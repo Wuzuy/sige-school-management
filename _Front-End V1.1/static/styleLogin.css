@@ -1,0 +1,259 @@
+/* ESTILIZAÇÕES GERAIS */
+	/* AJUSTES DE CORES E FONTE */
+		:root {
+			/* FUNDOS E DETALHES */
+			--corBorda: #F0F0F2;
+			--azulPrincipal: #1A66FF;
+			--azulSegundario: #1643F5;
+			--fundoCinzaUm: #F0F1F4;
+				/* FUNDOS DE CORES QUENTES */
+				--textoQuentePrincipal: #BD2C1A;
+				--textoQuenteSegundario: #AC4E2D;
+				--fundoQuenteUm: #FFF4E8;
+				--corBordaQuente: #FCE4D6;
+				
+			/* TEXTO */
+			--textoPrincipal: #000000;
+			--textoSegundario: #FFFFFF;
+			--textoTerciario: #767784;
+			--textoQuarternario: #F0F1F4;
+			--fonteGrandeUm: 32px;
+			/* BOTÕES */
+			--botaoInativoLogin: #F0F1F4;
+			--botaoAtivoLogin: #FFFFFF;
+			--fontePequenaUm: 16px;
+		}	
+		/* FONTE NORMAL */
+		@font-face {
+			font-family:'uberMove';
+			src: url('\UberMoveTextRegular.otf');
+			
+		}
+		/* FONTE GROSSA */
+		@font-face {
+			font-family:'uberMoveBold';
+			src: url('\UberMoveTextBold.otf');
+		}
+		/* TEXTO GENÉRICO */
+		p {
+			color: var(--textoTerciario);
+		}
+		.tituloEdital {
+			color: var(--textoQuentePrincipal);
+		}
+		.textoEdital {
+			color: var(--textoQuenteSegundario);
+		}
+	/* AJUSTA O TAMANHO E PROPORÇÕES DO SITE */
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing:border-box;
+		}
+	/* ESTA PARTE EM PARTICULAR AFETA TODOS OS PLACEHOLDERS DE INPUTS DA PÁGINA */
+		input::placeholder,
+		textarea::placeholder {
+			color: var(--textoTerciario);
+			padding-left: 4px;
+		}
+@media screen and (min-width: 1000px) {
+	/* INTERFACE COMO UM TODO */
+		.interfaceTelaLogin {
+			box-sizing: border-box;
+			display: flex;
+			align-items: center;
+			flex-direction: column;
+			justify-content: flex-start;
+			flex-wrap: wrap;
+			gap: 5px;
+		}
+	/* HEADER */
+		header {
+			gap: 10px;
+			padding: 10px;
+		}
+		header img {
+			width: 600px ;
+			height: auto;
+		}
+	/* CONTAINER DOS CONTAINERS DA TELA DE LOGIN */
+		.containerLoginEditais {
+			align-items: start;
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 1rem;
+		}
+	/* CONTAINER DA TELA INICIAL */
+		/* CONTAINER DA TELA DE LOGIN */
+			/* INPUTS E BOTÕES */
+						.escrever {
+							height: 2rem;
+							border: 2px solid var(--corBorda);
+							border-radius: 8px;
+							padding-left: 4px;
+						}
+						.botaoPrincipal {
+							background-color: var(--azulPrincipal);
+							border: none;
+							border-radius: 10px;
+							height: 2.5rem;
+							color: var(--textoSegundario);
+							font-weight: 900;
+						}
+						.botaoPrincipal:hover {
+							background-color: var(--azulSegundario);
+						}
+			/* GRIDBOX DA TELA DE LOGIN */
+			.gridbox {
+				/* TAMANHO DA GRIDBOX */
+					padding: 10px;
+					max-width: 380px;
+					width: 100%;
+					margin-top: 20px;
+				/* AJUSTA O TAMANHO DOS INPUTS */
+					display: grid;
+					grid-template-columns: 1fr;
+					gap: 1rem;
+				/* ESTILIZAÇÃO DE BORDA */
+					border: solid 2px var(--corBorda);
+					border-radius: 8px;
+			}
+			/* CADASTRO E LOGIN TOGGLE CONTAINER */
+				/* CONTAINER DE BOTÕES DA TELA DE LOGIN */
+					.buttonBox {
+						display: flex;
+						background-color: var(--fundoCinzaUm);
+						padding: 4px;
+						border: none;
+						border-radius: 22px;
+					}
+					.buttonBox button {
+						flex: 1;
+					}
+					.botaoLogin {
+						border: none;
+						border-radius: 10px;
+						height: 2.5rem;
+						color: var(--textoPrincipal);
+						font-weight: 900;
+						border-radius: 22px;
+						background-color: var(--botaoInativoLogin);
+					}
+				/* AJUSTA A COR DOS BOTÕES DE LOGIN INDIVIDUALMENTE */
+					.botaoLogin.ativo {
+						background-color: var(--botaoAtivoLogin);
+					}
+				/* TEXTO DO CONTAINER DE LOGIN */
+					.yapContainer p:nth-child(1) {
+						font-size: var(--fonteGrandeUm);
+						color: var(--textoPrincipal);
+					}
+					.yapContainer p:nth-child(2) {
+						font-size: var(--fontePequenaUm);
+						color: var(--textoTerciario);
+					}
+				/* ALTERNA QUAL TELA DE CREDENCIAIS ESTÁ ATIVA */
+					.visivel {
+						display: block !important;
+					}
+					.caixa {
+						display: none;
+					}
+			/* INTERATIVIDADE */
+				/* ORGANIZA CADA ELEMENTO DE ACORDO COM A GRIDBOX */
+					.flexParent {
+						display: flex;
+						flex-wrap: wrap;
+					}
+					.flexbox {
+						box-sizing: border-box;
+						width: 100%;
+						display: flex;
+						flex-direction: column;
+						align-content: center;
+					}
+	/* EDITAIS */
+	.editais {
+		background-color: var(--fundoQuenteUm);
+		color:;
+		border: 2px solid var(--corBordaQuente);
+	}
+	.editais .yapContainer p:nth-child(1) {
+		font-size: var(--fonteGrandeUm);
+		color: var(--textoQuentePrincipal);
+	}
+	.editais .yapContainer p:nth-child(2) {
+		font-size: var(--fontePequenaUmUm);
+		color: var(--textoQuenteSegundario);
+	}
+	.editalContainer {
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+		justify-content: flex-start;
+		flex-wrap: wrap;
+		gap: 5px;
+	}
+	.editalConteudo {
+		background-color: #FFFFFF;
+		border: 2px solid var(--corBordaQuente);
+		border-radius: 8px;
+		padding: 4px;
+	}
+}
+@media screen and (max-width: 999px) {
+	.interface {
+		max-width: 340px;
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+	.gridbox {
+		max-width: 300px;
+		width: 100%;
+		margin-top: 20px;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.2rem;
+	}
+	.flexParent {
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.gridbox div:nth-child(1) {
+		grid-column: span 2;
+	}
+	.gridbox div:nth-child(4) {
+		grid-column: span 2;
+	}
+	.flexbox {
+		max-width: 300px;
+		padding: 2px;
+		box-sizing: border-box;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-content: center;
+	}
+	.escrever {
+		height: 2rem;
+		border: 1px solid black;
+		width: 100%;
+	}
+	button {
+		background-color: #00CC00;
+		border: none;
+		border-radius: 1px;
+		height: 2.5rem;
+		color: #FFFFFF;
+		font-weight: 900;
+		margin: 2px;
+	}
+	button:hover {
+		background-color: #00BB00;
+	}
+}
