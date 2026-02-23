@@ -1,0 +1,4 @@
+CHANGELOG
+
+Alternância dos botões cadastro/login adicionadas
+Troca de cores dos botões cadastro/login adicionadas
