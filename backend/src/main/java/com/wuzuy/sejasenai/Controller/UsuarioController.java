@@ -38,14 +38,14 @@ public class UsuarioController {
         usuarioRepository.deleteById(id);
     }
 
-    @PostMapping("login")
-    public ResponseEntity login(@RequestBody LoginDto usuarioLogin) {
+    @PostMapping("/login")
+    public ResponseEntity<Object> login(@RequestBody LoginDto usuarioLogin) {
         Optional<Usuario> usuarioDb = usuarioRepository.findByEmail(usuarioLogin.getEmail());
 
         if (usuarioDb.isPresent() && usuarioDb.get().getSenha().equals(usuarioLogin.getSenha())) {
-
-            usuarioLogin.setSenha("null");
-            return ResponseEntity.ok(usuarioDb.get());
+            Usuario usuario = usuarioDb.get();
+            usuario.setSenha(null);
+            return ResponseEntity.ok(usuario);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email ou senha inválidos");
         }
