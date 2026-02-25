@@ -1,4 +1,4 @@
-package com.wuzuy.SejaSenai;
+package com.wuzuy.sejasenai;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
