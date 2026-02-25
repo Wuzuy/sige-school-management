@@ -38,6 +38,13 @@
 const BASE_URL = 'http://localhost:8080/api/usuarios';
 const botaoPrincipal = document.querySelector('.botaoPrincipal');
 
+// atualiza o texto do botão principal conforme o modo
+function atualizarTextoBotao() {
+    botaoPrincipal.textContent = isCadastroTrue ? 'Cadastrar' : 'Entrar';
+}
+
+atualizarTextoBotao();
+
 botaoPrincipal.addEventListener('click', async function(event) {
     event.preventDefault();
 
@@ -70,6 +77,9 @@ botaoPrincipal.addEventListener('click', async function(event) {
         } catch (err) {
             alert('Erro de conexão: ' + err.message);
         }
+
+        // após cadastro, manter no modo cadastro e limpar campos (ou alternar para login se preferir)
+        atualizarTextoBotao();
 
     } else {
         // Login
