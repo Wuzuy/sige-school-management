@@ -1,0 +1,34 @@
+# Compilação e Build
+target/
+build/
+out/
+bin/
+*.class
+*.jar
+*.war
+*.ear
+
+# IDEs (IntelliJ, Eclipse, VS Code)
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+
+# Mobile (Android Studio / Kotlin)
+local.properties
+.gradle/
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.ap_
+
+# Sistema e Logs
+.DS_Store
+Thumbs.db
+*.log
+
+# Configurações Sensíveis
+# application.properties

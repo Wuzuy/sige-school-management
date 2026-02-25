@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.wuzuy</groupId>
-	<artifactId>SejaSenai</artifactId>
+	<artifactId>sejasenai</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>SejaSenai</name>
 	<description>O SEJA SENAI é um projeto que visa a criação de um sistema de acesso a informação, inscrição e a dados de forma totalmente online. O objetivo é tornar o processo mais acessível, prático e eficiente.</description>
