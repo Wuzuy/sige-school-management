@@ -18,7 +18,7 @@ Projeto desenvolvido para o curso Técnico de Desenvolvimento de Sistemas na Fir
 * **Turma:** TEC00412025.1046
 * **Orientadora:** Ana Carla
 * **Desenvolvedores:** 
-* Artur de Paula Santos
+  * Artur de Paula Santos
   * João Felipe da Costa Moreira
   * João Miguel Gonçalves Coelho
   * Lucas Matheus Lima Sandin
