@@ -41,8 +41,24 @@ public class Unidade {
         return cnpj;
     }
 
-    public void setCnpj(String endereco) {
-        this.cnpj = endereco;
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
     }
 }
 
