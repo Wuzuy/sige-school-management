@@ -11,8 +11,9 @@ public class Curso {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String id_unidade;
+    @ManyToOne
+    @JoinColumn (name = "id_unidade", nullable = false)
+    private Unidade id_unidade;
 
     @Column(nullable = false)
     private String nome_curso;
@@ -40,11 +41,11 @@ public class Curso {
         this.id = id;
     }
 
-    public String getId_unidade() {
+    public Unidade getId_unidade() {
         return id_unidade;
     }
 
-    public void setId_unidade(String id_unidade) {
+    public void setId_unidade(Unidade id_unidade) {
         this.id_unidade = id_unidade;
     }
 
