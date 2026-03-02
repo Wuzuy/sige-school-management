@@ -21,7 +21,7 @@ public class Usuario {
     @Column(nullable = false)
     private String senha;
 
-    @Column
+    @Column(unique = true)
     private String cpf;
 
     @Column
