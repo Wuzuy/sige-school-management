@@ -1,436 +1,264 @@
 {
   "info": {
-    "_postman_id": "a606b37c-6579-4182-8d6c-55b8280df2e4",
-    "name": "Garotos de Programa",
+    "name": "Seja Senai API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-  "item": [
-    {
-      "name": "Seja Senai API",
-      "item": [
-        {
-          "name": "Usuarios",
-          "item": [
-            {
-              "name": "Listar usuarios",
-              "id": "9efc5aaf-6023-4368-82b9-a051fb6c6eb7",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/usuarios",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "usuarios"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Buscar usuario por id",
-              "id": "fa935a33-1ac4-473c-ba4e-be40eb283580",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/usuarios/1",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "usuarios",
-                    "1"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Criar usuario",
-              "id": "9bf4e1bf-3a39-44de-adb8-e7b4e458a98a",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"nomeCompleto\": \"Lucas Matheus\",\n  \"email\": \"wuzuy@email.com\",\n  \"senha\": \"123\",\n  \"cpf\": \"12345678910\",\n  \"telefone\": \"2199999999\",\n  \"dataNascimento\": \"2005-08-19\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/usuarios",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "usuarios"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Login usuario",
-              "id": "7d800112-699c-4ef7-87dd-43cfd6b4186a",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"email\": \"wuzuy@email.com\",\n  \"senha\": \"123\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/usuarios/login",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "usuarios",
-                    "login"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Deletar usuario",
-              "id": "e5452312-39ee-4321-9e35-818494ffaeff",
-              "request": {
-                "method": "DELETE",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/usuarios/1",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "usuarios",
-                    "1"
-                  ]
-                }
-              },
-              "response": []
-            }
-          ],
-          "id": "9934f895-8e2c-443d-9def-75509e39a3dd"
-        },
-        {
-          "name": "Unidades",
-          "item": [
-            {
-              "name": "Listar unidades",
-              "id": "2329fee2-b925-4380-825a-9b56ab987793",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/unidades",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "unidades"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Buscar unidade por id",
-              "id": "93878710-3501-4999-842b-54b525d2f256",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/unidades/1",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "unidades",
-                    "1"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Criar unidade",
-              "id": "1de8a17f-fca7-4b90-9c65-374d95a50563",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"nome\": \"Unidade Centro\",\n  \"cidade\": \"Duque de Caxias\",\n  \"estado\": \"Rio de Janeiro\",\n  \"cnpj\": \"1234567890123\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/unidades",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "unidades"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Deletar unidade",
-              "id": "3ce6b407-5e0c-41e6-b538-90bbaeff4be8",
-              "request": {
-                "method": "DELETE",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/unidades/:id",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "unidades",
-                    ":id"
-                  ],
-                  "variable": [
-                    {
-                      "key": "id"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            }
-          ],
-          "id": "e21f8481-48f4-489f-856e-e60282e23f22"
-        },
-        {
-          "name": "Cursos",
-          "item": [
-            {
-              "name": "Listar cursos",
-              "id": "c4801f66-807e-4e55-9629-adb3ef367fcd",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/cursos",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "cursos"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Buscar curso por id",
-              "id": "79787ece-4daa-4ea1-aa6d-b6a489f283a5",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/cursos/1",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "cursos",
-                    "1"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Criar curso",
-              "id": "f4373335-06b0-447e-b3d4-2874b294526b",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"id_unidade\": {\n    \"id\": 1\n  },\n  \"nome_curso\": \"Desenvolvimento de Sistemas\",\n  \"tipo\": \"Tecnico\",\n  \"turno\": \"Noite\",\n  \"data_inicio\": \"2025-08-19\",\n  \"duracao_meses\": 18,\n  \"status\": \"Aberto\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/cursos",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "cursos"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Deletar curso",
-              "id": "354d2ba9-742a-492d-8b9e-bf6c8cda85d2",
-              "request": {
-                "method": "DELETE",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/cursos/1",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "cursos",
-                    "1"
-                  ]
-                }
-              },
-              "response": []
-            }
-          ],
-          "id": "8d14e9b7-fcb1-4c43-bea6-297d80348ae1"
-        },
-        {
-          "name": "Inscricoes",
-          "item": [
-            {
-              "name": "Listar inscricoes",
-              "id": "a4e7f305-ca0a-48c8-9386-738409a611b5",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/inscricoes",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "inscricoes"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Buscar inscricao por id",
-              "id": "7e784a03-f69b-408a-97a2-881616645f1c",
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/inscricoes/1",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "inscricoes",
-                    "1"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Criar inscricao",
-              "id": "ffbee2a0-05b4-496a-8285-99182cd0fd70",
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"id_usuario\": {\n    \"id\": 1\n  },\n  \"id_curso\": {\n    \"id\": 1\n  },\n  \"id_unidade\": \"1\",\n  \"data_inscricao\": \"2026-02-27\",\n  \"status_aprovacao\": \"Pendente\",\n  \"escolaridade_declarada\": \"Ensino Médio\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/inscricoes",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "inscricoes"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Deletar inscricao",
-              "id": "e3eadc69-e7cc-4a6d-b0d6-a505a50f6e4a",
-              "request": {
-                "method": "DELETE",
-                "header": [],
-                "url": {
-                  "raw": "{{baseUrl}}/inscricoes/",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "inscricoes",
-                    ""
-                  ]
-                }
-              },
-              "response": []
-            }
-          ],
-          "id": "63e03a3a-929b-402f-b554-74619c9dd4ca"
-        }
-      ],
-      "id": "4980cad6-af63-4c8a-8089-2594063b5622"
-    }
-  ],
   "variable": [
     {
-      "id": "5d826f4a-0760-4363-8d99-866872135907",
       "key": "baseUrl",
-      "value": "http://localhost:8080/api"
+      "value": "http://localhost:8080/api",
+      "type": "string"
+    },
+    {
+      "key": "admin_email",
+      "value": "wuzuy@gmail.com",
+      "type": "string"
+    },
+    {
+      "key": "admin_senha",
+      "value": "admin",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "Listar todos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios"]
+            }
+          }
+        },
+        {
+          "name": "Cadastrar novo",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nomeCompleto\": \"Aluno Teste\",\n  \"email\": \"aluno@email.com\",\n  \"senha\": \"123\",\n  \"cpf\": \"11122233344\",\n  \"telefone\": \"2199999999\",\n  \"dataNascimento\": \"2000-01-01\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios"]
+            }
+          }
+        },
+        {
+          "name": "Realizar Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"aluno@email.com\",\n  \"senha\": \"123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios", "login"]
+            }
+          }
+        },
+        {
+          "name": "Atualizar Permissão",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                { "key": "password", "value": "{{admin_senha}}", "type": "string" },
+                { "key": "username", "value": "{{admin_email}}", "type": "string" }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/1/role?role=ROLE_ADMIN",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios", "1", "role"],
+              "query": [
+                { "key": "role", "value": "ROLE_ADMIN" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Remover",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Unidades",
+      "item": [
+        {
+          "name": "Listar todas",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/unidades",
+              "host": ["{{baseUrl}}"],
+              "path": ["unidades"]
+            }
+          }
+        },
+        {
+          "name": "Cadastrar unidade",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                { "key": "password", "value": "{{admin_senha}}", "type": "string" },
+                { "key": "username", "value": "{{admin_email}}", "type": "string" }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Firjan SENAI Caxias\",\n  \"cnpj\": \"12345678000199\",\n  \"estado\": \"RJ\",\n  \"cidade\": \"Duque de Caxias\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/unidades",
+              "host": ["{{baseUrl}}"],
+              "path": ["unidades"]
+            }
+          }
+        },
+        {
+          "name": "Remover",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/unidades/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["unidades", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cursos",
+      "item": [
+        {
+          "name": "Listar todos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/cursos",
+              "host": ["{{baseUrl}}"],
+              "path": ["cursos"]
+            }
+          }
+        },
+        {
+          "name": "Cadastrar curso",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "auth": {
+              "type": "basic",
+              "basic": [
+                { "key": "password", "value": "{{admin_senha}}", "type": "string" },
+                { "key": "username", "value": "{{admin_email}}", "type": "string" }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_unidade\": { \"id\": 1 },\n  \"nome_curso\": \"Desenvolvimento de Sistemas\",\n  \"tipo\": \"Tecnico\",\n  \"turno\": \"Noite\",\n  \"data_inicio\": \"2026-02-25\",\n  \"duracao_meses\": 18,\n  \"status\": \"Aberto\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cursos",
+              "host": ["{{baseUrl}}"],
+              "path": ["cursos"]
+            }
+          }
+        },
+        {
+          "name": "Remover",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/cursos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["cursos", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inscricoes",
+      "item": [
+        {
+          "name": "Listar todas",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/inscricoes",
+              "host": ["{{baseUrl}}"],
+              "path": ["inscricoes"]
+            }
+          }
+        },
+        {
+          "name": "Nova inscrição",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_usuario\": { \"id\": 1 },\n  \"id_curso\": { \"id\": 1 },\n  \"id_unidade\": \"1\",\n  \"data_inscricao\": \"2026-02-27\",\n  \"status_aprovacao\": \"Pendente\",\n  \"escolaridade_declarada\": \"Ensino Medio\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inscricoes",
+              "host": ["{{baseUrl}}"],
+              "path": ["inscricoes"]
+            }
+          }
+        },
+        {
+          "name": "Remover",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/inscricoes/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["inscricoes", "1"]
+            }
+          }
+        }
+      ]
     }
   ]
 }
