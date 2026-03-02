@@ -21,7 +21,7 @@ public class Usuario {
     @Column(nullable = false)
     private String senha;
 
-    @Column
+    @Column(unique = true)
     private String cpf;
 
     @Column
@@ -29,6 +29,10 @@ public class Usuario {
 
     @Column
     private LocalDate dataNascimento;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role = Role.ROLE_USER;
 
     public Long getId() {
         return id;
@@ -84,5 +88,13 @@ public class Usuario {
 
     public void setDataNascimento(LocalDate nascimento) {
         this.dataNascimento = nascimento;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
