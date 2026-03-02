@@ -1,4 +1,8 @@
+<<<<<<< yago
 package com.wuzuy.sejasenai.config;
+=======
+package com.senai.sejasenai.config;
+>>>>>>> main
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
