@@ -1,11 +1,13 @@
 package com.wuzuy.sejasenai.controller;
 
+import com.wuzuy.sejasenai.model.Role;
 import com.wuzuy.sejasenai.model.Usuario;
 import com.wuzuy.sejasenai.repository.UsuarioRepository;
 import com.wuzuy.sejasenai.dto.LoginDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,6 +51,21 @@ public class UsuarioController {
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
+    }
+
+    // Altera o papel (Role) de um utilizador existente (Apenas ADMIN)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PutMapping("/{id}/role")
+    public ResponseEntity<Usuario> updateRole(@PathVariable Long id, @RequestParam Role role) {
+        Optional<Usuario> userDb = repository.findById(id);
+
+        if (userDb.isPresent()) {
+            Usuario user = userDb.get();
+            user.setRole(role);
+            return ResponseEntity.ok(repository.save(user));
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
