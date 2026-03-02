@@ -1,8 +1,8 @@
 package com.wuzuy.sejasenai.controller;
 
-import com.wuzuy.sejasenai.dto.LoginDTO;
 import com.wuzuy.sejasenai.model.Usuario;
 import com.wuzuy.sejasenai.repository.UsuarioRepository;
+import com.wuzuy.sejasenai.dto.LoginDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,43 +16,47 @@ import java.util.Optional;
 @RequestMapping("/api/usuarios")
 @CrossOrigin(origins = "*")
 public class UsuarioController {
+
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UsuarioRepository repository;
+
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder encoder;
 
     @GetMapping
-    public List<Usuario> findAll() {
-        return usuarioRepository.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public Usuario findOne(@PathVariable int id) {
-        return usuarioRepository.findById(id).orElse(null);
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id) {
-        usuarioRepository.deleteById(id);
+    public List<Usuario> list() {
+        return repository.findAll();
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> cadastrar(@RequestBody Usuario usuario) {
-        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
-        Usuario salvo = usuarioRepository.save(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
+    public ResponseEntity<Usuario> register(@RequestBody Usuario user) {
+        try {
+            user.setSenha(encoder.encode(user.getSenha()));
+            Usuario salvo = repository.save(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginDTO usuarioLogin) {
-        Optional<Usuario> usuarioDb = usuarioRepository.findByEmail(usuarioLogin.getEmail());
+    public ResponseEntity<Object> login(@RequestBody LoginDTO login) {
+        Optional<Usuario> userDb = repository.findByEmail(login.getEmail());
 
-        if (usuarioDb.isPresent() && usuarioDb.get().getSenha().equals(usuarioLogin.getSenha())) {
-
-            usuarioLogin.setSenha("null");
-            return ResponseEntity.ok(usuarioDb.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email ou senha inválidos");
+        if (userDb.isPresent() && encoder.matches(login.getSenha(), userDb.get().getSenha())) {
+            userDb.get().setSenha(null);
+            return ResponseEntity.ok(userDb.get());
         }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }
