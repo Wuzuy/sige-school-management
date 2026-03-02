@@ -79,11 +79,17 @@ function init() {
                 const email = (inputs[1] && inputs[1].value) ? inputs[1].value.trim() : '';
                 const senha = (inputs[2] && inputs[2].value) ? inputs[2].value.trim() : '';
 
-                if (!nome || !email || !senha) {
+                const confirmarSenhaCampo = document.getElementById('senhaInputConfirmar');
+                const confirmarSenha = confirmarSenhaCampo ? confirmarSenhaCampo.value.trim() : '';
+
+                if (!nome || !email || !senha || !confirmarSenha) {
                     alert('Por favor, preencha todos os campos para realizar o cadastro.');
                     return;
                 }
-
+                if (senha !== confirmarSenha) {
+                    alert('As senhas não coincidem. Tente novamente.');
+                    return; // Interrompe a execução, não envia para o backend
+                }
                 const payload = { nomeCompleto: nome, email: email, senha: senha };
 
                 try {
