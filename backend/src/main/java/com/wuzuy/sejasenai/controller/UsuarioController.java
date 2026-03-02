@@ -1,11 +1,12 @@
-package com.wuzuy.sejasenai.Controller;
+package com.wuzuy.sejasenai.controller;
 
-import com.wuzuy.sejasenai.dto.LoginDto;
+import com.wuzuy.sejasenai.dto.LoginDTO;
 import com.wuzuy.sejasenai.model.Usuario;
 import com.wuzuy.sejasenai.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,15 +18,12 @@ import java.util.Optional;
 public class UsuarioController {
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping
     public List<Usuario> findAll() {
         return usuarioRepository.findAll();
-    }
-
-    @PostMapping
-    public Usuario save(@RequestBody Usuario usuario) {
-        return usuarioRepository.save(usuario);
     }
 
     @GetMapping("/{id}")
@@ -38,8 +36,15 @@ public class UsuarioController {
         usuarioRepository.deleteById(id);
     }
 
-    @PostMapping("login")
-    public ResponseEntity login(@RequestBody LoginDto usuarioLogin) {
+    @PostMapping
+    public ResponseEntity<Usuario> cadastrar(@RequestBody Usuario usuario) {
+        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+        Usuario salvo = usuarioRepository.save(usuario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody LoginDTO usuarioLogin) {
         Optional<Usuario> usuarioDb = usuarioRepository.findByEmail(usuarioLogin.getEmail());
 
         if (usuarioDb.isPresent() && usuarioDb.get().getSenha().equals(usuarioLogin.getSenha())) {
