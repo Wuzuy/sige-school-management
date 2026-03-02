@@ -1,4 +1,4 @@
-package com.wuzuy.sejasenai.Controller;
+package com.wuzuy.sejasenai.controller;
 
 import com.wuzuy.sejasenai.model.Inscricao;
 import com.wuzuy.sejasenai.repository.InscricaoRepository;

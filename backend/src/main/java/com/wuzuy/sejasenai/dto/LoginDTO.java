@@ -1,6 +1,6 @@
 package com.wuzuy.sejasenai.dto;
 
-public class LoginDto {
+public class LoginDTO {
     private String email;
     private String senha;
 
