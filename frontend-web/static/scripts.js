@@ -1,3 +1,24 @@
+// SCRIPT QUE FAZ A ALTURA DO HEADER NÃO QUEBRAR O SITE INTEIRO
+//NÃO APAGAR
+const header = document.querySelector('header');
+const altura = document.querySelector('.containerLoginEditais');
+altura.style.marginTop = header.offsetHeight + 'px';
+
+//
+
+//SCRIPT QUE FAZ A SENHA FICAR VISÍVEL OU INVISÍVEL
+const botoesVisao = document.querySelectorAll('.botaoVisao');
+botoesVisao.forEach(function(botao) {
+    botao.addEventListener('click', function() {
+        const inputSenha = this.parentElement.querySelector('input');
+        if (inputSenha.type === 'password') {
+            inputSenha.type = 'text';
+        } else {
+            inputSenha.type = 'password';
+        }
+    });
+});
+//
 function init() {
     // estado do modo: true = cadastro, false = login
     let isCadastroTrue = false;
