@@ -12,11 +12,13 @@ public class Inscricao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long id_usuario;
+    @ManyToOne
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuario id_usuario;
 
-    @Column(nullable = false)
-    private Long id_curso;
+    @ManyToOne
+    @JoinColumn
+    private Curso id_curso;
 
     @Column(nullable = false)
     private String id_unidade;
@@ -38,19 +40,19 @@ public class Inscricao {
         this.id = id;
     }
 
-    public Long getId_usuario() {
+    public Usuario getId_usuario() {
         return id_usuario;
     }
 
-    public void setId_usuario(Long id_usuario) {
+    public void setId_usuario(Usuario id_usuario) {
         this.id_usuario = id_usuario;
     }
 
-    public Long getId_curso() {
+    public Curso getId_curso() {
         return id_curso;
     }
 
-    public void setId_curso(Long id_curso) {
+    public void setId_curso(Curso id_curso) {
         this.id_curso = id_curso;
     }
 
