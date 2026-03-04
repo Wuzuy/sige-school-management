@@ -1,3 +1,5 @@
+package com.wuzuy.sejasenai.config;
+
 <<<<<<< yago
 package com.wuzuy.sejasenai.config;
 =======
