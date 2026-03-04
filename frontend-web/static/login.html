@@ -4,6 +4,7 @@
 	<title>Formulário</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="geral.css">
 	<link rel="stylesheet" href="styleLogin.css">
 	<link rel="shortcut icon" type="image/x-icon" href="https://firjan.com.br/data/files/63/87/D9/E1/AD4B59109D34F849D8284EA8/favicon.ico">
 </head>
@@ -36,7 +37,7 @@
 						<form class="caixa visivel login">
 							<div class="flexbox">
 								<label>Email</label>
-								<input type="email" class="escrever" placeholder="seu@email.com">
+								<input type="email" class="escrever" placeholder="seu@email.com" required>
 							</div>
 							<div class="flexbox">
 								<label>Senha</label>
@@ -45,6 +46,9 @@
 									<img src="imagens\hide.png">
 								</button>
 							</div>
+							<button class="botaoPrincipal" type="submit">
+								Logar
+							</button>
 						</form>
 						<!-- CADASTRO -->
 						<form class="caixa cadastro">
@@ -69,12 +73,12 @@
 								<button type="button" class="botaoVisao">
 									<img src="imagens\hide.png">
 								</button>
-							</div>	
+							</div>
+							<!-- BOTÃO PRINCIPAL -->
+							<button class="botaoPrincipal" type="submit">
+								Cadastrar
+							</button>
 						</form>
-					<!-- BOTÃO PRINCIPAL -->
-					<button class="botaoPrincipal">
-						Cadastrar
-					</button>
 				</div>
 			<!-- CONTAINER DOS EDITAIS -->
 				<div class="gridbox editais">

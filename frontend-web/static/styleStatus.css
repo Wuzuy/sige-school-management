@@ -1,0 +1,126 @@
+* {
+	scrollbar-width: none; 
+	-ms-overflow-style: none;
+}
+*::-webkit-scrollbar {
+	display: none;
+}
+/* HEADER */
+	header img {
+		max-width: 100%;
+		width: 450px ;
+		height: auto;
+	}
+	header p {
+		color: var(--textoQuarternario);
+	}
+	/* INTERFACE PRINCIPAL */
+	.interfaceStatus {
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		height: 100%;
+		margin-bottom: 10px;
+	}
+/* PLANILHA */
+	.containerStatus {
+	/* APARÊNCIA */
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		gap: 0px;
+		height: 100%;
+		overflow: hidden;
+		margin-top: 20px;
+		width: 90% ;
+	/* BORDA */
+		border: none;
+		border-radius: 8px;
+		box-shadow: 0px 0px 8px black;
+	}
+	.headerStatus {
+		background-color: var(--azulPrincipal);
+		width: 100%;
+		padding: 8px;
+	}
+	.headerStatus:not(.mini) p {
+		color: var(--textoSegundario);
+	}
+	.headerStatus img {
+		max-width: 400px;
+		height: auto;
+	}
+/* CONTAINER INPUTS */
+	.containerInputs {
+		background-color: var(--fundoBranco);
+		width: 100%;
+		padding: 8px;
+	}
+	.containerInputStatus {
+		width: 100%;
+		/* DISPLAY */
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+	}
+	.containerInputStatus div:nth-child(1) {
+			grid-column: span 2;
+	}
+	.containerInputStatus div:nth-child(8) {
+			grid-column: span 2;
+	}
+	.conteudoStatus {
+		background-color: var(--azulPrincipal);
+		width: 100%;
+		padding: 8px;
+	}
+	.mini {
+		background-color: var(--fundoBranco);
+	}
+	.containerInfo {
+		background-color: var(--fundoCinzaUm);
+		padding: 8px;
+		border: 1px solid var(--corBordaDois);
+		border-radius: 8px;
+	}
+	.warning {
+		background-color: var(--fundoBranco);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	.status {
+		color: var(--andamento);
+		font-weight: 900;
+	}
+	.grand {
+		font-size: 32px;
+	}
+	.grand img {
+		
+	}
+@media screen and (max-width: 999px) {
+	.headerStatus img{
+		width: 100px;
+		height: auto;
+	}
+	.warning img{
+		width:100px;
+		height: auto;
+	}
+	.grand {
+		font-size: 14px;
+	}
+	.containerInfo {
+		font-size: 12px;
+	}
+	.celula {
+		display: block;
+	}
+	.celula img {
+		display: none;
+	}
+}

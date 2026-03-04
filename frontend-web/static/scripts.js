@@ -1,10 +1,6 @@
 // SCRIPT QUE FAZ A ALTURA DO HEADER NÃO QUEBRAR O SITE INTEIRO
 //NÃO APAGAR
-const header = document.querySelector('header');
-const altura = document.querySelector('.containerLoginEditais');
-altura.style.marginTop = header.offsetHeight + 'px';
 
-//
 
 //SCRIPT QUE FAZ A SENHA FICAR VISÍVEL OU INVISÍVEL
 const botoesVisao = document.querySelectorAll('.botaoVisao');
@@ -29,15 +25,6 @@ function init() {
     const botaoPrincipal = document.querySelector('.botaoPrincipal');
     const BASE_URL = 'http://localhost:8080/api/usuarios';
 
-    // atualiza o texto do botão principal conforme o modo
-    function atualizarTextoBotao() {
-        if (!botaoPrincipal) return;
-        botaoPrincipal.textContent = isCadastroTrue ? 'Cadastrar' : 'Entrar';
-    }
-
-    // inicializar texto
-    atualizarTextoBotao();
-
     // configurar os botões de toggle
     botao.forEach(function(parametroBotao) {
         parametroBotao.addEventListener('click', function() {
@@ -60,9 +47,8 @@ function init() {
                 login.classList.add('visivel');
             }
 
-            // definir explicitamente o estado e atualizar o texto do botão principal
+            // definir explicitamente o estado
             isCadastroTrue = modoCadastro;
-            atualizarTextoBotao();
         });
     });
 
