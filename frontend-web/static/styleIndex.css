@@ -1,40 +1,12 @@
-@media screen and (min-width: 1000px) {
 /* HEADER */
-		header {
-			box-shadow: 1px 2px 10px #000000;
-			gap: 10px;
-			padding: 10px;
-			background-color: var(--azulTerciario);
-			box-sizing: border-box;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			align-items: center;
-			flex-wrap: wrap;
-			flex-direction: column;
-			gap: 10px;
-			z-index: 999;
-			border-bottom: 2px solid var(--azulSegundario);
-			position: sticky;
-			top:0;
-			width: 100%;
-		}
-		header img {
-			max-width: 100%;
-			width: 450px ;
-			height: auto;
-		}
-		header p {
-			color: var(--textoQuarternario);
-		}
-		body {
-			background-image: url('backgroundLogin.png');
-			background-repeat: no-repeat;
-			background-size: cover;
-		}
-		p {
-			padding: 4px;
-		}
+	header img {
+		max-width: 100%;
+		width: 450px ;
+		height: auto;
+	}
+	header p {
+		color: var(--textoQuarternario);
+	}
 /* INTERFACE PRINCIPAL */
 	.interfacePrincipal {
 		box-sizing: border-box;
@@ -44,21 +16,6 @@
 		align-items: center;
 		flex-direction: column;
 		height: 100%;
-	}
-/* BOTÕES */
-	.botaoInscrever {
-		background-color: var(--azulPrincipal);
-		border: none;
-		border-radius: 10px;
-		height: 2.5rem;
-		color: var(--textoSegundario);
-		font-weight: 900;
-		padding-right: 4px;
-		padding-left: 2px;
-	}
-	.botaoInscrever:hover {
-		background-color: var(--azulQuinario);
-		cursor: pointer;
 	}
 /* PLANILHA */
 	table {
@@ -78,21 +35,21 @@
 	}
 	.containerPlanilha {
 		/* APARÊNCIA */
-			box-sizing: border-box;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			align-items: center;
-			flex-direction: column;
-			gap: 0px;
-			height: 100%;
-			overflow: hidden;
-			margin-top: 20px;
-			width: 90% ;
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		gap: 0px;
+		height: 100%;
+		overflow: hidden;
+		margin-top: 20px;
+		width: 90% ;
 		/* BORDA */
-			border: none;
-			border-radius: 8px;
-			box-shadow: 0px 0px 8px black;
+		border: none;
+		border-radius: 8px;
+		box-shadow: 0px 0px 8px black;
 	}
 	.headerPlanilha {
 		background-color: var(--azulPrincipal);
@@ -109,12 +66,6 @@
 		max-width: 400px;
 		max-height: auto;
 	}
-	.celula {
-		display: flex;
-		gap: 4px;
-		flex-wrap: nowrap;
-		align-items: center;
-	}
 	td, .celula {
 		word-wrap: break-word;
 		overflow-wrap: break-word;
@@ -124,54 +75,19 @@
 		vertical-align: middle;
 		white-space: nowrap;   
 	}
-}
 
 @media screen and (max-width: 999px) {
 /* HEADER */
-		header {
-			box-shadow: 1px 2px 10px #000000;
-			gap: 10px;
-			padding: 10px;
-			background-color: var(--azulTerciario);
-			box-sizing: border-box;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			align-items: center;
-			flex-wrap: wrap;
-			flex-direction: column;
-			gap: 10px;
-			z-index: 999;
-			border-bottom: 2px solid var(--azulSegundario);
-			position: sticky;
-			top:0;
-			width: 100%;
-		}
-		header img {
-			max-width: 100%;
-			width: 450px ;
-			height: auto;
-		}
-		header p {
-			color: var(--textoQuarternario);
-		}
-		body {
-			background-image: url('backgroundLogin.png');
-			background-repeat: no-repeat;
-			background-size: cover;
-		}
-		p {
-			padding: 4px;
-		}
-/* INTERFACE PRINCIPAL */
-	.interfacePrincipal {
-		box-sizing: border-box;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		align-items: center;
-		flex-direction: column;
-		height: 100%;
+	header img {
+		height: auto;
+	}
+	body {
+		background-image: url('backgroundLogin.png');
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
+	p {
+		padding: 4px;
 	}
 /* BOTÕES */
 	.botaoInscrever {
@@ -208,7 +124,6 @@
 		text-transform: uppercase;
 		font-weight: 900;
 		display: block;
-		
 	}
 	table {
 		background-color: var(--fundoBranco);
@@ -228,21 +143,7 @@
 	}
 	.containerPlanilha {
 		/* APARÊNCIA */
-			box-sizing: border-box;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			align-items: center;
-			flex-direction: column;
-			gap: 0px;
-			height: 100%;
 			overflow-x: auto;
-			margin-top: 20px;
-			width: 90% ;
-		/* BORDA */
-			border: none;
-			border-radius: 8px;
-			box-shadow: 0px 0px 8px black;
 	}
 	.headerPlanilha {
 		background-color: var(--azulPrincipal);
@@ -258,12 +159,6 @@
 	.headerPlanilha img {
 		max-width: 200px;
 		max-height: auto;
-	}
-	.celula {
-		display: flex;
-		gap: 4px;
-		flex-wrap: nowrap;
-		align-items: center;
 	}
 	.celula img {
 		display: none;
