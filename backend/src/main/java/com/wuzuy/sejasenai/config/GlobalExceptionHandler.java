@@ -1,11 +1,5 @@
 package com.wuzuy.sejasenai.config;
 
-<<<<<<< yago
-package com.wuzuy.sejasenai.config;
-=======
-package com.senai.sejasenai.config;
->>>>>>> main
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
