@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentação Resources</title>
+  <link rel="stylesheet" href="site.css" />
+</head>
+<body>
+  <header class="top">
+    <h1>Resources</h1>
+    <p>Arquivos de configuração, dados auxiliares e coleções.</p>
+  </header>
+  <main class="layout">
+    <nav class="menu">
+      <a href="index.html">Início</a>
+      <a href="frontend.html">Frontend</a>
+      <a href="backend.html">Backend</a>
+      <a href="resources.html" class="active">Resources</a>
+      <a href="init.html">Inicialização</a>
+      <a href="snippets.html">Snippets</a>
+    </nav>
+    <section class="content">
+      <h2>Configuração Spring</h2>
+      <pre><code>spring.datasource.url=jdbc:mysql://localhost:3306/seja_senai_db?createDatabaseIfNotExist=true
+spring.datasource.username=root
+spring.datasource.password=
+spring.jpa.hibernate.ddl-auto=update
+server.port=8080</code></pre>
+
+      <h2>Postman</h2>
+      <ul>
+        <li><code>docs/postman/postman/collections/New Collection.postman_collection.json</code></li>
+        <li><code>docs/postman/globals/workspace.postman_globals.json</code></li>
+      </ul>
+
+      <h2>Arquivos estáticos frontend</h2>
+      <ul>
+        <li>Imagens em <code>frontend-web/static/imagens</code></li>
+        <li>Estilo principal em <code>frontend-web/static/app.css</code></li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

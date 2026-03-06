@@ -30,6 +30,12 @@ public class UnidadeController {
         return repository.save(unidade);
     }
 
+    @PutMapping("/{id}")
+    public Unidade updateUnidade(@PathVariable Long id, @RequestBody Unidade unidade) {
+        unidade.setId(id);
+        return repository.save(unidade);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteUnidade(@PathVariable Long id) {
         repository.deleteById(id);

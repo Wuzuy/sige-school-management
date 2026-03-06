@@ -1,65 +1,64 @@
 <!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-	<!-- -->
-	<title>Status da Inscrição</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="geral.css">
-	<link rel="stylesheet" href="styleStatus.css">
-    <link rel="shortcut icon" type="image/x-icon" href="https://firjan.com.br/data/files/63/87/D9/E1/AD4B59109D34F849D8284EA8/favicon.ico">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEJA SENAI - Status</title>
+  <link rel="stylesheet" href="app.css" />
 </head>
-<body>
-	<!-- HEADER -->
-	<header>
-		<img src="imagens\1.png">
-	</header>
-	<div class="interfaceStatus">
-		<div class="containerStatus">
-			<div class="headerStatus">
-				<img src="imagens\logo_firjan_senai.webp">
-				<p> Status da Inscrição </p>
-				<p> Acompanhe o andamento da sua inscrição </p>
-			</div>
-			<div class="conteudoStatus mini flexbox">
-				<h3 data-label="dadosPessoais"> Status da Inscrição: </h3>
-				<p class="status"> Inscrição em Andamento </p>
-				<!-- IMPORTANTE: JÁ TEM UM ÍCONE DE RELÓGIO VERDE NA PASTA IMAGENS -->
-				<div class="warning">
-					<img src="imagens\yellow.png">
-					<h3> Inscrição em Andamento </h3>
-					<p> Sua inscrição está sendo analisada pela equipe do SENAI </p>
-				</div>
-			</div>
-			<div class="conteudoStatus mini">
-				<div class="containerInfo">
-					<div class="celula grand">
-						<img src="imagens\blueDocument2.png" data-label="icone">
-						<h3>Destalhes da Inscrição</h3>
-					</div>
-					<div class="celula">
-						<img src="imagens\user.png" data-label="icone">
-						<p class="textoPrincipal destaque"> Usuário: </p>
-						<p class="textoPrincipal"> USERNAME </p>
-					</div>
-					<div class="celula">
-						<img src="imagens\document.png" data-label="icone">
-						<p class="textoPrincipal destaque"> Curso: </p>
-						<p class="textoPrincipal"> CURSOESCOLHIDO </p>
-					</div>
-					<div class="celula">
-						<img src="imagens\clock.png" data-label="icone">
-						<p class="textoPrincipal destaque"> Turno: </p>
-						<p class="textoPrincipal"> TURNOESCOLHIDO </p>
-					</div>
-					<div class="celula">
-						<img src="imagens\calendar.png" data-label="icone">
-						<p class="textoPrincipal destaque"> Data da Inscrição: </p>
-						<p class="textoPrincipal"> 00/00/0000 </p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script src="scripts.js">
-	</script>
+<body data-page="status">
+  <header class="topbar">
+    <div class="topbar__inner">
+      <div class="brand">
+        <img src="imagens/1.png" alt="SENAI" />
+        <span>SEJA SENAI</span>
+      </div>
+      <nav class="nav">
+        <a href="index.html">Cursos</a>
+        <a href="inscricao.html">Inscrição</a>
+        <a href="portal-aluno.html">Portal do Aluno</a>
+        <a href="portal-secretaria.html" data-admin-only>Portal da Secretaria</a>
+        <button data-logout type="button">Sair</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Status da Inscrição</h1>
+      <p>Status atual: <span id="status-atual" class="status">Carregando...</span></p>
+    </section>
+
+    <section class="card">
+      <h2>Histórico</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Curso</th>
+            <th>Unidade</th>
+            <th>Data</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="status-body">
+          <tr><td colspan="5">Carregando...</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="curso-detalhes-card" class="card hidden">
+      <h2>Detalhes do curso</h2>
+      <p><strong>Curso:</strong> <span id="detalhe-curso-nome">-</span></p>
+      <p><strong>Tipo:</strong> <span id="detalhe-curso-tipo">-</span></p>
+      <p><strong>Turno:</strong> <span id="detalhe-curso-turno">-</span></p>
+      <p><strong>Unidade:</strong> <span id="detalhe-curso-unidade">-</span></p>
+      <p><strong>Data de início:</strong> <span id="detalhe-curso-inicio">-</span></p>
+      <p><strong>Duração:</strong> <span id="detalhe-curso-duracao">-</span></p>
+      <p><strong>Status:</strong> <span id="detalhe-curso-status">-</span></p>
+    </section>
+  </main>
+
+  <script src="scripts.js"></script>
 </body>
+</html>

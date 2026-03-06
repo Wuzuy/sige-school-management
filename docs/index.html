@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentação SEJA SENAI</title>
+  <link rel="stylesheet" href="site.css" />
+</head>
+<body>
+  <header class="top">
+    <h1>Documentação Técnica - SEJA SENAI</h1>
+    <p>Guia central de frontend, backend, recursos, inicialização e exemplos de código.</p>
+  </header>
+
+  <main class="layout">
+    <nav class="menu">
+      <a href="index.html" class="active">Início</a>
+      <a href="frontend.html">Frontend</a>
+      <a href="backend.html">Backend</a>
+      <a href="resources.html">Resources</a>
+      <a href="init.html">Inicialização</a>
+      <a href="snippets.html">Snippets</a>
+    </nav>
+
+    <section class="content">
+      <h2>Visão geral</h2>
+      <p>O projeto SEJA SENAI é composto por frontend estático (HTML/CSS/JS) e backend Java Spring Boot com autenticação JWT e APIs REST.</p>
+
+      <div class="cards">
+        <article>
+          <h3>Frontend</h3>
+          <p>Páginas estáticas e lógica central em <code>scripts.js</code>.</p>
+        </article>
+        <article>
+          <h3>Backend</h3>
+          <p>APIs para usuários, cursos, unidades, inscrições e editais.</p>
+        </article>
+        <article>
+          <h3>Administração</h3>
+          <p>Portal da secretaria com padrão CRUD: criar, pesquisar, filtrar, editar e deletar.</p>
+        </article>
+      </div>
+
+      <h2>Mapa rápido</h2>
+      <ul>
+        <li><strong>Frontend:</strong> <code>frontend-web/static</code></li>
+        <li><strong>Backend:</strong> <code>backend/src/main/java/com/wuzuy/sejasenai</code></li>
+        <li><strong>Configuração:</strong> <code>backend/src/main/resources/application.properties</code></li>
+        <li><strong>Coleções:</strong> <code>docs/postman/postman/collections</code></li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,130 +1,55 @@
 <!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-	<!-- -->
-	<title>Firjan SENAI Sesi</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="geral.css">
-	<link rel="stylesheet" href="styleIndex.css">
-    <link rel="shortcut icon" type="image/x-icon" href="https://firjan.com.br/data/files/63/87/D9/E1/AD4B59109D34F849D8284EA8/favicon.ico">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEJA SENAI - Cursos</title>
+  <link rel="stylesheet" href="app.css" />
 </head>
-<body>
-	<!-- HEADER -->
-	<header>
-		<img src="imagens\1.png">
-	</header>
-	<div class="interfacePrincipal">
-		<div class="containerPlanilha">
-			<div class="headerPlanilha">
-				<img src="imagens\logo_firjan_senai.webp">
-				<p> Cursos Disponíveis </p>
-				<p> Bem-vindo(a), USERNAME </p>
-			</div>
-			<div class="headerPlanilha mini">
-				<h3> Cursos Disponíveis para Inscrição </h3>
-				<p> Selecione o curso desejado e clique em "Inscrever-se" </p>
-			</div>
-			<table>
-				<thead>
-					<tr>
-						<th>Unidade</th> 
-						<th>Curso</th> 
-						<th>Turno</th> 
-						<th>Data de Início</th> 
-						<th>Duração</th> 
-						<th>Ação</th> 
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td data-label="Unidade">
-							<div class="celula">
-								<img src="imagens\location.png">
-								SENAI Caxias
-							</div>
-						</td>
-						<td data-label="Curso"> Eletrotécnica </td>
-						<td data-label="Turno"> Matinal </td>
-						<td data-label="Data de Início">
-							<div class="celula">
-								<img src="imagens\calendar.png">
-								16/01/2027
-							</div>
-						</td>
-						<td data-label="Duração">
-							<div class="celula">
-								<img src="imagens\clock.png">
-								Um ano e seis meses 
-							</div>
-						</td>
-						<td data-label="Ação">
-							<button class="botaoInscrever">
-								Inscrever-se
-							</button>
-						</td>
-					</tr>
-				</tbody>
-				<tbody>
-					<tr>
-						<td data-label="Unidade">
-							<div class="celula">
-								<img src="imagens\location.png">
-								SENAI Nova Iguaçu
-							</div>
-						</td>
-						<td data-label="Curso"> Desenvolvimento de Sistemas </td>
-						<td data-label="Turno"> Noturno </td>
-						<td data-label="Data de Início">
-							<div class="celula">
-								<img src="imagens\calendar.png">
-								15/02/2027 
-							</div>
-						</td>
-						<td data-label="Duração">
-							<div class="celula">
-								<img src="imagens\clock.png">
-								Dois anos 
-							</div>
-						</td>
-						<td data-label="Ação">
-							<button class="botaoInscrever">
-								Inscrever-se
-							</button>
-						</td>
-					</tr>
-				</tbody>
-				<tbody>
-					<tr>
-						<td data-label="Unidade">
-							<div class="celula">
-								<img src="imagens\location.png">
-								SENAI Rio
-							</div>
-						</td>
-						<td data-label="Curso"> Mecânica </td>
-						<td data-label="Turno"> Vespertino </td>
-						<td data-label="Data de Início">
-							<div class="celula">
-								<img src="imagens\calendar.png">
-								18/01/2027 
-							</div>
-						</td>
-						<td data-label="Duração">
-							<div class="celula">
-								<img src="imagens\clock.png">
-								Três anos
-							</div>
-						</td>
-						<td data-label="Ação">
-							<button class="botaoInscrever">
-								Inscrever-se
-							</button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
-	<script src="scripts.js">
-	</script>
+<body data-page="home">
+  <header class="topbar">
+    <div class="topbar__inner">
+      <div class="brand">
+        <img src="imagens/1.png" alt="SENAI" />
+        <span>SEJA SENAI</span>
+      </div>
+      <nav class="nav">
+        <a href="index.html">Cursos</a>
+        <a href="inscricao.html">Inscrição</a>
+        <a href="status.html">Status</a>
+        <a href="portal-aluno.html">Portal do Aluno</a>
+        <a href="portal-secretaria.html" data-admin-only>Portal da Secretaria</a>
+        <button data-logout type="button">Sair</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Cursos Disponíveis</h1>
+      <p>Bem-vindo(a), <strong data-user-name>Aluno</strong>. Escolha um curso para se inscrever.</p>
+    </section>
+
+    <section class="card">
+      <h2>Lista de cursos</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Unidade</th>
+            <th>Curso</th>
+            <th>Turno</th>
+            <th>Início</th>
+            <th>Duração</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="courses-body">
+          <tr><td colspan="6">Carregando cursos...</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="scripts.js"></script>
 </body>
+</html>
