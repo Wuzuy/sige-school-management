@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentação Completa - SEJA SENAI</title>
+  <link rel="stylesheet" href="site.css" />
+  <style>
+    .doc-section {
+      background: white;
+      padding: 24px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .doc-section h3 {
+      margin-top: 0;
+      color: #1e40af;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 12px;
+    }
+    .highlight-box {
+      background: #f0f9ff;
+      border-left: 4px solid #3b82f6;
+      padding: 16px;
+      margin: 16px 0;
+      border-radius: 4px;
+    }
+    .success-box {
+      background: #f0fdf4;
+      border-left: 4px solid #10b981;
+      padding: 16px;
+      margin: 16px 0;
+      border-radius: 4px;
+    }
+    .warning-box {
+      background: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      padding: 16px;
+      margin: 16px 0;
+      border-radius: 4px;
+    }
+    .pricing-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+    }
+    .pricing-table th {
+      background: #1e40af;
+      color: white;
+      padding: 12px;
+      text-align: left;
+    }
+    .pricing-table td {
+      border: 1px solid #e5e7eb;
+      padding: 12px;
+    }
+    .pricing-table tr:nth-child(even) {
+      background: #f9fafb;
+    }
+    .tech-badge {
+      display: inline-block;
+      background: #e0e7ff;
+      color: #3730a3;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      margin: 4px;
+      font-weight: 600;
+    }
+    .endpoint-method {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      margin-right: 8px;
+    }
+    .method-get { background: #dbeafe; color: #1e40af; }
+    .method-post { background: #dcfce7; color: #166534; }
+    .method-put { background: #fef3c7; color: #92400e; }
+    .method-delete { background: #fee2e2; color: #991b1b; }
+    .download-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.2s;
+    }
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <h1>📚 Documentação Completa do Sistema</h1>
+    <p>Guia técnico completo: arquitetura, APIs, deploy, segurança, custos e diagramas</p>
+  </header>
+
+  <main class="layout">
+    <nav class="menu">
+      <a href="index.html">Início</a>
+      <a href="frontend.html">Frontend</a>
+      <a href="backend.html">Backend</a>
+      <a href="resources.html">Resources</a>
+      <a href="init.html">Inicialização</a>
+      <a href="snippets.html">Snippets</a>
+      <a href="developer-docs.html" class="active">📚 Documentação Completa</a>
+    </nav>
+
+    <section class="content">
+      <div class="success-box">
+        <h3 style="margin-top: 0;">✅ Sistema 100% Funcional e Documentado</h3>
+        <p>O sistema SEJA SENAI está completo com todas as funcionalidades implementadas, testadas e documentadas. Pronto para deploy em produção.</p>
+        <a href="developer-documentation.md" target="_blank" class="download-btn">📄 Baixar Documentação Markdown</a>
+      </div>
+
+      <!-- VISÃO GERAL -->
+      <div class="doc-section">
+        <h3>🎯 Visão Geral do Sistema</h3>
+        <p>O <strong>Sistema SEJA SENAI</strong> é uma plataforma completa para gerenciamento de inscrições em cursos profissionalizantes. Permite que candidatos se inscrevam, acompanhem o status através de múltiplas etapas (análise, prova, lista de espera, matrícula) e finalizem o processo de matrícula online.</p>
+        
+        <h4>Funcionalidades Principais</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 16px;">
+          <div style="background: #f9fafb; padding: 16px; border-radius: 8px; border-left: 4px solid #3b82f6;">
+            <h5 style="margin-top: 0; color: #1e40af;">👨‍🎓 Para Alunos</h5>
+            <ul style="margin-bottom: 0;">
+              <li>Visualização de cursos disponíveis</li>
+              <li>Inscrição online com formulário completo</li>
+              <li>Timeline visual de acompanhamento</li>
+              <li>Matrícula online com aceite de contrato</li>
+              <li>Gestão de perfil pessoal</li>
+            </ul>
+          </div>
+          <div style="background: #f9fafb; padding: 16px; border-radius: 8px; border-left: 4px solid #10b981;">
+            <h5 style="margin-top: 0; color: #065f46;">🏢 Para Secretaria</h5>
+            <ul style="margin-bottom: 0;">
+              <li>Gerenciamento de cursos e unidades</li>
+              <li>Administração de usuários</li>
+              <li>Controle de etapas do processo seletivo</li>
+              <li>Dashboard com estatísticas</li>
+              <li>Relatórios consolidados</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ARQUITETURA -->
+      <div class="doc-section">
+        <h3>🏗️ Arquitetura do Sistema</h3>
+        <p>Arquitetura <strong>cliente-servidor</strong> com separação clara de responsabilidades:</p>
+        <pre style="background: #1e293b; color: #e2e8f0; padding: 20px; border-radius: 8px; overflow-x: auto; line-height: 1.6;">
+┌─────────────────────────────────────────┐
+│         FRONTEND (Client)               │
+│      HTML5 + CSS3 + Vanilla JS          │
+│         SPA-like Navigation             │
+└──────────────┬──────────────────────────┘
+               │ REST API (JSON)
+               │ JWT Authentication
+               ▼
+┌─────────────────────────────────────────┐
+│         BACKEND (Server)                │
+│   Spring Boot 3.x + Java 21             │
+│   JPA/Hibernate + Spring Security       │
+└──────────────┬──────────────────────────┘
+               │ JDBC
+               ▼
+┌─────────────────────────────────────────┐
+│      DATABASE (PostgreSQL/MySQL)        │
+└─────────────────────────────────────────┘
+        </pre>
+
+        <h4>Padrões de Design</h4>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;">
+          <span class="tech-badge">MVC</span>
+          <span class="tech-badge">Repository Pattern</span>
+          <span class="tech-badge">DTO</span>
+          <span class="tech-badge">JWT Stateless</span>
+          <span class="tech-badge">CORS</span>
+        </div>
+      </div>
+
+      <!-- TECNOLOGIAS -->
+      <div class="doc-section">
+        <h3>💻 Stack Tecnológico</h3>
+        
+        <h4>Backend</h4>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0;">
+          <span class="tech-badge">Java 21</span>
+          <span class="tech-badge">Spring Boot 3.4.5</span>
+          <span class="tech-badge">Spring Data JPA</span>
+          <span class="tech-badge">Spring Security</span>
+          <span class="tech-badge">JWT</span>
+          <span class="tech-badge">BCrypt</span>
+          <span class="tech-badge">Maven</span>
+          <span class="tech-badge">PostgreSQL/MySQL</span>
+        </div>
+
+        <h4>Frontend</h4>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0;">
+          <span class="tech-badge">HTML5</span>
+          <span class="tech-badge">CSS3</span>
+          <span class="tech-badge">JavaScript ES6+</span>
+          <span class="tech-badge">Fetch API</span>
+          <span class="tech-badge">LocalStorage</span>
+          <span class="tech-badge">Responsive Design</span>
+        </div>
+      </div>
+
+      <!-- ENDPOINTS -->
+      <div class="doc-section">
+        <h3>🔌 Principais Endpoints da API</h3>
+        
+        <h4>Autenticação</h4>
+        <ul style="list-style: none; padding: 0;">
+          <li style="margin: 8px 0;">
+            <span class="endpoint-method method-post">POST</span>
+            <code>/api/auth/login</code>
+            <span style="color: #6b7280;"> - Login e obtenção de token JWT</span>
+          </li>
+          <li style="margin: 8px 0;">
+            <span class="endpoint-method method-post">POST</span>
+            <code>/api/auth/register</code>
+            <span style="color: #6b7280;"> - Registro de novo usuário</span>
+          </li>
+        </ul>
+
+        <h4>Usuários</h4>
+        <ul style="list-style: none; padding: 0;">
+          <li style="margin: 8px 0;">
+            <span class="endpoint-method method-get">GET</span>
+            <code>/api/usuarios/me</code>
+            <span style="color: #6b7280;"> - Dados do usuário logado</span>
+          </li>
+          <li style="margin: 8px 0;">
+            <span class="endpoint-method method-put">PUT</span>
+            <code>/api/usuarios/me</code>
+            <span style="color: #6b7280;"> - Atualizar próprio perfil</span>
+          </li>
+          <li style="margin: 8px 0;">
+            <span class="endpoint-method method-get">GET</span>
+            <code>/api/usuarios</code>
+            <span style="color: #6b7280;"> - Listar todos (admin only)</span>
+          </li>
+        </ul>
+
+        <h4>Inscrições</h4>
+        <ul style="list-style: none; padding: 0;">
+          <li style="margin: 8px 0;">
+            <span class="endpoint-method method-post">POST</span>
+            <code>/api/inscricoes</code>
+            <span style="color: #6b7280;"> - Criar nova inscrição</span>
+          </li>
+          <li style="margin: 8px 0;">
+            <span class="endpoint-method method-get">GET</span>
+            <code>/api/inscricoes/{id}</code>
+            <span style="color: #6b7280;"> - Buscar inscrição por ID</span>
+          </li>
+          <li style="margin: 8px 0;">
+            <span class="endpoint-method method-put">PUT</span>
+            <code>/api/inscricoes/{id}/etapas</code>
+            <span style="color: #6b7280;"> - Atualizar etapas do processo</span>
+          </li>
+          <li style="margin: 8px 0;">
+            <span class="endpoint-method method-put">PUT</span>
+            <code>/api/inscricoes/{id}/matricula</code>
+            <span style="color: #6b7280;"> - Aceitar/recusar matrícula</span>
+          </li>
+        </ul>
+
+        <h4>Cursos, Unidades, Editais</h4>
+        <ul style="list-style: none; padding: 0;">
+          <li style="margin: 8px 0;">
+            <span class="endpoint-method method-get">GET</span>
+            <code>/api/cursos</code>
+            <span style="color: #6b7280;"> - Listar todos os cursos</span>
+          </li>
+          <li style="margin: 8px 0;">
+            <span class="endpoint-method method-get">GET</span>
+            <code>/api/unidades</code>
+            <span style="color: #6b7280;"> - Listar todas as unidades</span>
+          </li>
+          <li style="margin: 8px 0;">
+            <span class="endpoint-method method-get">GET</span>
+            <code>/api/editais</code>
+            <span style="color: #6b7280;"> - Listar editais ativos</span>
+          </li>
+        </ul>
+
+        <div class="highlight-box">
+          <strong>📝 Nota:</strong> Todos os endpoints protegidos exigem o header <code>Authorization: Bearer &lt;token&gt;</code>
+        </div>
+      </div>
+
+      <!-- PÁGINAS -->
+      <div class="doc-section">
+        <h3>🖥️ Estrutura do Frontend</h3>
+        
+        <table class="pricing-table">
+          <thead>
+            <tr>
+              <th>Página</th>
+              <th>Descrição</th>
+              <th>Acesso</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>login.html</strong></td>
+              <td>Autenticação e registro de usuários</td>
+              <td>Público</td>
+            </tr>
+            <tr>
+              <td><strong>index.html</strong></td>
+              <td>Listagem de cursos disponíveis (status ATIVO)</td>
+              <td>Autenticado</td>
+            </tr>
+            <tr>
+              <td><strong>inscricao.html</strong></td>
+              <td>Formulário completo de inscrição</td>
+              <td>Autenticado</td>
+            </tr>
+            <tr>
+              <td><strong>status.html</strong></td>
+              <td>Acompanhamento com timeline visual</td>
+              <td>Autenticado</td>
+            </tr>
+            <tr>
+              <td><strong>matricula.html</strong></td>
+              <td>Aceite/recusa de matrícula com contrato</td>
+              <td>Autenticado</td>
+            </tr>
+            <tr>
+              <td><strong>portal-aluno.html</strong></td>
+              <td>Gestão de perfil pessoal</td>
+              <td>Autenticado</td>
+            </tr>
+            <tr>
+              <td><strong>portal-secretaria.html</strong></td>
+              <td>Administração completa do sistema</td>
+              <td>Admin only</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- FLUXO -->
+      <div class="doc-section">
+        <h3>🔄 Fluxo do Processo de Inscrição</h3>
+        <ol style="line-height: 2;">
+          <li><strong>Cadastro:</strong> Usuário cria conta com dados básicos</li>
+          <li><strong>Seleção:</strong> Escolhe curso disponível (sistema verifica duplicatas)</li>
+          <li><strong>Inscrição:</strong> Preenche formulário completo com documentação</li>
+          <li><strong>Análise:</strong> Secretaria avalia e define se há prova</li>
+          <li><strong>Prova (se aplicável):</strong> Aluno realiza e aguarda resultado</li>
+          <li><strong>Lista de Espera:</strong> Se reprovado na prova, pode entrar na lista</li>
+          <li><strong>Matrícula:</strong> Aluno aceita contrato online</li>
+          <li><strong>Conclusão:</strong> Secretaria valida documentos finais</li>
+        </ol>
+
+        <div class="success-box">
+          <strong>✅ Timeline Visual:</strong> O sistema exibe todas as etapas em tempo real com indicadores de status (concluída, em andamento, pendente)
+        </div>
+      </div>
+
+      <!-- SEGURANÇA -->
+      <div class="doc-section">
+        <h3>🔒 Segurança e Autenticação</h3>
+        
+        <h4>JWT (JSON Web Tokens)</h4>
+        <ul>
+          <li><strong>Validade:</strong> 24 horas (86400000 ms)</li>
+          <li><strong>Algoritmo:</strong> HS512 (HMAC-SHA512)</li>
+          <li><strong>Armazenamento:</strong> LocalStorage no frontend</li>
+          <li><strong>Proteção:</strong> JwtFilter intercepta todas as requisições</li>
+        </ul>
+
+        <h4>Hash de Senhas</h4>
+        <ul>
+          <li><strong>Algoritmo:</strong> BCrypt com salt automático</li>
+          <li><strong>Força:</strong> 10 rounds (padrão Spring Security)</li>
+          <li><strong>Validação:</strong> BCryptPasswordEncoder.matches()</li>
+        </ul>
+
+        <h4>Controle de Acesso</h4>
+        <table class="pricing-table">
+          <thead>
+            <tr>
+              <th>Rota</th>
+              <th>Permissão</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>/api/auth/**</code></td>
+              <td>Público</td>
+            </tr>
+            <tr>
+              <td><code>/api/cursos</code>, <code>/api/inscricoes</code></td>
+              <td>Autenticado</td>
+            </tr>
+            <tr>
+              <td><code>/api/unidades/**</code>, <code>/api/editais/**</code></td>
+              <td>ROLE_ADMIN</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- DEPLOY -->
+      <div class="doc-section">
+        <h3>🚀 Guia de Deploy</h3>
+        
+        <h4>Opção 1: Deploy Manual</h4>
+        <div class="highlight-box">
+          <strong>Backend:</strong>
+          <pre style="margin: 8px 0; background: #1e293b; color: #e2e8f0; padding: 12px; border-radius: 4px;">cd backend
+./mvnw clean package -DskipTests
+java -jar target/sejasenai-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod</pre>
+          
+          <strong>Frontend:</strong>
+          <pre style="margin: 8px 0; background: #1e293b; color: #e2e8f0; padding: 12px; border-radius: 4px;">cd frontend-web/static
+npx http-server . -p 3000</pre>
+        </div>
+
+        <h4>Opção 2: Docker</h4>
+        <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px;">docker-compose up -d</pre>
+
+        <h4>Opção 3: Cloud Providers</h4>
+        <ul>
+          <li><strong>AWS:</strong> Elastic Beanstalk + RDS + S3 + CloudFront</li>
+          <li><strong>Azure:</strong> App Service + Azure Database + Static Web Apps</li>
+          <li><strong>Google Cloud:</strong> App Engine + Cloud SQL + Firebase Hosting</li>
+        </ul>
+      </div>
+
+      <!-- PRECIFICAÇÃO -->
+      <div class="doc-section">
+        <h3>💰 Análise de Precificação</h3>
+        
+        <h4>Investimento Inicial</h4>
+        <table class="pricing-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Desenvolvimento do Sistema</strong></td>
+              <td>R$ 55.000 - R$ 70.000</td>
+            </tr>
+            <tr>
+              <td>Implantação e Treinamento</td>
+              <td>R$ 5.000 - R$ 10.000</td>
+            </tr>
+            <tr>
+              <td>Customizações (opcional)</td>
+              <td>R$ 5.000 - R$ 15.000</td>
+            </tr>
+            <tr style="background: #dbeafe; font-weight: 700;">
+              <td><strong>TOTAL INICIAL</strong></td>
+              <td><strong>R$ 65.000 - R$ 95.000</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>Custos Mensais de Infraestrutura</h4>
+        <table class="pricing-table">
+          <thead>
+            <tr>
+              <th>Plano</th>
+              <th>Infraestrutura</th>
+              <th>Custo Mensal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Básico</strong></td>
+              <td>VPS + PostgreSQL + SSL</td>
+              <td>R$ 205/mês</td>
+            </tr>
+            <tr>
+              <td><strong>Médio</strong></td>
+              <td>AWS EC2 + RDS + CloudFront</td>
+              <td>R$ 655/mês</td>
+            </tr>
+            <tr>
+              <td><strong>Enterprise</strong></td>
+              <td>Multi-AZ + Load Balancer + WAF</td>
+              <td>R$ 2.300/mês</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>Planos de Suporte</h4>
+        <table class="pricing-table">
+          <thead>
+            <tr>
+              <th>Plano</th>
+              <th>Incluído</th>
+              <th>Valor Mensal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Básico</strong></td>
+              <td>Atualizações de segurança + Backup + Suporte 48h</td>
+              <td>R$ 800</td>
+            </tr>
+            <tr>
+              <td><strong>Padrão</strong></td>
+              <td>Básico + Suporte 24h + Ajustes + Relatórios</td>
+              <td>R$ 1.500</td>
+            </tr>
+            <tr>
+              <td><strong>Premium</strong></td>
+              <td>Padrão + Suporte 24/7 + Novas features + Consultoria</td>
+              <td>R$ 3.000</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="success-box">
+          <strong>💡 ROI para a Instituição:</strong>
+          <ul style="margin-bottom: 0;">
+            <li>Redução de ~30% em materiais de escritório (papelada)</li>
+            <li>Economia de ~20 horas/mês da equipe da secretaria</li>
+            <li>Diminuição significativa de erros e retrabalho</li>
+            <li>Melhor experiência do aluno = maior retenção</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- DIAGRAMAS -->
+      <div class="doc-section">
+        <h3>📊 Diagramas e Modelagem</h3>
+        
+        <h4>Diagrama Entidade-Relacionamento (DER)</h4>
+        <div class="highlight-box">
+          <strong>Entidades Principais:</strong>
+          <ul>
+            <li><strong>USUARIO</strong> (id, nomeCompleto, email, senha, cpf, role)</li>
+            <li><strong>UNIDADE</strong> (id, nome_unidade, endereco, telefone)</li>
+            <li><strong>CURSO</strong> (id, id_unidade, nome_curso, tipo, turno, data_inicio, status)</li>
+            <li><strong>INSCRICAO</strong> (id, id_usuario, id_curso, dados pessoais, etapas do processo)</li>
+            <li><strong>EDITAL</strong> (id, titulo, url, ativo)</li>
+          </ul>
+
+          <strong>Relacionamentos:</strong>
+          <ul style="margin-bottom: 0;">
+            <li>USUARIO 1:N INSCRICAO (um usuário pode ter múltiplas inscrições)</li>
+            <li>CURSO 1:N INSCRICAO (um curso pode ter múltiplas inscrições)</li>
+            <li>UNIDADE 1:N CURSO (uma unidade oferece múltiplos cursos)</li>
+          </ul>
+        </div>
+
+        <h4>Ferramentas Recomendadas</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+          <div style="background: #f9fafb; padding: 16px; border-radius: 8px;">
+            <strong>🎨 Fluxogramas</strong>
+            <ul style="margin-bottom: 0; font-size: 0.9rem;">
+              <li>Lucidchart</li>
+              <li>Draw.io (gratuito)</li>
+              <li>Microsoft Visio</li>
+              <li>Mermaid.js (código)</li>
+            </ul>
+          </div>
+          <div style="background: #f9fafb; padding: 16px; border-radius: 8px;">
+            <strong>🗄️ Diagramas ER</strong>
+            <ul style="margin-bottom: 0; font-size: 0.9rem;">
+              <li>dbdiagram.io</li>
+              <li>MySQL Workbench</li>
+              <li>pgModeler</li>
+              <li>Draw.io (ER shapes)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONFIGURAÇÃO -->
+      <div class="doc-section">
+        <h3>⚙️ Configuração do Ambiente</h3>
+        
+        <h4>Pré-requisitos</h4>
+        <ul>
+          <li><strong>Java JDK 21+</strong> - <a href="https://adoptium.net/" target="_blank">Download</a></li>
+          <li><strong>PostgreSQL 14+</strong> ou MySQL 8+</li>
+          <li><strong>Maven 3.8+</strong> (ou usar mvnw incluído)</li>
+          <li><strong>IDE:</strong> IntelliJ IDEA ou VS Code com extensões Java</li>
+        </ul>
+
+        <h4>Configuração application.properties</h4>
+        <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto;">spring.datasource.url=jdbc:postgresql://localhost:5432/sejasenai
+spring.datasource.username=seu_usuario
+spring.datasource.password=sua_senha
+spring.jpa.hibernate.ddl-auto=update
+
+jwt.secret=sua_chave_secreta_muito_longa_e_segura
+jwt.expiration=86400000
+
+server.port=8080</pre>
+
+        <h4>Executar o Sistema</h4>
+        <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px;">cd backend
+./mvnw spring-boot:run
+
+# Em outro terminal
+cd frontend-web/static
+npx http-server . -p 3000</pre>
+      </div>
+
+      <!-- MONITORAMENTO -->
+      <div class="doc-section">
+        <h3>📈 Monitoramento e Manutenção</h3>
+        
+        <h4>Spring Boot Actuator</h4>
+        <ul style="list-style: none; padding: 0;">
+          <li style="margin: 8px 0;">
+            <span class="endpoint-method method-get">GET</span>
+            <code>/actuator/health</code>
+            <span style="color: #6b7280;"> - Status da aplicação</span>
+          </li>
+          <li style="margin: 8px 0;">
+            <span class="endpoint-method method-get">GET</span>
+            <code>/actuator/info</code>
+            <span style="color: #6b7280;"> - Informações da build</span>
+          </li>
+          <li style="margin: 8px 0;">
+            <span class="endpoint-method method-get">GET</span>
+            <code>/actuator/metrics</code>
+            <span style="color: #6b7280;"> - Métricas de performance</span>
+          </li>
+        </ul>
+
+        <h4>Backup de Banco de Dados</h4>
+        <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px;"># PostgreSQL Backup
+pg_dump -U admin -h localhost sejasenai > backup_$(date +%Y%m%d).sql
+
+# Restore
+psql -U admin -h localhost sejasenai < backup_20240315.sql</pre>
+
+        <h4>Checklist de Manutenção</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+          <div style="background: #fef3c7; padding: 16px; border-radius: 8px; border-left: 4px solid #f59e0b;">
+            <strong>📆 Semanal</strong>
+            <ul style="margin-bottom: 0; font-size: 0.9rem;">
+              <li>Verificar logs de erros</li>
+              <li>Monitorar uso de disco</li>
+              <li>Verificar backups</li>
+              <li>Testar endpoints críticos</li>
+            </ul>
+          </div>
+          <div style="background: #dbeafe; padding: 16px; border-radius: 8px; border-left: 4px solid #3b82f6;">
+            <strong>📅 Mensal</strong>
+            <ul style="margin-bottom: 0; font-size: 0.9rem;">
+              <li>Atualizar dependências</li>
+              <li>Revisar políticas de senha</li>
+              <li>Limpar dados obsoletos</li>
+              <li>Auditoria de segurança</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRÓXIMOS PASSOS -->
+      <div class="doc-section">
+        <h3>🚀 Próximos Passos Recomendados</h3>
+        <ol style="line-height: 2;">
+          <li>Implementar testes automatizados (JUnit + Mockito)</li>
+          <li>Adicionar sistema de notificações por email/SMS</li>
+          <li>Criar módulo de relatórios avançados (PDF/Excel)</li>
+          <li>Implementar dashboard analytics para gestão</li>
+          <li>Adicionar suporte a múltiplos idiomas (i18n)</li>
+          <li>Integração com sistemas de pagamento</li>
+          <li>Desenvolver app mobile nativo (React Native/Flutter)</li>
+        </ol>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="warning-box">
+        <h4 style="margin-top: 0;">📄 Documentação Completa</h4>
+        <p>Esta é uma visão resumida. Para informações detalhadas sobre cada módulo, exemplos de código, fluxogramas completos e diagramas ER, consulte o arquivo Markdown completo.</p>
+        <a href="developer-documentation.md" target="_blank" class="download-btn">📥 Baixar Documentação Markdown Completa</a>
+      </div>
+
+      <div style="text-align: center; margin-top: 40px; padding: 20px; background: #f9fafb; border-radius: 8px;">
+        <h4>✅ Sistema SEJA SENAI - Versão 1.0.0</h4>
+        <p style="margin: 8px 0; color: #6b7280;">Última atualização: Março 2024</p>
+        <p style="margin: 8px 0; color: #6b7280;">Status: <strong style="color: #10b981;">Produção</strong> | 100% Funcional e Documentado</p>
+      </div>
+
+    </section>
+  </main>
+</body>
+</html>

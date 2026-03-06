@@ -13,6 +13,9 @@
         <img src="imagens/1.png" alt="SENAI" />
         <span>SEJA SENAI</span>
       </div>
+      <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+        <span>☰</span>
+      </button>
       <nav class="nav">
         <a href="index.html">Cursos</a>
         <a href="inscricao.html">Inscrição</a>
@@ -22,6 +25,7 @@
       </nav>
     </div>
   </header>
+  <div class="nav-overlay"></div>
 
   <main class="container">
     <section class="hero">
@@ -31,20 +35,27 @@
 
     <section class="card">
       <h2>Histórico</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Curso</th>
-            <th>Unidade</th>
-            <th>Data</th>
-            <th>Status</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody id="status-body">
-          <tr><td colspan="5">Carregando...</td></tr>
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Curso</th>
+              <th>Unidade</th>
+              <th>Data</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="status-body">
+            <tr><td colspan="5">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="etapas-card" class="card hidden">
+      <h2>Etapas do Processo Seletivo</h2>
+      <div id="timeline-etapas"></div>
     </section>
 
     <section id="curso-detalhes-card" class="card hidden">

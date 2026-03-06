@@ -13,6 +13,9 @@
         <img src="imagens/1.png" alt="SENAI" />
         <span>SEJA SENAI</span>
       </div>
+      <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+        <span>☰</span>
+      </button>
       <nav class="nav">
         <a href="index.html">Cursos</a>
         <a href="inscricao.html">Inscrição</a>
@@ -23,6 +26,7 @@
       </nav>
     </div>
   </header>
+  <div class="nav-overlay"></div>
 
   <main class="container">
     <section class="hero">
@@ -32,21 +36,23 @@
 
     <section class="card">
       <h2>Lista de cursos</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Unidade</th>
-            <th>Curso</th>
-            <th>Turno</th>
-            <th>Início</th>
-            <th>Duração</th>
-            <th>Ação</th>
-          </tr>
-        </thead>
-        <tbody id="courses-body">
-          <tr><td colspan="6">Carregando cursos...</td></tr>
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Unidade</th>
+              <th>Curso</th>
+              <th>Turno</th>
+              <th>Início</th>
+              <th>Duração</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody id="courses-body">
+            <tr><td colspan="6">Carregando cursos...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
   </main>
 

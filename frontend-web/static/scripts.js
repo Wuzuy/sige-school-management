@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:8080/api';
+const API_BASE = 'https://perform-omaha-serum-inn.trycloudflare.com/api';
 
 function getAuth() {
   const raw = localStorage.getItem('auth');
@@ -52,6 +52,48 @@ function setupLogoutButtons() {
       clearAuth();
       window.location.href = 'login.html';
     });
+  });
+}
+
+function setupMobileMenu() {
+  const menuToggle = document.querySelector('.menu-toggle');
+  const nav = document.querySelector('.nav');
+  const overlay = document.querySelector('.nav-overlay');
+
+  if (!menuToggle || !nav) return;
+
+  const closeMenu = () => {
+    nav.classList.remove('open');
+    if (overlay) overlay.classList.remove('visible');
+    menuToggle.setAttribute('aria-expanded', 'false');
+  };
+
+  const toggleMenu = () => {
+    const isOpen = nav.classList.toggle('open');
+    if (overlay) overlay.classList.toggle('visible', isOpen);
+    menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  };
+
+  menuToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMenu();
+  });
+
+  // Fechar ao clicar em um link
+  nav.querySelectorAll('a, button').forEach((item) => {
+    item.addEventListener('click', closeMenu);
+  });
+
+  // Fechar ao clicar no overlay
+  if (overlay) {
+    overlay.addEventListener('click', closeMenu);
+  }
+
+  // Fechar ao pressionar ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && nav.classList.contains('open')) {
+      closeMenu();
+    }
   });
 }
 
@@ -116,12 +158,15 @@ function renderEditais(container, editais) {
     return;
   }
 
+  // Verificar se estamos na página de login para usar estilo especial
+  const isLoginPage = document.body.dataset.page === 'login';
+
   editais.forEach((edital) => {
     const link = document.createElement('a');
     link.href = edital.url;
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
-    link.className = 'btn btn-soft';
+    link.className = isLoginPage ? 'btn btn-edital' : 'btn btn-soft';
     link.textContent = edital.titulo;
     container.appendChild(link);
   });
@@ -229,11 +274,25 @@ async function initHomePage() {
   const body = document.querySelector('#courses-body');
 
   try {
-    const cursos = await request('/cursos', { headers: authHeaders(false) });
+    const [cursos, inscricoes] = await Promise.all([
+      request('/cursos', { headers: authHeaders(false) }),
+      request('/inscricoes', { headers: authHeaders(false) })
+    ]);
+
+    // Filtrar apenas cursos ativos
+    const cursosAtivos = cursos.filter(curso => curso.status === 'ATIVO');
+
+    // IDs dos cursos em que o usuário já está inscrito
+    const cursosInscritos = new Set(
+      inscricoes
+        .filter(insc => insc?.id_usuario?.id === auth.usuario.id)
+        .map(insc => insc?.id_curso?.id)
+    );
 
     body.innerHTML = '';
 
-    cursos.forEach((curso) => {
+    cursosAtivos.forEach((curso) => {
+      const jaInscrito = cursosInscritos.has(curso.id);
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${curso?.id_unidade?.nome || '-'}</td>
@@ -241,10 +300,19 @@ async function initHomePage() {
         <td>${curso.turno}</td>
         <td>${formatDate(curso.data_inicio)}</td>
         <td>${curso.duracao_meses} meses</td>
-        <td><button class="btn btn-primary" data-inscrever="${curso.id}">Inscrever-se</button></td>
+        <td>
+          ${jaInscrito 
+            ? '<span class="status" style="background: #d1fae5; color: #065f46;">Já inscrito</span>' 
+            : `<button class="btn btn-primary" data-inscrever="${curso.id}">Inscrever-se</button>`
+          }
+        </td>
       `;
       body.appendChild(tr);
     });
+
+    if (cursosAtivos.length === 0) {
+      body.innerHTML = '<tr><td colspan="6">Nenhum curso ativo disponível no momento.</td></tr>';
+    }
 
     body.querySelectorAll('[data-inscrever]').forEach((button) => {
       button.addEventListener('click', () => {
@@ -266,40 +334,74 @@ async function initInscricaoPage() {
   const cursoId = params.get('cursoId');
   const detailsAlert = document.querySelector('#curso-detalhes');
 
-  if (cursoId) {
-    try {
-      const curso = await request(`/cursos/${cursoId}`, { headers: authHeaders(false) });
+  // Redirecionar se não há curso selecionado
+  if (!cursoId) {
+    alert('Por favor, selecione um curso antes de preencher a inscrição.');
+    window.location.href = 'index.html';
+    return;
+  }
 
-      document.querySelector('#curso-info').textContent = `${curso.nome_curso} - ${curso.turno}`;
-      document.querySelector('#unidade-info').textContent = curso?.id_unidade?.nome || '-';
+  try {
+    // Carregar dados do curso e do usuário em paralelo
+    const [curso, usuario] = await Promise.all([
+      request(`/cursos/${cursoId}`, { headers: authHeaders(false) }),
+      request('/usuarios/me', { headers: authHeaders(false) })
+    ]);
 
-      if (detailsAlert) {
-        detailsAlert.classList.remove('hidden');
-        detailsAlert.textContent = `Tipo: ${curso?.tipo || '-'} | Início: ${formatDate(curso?.data_inicio)} | Duração: ${curso?.duracao_meses || '-'} meses | Status: ${curso?.status || '-'}`;
-      }
-    } catch (error) {
-      alert(`Falha ao carregar curso: ${error.message}`);
+    // Preencher informações do curso
+    document.querySelector('#curso-info').textContent = `${curso.nome_curso} - ${curso.turno}`;
+    document.querySelector('#unidade-info').textContent = curso?.id_unidade?.nome || '-';
+
+    if (detailsAlert) {
+      detailsAlert.classList.remove('hidden');
+      detailsAlert.textContent = `Tipo: ${curso?.tipo || '-'} | Início: ${formatDate(curso?.data_inicio)} | Duração: ${curso?.duracao_meses || '-'} meses | Status: ${curso?.status || '-'}`;
     }
+
+    // Preencher formulário com dados do usuário
+    document.querySelector('#nome-completo').value = usuario.nomeCompleto || '';
+    document.querySelector('#cpf').value = usuario.cpf || '';
+    document.querySelector('#telefone-contato').value = usuario.telefone || '';
+    document.querySelector('#email-contato').value = usuario.email || '';
+    document.querySelector('#data-nascimento').value = toDateInputValue(usuario.dataNascimento);
+
+    // RG não está no modelo atual, deixar vazio
+    document.querySelector('#rg').value = '';
+  } catch (error) {
+    alert(`Falha ao carregar dados: ${error.message}`);
+    window.location.href = 'index.html';
+    return;
   }
 
   form?.addEventListener('submit', async (event) => {
     event.preventDefault();
 
+    const nomeCompleto = document.querySelector('#nome-completo').value.trim();
+    const rg = document.querySelector('#rg').value.trim();
+    const cpf = document.querySelector('#cpf').value.trim();
+    const telefone = document.querySelector('#telefone-contato').value.trim();
+    const email = document.querySelector('#email-contato').value.trim();
+    const dataNascimento = document.querySelector('#data-nascimento').value;
     const escolaridade = document.querySelector('#escolaridade').value.trim();
-    const unidadeManual = document.querySelector('#id-unidade-manual').value.trim();
 
     if (!cursoId) {
-      alert('Selecione um curso antes de finalizar a inscrição.');
+      alert('Erro: curso não identificado.');
       return;
     }
 
     const payload = {
       id_usuario: { id: auth.usuario.id },
       id_curso: { id: Number(cursoId) },
-      id_unidade: unidadeManual || 'Não informado',
+      id_unidade: '', // Será definido pelo curso
       data_inscricao: new Date().toISOString().slice(0, 10),
       status_aprovacao: 'EM_ANALISE',
       escolaridade_declarada: escolaridade,
+      // Campos adicionais (precisaremos ajustar o backend para aceitar)
+      nome_completo_inscricao: nomeCompleto,
+      rg_inscricao: rg,
+      cpf_inscricao: cpf,
+      telefone_inscricao: telefone,
+      email_inscricao: email,
+      data_nascimento_inscricao: dataNascimento
     };
 
     try {
@@ -308,10 +410,10 @@ async function initInscricaoPage() {
         headers: authHeaders(),
         body: JSON.stringify(payload),
       });
-      alert('Inscrição enviada com sucesso.');
+      alert('Inscrição enviada com sucesso! Acompanhe o status na aba Status.');
       window.location.href = 'status.html';
     } catch (error) {
-      alert(`Não foi possível concluir: ${error.message}`);
+      alert(`Não foi possível concluir a inscrição: ${error.message}`);
     }
   });
 }
@@ -324,6 +426,8 @@ async function initStatusPage() {
   const statusText = document.querySelector('#status-atual');
   const body = document.querySelector('#status-body');
   const detailsCard = document.querySelector('#curso-detalhes-card');
+  const etapasCard = document.querySelector('#etapas-card');
+  const timeline = document.querySelector('#timeline-etapas');
 
   try {
     const inscricoes = await request('/inscricoes', { headers: authHeaders(false) });
@@ -340,28 +444,45 @@ async function initStatusPage() {
 
     minhas.forEach((item) => {
       const tr = document.createElement('tr');
+      
+      // Verificar se há matrícula disponível para aceite
+      const btnMatricula = item.status_matricula === 'AGUARDANDO_ACEITE' 
+        ? `<a href="matricula.html?inscricaoId=${item.id}" class="btn btn-primary" style="margin-left: 8px; font-size: 0.85rem;">Aceitar Matrícula</a>`
+        : '';
+      
       tr.innerHTML = `
         <td>${item?.id_curso?.nome_curso || '-'}</td>
         <td>${item.id_unidade}</td>
         <td>${formatDate(item.data_inscricao)}</td>
         <td><span class="status">${item.status_aprovacao}</span></td>
-        <td><button class="btn btn-soft" data-detalhes-curso="${item?.id_curso?.id || ''}">Ver detalhes</button></td>
+        <td>
+          <button class="btn btn-soft" data-detalhes-inscricao="${item.id}">Ver detalhes</button>
+          ${btnMatricula}
+        </td>
       `;
       body.appendChild(tr);
     });
 
     body.addEventListener('click', async (event) => {
-      const button = event.target.closest('[data-detalhes-curso]');
+      const button = event.target.closest('[data-detalhes-inscricao]');
       if (!button) return;
 
-      const id = button.getAttribute('data-detalhes-curso');
-      if (!id) {
-        alert('Curso não encontrado para esta inscrição.');
+      const idInscricao = button.getAttribute('data-detalhes-inscricao');
+      const inscricao = minhas.find(i => i.id === Number(idInscricao));
+      
+      if (!inscricao) {
+        alert('Inscrição não encontrada.');
+        return;
+      }
+
+      const cursoId = inscricao?.id_curso?.id;
+      if (!cursoId) {
+        alert('Curso não identificado para esta inscrição.');
         return;
       }
 
       try {
-        const course = await request(`/cursos/${id}`, { headers: authHeaders(false) });
+        const course = await request(`/cursos/${cursoId}`, { headers: authHeaders(false) });
         fillCourseDetailsPanel(course, {
           name: '#detalhe-curso-nome',
           type: '#detalhe-curso-tipo',
@@ -372,6 +493,13 @@ async function initStatusPage() {
           status: '#detalhe-curso-status',
         });
         detailsCard?.classList.remove('hidden');
+
+        // Renderizar timeline de etapas
+        renderTimelineEtapas(timeline, inscricao);
+        etapasCard?.classList.remove('hidden');
+
+        // Scroll suave até os detalhes
+        etapasCard?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       } catch (error) {
         alert(`Não foi possível carregar os detalhes: ${error.message}`);
       }
@@ -381,9 +509,202 @@ async function initStatusPage() {
   }
 }
 
+function renderTimelineEtapas(container, inscricao) {
+  if (!container) return;
+
+  const etapas = [
+    {
+      numero: 1,
+      titulo: 'Inscrição Realizada',
+      descricao: `Sua inscrição foi enviada em ${formatDate(inscricao.data_inscricao)}`,
+      data: formatDate(inscricao.data_inscricao),
+      status: 'concluida'
+    },
+    {
+      numero: 2,
+      titulo: 'Análise de Inscrição',
+      descricao: `Status: ${inscricao.status_aprovacao}`,
+      data: inscricao.status_aprovacao === 'APROVADA' ? 'Aprovada' : 'Em análise',
+      status: inscricao.status_aprovacao === 'APROVADA' ? 'concluida' : 
+              inscricao.status_aprovacao === 'REPROVADA' ? 'pendente' : 'em-andamento'
+    }
+  ];
+
+  // Adicionar etapa de prova se estiver definida
+  if (inscricao.realiza_prova === 'SIM' && inscricao.data_prova) {
+    etapas.push({
+      numero: 3,
+      titulo: 'Prova do Processo Seletivo',
+      descricao: inscricao.situacao_aprovacao_prova 
+        ? `Resultado: ${inscricao.situacao_aprovacao_prova}` 
+        : 'Aguardando realização da prova',
+      data: `Data: ${formatDate(inscricao.data_prova)}`,
+      status: inscricao.situacao_aprovacao_prova === 'APROVADO' ? 'concluida' :
+              inscricao.situacao_aprovacao_prova === 'REPROVADO' ? 'pendente' :
+              new Date(inscricao.data_prova) < new Date() ? 'em-andamento' : 'pendente'
+    });
+  } else if (inscricao.realiza_prova === 'NAO') {
+    etapas.push({
+      numero: 3,
+      titulo: 'Prova do Processo Seletivo',
+      descricao: 'Não há prova para este curso',
+      data: '',
+      status: 'concluida'
+    });
+  }
+
+  // Adicionar etapa de lista de espera se aplicável
+  if (inscricao.lista_espera === 'SIM') {
+    etapas.push({
+      numero: etapas.length + 1,
+      titulo: 'Lista de Espera',
+      descricao: 'Você está na lista de espera. Aguarde convocação.',
+      data: '',
+      status: 'em-andamento'
+    });
+  }
+
+  // Adicionar etapa de matrícula
+  if (inscricao.status_matricula) {
+    const statusMatricula = inscricao.status_matricula;
+    etapas.push({
+      numero: etapas.length + 1,
+      titulo: 'Matrícula',
+      descricao: `Status: ${statusMatricula}`,
+      data: inscricao.data_aceite_matricula ? `Aceita em: ${formatDate(inscricao.data_aceite_matricula)}` : '',
+      status: statusMatricula === 'CONCLUIDA' ? 'concluida' :
+              statusMatricula === 'RECUSADA' ? 'pendente' : 'em-andamento'
+    });
+  }
+
+  container.innerHTML = etapas.map(etapa => `
+    <div class="etapa-item ${etapa.status}">
+      <div class="etapa-icon">${etapa.numero}</div>
+      <div class="etapa-content">
+        <div class="etapa-titulo">${etapa.titulo}</div>
+        <div class="etapa-descricao">${etapa.descricao}</div>
+        ${etapa.data ? `<div class="etapa-data">${etapa.data}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
 function toDateInputValue(value) {
   if (!value) return '';
   return String(value).slice(0, 10);
+}
+
+async function initMatriculaPage() {
+  const auth = requireAuth();
+  if (!auth) return;
+  setupProtectedPage(auth);
+
+  const params = new URLSearchParams(window.location.search);
+  const inscricaoId = params.get('inscricaoId');
+
+  if (!inscricaoId) {
+    alert('Inscrição não identificada. Redirecionando...');
+    window.location.href = 'status.html';
+    return;
+  }
+
+  try {
+    // Buscar dados da inscrição
+    const inscricao = await request(`/inscricoes/${inscricaoId}`, { headers: authHeaders(false) });
+
+    // Verificar se a inscrição pertence ao usuário logado
+    if (inscricao.id_usuario.id !== auth.usuario.id) {
+      alert('Acesso não autorizado a esta matrícula.');
+      window.location.href = 'status.html';
+      return;
+    }
+
+    // Verificar se o status permite matrícula
+    if (inscricao.status_matricula !== 'AGUARDANDO_ACEITE') {
+      alert('Esta matrícula não está disponível para aceite.');
+      window.location.href = 'status.html';
+      return;
+    }
+
+    // Popular dados do aluno
+    document.querySelector('#mat-aluno-nome').textContent = inscricao.nome_completo_inscricao || auth.usuario.nomeCompleto;
+    document.querySelector('#mat-aluno-cpf').textContent = inscricao.cpf_inscricao || auth.usuario.cpf || '-';
+    document.querySelector('#mat-aluno-email').textContent = inscricao.email_inscricao || auth.usuario.email;
+
+    // Popular dados do curso
+    document.querySelector('#curso-matricula-nome').textContent = inscricao.id_curso.nome_curso;
+    document.querySelector('#mat-curso-nome').textContent = inscricao.id_curso.nome_curso;
+    document.querySelector('#mat-curso-turno').textContent = inscricao.id_curso.turno;
+    document.querySelector('#mat-curso-inicio').textContent = formatDate(inscricao.id_curso.data_inicio);
+
+    // Popular dados do contrato
+    document.querySelector('#contrato-aluno').textContent = inscricao.nome_completo_inscricao || auth.usuario.nomeCompleto;
+    document.querySelector('#contrato-cpf').textContent = inscricao.cpf_inscricao || auth.usuario.cpf || '-';
+    document.querySelector('#contrato-curso').textContent = inscricao.id_curso.nome_curso;
+    document.querySelector('#contrato-turno').textContent = inscricao.id_curso.turno;
+    document.querySelector('#contrato-duracao').textContent = inscricao.id_curso.duracao_meses || '-';
+    document.querySelector('#contrato-data').textContent = new Date().toLocaleDateString('pt-BR');
+
+    // Armazenar ID da inscrição no campo hidden
+    document.querySelector('#inscricao-id-matricula').value = inscricaoId;
+
+    // Handler de aceite de matrícula
+    document.querySelector('#form-aceite-matricula')?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const aceiteTermos = document.querySelector('#aceite-termos').checked;
+      const aceiteVeracidade = document.querySelector('#aceite-veracidade').checked;
+
+      if (!aceiteTermos || !aceiteVeracidade) {
+        alert('Você precisa concordar com os termos para continuar.');
+        return;
+      }
+
+      try {
+        await request(`/inscricoes/${inscricaoId}/matricula`, {
+          method: 'PUT',
+          headers: authHeaders(),
+          body: JSON.stringify({
+            status_matricula: 'ACEITA',
+            data_aceite_matricula: new Date().toISOString().slice(0, 10)
+          })
+        });
+
+        // Mostrar mensagem de sucesso e ocultar formulário
+        document.querySelector('.card').classList.add('hidden');
+        document.querySelector('#mensagem-sucesso').classList.remove('hidden');
+      } catch (error) {
+        alert(`Erro ao aceitar matrícula: ${error.message}`);
+      }
+    });
+
+    // Handler de recusa de matrícula
+    document.querySelector('#recusar-matricula')?.addEventListener('click', async () => {
+      if (!confirm('Tem certeza que deseja recusar esta matrícula? Esta ação não pode ser desfeita.')) {
+        return;
+      }
+
+      try {
+        await request(`/inscricoes/${inscricaoId}/matricula`, {
+          method: 'PUT',
+          headers: authHeaders(),
+          body: JSON.stringify({
+            status_matricula: 'RECUSADA',
+            data_aceite_matricula: new Date().toISOString().slice(0, 10)
+          })
+        });
+
+        alert('Matrícula recusada.');
+        window.location.href = 'status.html';
+      } catch (error) {
+        alert(`Erro ao recusar matrícula: ${error.message}`);
+      }
+    });
+
+  } catch (error) {
+    alert(`Falha ao carregar dados da matrícula: ${error.message}`);
+    window.location.href = 'status.html';
+  }
 }
 
 async function initPortalAlunoPage() {
@@ -938,12 +1259,15 @@ async function initPortalSecretariaPage() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  setupMobileMenu();
+  
   const page = document.body.dataset.page;
 
   if (page === 'login') initLoginPage();
   if (page === 'home') initHomePage();
   if (page === 'inscricao') initInscricaoPage();
   if (page === 'status') initStatusPage();
+  if (page === 'matricula') initMatriculaPage();
   if (page === 'portal-aluno') initPortalAlunoPage();
   if (page === 'portal-secretaria') initPortalSecretariaPage();
 });
