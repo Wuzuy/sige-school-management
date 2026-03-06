@@ -95,8 +95,11 @@
       box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     }
   </style>
+  <script defer src="docs-menu.js"></script>
 </head>
 <body>
+  <button class="menu-toggle" aria-label="Menu" aria-expanded="false">☰</button>
+  <div class="menu-overlay"></div>
   <header class="top">
     <h1>📚 Documentação Completa do Sistema</h1>
     <p>Guia técnico completo: arquitetura, APIs, deploy, segurança, custos e diagramas</p>
@@ -126,7 +129,7 @@
         <p>O <strong>Sistema SEJA SENAI</strong> é uma plataforma completa para gerenciamento de inscrições em cursos profissionalizantes. Permite que candidatos se inscrevam, acompanhem o status através de múltiplas etapas (análise, prova, lista de espera, matrícula) e finalizem o processo de matrícula online.</p>
         
         <h4>Funcionalidades Principais</h4>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 16px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px; margin-top: 16px;">
           <div style="background: #f9fafb; padding: 16px; border-radius: 8px; border-left: 4px solid #3b82f6;">
             <h5 style="margin-top: 0; color: #1e40af;">👨‍🎓 Para Alunos</h5>
             <ul style="margin-bottom: 0;">
@@ -154,7 +157,7 @@
       <div class="doc-section">
         <h3>🏗️ Arquitetura do Sistema</h3>
         <p>Arquitetura <strong>cliente-servidor</strong> com separação clara de responsabilidades:</p>
-        <pre style="background: #1e293b; color: #e2e8f0; padding: 20px; border-radius: 8px; overflow-x: auto; line-height: 1.6;">
+        <pre style="background: #1e293b; color: #e2e8f0; padding: 20px; border-radius: 8px; overflow-x: auto; line-height: 1.6; max-width: 100%;">
 ┌─────────────────────────────────────────┐
 │         FRONTEND (Client)               │
 │      HTML5 + CSS3 + Vanilla JS          │
@@ -301,6 +304,7 @@
       <div class="doc-section">
         <h3>🖥️ Estrutura do Frontend</h3>
         
+        <div class="table-wrapper">
         <table class="pricing-table">
           <thead>
             <tr>
@@ -347,6 +351,7 @@
             </tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <!-- FLUXO -->
@@ -388,6 +393,7 @@
         </ul>
 
         <h4>Controle de Acesso</h4>
+        <div class="table-wrapper">
         <table class="pricing-table">
           <thead>
             <tr>
@@ -410,6 +416,7 @@
             </tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <!-- DEPLOY -->
@@ -419,17 +426,17 @@
         <h4>Opção 1: Deploy Manual</h4>
         <div class="highlight-box">
           <strong>Backend:</strong>
-          <pre style="margin: 8px 0; background: #1e293b; color: #e2e8f0; padding: 12px; border-radius: 4px;">cd backend
+          <pre style="margin: 8px 0; background: #1e293b; color: #e2e8f0; padding: 12px; border-radius: 4px; max-width: 100%; overflow-x: auto;">cd backend
 ./mvnw clean package -DskipTests
 java -jar target/sejasenai-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod</pre>
           
           <strong>Frontend:</strong>
-          <pre style="margin: 8px 0; background: #1e293b; color: #e2e8f0; padding: 12px; border-radius: 4px;">cd frontend-web/static
+          <pre style="margin: 8px 0; background: #1e293b; color: #e2e8f0; padding: 12px; border-radius: 4px; max-width: 100%; overflow-x: auto;">cd frontend-web/static
 npx http-server . -p 3000</pre>
         </div>
 
         <h4>Opção 2: Docker</h4>
-        <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px;">docker-compose up -d</pre>
+        <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; max-width: 100%; overflow-x: auto;">docker-compose up -d</pre>
 
         <h4>Opção 3: Cloud Providers</h4>
         <ul>
@@ -444,6 +451,7 @@ npx http-server . -p 3000</pre>
         <h3>💰 Análise de Precificação</h3>
         
         <h4>Investimento Inicial</h4>
+        <div class="table-wrapper">
         <table class="pricing-table">
           <thead>
             <tr>
@@ -470,8 +478,10 @@ npx http-server . -p 3000</pre>
             </tr>
           </tbody>
         </table>
+        </div>
 
         <h4>Custos Mensais de Infraestrutura</h4>
+        <div class="table-wrapper">
         <table class="pricing-table">
           <thead>
             <tr>
@@ -498,8 +508,10 @@ npx http-server . -p 3000</pre>
             </tr>
           </tbody>
         </table>
+        </div>
 
         <h4>Planos de Suporte</h4>
+        <div class="table-wrapper">
         <table class="pricing-table">
           <thead>
             <tr>
@@ -526,6 +538,7 @@ npx http-server . -p 3000</pre>
             </tr>
           </tbody>
         </table>
+        </div>
 
         <div class="success-box">
           <strong>💡 ROI para a Instituição:</strong>
@@ -562,7 +575,7 @@ npx http-server . -p 3000</pre>
         </div>
 
         <h4>Ferramentas Recomendadas</h4>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 16px;">
           <div style="background: #f9fafb; padding: 16px; border-radius: 8px;">
             <strong>🎨 Fluxogramas</strong>
             <ul style="margin-bottom: 0; font-size: 0.9rem;">
@@ -597,7 +610,7 @@ npx http-server . -p 3000</pre>
         </ul>
 
         <h4>Configuração application.properties</h4>
-        <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto;">spring.datasource.url=jdbc:postgresql://localhost:5432/sejasenai
+        <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto; max-width: 100%;">spring.datasource.url=jdbc:postgresql://localhost:5432/sejasenai
 spring.datasource.username=seu_usuario
 spring.datasource.password=sua_senha
 spring.jpa.hibernate.ddl-auto=update
@@ -608,7 +621,7 @@ jwt.expiration=86400000
 server.port=8080</pre>
 
         <h4>Executar o Sistema</h4>
-        <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px;">cd backend
+        <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; max-width: 100%; overflow-x: auto;">cd backend
 ./mvnw spring-boot:run
 
 # Em outro terminal
@@ -640,14 +653,14 @@ npx http-server . -p 3000</pre>
         </ul>
 
         <h4>Backup de Banco de Dados</h4>
-        <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px;"># PostgreSQL Backup
+        <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; max-width: 100%; overflow-x: auto;"># PostgreSQL Backup
 pg_dump -U admin -h localhost sejasenai > backup_$(date +%Y%m%d).sql
 
 # Restore
 psql -U admin -h localhost sejasenai < backup_20240315.sql</pre>
 
         <h4>Checklist de Manutenção</h4>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px;">
           <div style="background: #fef3c7; padding: 16px; border-radius: 8px; border-left: 4px solid #f59e0b;">
             <strong>📆 Semanal</strong>
             <ul style="margin-bottom: 0; font-size: 0.9rem;">

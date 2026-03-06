@@ -11,21 +11,88 @@
   box-sizing: border-box;
 }
 
+html {
+  overflow-x: hidden;
+  width: 100%;
+}
+
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   color: var(--text);
   background: var(--bg);
+  overflow-x: hidden;
+  width: 100%;
 }
 
 .top {
   background: linear-gradient(90deg, #00aaff 0%, #1a66ff 100%);
   color: #fff;
   padding: 22px;
+  position: relative;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 .top h1 {
   margin: 0 0 8px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+.top p {
+  margin: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+/* ============================================ */
+/* MENU HAMBURGUER */
+/* ============================================ */
+
+.menu-toggle {
+  display: none;
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  background: #1e40af;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 10px 12px;
+  color: #ffffff;
+  font-size: 1.3rem;
+  line-height: 1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.menu-toggle:hover {
+  background: #1e3a8a;
+  transform: scale(1.05);
+}
+
+.menu-toggle:active {
+  transform: scale(0.95);
+}
+
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+  transition: opacity 0.3s ease;
+}
+
+.menu-overlay.visible {
+  display: block;
 }
 
 .layout {
@@ -71,12 +138,38 @@ body {
 
 .content h2 {
   margin-top: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.content h3,
+.content h4,
+.content h5,
+.content h6 {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.content p,
+.content li,
+.content span,
+.content strong,
+.content em,
+.content a {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+.content img {
+  max-width: 100%;
+  height: auto;
 }
 
 .cards {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
   margin-bottom: 16px;
 }
 
@@ -93,10 +186,22 @@ pre {
   background: #f8fafc;
   border-radius: 10px;
   padding: 12px;
+  max-width: 100%;
+  word-wrap: normal;
+  white-space: pre-wrap;
+}
+
+pre code {
+  word-break: normal;
+  white-space: pre-wrap;
 }
 
 code {
   font-family: Consolas, Menlo, Monaco, monospace;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
 }
 
 .table {
@@ -111,8 +216,471 @@ code {
   padding: 8px;
 }
 
+/* ============================================ */
+/* RESPONSIVIDADE - MOBILE FIRST */
+/* ============================================ */
+
+/* Wrapper para tabelas com scroll horizontal */
+.table-wrapper {
+  overflow-x: auto;
+  margin: 16px 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.table-wrapper table {
+  margin: 0;
+  border: none;
+}
+
+/* Tablet e Desktop pequeno: até 920px */
 @media (max-width: 920px) {
   .layout {
     grid-template-columns: 1fr;
+    padding: 0 16px;
+    margin: 16px auto;
+  }
+
+  .top {
+    padding: 18px;
+  }
+
+  .top h1 {
+    font-size: 1.5rem;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .content {
+    padding: 16px;
+  }
+}
+
+/* Tablet: 641px - 768px */
+@media (max-width: 768px) {
+  .layout {
+    padding: 0 12px;
+    margin: 12px auto;
+  }
+
+  .content {
+    padding: 14px;
+  }
+
+  .content h2 {
+    font-size: 1.4rem;
+  }
+
+  .content h3 {
+    font-size: 1.2rem;
+  }
+
+  .content h4 {
+    font-size: 1.05rem;
+  }
+
+  pre {
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+
+  .cards article {
+    padding: 14px;
+  }
+}
+
+/* Mobile: até 640px */
+@media (max-width: 640px) {
+  body {
+    font-size: 0.95rem;
+  }
+
+  /* Exibir botão hambúrguer */
+  .menu-toggle {
+    display: block;
+  }
+
+  .top {
+    padding: 16px 12px 16px 56px;
+  }
+
+  .top h1 {
+    font-size: 1.3rem;
+    margin-bottom: 6px;
+  }
+
+  .top p {
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .layout {
+    padding: 0 8px;
+    margin: 8px auto;
+    gap: 12px;
+    grid-template-columns: 1fr;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* Menu lateral deslizante */
+  .menu {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 280px;
+    max-width: 85vw;
+    height: 100vh;
+    background: linear-gradient(180deg, #1a66ff 0%, #0e4fc9 100%);
+    border: none;
+    border-radius: 0;
+    padding: 60px 0 20px 0;
+    gap: 0;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.4);
+    transition: left 0.3s ease;
+    overflow-y: auto;
+    z-index: 1000;
+    /* Suporte para navegação por teclado */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .menu.open {
+    left: 0;
+  }
+
+  .menu a {
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    padding: 14px 20px;
+    font-size: 0.95rem;
+    color: #ffffff;
+    text-align: left;
+    display: block;
+  }
+
+  .menu a:hover,
+  .menu a:focus {
+    background: rgba(255, 255, 255, 0.15);
+    outline: none;
+  }
+
+  .menu a.active {
+    background: rgba(255, 255, 255, 0.25);
+    border-left: 4px solid #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+    font-weight: 700;
+  }
+
+  .content {
+    padding: 12px;
+    border-radius: 8px;
+    overflow-x: hidden;
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+
+  .content h2 {
+    font-size: 1.3rem;
+    margin-top: 0;
+    margin-bottom: 12px;
+  }
+
+  .content h3 {
+    font-size: 1.15rem;
+    margin-top: 16px;
+    margin-bottom: 10px;
+  }
+
+  .content h4 {
+    font-size: 1rem;
+    margin-top: 14px;
+    margin-bottom: 8px;
+  }
+
+  .content ul,
+  .content ol {
+    padding-left: 24px;
+  }
+
+  .content li {
+    margin: 6px 0;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .cards article {
+    padding: 12px;
+  }
+
+  .cards article h3 {
+    font-size: 1.1rem;
+    margin-top: 0;
+  }
+
+  pre {
+    font-size: 0.8rem;
+    padding: 10px;
+    border-radius: 6px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: calc(100vw - 40px);
+  }
+
+  code {
+    font-size: 0.85rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    display: inline-block;
+  }
+
+  .table {
+    font-size: 0.85rem;
+  }
+
+  .table th,
+  .table td {
+    padding: 6px;
+  }
+
+  /* Força scroll horizontal em tabelas */
+  .table-wrapper {
+    margin: 12px -12px;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    max-width: 100vw;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Estilos específicos para developer-docs.html */
+  .doc-section {
+    padding: 16px !important;
+    margin-bottom: 16px !important;
+    max-width: 100%;
+    overflow-x: hidden;
+    word-wrap: break-word;
+  }
+
+  .highlight-box,
+  .success-box,
+  .warning-box {
+    padding: 12px !important;
+    margin: 12px 0 !important;
+  }
+
+  .tech-badge {
+    font-size: 0.8rem;
+    padding: 3px 10px;
+    margin: 3px;
+  }
+
+  .endpoint-method {
+    font-size: 0.75rem;
+    padding: 2px 6px;
+  }
+
+  .download-btn {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    display: block;
+    text-align: center;
+    margin: 12px 0;
+  }
+
+  .pricing-table {
+    font-size: 0.85rem;
+  }
+
+  .pricing-table th,
+  .pricing-table td {
+    padding: 8px 6px;
+  }
+
+  /* Grid responsivo para 2 colunas em mobile */
+  [style*="display: grid"][style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+    max-width: 100%;
+  }
+
+  /* Flex containers responsivos */
+  [style*="display: flex"] {
+    flex-wrap: wrap !important;
+    max-width: 100%;
+  }
+
+  /* Listas sem estilo (endpoints) - melhor espaçamento */
+  ul[style*="list-style: none"] li {
+    margin: 10px 0 !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* Garantir que ul/ol não ultrapassem a viewport */
+  ul, ol {
+    max-width: 100%;
+    overflow-x: hidden;
+    word-wrap: break-word;
+  }
+
+  /* Tech badges e endpoint methods com quebra flexível */
+  .tech-badge,
+  .endpoint-method {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Highlight boxes responsivas */
+  .highlight-box,
+  .success-box,
+  .warning-box {
+    max-width: 100%;
+    overflow-x: hidden;
+    word-wrap: break-word;
+  }
+
+  /* Divs inline com background */
+  div[style*="background"] {
+    max-width: 100%;
+    overflow-x: hidden;
+    word-wrap: break-word;
+  }
+
+  /* Pre blocks com estilos inline */
+  pre[style] {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+  }
+
+  /* Garantir que strong/code inline não causem overflow */
+  strong, em, b, i {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+/* Mobile muito pequeno: até 380px */
+@media (max-width: 380px) {
+  .top {
+    padding: 14px 10px 14px 50px;
+  }
+
+  .top h1 {
+    font-size: 1.15rem;
+  }
+
+  .top p {
+    font-size: 0.85rem;
+  }
+
+  .menu a {
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+
+  .content {
+    padding: 10px;
+  }
+
+  .content h2 {
+    font-size: 1.2rem;
+  }
+
+  .content h3 {
+    font-size: 1.05rem;
+  }
+
+  pre {
+    font-size: 0.75rem;
+    padding: 8px;
+  }
+
+  .cards article {
+    padding: 10px;
+  }
+
+  .tech-badge {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+  }
+}
+
+/* iPhone XR e dispositivos similares: até 414px */
+@media (max-width: 414px) {
+  .layout {
+    padding: 0 6px;
+    margin: 6px auto;
+  }
+
+  .content {
+    padding: 10px;
+  }
+
+  .content ul,
+  .content ol {
+    padding-left: 20px;
+  }
+
+  pre {
+    font-size: 0.75rem;
+    padding: 8px;
+    max-width: calc(100vw - 32px);
+  }
+
+  code {
+    font-size: 0.8rem;
+  }
+
+  .table-wrapper {
+    margin: 10px -10px;
+  }
+
+  .doc-section {
+    padding: 12px !important;
+  }
+
+  .highlight-box,
+  .success-box,
+  .warning-box {
+    padding: 10px !important;
+    margin: 10px 0 !important;
+  }
+}
+
+/* Utilitários */
+.mobile-only {
+  display: none;
+}
+
+/* Esconder overlay e botão em desktop */
+@media (min-width: 641px) {
+  .menu-toggle {
+    display: none !important;
+  }
+
+  .menu-overlay {
+    display: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .mobile-only {
+    display: block;
+  }
+
+  .desktop-only {
+    display: none;
   }
 }

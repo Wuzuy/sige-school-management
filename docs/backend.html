@@ -5,8 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Documentação Backend</title>
   <link rel="stylesheet" href="site.css" />
+  <script defer src="docs-menu.js"></script>
 </head>
 <body>
+  <button class="menu-toggle" aria-label="Menu" aria-expanded="false">☰</button>
+  <div class="menu-overlay"></div>
   <header class="top">
     <h1>Backend</h1>
     <p>Controllers, segurança e endpoints da API REST.</p>
@@ -31,6 +34,7 @@
       </ul>
 
       <h2>Endpoints de destaque</h2>
+      <div class="table-wrapper">
       <table class="table">
         <thead>
           <tr><th>Método</th><th>Rota</th><th>Descrição</th></tr>
@@ -45,6 +49,7 @@
           <tr><td>PUT</td><td>/api/usuarios/{id}</td><td>Edição de usuário (admin)</td></tr>
         </tbody>
       </table>
+      </div>
     </section>
   </main>
 </body>
