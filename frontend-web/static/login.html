@@ -1,154 +1,78 @@
 <!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-	<!-- -->
-	<title>Formulário</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="geral.css">
-	<link rel="stylesheet" href="styleLogin.css">
-	<link rel="shortcut icon" type="image/x-icon" href="https://firjan.com.br/data/files/63/87/D9/E1/AD4B59109D34F849D8284EA8/favicon.ico">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEJA SENAI - Acesso</title>
+  <link rel="stylesheet" href="app.css" />
 </head>
-<body>
-	<!-- HEADER COM LOGO E TÍTULO -->
-	<header>
-		<img src="imagens\1.png">
-		<p>Sistema de Inscrição de Cursos</p>
-	</header>
-	<div class="interfaceTelaLogin">
-		<div class="containerLoginEditais">
-			<!-- CONTAINER DE LOGIN -->
-				<div class="gridbox">
-					<!-- CONTAINER DO TEXTO -->
-					<div class="yapContainer">
-						<p> Acesso ao Sistema </p>
-						<p> Faça login ou cadastre-se para se increver nos cursos </p>
-					</div>
-					<!-- CONTAINER DOS BOTÕES TOGGLE -->
-					<div class="buttonBox">
-						<button class="botaoLogin ativo" data-mode="login">
-							Login
-						</button>
-						<button class="botaoLogin" data-mode="cadastro">
-							Cadastro
-						</button>
-					</div>
-					<!-- CONTAINER INPUT -->
-						<!-- LOGIN -->
-						<form class="caixa visivel login">
-							<div class="flexbox">
-								<label>Email</label>
-								<input type="email" class="escrever" placeholder="seu@email.com" required>
-							</div>
-							<div class="flexbox">
-								<label>Senha</label>
-								<input type="password" class="escrever inputSenha" placeholder="●●●●●●●">
-								<button type="button" class="botaoVisao">
-									<img src="imagens\hide.png">
-								</button>
-							</div>
-							<button class="botaoPrincipal" type="submit">
-								Logar
-							</button>
-						</form>
-						<!-- CADASTRO -->
-						<form class="caixa cadastro">
-							<div class="flexbox">
-								<label>Nome Completo</label>
-								<input type="text" class="escrever" placeholder="Nome Completo">
-							</div>
-							<div class="flexbox">
-								<label>Email</label>
-								<input type="email" class="escrever" placeholder="seu@email.com">
-							</div>
-							<div class="flexbox">
-								<label>Senha</label>
-								<input type="password" class="escrever inputSenha" placeholder="●●●●●●●">
-								<button type="button" class="botaoVisao">
-									<img src="imagens\hide.png">
-								</button>
-							</div>
-							<div class="flexbox">
-								<label>Confirmar Senha</label>
-								<input type="password" class="escrever " placeholder="●●●●●●●" id="senhaInputConfirmar">
-								<button type="button" class="botaoVisao">
-									<img src="imagens\hide.png">
-								</button>
-							</div>
-							<!-- BOTÃO PRINCIPAL -->
-							<button class="botaoPrincipal" type="submit">
-								Cadastrar
-							</button>
-						</form>
-				</div>
-			<!-- CONTAINER DOS EDITAIS -->
-				<div class="gridbox editais">
-					<!-- CONTAINER DO TEXTO -->
-					<div class="yapContainer">
-						<p> Editais </p>
-						<p> Confira os editais disponíveis </p>
-					</div>
-					<!-- CONTAINER DOS EDITAIS -->
-					<div class="editalContanier">
-						<a href="https://www.google.com/">
-							<div class="editalConteudo">
-								<p class="tituloEdital">Edital 001/2025</p>
-								<p class="textoEdital">Cursos Técnicos - Vagas Abertas </p>
-							</div>
-						</a>
-						<a href="https://www.google.com/">
-							<div class="editalConteudo">
-								<p class="tituloEdital">Edital 001/2025</p>
-								<p class="textoEdital">Cursos Técnicos - Vagas Abertas </p>
-							</div>
-						</a>
-						<a href="https://www.google.com/">
-							<div class="editalConteudo">
-								<p class="tituloEdital">Edital 001/2025</p>
-								<p class="textoEdital">Cursos Técnicos - Vagas Abertas </p>
-							</div>
-						</a>
-						<a href="https://www.google.com/">
-							<div class="editalConteudo">
-								<p class="tituloEdital">Edital 001/2025</p>
-								<p class="textoEdital">Cursos Técnicos - Vagas Abertas </p>
-							</div>
-						</a>
-						<a href="https://www.google.com/">
-							<div class="editalConteudo">
-								<p class="tituloEdital">Edital 001/2025</p>
-								<p class="textoEdital">Cursos Técnicos - Vagas Abertas </p>
-							</div>
-						</a>
-						<a href="https://www.google.com/">
-							<div class="editalConteudo">
-								<p class="tituloEdital">Edital 001/2025</p>
-								<p class="textoEdital">Cursos Técnicos - Vagas Abertas </p>
-							</div>
-						</a><a href="https://www.google.com/">
-							<div class="editalConteudo">
-								<p class="tituloEdital">Edital 001/2025</p>
-								<p class="textoEdital">Cursos Técnicos - Vagas Abertas </p>
-							</div>
-						</a>
-						<a href="https://www.google.com/">
-							<div class="editalConteudo">
-								<p class="tituloEdital">Edital 001/2025</p>
-								<p class="textoEdital">Cursos Técnicos - Vagas Abertas </p>
-							</div>
-						</a>
-						<a href="https://www.google.com/">
-							<div class="editalConteudo">
-								<p class="tituloEdital">Edital 001/2025</p>
-								<p class="textoEdital">Cursos Técnicos - Vagas Abertas </p>
-							</div>
-						</a>
-					</div>
-					<!-- CONTAINER INPUT -->
-				</div>
-		</div>
-	</div>
-	<footer class="sombra">
-	</footer>
-	<script src="scripts.js">
-	</script>
+<body data-page="login">
+  <header class="topbar">
+    <div class="topbar__inner">
+      <div class="brand">
+        <img src="imagens/1.png" alt="SENAI" />
+        <span>Sistema de Inscrição e Gestão</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Acesso ao SEJA SENAI</h1>
+      <p>Plataforma unificada para alunos e secretaria.</p>
+    </section>
+
+    <section class="grid">
+      <article class="card card-6">
+        <h2>Entrar ou Criar Conta</h2>
+        <div class="auth-switch">
+          <button id="switch-login" class="active" type="button">Login</button>
+          <button id="switch-register" type="button">Cadastro</button>
+        </div>
+
+        <form id="form-login">
+          <div class="field">
+            <label for="login-email">Email</label>
+            <input id="login-email" type="email" required />
+          </div>
+          <div class="field">
+            <label for="login-senha">Senha</label>
+            <input id="login-senha" type="password" required />
+          </div>
+          <button class="btn btn-primary" type="submit">Entrar</button>
+        </form>
+
+        <form id="form-register" class="hidden">
+          <div class="field">
+            <label for="register-nome">Nome completo</label>
+            <input id="register-nome" type="text" required />
+          </div>
+          <div class="field">
+            <label for="register-email">Email</label>
+            <input id="register-email" type="email" required />
+          </div>
+          <div class="field">
+            <label for="register-senha">Senha</label>
+            <input id="register-senha" type="password" required />
+          </div>
+          <div class="field">
+            <label for="register-confirmar">Confirmar senha</label>
+            <input id="register-confirmar" type="password" required />
+          </div>
+          <button class="btn btn-primary" type="submit">Cadastrar</button>
+        </form>
+      </article>
+
+      <article class="card card-6">
+        <h2>Editais e Informações</h2>
+        <p class="muted">A secretaria pode cadastrar cursos, unidades, usuários e editais no portal administrativo.</p>
+        <p class="muted">Os links de editais são gerenciados no Portal da Secretaria.</p>
+        <div class="alert alert-info">Alunos: após o login, utilize o Portal do Aluno para atualizar seu telefone.</div>
+        <div id="editais-list" class="actions" style="margin-top: 12px;"></div>
+      </article>
+    </section>
+  </main>
+
+  <script src="scripts.js"></script>
 </body>
+</html>

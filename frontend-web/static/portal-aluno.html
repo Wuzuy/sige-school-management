@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEJA SENAI - Portal do Aluno</title>
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body data-page="portal-aluno">
+  <header class="topbar">
+    <div class="topbar__inner">
+      <div class="brand">
+        <img src="imagens/1.png" alt="SENAI" />
+        <span>Portal do Aluno</span>
+      </div>
+      <nav class="nav">
+        <a href="index.html">Cursos</a>
+        <a href="inscricao.html">Inscrição</a>
+        <a href="status.html">Status</a>
+        <a href="portal-secretaria.html" data-admin-only>Portal da Secretaria</a>
+        <button data-logout type="button">Sair</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Dados do Aluno</h1>
+      <p>Atualize seus dados não únicos para manter seu cadastro sempre correto.</p>
+    </section>
+
+    <section class="grid">
+      <article class="card card-6">
+        <h2>Perfil</h2>
+        <p><strong>Nome:</strong> <span id="aluno-nome">-</span></p>
+        <p><strong>Email:</strong> <span id="aluno-email">-</span></p>
+        <p><strong>CPF:</strong> <span id="aluno-cpf">-</span></p>
+        <p><strong>Data de nascimento:</strong> <span id="aluno-data-nascimento">-</span></p>
+      </article>
+
+      <article class="card card-6">
+        <h2>Atualizar dados</h2>
+        <form id="form-perfil">
+          <div class="field">
+            <label for="perfil-nome">Nome completo</label>
+            <input id="perfil-nome" type="text" required />
+          </div>
+          <div class="field">
+            <label for="telefone">Telefone</label>
+            <input id="telefone" type="text" placeholder="(00) 00000-0000" required />
+          </div>
+          <div class="field">
+            <label for="perfil-data-nascimento">Data de nascimento</label>
+            <input id="perfil-data-nascimento" type="date" />
+          </div>
+          <button class="btn btn-primary" type="submit">Salvar alteração</button>
+        </form>
+      </article>
+    </section>
+  </main>
+
+  <script src="scripts.js"></script>
+</body>
+</html>

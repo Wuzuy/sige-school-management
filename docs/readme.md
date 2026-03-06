@@ -1,11 +1,26 @@
 # Documentação - SEJA SENAI
 
-Pasta reservada para artefatos de planejamento, design e pesquisas do projeto.
+Este diretório contém um site de documentação técnica para facilitar manutenção e onboarding do projeto.
 
-# Conteúdo
+## Site de documentação
 
-* **Relatórios:** Documentos e PDFs (como o relatório principal do projeto).
+- Página inicial: `docs/index.html`
+- Seções:
+	- `docs/frontend.html`
+	- `docs/backend.html`
+	- `docs/resources.html`
+	- `docs/init.html`
+	- `docs/snippets.html`
 
-* **Protótipos:** Links, imagens e exportações do Figma.
+## Como abrir
 
-* **Diagramas:** Modelagem do banco de dados (DER) e fluxogramas.
+Você pode abrir os arquivos HTML diretamente no navegador, ou servir a pasta `docs` com um servidor estático.
+
+Exemplo com Python:
+
+```powershell
+cd docs
+python -m http.server 5600
+```
+
+Depois acesse `http://localhost:5600/index.html`.

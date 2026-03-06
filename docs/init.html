@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentação Inicialização</title>
+  <link rel="stylesheet" href="site.css" />
+</head>
+<body>
+  <header class="top">
+    <h1>Inicialização</h1>
+    <p>Passo a passo para subir backend e frontend localmente.</p>
+  </header>
+  <main class="layout">
+    <nav class="menu">
+      <a href="index.html">Início</a>
+      <a href="frontend.html">Frontend</a>
+      <a href="backend.html">Backend</a>
+      <a href="resources.html">Resources</a>
+      <a href="init.html" class="active">Inicialização</a>
+      <a href="snippets.html">Snippets</a>
+    </nav>
+    <section class="content">
+      <h2>Pré-requisitos</h2>
+      <ul>
+        <li>JDK 21</li>
+        <li>MySQL em execução</li>
+        <li>Python 3 (ou outro servidor estático para frontend)</li>
+      </ul>
+
+      <h2>Subindo backend</h2>
+      <pre><code>cd backend
+.\mvnw.cmd spring-boot:run</code></pre>
+
+      <h2>Subindo frontend</h2>
+      <pre><code>cd frontend-web\static
+python -m http.server 5500</code></pre>
+
+      <h2>Links principais</h2>
+      <ul>
+        <li>Frontend: <code>http://localhost:5500/login.html</code></li>
+        <li>API: <code>http://localhost:8080/api</code></li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentação Frontend</title>
+  <link rel="stylesheet" href="site.css" />
+</head>
+<body>
+  <header class="top">
+    <h1>Frontend</h1>
+    <p>Estrutura, páginas e fluxo de autenticação/UX.</p>
+  </header>
+  <main class="layout">
+    <nav class="menu">
+      <a href="index.html">Início</a>
+      <a href="frontend.html" class="active">Frontend</a>
+      <a href="backend.html">Backend</a>
+      <a href="resources.html">Resources</a>
+      <a href="init.html">Inicialização</a>
+      <a href="snippets.html">Snippets</a>
+    </nav>
+    <section class="content">
+      <h2>Arquivos principais</h2>
+      <ul>
+        <li><code>app.css</code>: estilo principal e barra superior.</li>
+        <li><code>scripts.js</code>: autenticação, permissões, CRUD admin, filtros e detalhes de inscrição.</li>
+        <li>Páginas: <code>login.html</code>, <code>index.html</code>, <code>inscricao.html</code>, <code>status.html</code>, <code>portal-aluno.html</code>, <code>portal-secretaria.html</code>.</li>
+      </ul>
+
+      <h2>Comportamentos importantes</h2>
+      <ul>
+        <li>Menu superior com destaque da página atual sem alterar layout base.</li>
+        <li>Link “Portal da Secretaria” visível apenas para perfil <code>ROLE_ADMIN</code>.</li>
+        <li>Portal da secretaria dividido por módulos (Unidades, Cursos, Usuários, Editais).</li>
+        <li>Padrão CRUD completo com busca, filtro, edição e exclusão.</li>
+        <li>Status de inscrições com botão “Ver detalhes” do curso.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
