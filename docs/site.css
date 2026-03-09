@@ -593,9 +593,18 @@ table tbody tr:last-child td {
 
 /* Mobile */
 @media (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+
   /* Header com melhor espaçamento */
   .top {
     padding: var(--spacing-xl) var(--spacing-md) var(--spacing-lg);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: var(--shadow-md);
   }
 
   .top h1 {
@@ -612,13 +621,31 @@ table tbody tr:last-child td {
 
   .menu-toggle {
     display: block;
-    min-height: 44px;
-    min-width: 44px;
-    font-size: 1.5rem;
+    min-height: 48px;
+    min-width: 48px;
+    font-size: 1.75rem;
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 1001;
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--senai-purple);
+    border: 2px solid var(--senai-purple);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    transition: all var(--transition-base);
+  }
+
+  .menu-toggle:active {
+    transform: scale(0.95);
   }
 
   .layout {
-    margin: var(--spacing-md) auto;
+    margin: 0;
     padding: 0;
     max-width: 100%;
   }
@@ -636,6 +663,7 @@ table tbody tr:last-child td {
     border-radius: 0;
     box-shadow: var(--shadow-xl);
     padding: var(--spacing-2xl) var(--spacing-md);
+    background: var(--surface);
   }
 
   .menu.open {
@@ -645,40 +673,67 @@ table tbody tr:last-child td {
   .menu a {
     padding: var(--spacing-md);
     font-size: 1rem;
-    min-height: 44px;
+    min-height: 48px;
     display: flex;
     align-items: center;
+    border-radius: var(--border-radius-sm);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    backdrop-filter: blur(4px);
+  }
+
+  .menu-overlay.visible {
+    display: block;
   }
 
   .content {
-    padding: var(--spacing-md);
+    padding: var(--spacing-lg) var(--spacing-md);
     max-width: 100%;
     overflow-x: hidden;
+    word-wrap: break-word;
   }
 
   .content h2 {
     font-size: clamp(1.25rem, 5vw, 1.75rem);
     word-break: break-word;
     hyphens: auto;
+    line-height: 1.3;
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-md);
   }
 
   .content h3 {
     font-size: clamp(1.1rem, 4vw, 1.5rem);
     word-break: break-word;
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-sm);
   }
 
   .content p {
     font-size: 0.95rem;
     line-height: 1.7;
+    margin-bottom: var(--spacing-md);
   }
 
   .content ul,
   .content ol {
     padding-left: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
   }
 
   .content li {
     margin-bottom: var(--spacing-sm);
+    line-height: 1.6;
   }
 
   .cards {
@@ -687,32 +742,36 @@ table tbody tr:last-child td {
   }
 
   .card {
-    padding: var(--spacing-md);
+    padding: var(--spacing-lg);
   }
 
   /* Botões maiores para touch */
   .btn,
   .btn-primary,
   .btn-secondary {
-    padding: 12px 20px;
-    min-height: 44px;
+    padding: 14px 24px;
+    min-height: 48px;
     font-size: 0.95rem;
     width: 100%;
     text-align: center;
+    border-radius: var(--border-radius-sm);
   }
 
   /* Code blocks mobile-friendly */
   pre {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     padding: var(--spacing-md);
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     border-radius: var(--border-radius-sm);
+    margin: var(--spacing-md) 0;
+    max-width: 100%;
   }
 
   pre code {
-    word-break: break-all;
-    white-space: pre-wrap;
+    white-space: pre;
+    word-wrap: normal;
+    overflow-wrap: normal;
   }
 
   /* Tabelas responsivas */
@@ -734,13 +793,16 @@ table tbody tr:last-child td {
   img {
     max-width: 100%;
     height: auto;
+    display: block;
+    margin: var(--spacing-md) 0;
   }
 
   /* Links com área de toque maior */
-  a {
+  .content a {
     min-height: 44px;
     display: inline-flex;
     align-items: center;
+    padding: 4px 0;
   }
 
   /* Hero section mobile */
@@ -750,6 +812,7 @@ table tbody tr:last-child td {
 
   div[style*="text-align: center"] h2 {
     font-size: clamp(1.5rem, 6vw, 2rem) !important;
+    line-height: 1.2;
   }
 
   div[style*="text-align: center"] p {
@@ -758,6 +821,13 @@ table tbody tr:last-child td {
 
   div[style*="display: flex"] {
     flex-direction: column !important;
+    gap: var(--spacing-sm) !important;
+  }
+
+  /* Badges responsivos */
+  .badge {
+    font-size: 0.75rem;
+    padding: 4px 8px;
   }
 }
 

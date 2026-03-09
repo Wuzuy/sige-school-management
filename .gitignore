@@ -154,4 +154,5 @@ coverage.xml
 # ====================
 .wrangler/
 .dev.vars
+cloudflared.exe
 *.cover
