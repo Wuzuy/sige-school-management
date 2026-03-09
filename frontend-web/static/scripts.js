@@ -1,6 +1,232 @@
-// Configuração da URL da API
-// Prioridade: 1) Variável de ambiente do Cloudflare, 2) window.API_BASE_URL, 3) localhost
-const API_BASE = window.ENV?.API_BASE_URL || window.API_BASE_URL || 'http://localhost:8080/api';
+// ========== CONFIGURAÇÃO INTELIGENTE DA API ==========
+
+// Sistema de configuração de API com detecção automática de ambiente
+function getApiBaseUrl() {
+  // 1. Prioridade: LocalStorage (configurado pelo usuário)
+  const savedUrl = localStorage.getItem('API_BASE_URL');
+  if (savedUrl) {
+    console.log('✅ API configurada pelo usuário:', savedUrl);
+    return savedUrl;
+  }
+  
+  // 2. Variável de ambiente Cloudflare Pages
+  if (window.ENV?.API_BASE_URL) {
+    console.log('✅ API via Cloudflare ENV:', window.ENV.API_BASE_URL);
+    return window.ENV.API_BASE_URL;
+  }
+  
+  // 3. Window global (para desenvolvimento)
+  if (window.API_BASE_URL) {
+    console.log('✅ API via window.API_BASE_URL:', window.API_BASE_URL);
+    return window.API_BASE_URL;
+  }
+  
+  // 4. Detectar ambiente Pages.dev (produção)
+  if (window.location.hostname.includes('pages.dev') || window.location.hostname.includes('workers.dev')) {
+    console.warn('⚠️ Rodando no Cloudflare Pages sem API configurada!');
+    // Mostrar modal de configuração após load
+    setTimeout(() => showApiConfigModal(), 1000);
+    return null; // Bloqueia chamadas até configurar
+  }
+  
+  // 5. Fallback: localhost (desenvolvimento local)
+  console.log('✅ API Fallback: localhost:8080');
+  return 'http://localhost:8080/api';
+}
+
+// Inicializa API_BASE
+let API_BASE = getApiBaseUrl();
+
+// Função para atualizar URL da API
+function updateApiBaseUrl(newUrl) {
+  if (newUrl && newUrl.trim()) {
+    // Remove barra final se houver
+    const cleanUrl = newUrl.trim().replace(/\/$/, '');
+    localStorage.setItem('API_BASE_URL', cleanUrl);
+    API_BASE = cleanUrl;
+    console.log('✅ API atualizada para:', cleanUrl);
+    
+    // Esconde modal se estiver aberto
+    const modal = document.getElementById('api-config-modal');
+    if (modal) modal.style.display = 'none';
+    
+    // Atualiza indicador de status
+    updateApiStatus('testing');
+    
+    // Testa conexão
+    testApiConnection();
+    
+    return true;
+  }
+  return false;
+}
+
+// Modal de configuração da API
+function showApiConfigModal() {
+  // Verifica se modal já existe
+  let modal = document.getElementById('api-config-modal');
+  if (!modal) {
+    // Cria modal
+    modal = document.createElement('div');
+    modal.id = 'api-config-modal';
+    modal.innerHTML = `
+      <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px;">
+        <div style="background: white; padding: 30px; border-radius: 12px; max-width: 600px; width: 100%; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+          <h2 style="margin: 0 0 15px 0; color: #667eea; font-size: 24px;">⚙️ Configurar API Backend</h2>
+          <p style="margin: 0 0 20px 0; color: #666; line-height: 1.6;">
+            Para acessar o backend, você precisa configurar a URL do <strong>Cloudflare Tunnel</strong>.<br>
+            Siga os passos:
+          </p>
+          <ol style="margin: 0 0 20px 0; padding-left: 20px; color: #555; line-height: 1.8;">
+            <li>Inicie o backend com: <code style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px;">iniciar-backend-cloudflare-tunnel.bat</code></li>
+            <li>Copie a URL gerada (ex: <code style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px;">https://random-words.trycloudflare.com</code>)</li>
+            <li>Cole abaixo e clique em <strong>Salvar e Testar</strong></li>
+          </ol>
+          <input type="text" id="api-url-input" placeholder="https://seu-tunnel.trycloudflare.com" 
+                 style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box;">
+          <div style="display: flex; gap: 10px;">
+            <button onclick="saveAndTestApi()" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">
+              💾 Salvar e Testar
+            </button>
+            <button onclick="closeApiModal()" style="padding: 12px 20px; background: #e5e7eb; color: #555; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">
+              Cancelar
+            </button>
+          </div>
+          <div id="api-test-result" style="margin-top: 15px; padding: 12px; border-radius: 8px; display: none;"></div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+  modal.style.display = 'flex';
+}
+
+// Salvar e testar API
+window.saveAndTestApi = function() {
+  const input = document.getElementById('api-url-input');
+  const resultDiv = document.getElementById('api-test-result');
+  const url = input.value.trim();
+  
+  if (!url) {
+    resultDiv.style.display = 'block';
+    resultDiv.style.background = '#fee';
+    resultDiv.style.color = '#c00';
+    resultDiv.innerHTML = '❌ Por favor, insira uma URL válida';
+    return;
+  }
+  
+  // Valida formato básico
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    resultDiv.style.display = 'block';
+    resultDiv.style.background = '#fee';
+    resultDiv.style.color = '#c00';
+    resultDiv.innerHTML = '❌ URL deve começar com http:// ou https://';
+    return;
+  }
+  
+  resultDiv.style.display = 'block';
+  resultDiv.style.background = '#fef9e7';
+  resultDiv.style.color = '#856404';
+  resultDiv.innerHTML = '⏳ Testando conexão...';
+  
+  // Atualiza URL
+  updateApiBaseUrl(url);
+};
+
+// Fechar modal
+window.closeApiModal = function() {
+  const modal = document.getElementById('api-config-modal');
+  if (modal) modal.style.display = 'none';
+};
+
+// Testar conexão com API
+function testApiConnection() {
+  if (!API_BASE) {
+    updateApiStatus('offline');
+    return;
+  }
+  
+  const resultDiv = document.getElementById('api-test-result');
+  
+  fetch(`${API_BASE}/usuarios/count`, { method: 'GET' })
+    .then(response => {
+      if (response.ok) {
+        updateApiStatus('online');
+        if (resultDiv) {
+          resultDiv.style.display = 'block';
+          resultDiv.style.background = '#d4edda';
+          resultDiv.style.color = '#155724';
+          resultDiv.innerHTML = '✅ Conexão bem-sucedida! API funcionando.';
+          setTimeout(() => {
+            closeApiModal();
+          }, 2000);
+        }
+      } else {
+        throw new Error('Resposta não OK');
+      }
+    })
+    .catch(error => {
+      updateApiStatus('offline');
+      if (resultDiv) {
+        resultDiv.style.display = 'block';
+        resultDiv.style.background = '#fee';
+        resultDiv.style.color = '#c00';
+        resultDiv.innerHTML = '❌ Falha ao conectar. Verifique se o backend está rodando e a URL está correta.';
+      }
+      console.error('Erro ao testar API:', error);
+    });
+}
+
+// Indicador de status da API
+function createApiStatusIndicator() {
+  const indicator = document.createElement('div');
+  indicator.id = 'api-status-indicator';
+  indicator.innerHTML = `
+    <div style="position: fixed; top: 10px; right: 10px; z-index: 9999; background: white; padding: 8px 12px; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 8px; font-size: 12px; cursor: pointer;" onclick="showApiConfigModal()">
+      <span id="api-status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #999;"></span>
+      <span id="api-status-text">API</span>
+      <span style="font-size: 10px; opacity: 0.6;">⚙️</span>
+    </div>
+  `;
+  document.body.appendChild(indicator);
+}
+
+// Atualizar status visual
+function updateApiStatus(status) {
+  const dot = document.getElementById('api-status-dot');
+  const text = document.getElementById('api-status-text');
+  
+  if (!dot || !text) return;
+  
+  switch(status) {
+    case 'online':
+      dot.style.background = '#10b981';
+      text.textContent = 'API Online';
+      break;
+    case 'offline':
+      dot.style.background = '#ef4444';
+      text.textContent = 'API Offline';
+      break;
+    case 'testing':
+      dot.style.background = '#f59e0b';
+      text.textContent = 'Testando...';
+      break;
+    default:
+      dot.style.background = '#999';
+      text.textContent = 'API';
+  }
+}
+
+// Inicializar na carga da página
+document.addEventListener('DOMContentLoaded', () => {
+  createApiStatusIndicator();
+  if (API_BASE) {
+    updateApiStatus('testing');
+    testApiConnection();
+  } else {
+    updateApiStatus('offline');
+  }
+});
 
 // ========== SISTEMA DE NOTIFICAÇÕES TOAST (NOTYF) ==========
 
