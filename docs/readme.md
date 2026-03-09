@@ -1,17 +1,6 @@
 # 📚 Documentação Técnica - SEJA SENAI
 
-<<<<<<< Updated upstream
-Pasta reservada para artefatos de planejamento, design e pesquisas do projeto.
-
-# Conteúdo
-
-* **Relatórios:** Documentos e PDFs (como o relatório principal do projeto).
-
-* **Protótipos:** Links, imagens e exportações do Figma.
-
-* **Diagramas:** Modelagem do banco de dados (DER) e fluxogramas.
-=======
-Esta pasta contém toda a documentação técnica do sistema SEJA SENAI, incluindo guias de desenvolvimento, APIs, configuração, segurança e arquitetura.
+Esta pasta contém toda a documentação técnica do sistema SEJA SENAI, incluindo guias de desenvolvimento, APIs, configuração, segurança, deploy e business model.
 
 ## ✨ Nova Experiência de Documentação
 
@@ -40,12 +29,27 @@ A documentação foi **completamente** redesenhada com foco em UX/UI moderna:
 - **[security.html](security.html)** - JWT, rate limiting, validações e proteções
 - **[init.html](init.html)** - Guia de configuração (H2, MySQL, variáveis)
 
+### 🚀 Deploy e Hospedagem
+- **[deploy-cloudflare.md](deploy-cloudflare.md)** - Deploy do frontend na Cloudflare Pages 🆕
+- **[deploy-ngrok.md](deploy-ngrok.md)** - Expor backend com Ngrok para testes 🆕
+
+### 📊 Business e Documentação
+- **[business-model-canvas.md](business-model-canvas.md)** - BMCanvas completo do projeto 🆕
+
 ### 🔧 Suporte
-- **[troubleshooting.html](troubleshooting.html)** - Soluções para problemas comuns 🆕
+- **[troubleshooting.html](troubleshooting.html)** - Soluções para problemas comuns
 - **[developer-docs.html](developer-docs.html)** - Documentação técnica completa
+
+### 📝 Guias do Usuário
+- **[guia-aluno.md](guia-aluno.md)** - Como usar o portal do aluno
+- **[guia-secretaria.md](guia-secretaria.md)** - Como usar o portal da secretaria
+- **[carteirinha-sistema.md](carteirinha-sistema.md)** - Sistema de carteirinha digital
+- **[limpar-banco-guia.md](limpar-banco-guia.md)** - Como limpar dados de teste
 
 ### 📝 Recursos Adicionais
 - **[developer-documentation.md](developer-documentation.md)** - Documentação em formato Markdown
+- **[backend-api-reference.md](backend-api-reference.md)** - Referência completa da API REST
+- **[frontend-documentacao-tecnica.md](frontend-documentacao-tecnica.md)** - Documentação técnica do frontend
 - **[postman/](postman/)** - Coleções Postman para testes de API
 
 ## 🚀 Como Acessar a Documentação
