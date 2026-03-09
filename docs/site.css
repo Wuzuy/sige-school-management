@@ -147,6 +147,7 @@ td {
   right: 24px;
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--border-radius-sm);
   cursor: pointer;
@@ -155,12 +156,16 @@ td {
   font-size: 1.5rem;
   line-height: 1;
   transition: var(--transition-base);
+  -webkit-transition: var(--transition-base);
   z-index: 1001;
   /* Touch-friendly */
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0.2);
   touch-action: manipulation;
+  -webkit-touch-callout: none;
   user-select: none;
   -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .menu-toggle:hover {
@@ -642,18 +647,27 @@ table tbody tr:last-child td {
     justify-content: center;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     transition: all var(--transition-base);
+    -webkit-transition: all var(--transition-base);
     cursor: pointer;
-    /* Touch optimizations */
+    padding: 0;
+    /* iOS Safari specific optimizations */
     -webkit-tap-highlight-color: rgba(102, 126, 234, 0.3);
     touch-action: manipulation;
+    -webkit-touch-callout: none;
     user-select: none;
     -webkit-user-select: none;
-    padding: 0;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    /* Garantir que está acima de tudo */
+    pointer-events: auto;
+    isolation: isolate;
   }
 
   .menu-toggle:active {
     transform: scale(0.92);
+    -webkit-transform: scale(0.92);
     background: rgba(255, 255, 255, 1);
   }
 
@@ -669,18 +683,29 @@ table tbody tr:last-child td {
     left: -100%;
     width: min(85vw, 320px);
     height: 100vh;
+    height: -webkit-fill-available;
     z-index: 1000;
     overflow-y: auto;
     overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
     transition: left var(--transition-slow);
+    -webkit-transition: left var(--transition-slow);
     border-radius: 0;
     box-shadow: var(--shadow-xl);
     padding: var(--spacing-2xl) var(--spacing-md);
     background: var(--surface);
+    /* iOS fixes */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: left;
   }
 
   .menu.open {
     left: 0;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
   }
 
   .menu a {
@@ -703,9 +728,13 @@ table tbody tr:last-child td {
     background: rgba(0, 0, 0, 0.5);
     z-index: 999;
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     cursor: pointer;
     touch-action: auto;
     -webkit-tap-highlight-color: transparent;
+    /* iOS fix */
+    pointer-events: auto;
+    isolation: isolate;
   }
 
   .menu-overlay.visible {
