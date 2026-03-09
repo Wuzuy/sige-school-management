@@ -42,11 +42,35 @@ public class JwtService {
     }
 
     /**
+     * Gera o token JWT com o email e role do usuário
+     */
+    public String generateToken(String email, String role) {
+        return Jwts.builder()
+                .setSubject(email)
+                .claim("role", role)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    /**
      * Extrai o email (subject) do token
      */
     public String extractEmail(String token) {
         try {
             return extractAllClaims(token).getSubject();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Extrai a role do token
+     */
+    public String extractRole(String token) {
+        try {
+            return extractAllClaims(token).get("role", String.class);
         } catch (Exception e) {
             return null;
         }

@@ -8,25 +8,20 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-<<<<<<< Updated upstream
-=======
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
->>>>>>> Stashed changes
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.http.SessionCreationPolicy;
 
 @EnableMethodSecurity
 @Configuration
 public class SecurityConfig {
 
-<<<<<<< Updated upstream
-=======
     @Autowired
     private JwtFilter jwtFilter;
 
     @Autowired
     private RateLimitFilter rateLimitFilter;
-
->>>>>>> Stashed changes
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -34,15 +29,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-<<<<<<< Updated upstream
-        http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        // Rotas publicas (Login e Cadastro)
-                        .requestMatchers(HttpMethod.POST, "/api/usuarios/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll()
-
-                        // Rotas exclusivas para ADMIN
-=======
         http.csrf(csrf -> csrf.disable()) // Desabilitar CSRF completamente (JWT não precisa)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 
@@ -78,7 +64,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/usuarios/*/role").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/usuarios/*").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/usuarios/**").hasAuthority("ROLE_ADMIN")
->>>>>>> Stashed changes
                         .requestMatchers(HttpMethod.POST, "/api/cursos/**", "/api/unidades/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/cursos/**", "/api/unidades/**").hasAuthority("ROLE_ADMIN")
 
@@ -88,14 +73,10 @@ public class SecurityConfig {
                         // Qualquer outra requisicao precisa de autenticacao
                         .anyRequest().authenticated()
                 )
-<<<<<<< Updated upstream
-                .httpBasic(basic -> {}); // Habilita autenticacao basica temporaria para testes
-=======
                 // Adiciona o filtro de rate limiting antes de tudo
                 .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
                 // Adiciona o filtro JWT antes do filtro de autenticacao padrao
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
->>>>>>> Stashed changes
 
         return http.build();
     }

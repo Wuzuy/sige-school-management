@@ -1,24 +1,18 @@
 package com.wuzuy.sejasenai.controller;
 
-<<<<<<< Updated upstream
-=======
 import com.wuzuy.sejasenai.config.JwtService;
 import com.wuzuy.sejasenai.config.LoginAttemptService;
 import com.wuzuy.sejasenai.config.PasswordValidator;
 import com.wuzuy.sejasenai.dto.AdminUserCreateDTO;
 import com.wuzuy.sejasenai.dto.AdminUserUpdateDTO;
->>>>>>> Stashed changes
 import com.wuzuy.sejasenai.model.Role;
 import com.wuzuy.sejasenai.model.Usuario;
 import com.wuzuy.sejasenai.repository.UsuarioRepository;
 import com.wuzuy.sejasenai.dto.LoginDTO;
-<<<<<<< Updated upstream
-=======
 import com.wuzuy.sejasenai.dto.LoginResponseDTO;
 import com.wuzuy.sejasenai.dto.TelefoneUpdateDTO;
 import com.wuzuy.sejasenai.dto.UserProfileUpdateDTO;
 import jakarta.servlet.http.HttpServletRequest;
->>>>>>> Stashed changes
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +20,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,8 +38,6 @@ public class UsuarioController {
     @Autowired
     private BCryptPasswordEncoder encoder;
 
-<<<<<<< Updated upstream
-=======
     @Autowired
     private JwtService jwtService;
 
@@ -54,7 +48,6 @@ public class UsuarioController {
     private LoginAttemptService loginAttemptService;
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
->>>>>>> Stashed changes
     @GetMapping
     public List<Usuario> list() {
         return repository.findAll();
@@ -72,8 +65,6 @@ public class UsuarioController {
 
             user.setSenha(encoder.encode(user.getSenha()));
             Usuario salvo = repository.save(user);
-<<<<<<< Updated upstream
-=======
             salvo.setSenha(null);
             return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
         } catch (Exception e) {
@@ -142,12 +133,13 @@ public class UsuarioController {
             user.setSenha(encoder.encode(input.getSenha()));
             user.setCpf(input.getCpf());
             user.setTelefone(input.getTelefone());
-            user.setDataNascimento(input.getDataNascimento());
+            if (input.getDataNascimento() != null && !input.getDataNascimento().isEmpty()) {
+                user.setDataNascimento(LocalDate.parse(input.getDataNascimento(), DateTimeFormatter.ISO_LOCAL_DATE));
+            }
             user.setRole(input.getRole() == null ? Role.ROLE_USER : input.getRole());
 
             Usuario salvo = repository.save(user);
             salvo.setSenha(null);
->>>>>>> Stashed changes
             return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
         } catch (Exception e) {
             Map<String, String> erro = new HashMap<>();
@@ -172,16 +164,11 @@ public class UsuarioController {
         Optional<Usuario> userDb = repository.findByEmail(login.getEmail());
 
         if (userDb.isPresent() && encoder.matches(login.getSenha(), userDb.get().getSenha())) {
-<<<<<<< Updated upstream
-            userDb.get().setSenha(null);
-            return ResponseEntity.ok(userDb.get());
-=======
             loginAttemptService.loginSucceeded(key);
             Usuario usuario = userDb.get();
-            String token = jwtService.generateToken(usuario.getEmail());
+            String token = jwtService.generateToken(usuario.getEmail(), usuario.getRole().name());
             usuario.setSenha(null);
             return ResponseEntity.ok(new LoginResponseDTO(token, usuario));
->>>>>>> Stashed changes
         }
 
         // Registra tentativa falhada
