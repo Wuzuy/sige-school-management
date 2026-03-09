@@ -2,7 +2,15 @@
 
 Esta pasta contém scripts auxiliares para facilitar o gerenciamento do projeto SEJA SENAI.
 
-## 📋 Scripts Disponíveis
+## � Formatos Disponíveis
+
+Cada script tem **duas versões**:
+- **`.bat`** - Versão Windows Batch (funciona em qualquer Windows)
+- **`.ps1`** - Versão PowerShell (mais recursos e mensagens coloridas)
+
+**Recomendação:** Use os arquivos `.bat` para máxima compatibilidade.
+
+## �📋 Scripts Disponíveis
 
 ### 🗄️ `popular-dados-teste.bat`
 **Descrição:** Popula o banco de dados com dados de teste.
@@ -83,7 +91,34 @@ verificar-status.bat
 
 ---
 
-## 🔄 Fluxo de Uso Recomendado
+## � Como Executar Scripts PowerShell (.ps1)
+
+Se você preferir usar os scripts PowerShell (`.ps1`), execute desta forma:
+
+### Opção 1: Diretamente no PowerShell
+```powershell
+cd scripts
+.\popular-dados-teste.ps1
+```
+
+### Opção 2: Com ExecutionPolicy
+Se der erro de "não pode ser carregado porque a execução de scripts foi desabilitada":
+
+```powershell
+cd scripts
+powershell -ExecutionPolicy Bypass -File .\popular-dados-teste.ps1
+```
+
+### Opção 3: Mudar política permanentemente (Admin)
+```powershell
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+**💡 Dica:** Se tiver dúvida, use os arquivos `.bat` que funcionam sem configuração!
+
+---
+
+## �🔄 Fluxo de Uso Recomendado
 
 ### Iniciar o projeto do zero:
 
