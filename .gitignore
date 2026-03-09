@@ -1,4 +1,10 @@
-# Compilação e Build
+# ============================================
+# SEJA SENAI - GitIgnore (Repositório Privado)
+# ============================================
+
+# ====================
+# COMPILAÇÃO E BUILD
+# ====================
 target/
 build/
 out/
@@ -7,16 +13,37 @@ bin/
 *.jar
 *.war
 *.ear
+*.nar
+dependency-reduced-pom.xml
 
-# IDEs (IntelliJ, Eclipse, VS Code)
+# ====================
+# IDEs
+# ====================
+# IntelliJ IDEA
 .idea/
 *.iml
+*.iws
+*.ipr
+
+# Eclipse
 .classpath
 .project
 .settings/
-.vscode/
+.metadata/
 
-# Mobile (Android Studio / Kotlin)
+# VS Code
+.vscode/
+*.code-workspace
+
+# NetBeans
+nbproject/
+nbbuild/
+nbdist/
+.nb-gradle/
+
+# ====================
+# MOBILE (Android/Kotlin)
+# ====================
 local.properties
 .gradle/
 captures/
@@ -24,11 +51,101 @@ captures/
 .cxx/
 *.apk
 *.ap_
+*.aab
 
-# Sistema e Logs
+# ====================
+# SISTEMA OPERACIONAL
+# ====================
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
-*.log
+desktop.ini
 
-# Configurações Sensíveis
+# ====================
+# LOGS
+# ====================
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ====================
+# NODE.JS / NPM
+# ====================
+node_modules/
+npm-debug.log
+package-lock.json
+yarn.lock
+
+# ====================
+# PYTHON
+# ====================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+env/
+
+# ====================
+# MAVEN
+# ====================
+.mvn/wrapper/maven-wrapper.jar
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.properties
+
+# ====================
+# TEMPORÁRIOS
+# ====================
+*.tmp
+*.bak
+*.swp
+*~.nib
+*.orig
+
+# ====================
+# CONFIGURAÇÕES SENSÍVEIS
+# (Mantidas para referência, ajuste conforme necessário)
+# ====================
+# Descomente se quiser versionar as configurações:
 # application.properties
+# application-prod.properties
+
+# ====================
+# BASE DE DADOS
+# ====================
+*.db
+*.sqlite
+*.sqlite3
+h2/
+database/
+
+# ====================
+# UPLOADS E ARQUIVOS GERADOS
+# ====================
+uploads/
+generated/
+dist/
+*.pdf
+*.docx
+
+# ====================
+# TESTES E COVERAGE
+# ====================
+coverage/
+*.coveragerc
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover

@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Opções de Hospedagem Barata - SEJA SENAI</title>
+  <link rel="stylesheet" href="site.css" />
+  <script defer src="docs-menu.js"></script>
+</head>
+<body>
+  <button class="menu-toggle" aria-label="Menu" aria-expanded="false">☰</button>
+  <div class="menu-overlay"></div>
+  <header class="top">
+    <h1>🌩️ Hospedagem Barata para Apresentação</h1>
+    <p>Como subir backend + frontend + documentação por menos de R$ 10/mês</p>
+  </header>
+
+  <main class="layout">
+    <nav class="menu">
+      <a href="index.html">🏠 Início</a>
+      <a href="quick-start.html">🚀 Guia Rápido</a>
+      <a href="guia-uso-aluno.html">👨‍🎓 Guia do Aluno</a>
+      <a href="guia-uso-secretaria.html">🏢 Guia da Secretaria</a>
+      <a href="proposta-comercial.html">💼 Proposta Comercial</a>
+      <a href="hospedagem-opcoes.html" class="active">🌩️ Hospedagem Barata</a>      <a href="scripts.html">⚡ Scripts Executores</a>
+      <a href="backend.html">⚙️ Backend API</a>
+      <a href="frontend.html">🎨 Frontend</a>
+      <a href="security.html">🔒 Segurança</a>
+      <a href="init.html">🛠️ Configuração</a>
+      <a href="troubleshooting.html">🔧 Troubleshooting</a>
+      <a href="snippets.html">📝 Snippets</a>      <a href="developer-docs.html">📚 Docs Completa</a>
+    </nav>
+
+    <section class="content">
+      <!-- RESUMO EXECUTIVO -->
+      <div style="background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 32px; border-radius: 12px; margin-bottom: 32px;">
+        <h2 style="margin: 0 0 16px; border: none; color: white;">💰 Resumo: Hospedagem Gratuita</h2>
+        <p style="font-size: 1.25rem; margin: 0; line-height: 1.6;">
+          É possível hospedar <strong>backend + frontend + docs</strong> completamente <strong>GRÁTIS</strong> usando os planos gratuitos de Railway.app, Vercel e GitHub Pages! Perfeito para sua apresentação.
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 24px;">
+          <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 8px;">
+            <div style="font-size: 0.9rem; opacity: 0.9;">Backend + Database</div>
+            <div style="font-size: 2rem; font-weight: bold;">R$ 0</div>
+            <div style="font-size: 0.85rem; opacity: 0.9;">Railway.app grátis</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 8px;">
+            <div style="font-size: 0.9rem; opacity: 0.9;">Frontend</div>
+            <div style="font-size: 2rem; font-weight: bold;">R$ 0</div>
+            <div style="font-size: 0.85rem; opacity: 0.9;">Vercel grátis</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 8px;">
+            <div style="font-size: 0.9rem; opacity: 0.9;">Documentação</div>
+            <div style="font-size: 2rem; font-weight: bold;">R$ 0</div>
+            <div style="font-size: 0.85rem; opacity: 0.9;">GitHub Pages grátis</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ÍNDICE -->
+      <h2>📋 Índice</h2>
+      <ul>
+        <li><a href="#comparacao">1. Comparação de Plataformas</a></li>
+        <li><a href="#railway">2. Railway.app (Backend + Database)</a></li>
+        <li><a href="#vercel">3. Vercel (Frontend)</a></li>
+        <li><a href="#github-pages">4. GitHub Pages (Documentação)</a></li>
+        <li><a href="#alternativas">5. Alternativas (Render, Fly.io)</a></li>
+        <li><a href="#custos">6. Comparação de Custos</a></li>
+        <li><a href="#recomendacao">7. Recomendação Final</a></li>
+      </ul>
+
+      <!-- COMPARAÇÃO DE PLATAFORMAS -->
+      <h2 id="comparacao">1️⃣ Comparação de Plataformas</h2>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Plataforma</th>
+              <th>Ideal para</th>
+              <th>Plano Grátis</th>
+              <th>Limitações</th>
+              <th>Preço Pro</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Railway.app</strong></td>
+              <td>Backend Spring Boot<br>+ Database MySQL</td>
+              <td>✅ $5 crédito/mês<br>(~500h uptime)</td>
+              <td>Sleep após inatividade<br>512MB RAM</td>
+              <td>$5/mês<br>(500h) ou $20/mês (ilimitado)</td>
+            </tr>
+            <tr>
+              <td><strong>Render.com</strong></td>
+              <td>Backend<br>+ PostgreSQL</td>
+              <td>✅ Web service grátis<br>+ PostgreSQL grátis</td>
+              <td>Sleep após 15min<br>90 dias de dados</td>
+              <td>$7/mês</td>
+            </tr>
+            <tr>
+              <td><strong>Vercel</strong></td>
+              <td>Frontend estático<br>(HTML/CSS/JS)</td>
+              <td>✅ Ilimitado<br>100GB bandwidth</td>
+              <td>Apenas frontend<br>Build 6000min/mês</td>
+              <td>$20/mês</td>
+            </tr>
+            <tr>
+              <td><strong>GitHub Pages</strong></td>
+              <td>Documentação<br>Sites estáticos</td>
+              <td>✅ Ilimitado<br>1GB storage</td>
+              <td>Apenas estático<br>100GB bandwidth/mês</td>
+              <td>Gratuito sempre</td>
+            </tr>
+            <tr>
+              <td><strong>Fly.io</strong></td>
+              <td>Containers Docker<br>Apps globais</td>
+              <td>✅ 3 VMs grátis<br>256MB RAM cada</td>
+              <td>Requer Docker<br>Setup complexo</td>
+              <td>$1.94/VM/mês</td>
+            </tr>
+            <tr>
+              <td><strong>DigitalOcean</strong></td>
+              <td>VPS completo<br>(tudo junto)</td>
+              <td>❌ Sem plano grátis</td>
+              <td>-</td>
+              <td>$4/mês (USD)<br>~R$ 20/mês</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="success-box">
+        <h3>✅ Melhor combinação para apresentação (GRÁTIS):</h3>
+        <p style="font-size: 1.15rem; margin: 0;">
+          <strong>Railway</strong> (backend) + <strong>Vercel</strong> (frontend) + <strong>GitHub Pages</strong> (docs) = <strong>R$ 0/mês</strong>
+        </p>
+      </div>
+
+      <!-- RAILWAY.APP -->
+      <h2 id="railway">2️⃣ Railway.app - Backend + Database</h2>
+
+      <div class="info-box">
+        <h3>🚆 Por que Railway?</h3>
+        <ul>
+          <li>✅ Deploy automático via GitHub</li>
+          <li>✅ MySQL/PostgreSQL incluído (grátis)</li>
+          <li>✅ Suporta Spring Boot nativamente</li>
+          <li>✅ Variáveis de ambiente fáceis</li>
+          <li>✅ Logs em tempo real</li>
+          <li>✅ Domínio gratuito (.railway.app)</li>
+        </ul>
+      </div>
+
+      <h3>2.1. Configuração Passo a Passo</h3>
+
+      <h4>Passo 1: Criar conta no Railway</h4>
+      <ol>
+        <li>Acesse: <a href="https://railway.app" target="_blank">https://railway.app</a></li>
+        <li>Clique em <strong>"Start a New Project"</strong></li>
+        <li>Faça login com GitHub (autenticação OAuth)</li>
+        <li>✅ Você ganha $5 de crédito grátis/mês (sem cartão necessário)</li>
+      </ol>
+
+      <h4>Passo 2: Configurar Projeto</h4>
+      <ol>
+        <li>No dashboard, clique <strong>"+ New Project"</strong></li>
+        <li>Selecione <strong>"Deploy from GitHub repo"</strong></li>
+        <li>Escolha o repositório: <code>seja-senai</code></li>
+        <li>Railway detecta automaticamente que é <strong>Spring Boot</strong></li>
+        <li>Clique em <strong>"Deploy Now"</strong></li>
+      </ol>
+
+      <h4>Passo 3: Adicionar MySQL Database</h4>
+      <ol>
+        <li>No projeto, clique <strong>"+ New"</strong> → <strong>"Database"</strong> → <strong>"MySQL"</strong></li>
+        <li>Railway cria banco automaticamente</li>
+        <li>Copie as credenciais que aparecem na aba <strong>"Connect"</strong>:
+          <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto; margin-top: 8px;">MYSQL_HOST=containers-us-west-xxx.railway.app
+MYSQL_PORT=6389
+MYSQL_DATABASE=railway
+MYSQL_USER=root
+MYSQL_PASSWORD=gxxxxxxxxxxxxxxx</pre>
+        </li>
+      </ol>
+
+      <h4>Passo 4: Configurar Variáveis de Ambiente</h4>
+      <ol>
+        <li>No serviço do backend, vá em <strong>"Variables"</strong></li>
+        <li>Adicione as seguintes variáveis:
+          <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto; margin-top: 8px;">SPRING_DATASOURCE_URL=jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}
+SPRING_DATASOURCE_USERNAME=${MYSQL_USER}
+SPRING_DATASOURCE_PASSWORD=${MYSQL_PASSWORD}
+SPRING_JPA_HIBERNATE_DDL_AUTO=update
+JWT_SECRET=seu_super_secret_key_aqui_com_32_caracteres_minimo
+CORS_ALLOWED_ORIGINS=https://seu-frontend.vercel.app</pre>
+        </li>
+        <li>Clique em <strong>"Add"</strong> para salvar</li>
+      </ol>
+
+      <h4>Passo 5: Deploy e Obter URL</h4>
+      <ol>
+        <li>Railway faz deploy automaticamente (aguarde ~3 minutos)</li>
+        <li>Na aba <strong>"Settings"</strong> → <strong>"Networking"</strong>, clique <strong>"Generate Domain"</strong></li>
+        <li>✅ Sua API estará disponível em: <code>https://sejasenai-production.up.railway.app</code></li>
+        <li>Teste: <code>https://sejasenai-production.up.railway.app/api/cursos</code></li>
+      </ol>
+
+      <div class="warning-box">
+        <h4>⚠️ Limitações do Plano Grátis</h4>
+        <ul>
+          <li>$5 crédito/mês = ~500 horas de execução</li>
+          <li>512MB RAM (suficiente para Spring Boot básico)</li>
+          <li>O serviço pode "dormir" após inatividade (demora ~30s para acordar)</li>
+          <li>Uptime: ~70% (suficiente para apresentação)</li>
+        </ul>
+      </div>
+
+      <h3>2.2. Atualizar application.properties</h3>
+      <p>No arquivo <code>backend/src/main/resources/application.properties</code>, adicione:</p>
+      <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto;">spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/sejasenai}
+spring.datasource.username=${SPRING_DATASOURCE_USERNAME:root}
+spring.datasource.password=${SPRING_DATASOURCE_PASSWORD:root}
+spring.jpa.hibernate.ddl-auto=${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+
+jwt.secret=${JWT_SECRET:default_secret_only_for_local_dev}
+cors.allowed.origins=${CORS_ALLOWED_ORIGINS:http://localhost:8080}
+
+server.port=${PORT:8080}</pre>
+
+      <div class="info-box">
+        <p>✅ O <code>${PORT:8080}</code> é importante! Railway injeta automaticamente a variável <code>PORT</code>.</p>
+      </div>
+
+      <!-- VERCEL -->
+      <h2 id="vercel">3️⃣ Vercel - Frontend Web</h2>
+
+      <div class="info-box">
+        <h3>⚡ Por que Vercel?</h3>
+        <ul>
+          <li>✅ Deploy automático via Git (push = deploy)</li>
+          <li>✅ CDN global (site rápido no mundo todo)</li>
+          <li>✅ HTTPS automático</li>
+          <li>✅ Preview de branches (testa antes de publicar)</li>
+          <li>✅ 100% grátis para frontend estático</li>
+        </ul>
+      </div>
+
+      <h3>3.1. Configuração Passo a Passo</h3>
+
+      <h4>Passo 1: Criar conta no Vercel</h4>
+      <ol>
+        <li>Acesse: <a href="https://vercel.com" target="_blank">https://vercel.com</a></li>
+        <li>Clique em <strong>"Sign Up"</strong></li>
+        <li>Faça login com GitHub</li>
+      </ol>
+
+      <h4>Passo 2: Importar Projeto</h4>
+      <ol>
+        <li>No dashboard, clique <strong>"Add New..."</strong> → <strong>"Project"</strong></li>
+        <li>Selecione o repositório <strong>seja-senai</strong></li>
+        <li>Configure:
+          <ul>
+            <li><strong>Framework Preset:</strong> Other</li>
+            <li><strong>Root Directory:</strong> <code>frontend-web/static</code></li>
+            <li><strong>Build Command:</strong> (deixe vazio - é site estático)</li>
+            <li><strong>Output Directory:</strong> <code>.</code></li>
+          </ul>
+        </li>
+        <li>Clique em <strong>"Deploy"</strong></li>
+      </ol>
+
+      <h4>Passo 3: Atualizar URL da API no Frontend</h4>
+      <p>No arquivo <code>frontend-web/static/scripts.js</code>, atualize a URL da API:</p>
+      <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto;">// No início do arquivo
+const API_BASE_URL = 'https://sejasenai-production.up.railway.app/api';
+
+// Exemplo de fetch:
+fetch(`${API_BASE_URL}/cursos`)
+  .then(response => response.json())
+  .then(data => console.log(data));</pre>
+
+      <h4>Passo 4: Deploy Completo</h4>
+      <ol>
+        <li>Commit e push das mudanças para GitHub</li>
+        <li>✅ Vercel faz deploy automático (1-2 minutos)</li>
+        <li>Acesse seu site em: <code>https://seja-senai.vercel.app</code></li>
+      </ol>
+
+      <div class="success-box">
+        <h3>✅ Seu frontend está no ar!</h3>
+        <p>Domínio: <code>https://seja-senai.vercel.app</code><br>
+        Deploy automático: toda vez que você der <code>git push</code> na branch <code>main</code></p>
+      </div>
+
+      <!-- GITHUB PAGES -->
+      <h2 id="github-pages">4️⃣ GitHub Pages - Documentação</h2>
+
+      <div class="info-box">
+        <h3>📚 Por que GitHub Pages?</h3>
+        <ul>
+          <li>✅ 100% gratuito para sempre</li>
+          <li>✅ Integração nativa com GitHub</li>
+          <li>✅ HTTPS automático</li>
+          <li>✅ Perfeito para documentação estática</li>
+          <li>✅ Domínio: <code>username.github.io/repository</code></li>
+        </ul>
+      </div>
+
+      <h3>4.1. Configuração Passo a Passo</h3>
+
+      <h4>Passo 1: Ativar GitHub Pages</h4>
+      <ol>
+        <li>No GitHub, vá no repositório <strong>seja-senai</strong></li>
+        <li>Clique em <strong>"Settings"</strong></li>
+        <li>Na barra lateral, clique em <strong>"Pages"</strong></li>
+        <li>Em <strong>"Source"</strong>, selecione:
+          <ul>
+            <li><strong>Branch:</strong> main</li>
+            <li><strong>Folder:</strong> /docs</li>
+          </ul>
+        </li>
+        <li>Clique em <strong>"Save"</strong></li>
+      </ol>
+
+      <h4>Passo 2: Aguardar Deploy</h4>
+      <ol>
+        <li>GitHub processa automaticamente (1-2 minutos)</li>
+        <li>✅ Documentação estará disponível em:<br>
+          <code>https://lucas.github.io/seja-senai/</code></li>
+        <li>Teste acessando: <code>https://lucas.github.io/seja-senai/index.html</code></li>
+      </ol>
+
+      <h4>Passo 3: Configurar Links Relativos</h4>
+      <p>Se houver problemas com CSS/JS, atualize os caminhos nos arquivos HTML da pasta <code>docs/</code>:</p>
+      <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto;">&lt;!-- De: --&gt;
+&lt;link rel="stylesheet" href="site.css" /&gt;
+
+&lt;!-- Para: --&gt;
+&lt;link rel="stylesheet" href="/seja-senai/site.css" /&gt;</pre>
+
+      <div class="warning-box">
+        <h4>⚠️ Atenção aos caminhos</h4>
+        <p>GitHub Pages adiciona o nome do repositório na URL. Use caminhos absolutos começando com <code>/seja-senai/</code></p>
+      </div>
+
+      <h3>4.2. Deploy Automático com GitHub Actions (Opcional)</h3>
+      <p>Crie o arquivo <code>.github/workflows/deploy-docs.yml</code>:</p>
+      <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto;">name: Deploy Docs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs</pre>
+
+      <!-- ALTERNATIVAS -->
+      <h2 id="alternativas">5️⃣ Alternativas</h2>
+
+      <h3>5.1. Render.com (Alternativa ao Railway)</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Característica</th>
+              <th>Detalhes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Plano Grátis</strong></td>
+              <td>Web service + PostgreSQL grátis</td>
+            </tr>
+            <tr>
+              <td><strong>Vantagens</strong></td>
+              <td>• Mais estável que Railway<br>• PostgreSQL incluso<br>• SSL automático</td>
+            </tr>
+            <tr>
+              <td><strong>Desvantagens</strong></td>
+              <td>• Sleep após 15min inatividade<br>• Banco expira em 90 dias<br>• Não suporta MySQL (só PostgreSQL)</td>
+            </tr>
+            <tr>
+              <td><strong>URL</strong></td>
+              <td><a href="https://render.com" target="_blank">https://render.com</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>5.2. Fly.io (Para usuários avançados)</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Característica</th>
+              <th>Detalhes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Plano Grátis</strong></td>
+              <td>3 VMs gratuitas (256MB RAM cada)</td>
+            </tr>
+            <tr>
+              <td><strong>Vantagens</strong></td>
+              <td>• Deployment global (edge computing)<br>• Containers Docker<br>• Escalabilidade automática</td>
+            </tr>
+            <tr>
+              <td><strong>Desvantagens</strong></td>
+              <td>• Requer Dockerfile<br>• Curva de aprendizado<br>• CLI obrigatória</td>
+            </tr>
+            <tr>
+              <td><strong>URL</strong></td>
+              <td><a href="https://fly.io" target="_blank">https://fly.io</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- COMPARAÇÃO DE CUSTOS -->
+      <h2 id="custos">6️⃣ Comparação de Custos</h2>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Solução</th>
+              <th>Backend</th>
+              <th>Frontend</th>
+              <th>Docs</th>
+              <th>Total/Mês</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background: #d1fae5;">
+              <td><strong>⭐ Opção 1: 100% Grátis</strong></td>
+              <td>Railway (grátis)</td>
+              <td>Vercel (grátis)</td>
+              <td>GitHub Pages (grátis)</td>
+              <td><strong style="color: #059669;">R$ 0</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Opção 2: Railway Pro</strong></td>
+              <td>Railway ($20)</td>
+              <td>Vercel (grátis)</td>
+              <td>GitHub Pages (grátis)</td>
+              <td><strong>R$ 100</strong><br>(~$20 USD)</td>
+            </tr>
+            <tr>
+              <td><strong>Opção 3: Render</strong></td>
+              <td>Render ($7)</td>
+              <td>Vercel (grátis)</td>
+              <td>GitHub Pages (grátis)</td>
+              <td><strong>R$ 35</strong><br>(~$7 USD)</td>
+            </tr>
+            <tr>
+              <td><strong>Opção 4: VPS Completo</strong></td>
+              <td colspan="3" style="text-align: center;">DigitalOcean Droplet ($4/mês)</td>
+              <td><strong>R$ 20</strong><br>(~$4 USD)</td>
+            </tr>
+            <tr>
+              <td><strong>Opção 5: VPS Profissional</strong></td>
+              <td colspan="3" style="text-align: center;">DigitalOcean 4GB RAM ($24/mês)</td>
+              <td><strong>R$ 120</strong><br>(~$24 USD)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-box">
+        <h3>💡 Observações sobre custos:</h3>
+        <ul>
+          <li>Valores em dólar convertidos para reais (R$5 = $1 USD)</li>
+          <li>Opção 1 (grátis) é perfeita para apresentações e demos</li>
+          <li>Opção 3 (R$ 35/mês) é excelente custo-benefício para produção pequena</li>
+          <li>Opção 4 (R$ 20/mês) requer conhecimento técnico de Linux/servidor</li>
+        </ul>
+      </div>
+
+      <!-- RECOMENDAÇÃO FINAL -->
+      <h2 id="recomendacao">7️⃣ Recomendação Final</h2>
+
+      <div class="cards">
+        <article class="card card-success">
+          <h3>🎯 Para Apresentação (Agora)</h3>
+          <p><strong>Use 100% GRÁTIS:</strong></p>
+          <ul style="text-align: left;">
+            <li>✅ <strong>Backend:</strong> Railway.app (plano grátis)</li>
+            <li>✅ <strong>Frontend:</strong> Vercel (plano grátis)</li>
+            <li>✅ <strong>Docs:</strong> GitHub Pages (sempre grátis)</li>
+          </ul>
+          <div style="margin-top: 16px; padding: 12px; background: #d1fae5; border-radius: 8px;">
+            <strong>Total:</strong> <span style="color: #059669; font-size: 1.5rem;">R$ 0/mês</span>
+          </div>
+          <p style="margin-top: 16px; font-size: 0.9rem; color: #6b7280;">Perfeito para demonstrar o sistema, validar com usuários e apresentar para investidores.</p>
+        </article>
+
+        <article class="card card-primary">
+          <h3>🚀 Para Produção (Após venda)</h3>
+          <p><strong>Evolutivo por etapas:</strong></p>
+          <ul style="text-align: left;">
+            <li><strong>Mês 1-3:</strong> Render.com ($7/mês = R$ 35/mês)</li>
+            <li><strong>Mês 4-12:</strong> Railway Pro ($20/mês = R$ 100/mês)</li>
+            <li><strong>Após 1 ano:</strong> VPS Dedicado (R$ 89-450/mês)</li>
+          </ul>
+          <div style="margin-top: 16px; padding: 12px; background: #dbeafe; border-radius: 8px;">
+            <strong>Crescimento gradual</strong> conforme demanda
+          </div>
+        </article>
+
+        <article class="card card-warning">
+          <h3>⚡ Para Alta Demanda</h3>
+          <p><strong>Sistema robusto:</strong></p>
+          <ul style="text-align: left;">
+            <li>✅ <strong>Backend:</strong> DigitalOcean VPS (4GB RAM)</li>
+            <li>✅ <strong>Database:</strong> MySQL Managed Database</li>
+            <li>✅ <strong>Frontend:</strong> Vercel Pro (CDN global)</li>
+            <li>✅ <strong>Backup:</strong> Backblaze B2 (R$ 10/mês)</li>
+          </ul>
+          <div style="margin-top: 16px; padding: 12px; background: #fef3c7; border-radius: 8px;">
+            <strong>Total:</strong> <span style="color: #d97706; font-size: 1.5rem;">R$ 250/mês</span>
+          </div>
+          <p style="margin-top: 16px; font-size: 0.9rem; color: #6b7280;">Para 5.000+ usuários simultâneos com SLA 99.9%.</p>
+        </article>
+      </div>
+
+      <!-- CHECKLIST FINAL -->
+      <div style="background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; padding: 32px; border-radius: 12px; margin-top: 48px;">
+        <h2 style="margin: 0 0 16px; border: none; color: white;">✅ Checklist de Deploy</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 24px;">
+          <div>
+            <h3 style="color: rgba(255,255,255,0.9); font-size: 1.25rem; margin: 0 0 16px;">Backend (Railway)</h3>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li>☐ Criar conta no Railway.app</li>
+              <li>☐ Conectar repositório GitHub</li>
+              <li>☐ Adicionar MySQL database</li>
+              <li>☐ Configurar variáveis de ambiente</li>
+              <li>☐ Gerar domínio público</li>
+              <li>☐ Testar endpoints da API</li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 style="color: rgba(255,255,255,0.9); font-size: 1.25rem; margin: 0 0 16px;">Frontend (Vercel)</h3>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li>☐ Criar conta no Vercel</li>
+              <li>☐ Importar repositório</li>
+              <li>☐ Configurar root: frontend-web/static</li>
+              <li>☐ Atualizar API_BASE_URL no scripts.js</li>
+              <li>☐ Deploy automático</li>
+              <li>☐ Testar login e funcionalidades</li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 style="color: rgba(255,255,255,0.9); font-size: 1.25rem; margin: 0 0 16px;">Docs (GitHub Pages)</h3>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li>☐ Ir em Settings → Pages</li>
+              <li>☐ Selecionar branch: main, folder: /docs</li>
+              <li>☐ Aguardar build (1-2 minutos)</li>
+              <li>☐ Acessar URL gerada</li>
+              <li>☐ Verificar CSS e navegação</li>
+              <li>☐ Compartilhar link público</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div style="margin-top: 32px; padding: 24px; background: rgba(255,255,255,0.15); border-radius: 8px;">
+          <h3 style="color: white; margin: 0 0 12px; font-size: 1.25rem;">🎉 Após Deploy Completo</h3>
+          <p style="margin: 0; font-size: 1.125rem;">Você terá 3 URLs públicas para compartilhar na apresentação:</p>
+          <ul style="margin: 12px 0 0; font-size: 1.125rem; line-height: 1.8;">
+            <li>🔗 <strong>Backend API:</strong> https://sejasenai-production.up.railway.app/api</li>
+            <li>🔗 <strong>Frontend:</strong> https://seja-senai.vercel.app</li>
+            <li>🔗 <strong>Documentação:</strong> https://lucas.github.io/seja-senai/</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- TROUBLESHOOTING -->
+      <h2>🔧 Troubleshooting</h2>
+
+      <h3>Problema: Backend não conecta no banco</h3>
+      <div class="warning-box">
+        <p><strong>Solução:</strong></p>
+        <ol>
+          <li>Verifique se as variáveis de ambiente estão corretas no Railway</li>
+          <li>Confirme que <code>SPRING_DATASOURCE_URL</code> usa <code>jdbc:mysql://</code></li>
+          <li>Verifique os logs no Railway: aba "Deployments" → clique no último deploy</li>
+        </ol>
+      </div>
+
+      <h3>Problema: CORS bloqueado no frontend</h3>
+      <div class="warning-box">
+        <p><strong>Solução:</strong></p>
+        <ol>
+          <li>No Railway, adicione a variável: <code>CORS_ALLOWED_ORIGINS=https://seja-senai.vercel.app</code></li>
+          <li>No backend, verifique <code>SecurityConfig.java</code> se está lendo a variável corretamente</li>
+          <li>Reinicie o backend após mudanças</li>
+        </ol>
+      </div>
+
+      <h3>Problema: CSS quebrado no GitHub Pages</h3>
+      <div class="warning-box">
+        <p><strong>Solução:</strong></p>
+        <ol>
+          <li>Altere os caminhos nos HTML de <code>href="site.css"</code> para <code>href="/seja-senai/site.css"</code></li>
+          <li>Ou use caminhos relativos: <code>href="./site.css"</code></li>
+          <li>GitHub Pages adiciona o nome do repositório na URL base</li>
+        </ol>
+      </div>
+
+      <h3>Problema: Backend "dormindo" (cold start)</h3>
+      <div class="info-box">
+        <p><strong>É normal no plano grátis!</strong> Após 15min de inatividade, o serviço entra em sleep.</p>
+        <p><strong>Como resolver:</strong></p>
+        <ul>
+          <li>Aceite o delay de ~30s no primeiro acesso</li>
+          <li>Ou configure um ping a cada 10 minutos (UptimeRobot grátis)</li>
+          <li>Ou migre para Railway Pro ($20/mês sem sleep)</li>
+        </ul>
+      </div>
+
+      <!-- CONTATO -->
+      <div class="success-box" style="margin-top: 48px;">
+        <h3>🚀 Pronto para Deploy!</h3>
+        <p>Com essas instruções, você pode colocar todo o sistema SEJA SENAI online <strong>GRATUITAMENTE</strong> em menos de 1 hora.</p>
+        <p style="margin-top: 16px;"><strong>Dúvidas?</strong> Consulte as documentações oficiais:</p>
+        <ul>
+          <li>📚 <a href="https://docs.railway.app" target="_blank" style="color: #0ea5e9;">Railway Docs</a></li>
+          <li>📚 <a href="https://vercel.com/docs" target="_blank" style="color: #0ea5e9;">Vercel Docs</a></li>
+          <li>📚 <a href="https://docs.github.com/pages" target="_blank" style="color: #0ea5e9;">GitHub Pages Docs</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Segurança - SEJA SENAI</title>
+  <link rel="stylesheet" href="site.css" />
+</head>
+<body>
+  <header class="top">
+    <button class="menu-toggle" aria-label="Menu" aria-expanded="false">☰</button>
+    <h1>🔒 Documentação de Segurança - SEJA SENAI</h1>
+    <p>Práticas e implementações de segurança aplicadas ao sistema</p>
+  </header>
+
+  <div class="menu-overlay"></div>
+
+  <main class="layout">
+    <nav class="menu">
+      <a href="index.html">🏠 Início</a>
+      <a href="quick-start.html">🚀 Guia Rápido</a>
+      <a href="guia-uso-aluno.html">👨‍🎓 Guia do Aluno</a>
+      <a href="guia-uso-secretaria.html">🏢 Guia da Secretaria</a>
+      <a href="proposta-comercial.html">💼 Proposta Comercial</a>
+      <a href="hospedagem-opcoes.html">🌩️ Hospedagem</a>
+      <a href="scripts.html">⚡ Scripts Executores</a>
+      <a href="backend.html">⚙️ Backend API</a>
+      <a href="frontend.html">🎨 Frontend</a>
+      <a href="security.html" class="active">🔒 Segurança</a>
+      <a href="init.html">🛠️ Configuração</a>
+      <a href="troubleshooting.html">🔧 Troubleshooting</a>
+      <a href="snippets.html">📝 Snippets</a>
+      <a href="developer-docs.html">📚 Docs Completa</a>
+    </nav>
+
+    <section class="content">
+      <h2>Visão Geral</h2>
+      <p>O sistema SEJA SENAI implementa múltiplas camadas de segurança para proteger dados dos usuários e garantir a integridade do processo seletivo. Esta documentação detalha todas as medidas de segurança aplicadas.</p>
+
+      <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 16px; border-radius: 8px; margin: 20px 0;">
+        <strong>⚠️ Importante:</strong> Esta documentação é destinada à equipe de desenvolvimento. Não compartilhe informações técnicas detalhadas com usuários finais.
+      </div>
+
+      <h2>🛡️ Segurança do Backend</h2>
+
+      <h3>1. Autenticação JWT (JSON Web Tokens)</h3>
+      <div class="cards">
+        <article>
+          <h4>Configuração</h4>
+          <ul>
+            <li><strong>Secret Key:</strong> Chave de 256 bits configurável via <code>application.properties</code></li>
+            <li><strong>Algoritmo:</strong> HS256 (HMAC-SHA256)</li>
+            <li><strong>Validade:</strong> 24 horas (86400000ms)</li>
+            <li><strong>Renovação:</strong> Automática a cada requisição válida</li>
+          </ul>
+        </article>
+        <article>
+          <h4>Validações Implementadas</h4>
+          <ul>
+            <li>Verificação de assinatura do token</li>
+            <li>Validação de expiração</li>
+            <li>Verificação de formato (malformed)</li>
+            <li>Proteção contra tokens vazios ou inválidos</li>
+          </ul>
+        </article>
+      </div>
+
+      <pre><code># application.properties
+jwt.secret=SejaSenai2025SecretKeyForJWTTokenGenerationAndValidationMustBeLongEnoughForHS256
+jwt.expiration=86400000</code></pre>
+
+      <h3>2. Senhas Fortes</h3>
+      <p>Implementamos validação de senha forte para garantir segurança das contas de usuário:</p>
+      
+      <div style="background: #e3f2fd; padding: 16px; border-radius: 8px; margin: 16px 0;">
+        <h4>Requisitos de Senha:</h4>
+        <ul>
+          <li>✅ Mínimo de 8 caracteres</li>
+          <li>✅ Pelo menos 1 letra maiúscula (A-Z)</li>
+          <li>✅ Pelo menos 1 letra minúscula (a-z)</li>
+          <li>✅ Pelo menos 1 número (0-9)</li>
+          <li>✅ Pelo menos 1 caractere especial (@#$%^&+=!)</li>
+          <li>✅ Sem espaços em branco</li>
+        </ul>
+      </div>
+
+      <p><strong>Classe:</strong> <code>PasswordValidator.java</code></p>
+      <p><strong>Validação:</strong> Frontend e Backend (dupla camada)</p>
+      <p><strong>Criptografia:</strong> BCrypt com força 10 (padrão Spring Security)</p>
+
+      <h3>3. Rate Limiting</h3>
+      <p>Proteção contra ataques de negação de serviço (DoS) e força bruta:</p>
+      
+      <div class="cards">
+        <article>
+          <h4>Limites Globais</h4>
+          <ul>
+            <li><strong>Bucket4j:</strong> 100 requisições por minuto por IP</li>
+            <li><strong>Renovação:</strong> Intervalo de 1 minuto</li>
+            <li><strong>Resposta:</strong> HTTP 429 (Too Many Requests)</li>
+          </ul>
+        </article>
+        <article>
+          <h4>Identificação de Cliente</h4>
+          <ul>
+            <li>IP do cliente (X-Forwarded-For)</li>
+            <li>Cache em memória (ConcurrentHashMap)</li>
+            <li>Limites por endpoint</li>
+          </ul>
+        </article>
+      </div>
+
+      <pre><code>// RateLimitFilter.java
+Bandwidth limit = Bandwidth.classic(100, Refill.intervally(100, Duration.ofMinutes(1)));</code></pre>
+
+      <h3>4. Proteção contra Brute Force (Login)</h3>
+      <p>Sistema de bloqueio temporário após tentativas falhadas de login:</p>
+      
+      <div style="background: #f3e5f5; padding: 16px; border-radius: 8px; margin: 16px 0;">
+        <h4>Configuração:</h4>
+        <ul>
+          <li><strong>Máximo de tentativas:</strong> 5 tentativas por usuário/IP</li>
+          <li><strong>Tempo de bloqueio:</strong> 15 minutos</li>
+          <li><strong>Chave de identificação:</strong> email + IP</li>
+          <li><strong>Feedback:</strong> Número de tentativas restantes na resposta</li>
+        </ul>
+      </div>
+
+      <p><strong>Classe:</strong> <code>LoginAttemptService.java</code></p>
+      <p><strong>Resposta ao bloqueio:</strong> HTTP 429 com tempo restante em minutos</p>
+
+      <h3>5. Headers de Segurança HTTP</h3>
+      <p>Headers configurados no <code>SecurityConfig.java</code> para proteção adicional:</p>
+
+      <table style="width: 100%; border-collapse: collapse; margin: 16px 0;">
+        <thead>
+          <tr style="background: #f5f5f5;">
+            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Header</th>
+            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Valor/Configuração</th>
+            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Proteção</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 12px; border: 1px solid #ddd;"><code>Content-Security-Policy</code></td>
+            <td style="padding: 12px; border: 1px solid #ddd;">default-src 'self'; script-src 'self' 'unsafe-inline'</td>
+            <td style="padding: 12px; border: 1px solid #ddd;">XSS, Injection</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border: 1px solid #ddd;"><code>X-XSS-Protection</code></td>
+            <td style="padding: 12px; border: 1px solid #ddd;">1; mode=block</td>
+            <td style="padding: 12px; border: 1px solid #ddd;">XSS (Cross-Site Scripting)</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border: 1px solid #ddd;"><code>X-Frame-Options</code></td>
+            <td style="padding: 12px; border: 1px solid #ddd;">DENY</td>
+            <td style="padding: 12px; border: 1px solid #ddd;">Clickjacking</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border: 1px solid #ddd;"><code>Strict-Transport-Security</code></td>
+            <td style="padding: 12px; border: 1px solid #ddd;">max-age=31536000; includeSubDomains</td>
+            <td style="padding: 12px; border: 1px solid #ddd;">Man-in-the-Middle</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>6. CORS (Cross-Origin Resource Sharing)</h3>
+      <p>Configurado para aceitar requisições de origens específicas:</p>
+      <pre><code>@CrossOrigin(origins = "*") // Ambiente de desenvolvimento
+// Em produção, especificar domínios permitidos:
+// @CrossOrigin(origins = {"https://sejasenai.com.br"})</code></pre>
+
+      <h3>7. Gestão de Exceções</h3>
+      <p><strong>GlobalExceptionHandler:</strong> Trata erros de forma segura sem expor detalhes internos</p>
+      <ul>
+        <li>Captura <code>DataIntegrityViolationException</code> (dados duplicados)</li>
+        <li>Retorna mensagens genéricas (não expõe stack trace)</li>
+        <li>Log de erros para análise interna</li>
+      </ul>
+
+      <h2>🔐 Segurança do Frontend</h2>
+
+      <h3>1. Sanitização de Inputs</h3>
+      <p>Todas as entradas de usuário são sanitizadas antes do processamento:</p>
+      
+      <pre><code>// scripts.js
+function sanitizeHTML(str) {
+  if (!str) return '';
+  const temp = document.createElement('div');
+  temp.textContent = String(str);
+  return temp.innerHTML;
+}
+
+function sanitizeInput(value) {
+  if (!value) return '';
+  return String(value).trim().slice(0, 500); // Limita tamanho
+}</code></pre>
+
+      <h3>2. Validações Client-Side</h3>
+      <div class="cards">
+        <article>
+          <h4>Email</h4>
+          <p>Regex: <code>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</code></p>
+        </article>
+        <article>
+          <h4>CPF</h4>
+          <p>Formato: 11 dígitos numéricos</p>
+        </article>
+        <article>
+          <h4>Senha Forte</h4>
+          <p>Mesmos requisitos do backend</p>
+        </article>
+      </div>
+
+      <h3>3. Gestão Segura de Tokens</h3>
+      <ul>
+        <li><strong>Armazenamento:</strong> localStorage com validação</li>
+        <li><strong>Validação JWT:</strong> Estrutura de 3 partes separadas por pontos</li>
+        <li><strong>Limpeza automática:</strong> Tokens inválidos são removidos</li>
+        <li><strong>Verificação:</strong> A cada carregamento de página</li>
+      </ul>
+
+      <pre><code>function isValidToken(token) {
+  if (!token || typeof token !== 'string') return false;
+  const parts = token.split('.');
+  return parts.length === 3;
+}</code></pre>
+
+      <h3>4. Proteção XSS</h3>
+      <ul>
+        <li>Sanitização de HTML em todos os textos exibidos</li>
+        <li>Uso de <code>textContent</code> ao invés de <code>innerHTML</code></li>
+        <li>Escape de caracteres especiais</li>
+        <li>Content Security Policy configurado</li>
+      </ul>
+
+      <h2>📋 Checklist de Segurança</h2>
+
+      <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+        <h3>Backend ✅</h3>
+        <ul style="list-style: none; padding-left: 0;">
+          <li>✅ Autenticação JWT com secret configurável</li>
+          <li>✅ Validação de tokens (assinatura, expiração, formato)</li>
+          <li>✅ Senhas criptografadas com BCrypt</li>
+          <li>✅ Validação de senha forte (8+ chars, maiúscula, minúscula, número, especial)</li>
+          <li>✅ Rate Limiting global (100 req/min por IP)</li>
+          <li>✅ Proteção contra Brute Force (5 tentativas, 15min bloqueio)</li>
+          <li>✅ Headers de segurança HTTP (CSP, XSS, Frame, HSTS)</li>
+          <li>✅ CORS configurado</li>
+          <li>✅ Gestão segura de exceções</li>
+          <li>✅ Roles e autorização baseada em permissões</li>
+        </ul>
+
+        <h3 style="margin-top: 24px;">Frontend ✅</h3>
+        <ul style="list-style: none; padding-left: 0;">
+          <li>✅ Sanitização de inputs (HTML e texto)</li>
+          <li>✅ Validação de email, CPF e senha forte</li>
+          <li>✅ Validação de tokens JWT</li>
+          <li>✅ Proteção XSS (textContent, escape)</li>
+          <li>✅ Limpeza automática de tokens inválidos</li>
+          <li>✅ Limitação de tamanho de inputs (500 chars)</li>
+          <li>✅ Feedback de segurança ao usuário</li>
+        </ul>
+      </div>
+
+      <h2>🔧 Manutenção e Boas Práticas</h2>
+
+      <h3>Senhas e Secrets</h3>
+      <ul>
+        <li><strong>NUNCA</strong> commitar secrets no código</li>
+        <li>Usar variáveis de ambiente em produção</li>
+        <li>Rotacionar JWT secret periodicamente (a cada 90 dias)</li>
+        <li>Manter BCrypt strength >= 10</li>
+      </ul>
+
+      <h3>Logs e Monitoramento</h3>
+      <ul>
+        <li>Monitorar tentativas de login falhadas</li>
+        <li>Alertar sobre rate limiting excessivo</li>
+        <li>Auditar mudanças de permissões de usuário</li>
+        <li>Log de acessos administrativos</li>
+      </ul>
+
+      <h3>Atualizações</h3>
+      <ul>
+        <li>Manter dependências atualizadas (mvn versions:display-dependency-updates)</li>
+        <li>Atualizar Spring Security regularmente</li>
+        <li>Revisar CVEs de bibliotecas usadas</li>
+        <li>Testar segurança após cada atualização</li>
+      </ul>
+
+      <h2>📚 Referências</h2>
+      <ul>
+        <li><a href="https://owasp.org/www-project-top-ten/" target="_blank">OWASP Top 10</a></li>
+        <li><a href="https://spring.io/guides/topicals/spring-security-architecture" target="_blank">Spring Security Architecture</a></li>
+        <li><a href="https://jwt.io/introduction" target="_blank">JWT Introduction</a></li>
+        <li><a href="https://github.com/bucket4j/bucket4j" target="_blank">Bucket4j Rate Limiting</a></li>
+      </ul>
+
+      <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 16px; border-radius: 8px; margin-top: 32px;">
+        <strong>⚠️ Atenção:</strong> Esta documentação deve ser atualizada sempre que novas medidas de segurança forem implementadas.
+      </div>
+    </section>
+  </main>
+
+  <script src="menu.js"></script>
+</body>
+</html>

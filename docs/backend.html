@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentação Backend</title>
+  <link rel="stylesheet" href="site.css" />
+  <script defer src="docs-menu.js"></script>
+</head>
+<body>
+  <button class="menu-toggle" aria-label="Menu" aria-expanded="false">☰</button>
+  <div class="menu-overlay"></div>
+  <header class="top">
+    <button class="menu-toggle" aria-label="Menu" aria-expanded="false">☰</button>
+    <h1>Backend</h1>
+    <p>Controllers, segurança e endpoints da API REST.</p>
+  </header>
+
+  <div class="menu-overlay"></div>
+
+  <main class="layout">
+    <nav class="menu">
+      <a href="index.html">🏠 Início</a>
+      <a href="quick-start.html">🚀 Guia Rápido</a>
+      <a href="guia-uso-aluno.html">👨‍🎓 Guia do Aluno</a>
+      <a href="guia-uso-secretaria.html">🏢 Guia da Secretaria</a>
+      <a href="proposta-comercial.html">💼 Proposta Comercial</a>
+      <a href="hospedagem-opcoes.html">🌩️ Hospedagem</a>
+      <a href="scripts.html">⚡ Scripts Executores</a>
+      <a href="backend.html" class="active">⚙️ Backend API</a>
+      <a href="frontend.html">🎨 Frontend</a>
+      <a href="security.html">🔒 Segurança</a>
+      <a href="init.html">🛠️ Configuração</a>
+      <a href="troubleshooting.html">🔧 Troubleshooting</a>
+      <a href="snippets.html">📝 Snippets</a>
+      <a href="developer-docs.html">📚 Docs Completa</a>
+    </nav>
+    <section class="content">
+      <h2>Camadas</h2>
+      <ul>
+        <li><strong>Model:</strong> entidades JPA (<code>Usuario</code>, <code>Curso</code>, <code>Unidade</code>, <code>Inscricao</code>, <code>Edital</code>).</li>
+        <li><strong>Repository:</strong> interfaces Spring Data para persistência.</li>
+        <li><strong>Controller:</strong> APIs REST para operações de negócio.</li>
+        <li><strong>Security:</strong> JWT stateless com regras por rota e perfil.</li>
+      </ul>
+
+      <h2>Endpoints de destaque</h2>
+      <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr><th>Método</th><th>Rota</th><th>Descrição</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>POST</td><td>/api/usuarios/login</td><td>Login e retorno de token + usuário</td></tr>
+          <tr><td>GET</td><td>/api/usuarios/me</td><td>Dados do usuário autenticado</td></tr>
+          <tr><td>PUT</td><td>/api/usuarios/me</td><td>Atualiza dados não únicos do aluno</td></tr>
+          <tr><td>POST/PUT/DELETE</td><td>/api/editais</td><td>CRUD de editais (admin)</td></tr>
+          <tr><td>PUT</td><td>/api/unidades/{id}</td><td>Edição de unidade (admin)</td></tr>
+          <tr><td>PUT</td><td>/api/cursos/{id}</td><td>Edição de curso (admin)</td></tr>
+          <tr><td>PUT</td><td>/api/usuarios/{id}</td><td>Edição de usuário (admin)</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="menu.js"></script>
+</body>
+</html>

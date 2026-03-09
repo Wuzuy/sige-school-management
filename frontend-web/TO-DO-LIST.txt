@@ -1,0 +1,15 @@
+- Alterar o display do header
+- ✅ Sala de créditos - CONCLUÍDA 
+	Página criada em: frontend-web/static/credits.html
+	Inclui todas as atribuições de ícones da Flaticon
+	
+	Créditos incluídos:
+	<a href="https://www.flaticon.com/free-icons/calendar" title="calendar icons">Calendar icons created by Freepik - Flaticon</a>
+	<a href="https://www.flaticon.com/free-icons/clock" title="clock icons">Clock icons created by CreativeCons - Flaticon</a>
+	<a href="https://www.flaticon.com/free-icons/location" title="location icons">Location icons created by Vitaly Gorbachev - Flaticon</a>
+	<a href="https://www.flaticon.com/free-icons/yellow" title="yellow icons">Yellow icons created by hqrloveq - Flaticon</a>
+	<a href="https://www.flaticon.com/free-icons/timing" title="timing icons">Timing icons created by hqrloveq - Flaticon</a>
+	<a href="https://www.flaticon.com/free-icons/user" title="user icons">User icons created by Freepik - Flaticon</a>
+	<a href="https://www.flaticon.com/free-icons/doc" title="doc icons">Doc icons created by hqrloveq - Flaticon</a>
+	<a href="https://www.flaticon.com/free-icons/document" title="document icons">Document icons created by Freepik - Flaticon</a>
+	<a href="https://www.flaticon.com/free-icons/doc" title="doc icons">Doc icons created by hqrloveq - Flaticon</a>

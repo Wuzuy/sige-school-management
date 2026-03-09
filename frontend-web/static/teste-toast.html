@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Sistema de Notificações Toast</title>
+    <link rel="stylesheet" href="app.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            font-size: 32px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .test-button {
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            color: white;
+        }
+        
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .test-button:active {
+            transform: translateY(0);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .btn-error {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        
+        .btn-info {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+        
+        .feature-list {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 20px;
+        }
+        
+        .feature-list h3 {
+            margin-top: 0;
+            color: #1a1a1a;
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+        
+        .feature-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-list li:before {
+            content: "✓";
+            color: #10b981;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .code-example {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+        }
+        
+        .code-example .keyword {
+            color: #c792ea;
+        }
+        
+        .code-example .string {
+            color: #c3e88d;
+        }
+        
+        .code-example .comment {
+            color: #546e7a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Sistema de Notificações Toast</h1>
+        <p class="subtitle">Teste o novo design profissional das notificações</p>
+        
+        <div class="test-grid">
+            <button class="test-button btn-success" onclick="testSuccess()">
+                ✓ Sucesso
+            </button>
+            <button class="test-button btn-error" onclick="testError()">
+                ✕ Erro
+            </button>
+            <button class="test-button btn-warning" onclick="testWarning()">
+                ⚠ Aviso
+            </button>
+            <button class="test-button btn-info" onclick="testInfo()">
+                ℹ Informação
+            </button>
+        </div>
+        
+        <div class="test-grid">
+            <button class="test-button btn-success" onclick="testMultiple()">
+                🔥 Múltiplas Notificações
+            </button>
+            <button class="test-button btn-info" onclick="testLongMessage()">
+                📝 Mensagem Longa
+            </button>
+            <button class="test-button btn-error" onclick="testJSON()">
+                { } JSON Error
+            </button>
+            <button class="test-button btn-warning" onclick="testCustomDuration()">
+                ⏱ Duração 10s
+            </button>
+        </div>
+        
+        <div class="feature-list">
+            <h3>✨ Recursos Implementados</h3>
+            <ul>
+                <li>Design moderno com gradientes e sombras sofisticadas</li>
+                <li>Ícones SVG profissionais para cada tipo de notificação</li>
+                <li>Animações suaves de entrada e saída (cubic-bezier)</li>
+                <li>Progress bar animada indicando tempo restante</li>
+                <li>Hover effects interativos (scale, translate)</li>
+                <li>Position fixed garantindo visibilidade sempre</li>
+                <li>Z-index 99999 para aparecer acima de tudo</li>
+                <li>Parser inteligente de mensagens JSON/erro</li>
+                <li>Auto-dismiss configurável ou manual via botão fechar</li>
+                <li>Totalmente responsivo para mobile e desktop</li>
+                <li>Backdrop blur para efeito glassmorphism</li>
+                <li>Sanitização XSS em todas as mensagens</li>
+            </ul>
+        </div>
+        
+        <div class="code-example">
+            <span class="comment">// Exemplos de uso:</span><br><br>
+            <span class="keyword">showSuccess</span>(<span class="string">'Operação realizada com sucesso!'</span>);<br><br>
+            <span class="keyword">showError</span>(<span class="string">'Erro ao processar dados'</span>);<br><br>
+            <span class="keyword">showWarning</span>(<span class="string">'Atenção: verifique os campos obrigatórios'</span>);<br><br>
+            <span class="keyword">showInfo</span>(<span class="string">'Dados salvos automaticamente'</span>);<br><br>
+            <span class="comment">// Personalizado:</span><br>
+            <span class="keyword">showNotification</span>(<span class="string">'Mensagem'</span>, <span class="string">'success'</span>, 5000, <span class="string">'Título'</span>);
+        </div>
+    </div>
+    
+    <div id="toast-container"></div>
+    
+    <script src="scripts.js"></script>
+    <script>
+        function testSuccess() {
+            showSuccess('Inscrição realizada com sucesso! Você receberá um e-mail de confirmação em breve.');
+        }
+        
+        function testError() {
+            showError('Não foi possível concluir a inscrição. Verifique os campos obrigatórios.');
+        }
+        
+        function testWarning() {
+            showWarning('Sua sessão expirará em 5 minutos. Salve seu trabalho.');
+        }
+        
+        function testInfo() {
+            showInfo('Novos cursos disponíveis! Confira as vagas abertas para este semestre.');
+        }
+        
+        function testMultiple() {
+            showSuccess('Primeira notificação');
+            setTimeout(() => showInfo('Segunda notificação'), 300);
+            setTimeout(() => showWarning('Terceira notificação'), 600);
+            setTimeout(() => showError('Quarta notificação'), 900);
+        }
+        
+        function testLongMessage() {
+            showInfo('Esta é uma mensagem muito longa para testar como o sistema de notificações lida com textos extensos. O design deve permanecer elegante e legível mesmo com conteúdo grande. A mensagem será formatada adequadamente e o toast terá um tamanho apropriado.');
+        }
+        
+        function testJSON() {
+            showError('Não foi possível processar: {"erro":"Campos obrigatórios ausentes","detalhes":{"campo":"email","motivo":"formato inválido"}}');
+        }
+        
+        function testCustomDuration() {
+            showNotification('Esta notificação ficará visível por 10 segundos!', 'warning', 10000, 'Duração Personalizada');
+        }
+    </script>
+</body>
+</html>
