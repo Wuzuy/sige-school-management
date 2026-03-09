@@ -1,4 +1,6 @@
-const API_BASE = 'http://localhost:8080/api';
+// Configuração da URL da API
+// Prioridade: 1) Variável de ambiente do Cloudflare, 2) window.API_BASE_URL, 3) localhost
+const API_BASE = window.ENV?.API_BASE_URL || window.API_BASE_URL || 'http://localhost:8080/api';
 
 // ========== SISTEMA DE NOTIFICAÇÕES TOAST (NOTYF) ==========
 
