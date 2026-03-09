@@ -1,14 +1,7 @@
-// Configuração automática da API - Gerado automaticamente
-// URL do Cloudflare Tunnel ativa
+﻿// Configuracao automatica - 09/03/2026 15:20:13
 (function() {
-  const API_URL = 'https://breach-velvet-getting-payment.trycloudflare.com';
-  
-  // Salva no localStorage
+  const API_URL = 'https://hay-students-hopefully-kijiji.trycloudflare.com';
   localStorage.setItem('API_BASE_URL', API_URL);
-  
-  // Atualiza variável global
   window.API_BASE_URL = API_URL;
-  
-  console.log('✅ API configurada automaticamente:', API_URL);
-  console.log('💡 URL salva no localStorage');
+  console.log('API configurada:', API_URL);
 })();
