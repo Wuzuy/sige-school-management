@@ -148,4 +148,10 @@ htmlcov/
 .cache
 nosetests.xml
 coverage.xml
+
+# ====================
+# CLOUDFLARE WRANGLER
+# ====================
+.wrangler/
+.dev.vars
 *.cover
