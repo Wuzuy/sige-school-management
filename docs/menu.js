@@ -36,20 +36,26 @@
       menuToggle.innerHTML = isOpen ? '✕' : '☰';
     };
 
-    // Click no botão hambúrguer
-    menuToggle.addEventListener('click', (e) => {
+    // Click/Touch no botão hambúrguer
+    const handleToggle = (e) => {
+      e.preventDefault();
       e.stopPropagation();
       toggleMenu();
-    });
+    };
+    
+    menuToggle.addEventListener('click', handleToggle);
+    menuToggle.addEventListener('touchstart', handleToggle, { passive: false });
 
-    // Click nos links do menu (fecha o menu)
+    // Click/Touch nos links do menu (fecha o menu)
     menu.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', closeMenu);
+      link.addEventListener('touchend', closeMenu);
     });
 
-    // Click no overlay (fecha o menu)
+    // Click/Touch no overlay (fecha o menu)
     if (overlay) {
       overlay.addEventListener('click', closeMenu);
+      overlay.addEventListener('touchstart', closeMenu);
     }
 
     // Fechar ao pressionar ESC

@@ -156,11 +156,21 @@ td {
   line-height: 1;
   transition: var(--transition-base);
   z-index: 1001;
+  /* Touch-friendly */
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.2);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .menu-toggle:hover {
   background: rgba(255, 255, 255, 0.25);
   transform: scale(1.05);
+}
+
+.menu-toggle:active {
+  transform: scale(0.98);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .menu-toggle:active {
@@ -620,7 +630,7 @@ table tbody tr:last-child td {
   }
 
   .menu-toggle {
-    display: block;
+    display: flex !important;
     min-height: 48px;
     min-width: 48px;
     font-size: 1.75rem;
@@ -632,16 +642,23 @@ table tbody tr:last-child td {
     color: var(--senai-purple);
     border: 2px solid var(--senai-purple);
     border-radius: 50%;
-    display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(10px);
     transition: all var(--transition-base);
+    cursor: pointer;
+    /* Touch optimizations */
+    -webkit-tap-highlight-color: rgba(102, 126, 234, 0.3);
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    padding: 0;
   }
 
   .menu-toggle:active {
-    transform: scale(0.95);
+    transform: scale(0.92);
+    background: rgba(255, 255, 255, 1);
   }
 
   .layout {
@@ -690,6 +707,9 @@ table tbody tr:last-child td {
     background: rgba(0, 0, 0, 0.5);
     z-index: 999;
     backdrop-filter: blur(4px);
+    cursor: pointer;
+    touch-action: auto;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .menu-overlay.visible {
