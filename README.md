@@ -172,9 +172,28 @@ seja-senai/
 ### 1️⃣ Clonar o Repositório
 
 ```bash
-git clone https://github.com/seu-usuario/seja-senai.git
+git clone https://github.com/Wuzuy/seja-senai.git
 cd seja-senai
 ```
+
+---
+
+### ⚡ Início Rápido (Windows)
+
+Execute o arquivo BAT para iniciar tudo automaticamente:
+
+```bash
+INICIAR-PROJETO.bat
+```
+
+**O que esse script faz:**
+- ✅ Inicia o backend na porta 8080 em uma janela separada
+- ✅ Mostra instruções para abrir o frontend na porta 5500
+- ✅ Verifica pré-requisitos automaticamente
+
+**URLs após execução:**
+- Backend: `http://localhost:8080`
+- Frontend: `http://localhost:5500` (Live Server)
 
 ---
 
