@@ -65,19 +65,50 @@ cd frontend-web/static
 wrangler pages deploy . --project-name=seja-senai
 ```
 
-## Passo 3: Configurar Variáveis de Ambiente
+## Passo 3: Configurar URL da API do Backend
 
-Após o deploy, você precisa configurar a URL do backend:
+Existem **3 formas** de configurar a URL da API:
 
-1. No Cloudflare Pages, vá em **Settings** > **Environment Variables**
-2. Adicione:
-   ```
-   API_BASE_URL = https://seu-backend.ngrok.io
-   ```
+### ⭐ Opção A: Script Inline (MAIS FÁCIL)
 
-3. Atualize `scripts.js` para usar a variável:
+Adicione este script **ANTES** do `<script src="scripts.js"></script>` em cada página HTML:
+
+**Exemplo em `index.html`, `login.html`, etc:**
+```html
+<!-- Configure a URL do backend aqui -->
+<script>
+  window.API_BASE_URL = 'https://abc123.ngrok.io/api';
+</script>
+
+<!-- Depois carregue o scripts.js -->
+<script src="scripts.js"></script>
+```
+
+**⚠️ IMPORTANTE:** Substitua `https://abc123.ngrok.io` pela URL real do seu backend Ngrok!
+
+### Opção B: Arquivo config.js
+
+1. **Crie `frontend-web/static/config.js`:**
 ```javascript
-const BASE_URL = window.ENV?.API_BASE_URL || 'http://localhost:8080/api';
+// Configuração da API
+window.API_BASE_URL = 'https://abc123.ngrok.io/api';
+```
+
+2. **Adicione em TODAS as páginas HTML ANTES do scripts.js:**
+```html
+<script src="config.js"></script>
+<script src="scripts.js"></script>
+```
+
+### Opção C: Variáveis de Ambiente (Cloudflare Pages)
+
+1. No Cloudflare Dashboard, vá em **Pages** > **seu-projeto** > **Settings** > **Environment Variables**
+2. Adicione:
+   - **Variable name:** `API_BASE_URL`
+   - **Value:** `https://seu-backend.ngrok.io/api`
+3. Salve e faça redeploy
+
+**⚠️ Nota:** Esta opção requer configuração adicional no build e não é recomendada para iniciantes.
 ```
 
 ## Passo 4: Configurar Domínio Customizado (Opcional)
