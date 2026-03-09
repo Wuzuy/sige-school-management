@@ -70,6 +70,9 @@ html {
   scroll-behavior: smooth;
   overflow-x: hidden;
   width: 100%;
+  /* Melhor rendering em mobile */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
 }
 
 body {
@@ -83,6 +86,28 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   width: 100%;
+  /* Melhor scrolling em mobile */
+  -webkit-overflow-scrolling: touch;
+  /* Prevenir zoom indesejado em iOS */
+  touch-action: manipulation;
+}
+
+/* Garantir que imagens e mídia não quebrem o layout */
+img,
+video,
+iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Melhor handling de texto longo */
+p,
+li,
+td {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 /* ============================================
@@ -568,89 +593,285 @@ table tbody tr:last-child td {
 
 /* Mobile */
 @media (max-width: 768px) {
+  /* Header com melhor espaçamento */
   .top {
-    padding: var(--spacing-lg) var(--spacing-md);
+    padding: var(--spacing-xl) var(--spacing-md) var(--spacing-lg);
   }
 
   .top h1 {
-    margin-right: 50px;
-    font-size: 1.5rem;
+    margin-right: 60px;
+    font-size: clamp(1.25rem, 5vw, 1.75rem);
+    line-height: 1.2;
+    word-break: break-word;
+  }
+
+  .top p {
+    font-size: clamp(0.875rem, 3vw, 1rem);
+    line-height: 1.5;
   }
 
   .menu-toggle {
     display: block;
+    min-height: 44px;
+    min-width: 44px;
+    font-size: 1.5rem;
   }
 
   .layout {
     margin: var(--spacing-md) auto;
-    padding: 0 var(--spacing-md);
+    padding: 0;
+    max-width: 100%;
   }
 
   .menu {
     position: fixed;
     top: 0;
     left: -100%;
-    width: 280px;
+    width: min(85vw, 320px);
     height: 100vh;
     z-index: 1000;
     overflow-y: auto;
+    overflow-x: hidden;
     transition: left var(--transition-slow);
     border-radius: 0;
     box-shadow: var(--shadow-xl);
-    padding-top: var(--spacing-2xl);
+    padding: var(--spacing-2xl) var(--spacing-md);
   }
 
   .menu.open {
     left: 0;
   }
 
+  .menu a {
+    padding: var(--spacing-md);
+    font-size: 1rem;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
   .content {
     padding: var(--spacing-md);
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
   .content h2 {
-    font-size: 1.5rem;
+    font-size: clamp(1.25rem, 5vw, 1.75rem);
+    word-break: break-word;
+    hyphens: auto;
   }
 
   .content h3 {
-    font-size: 1.25rem;
+    font-size: clamp(1.1rem, 4vw, 1.5rem);
+    word-break: break-word;
+  }
+
+  .content p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .content ul,
+  .content ol {
+    padding-left: var(--spacing-lg);
+  }
+
+  .content li {
+    margin-bottom: var(--spacing-sm);
   }
 
   .cards {
     grid-template-columns: 1fr;
+    gap: var(--spacing-md);
   }
 
-  pre {
-    font-size: 0.8rem;
+  .card {
     padding: var(--spacing-md);
   }
 
+  /* Botões maiores para touch */
+  .btn,
+  .btn-primary,
+  .btn-secondary {
+    padding: 12px 20px;
+    min-height: 44px;
+    font-size: 0.95rem;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Code blocks mobile-friendly */
+  pre {
+    font-size: 0.75rem;
+    padding: var(--spacing-md);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--border-radius-sm);
+  }
+
+  pre code {
+    word-break: break-all;
+    white-space: pre-wrap;
+  }
+
+  /* Tabelas responsivas */
   .table-wrapper {
-    margin: var(--spacing-md) -var(--spacing-md);
+    margin: var(--spacing-md) calc(-1 * var(--spacing-md));
     border-radius: 0;
     border-left: none;
     border-right: none;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    min-width: 600px;
+    font-size: 0.85rem;
+  }
+
+  /* Imagens responsivas */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Links com área de toque maior */
+  a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Hero section mobile */
+  div[style*="text-align: center"] {
+    padding: var(--spacing-lg) var(--spacing-md) !important;
+  }
+
+  div[style*="text-align: center"] h2 {
+    font-size: clamp(1.5rem, 6vw, 2rem) !important;
+  }
+
+  div[style*="text-align: center"] p {
+    font-size: clamp(0.9rem, 3.5vw, 1.1rem) !important;
+  }
+
+  div[style*="display: flex"] {
+    flex-direction: column !important;
   }
 }
 
-/* Dispositivos muito pequenos */
+/* Dispositivos muito pequenos (< 480px) */
 @media (max-width: 480px) {
+  :root {
+    font-size: 14px;
+  }
+
+  .top {
+    padding: var(--spacing-lg) var(--spacing-sm) var(--spacing-md);
+  }
+
   .top h1 {
-    font-size: 1.25rem;
+    font-size: clamp(1.1rem, 5vw, 1.5rem);
+    margin-right: 50px;
   }
 
   .top p {
-    font-size: 0.85rem;
+    font-size: clamp(0.8rem, 3vw, 0.9rem);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .menu {
+    width: 90vw;
+    padding: var(--spacing-lg) var(--spacing-sm);
   }
 
   .content {
     padding: var(--spacing-sm);
   }
 
+  .content h2 {
+    font-size: clamp(1.1rem, 5vw, 1.5rem);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .content h3 {
+    font-size: clamp(1rem, 4vw, 1.25rem);
+  }
+
+  .content p,
+  .content li {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  /* Cards stack verticalmente */
+  .cards {
+    gap: var(--spacing-sm);
+  }
+
+  .card {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .card h3 {
+    font-size: 1.1rem;
+  }
+
+  /* Botões full-width com padding generoso */
+  .btn,
+  .btn-primary,
+  .btn-secondary {
+    padding: 14px 20px;
+    font-size: 0.9rem;
+    min-height: 48px;
+    width: 100%;
+  }
+
+  /* Tabelas ainda mais compactas */
+  table {
+    font-size: 0.8rem;
+    min-width: 500px;
+  }
+
   table th,
   table td {
-    padding: 8px;
-    font-size: 0.85rem;
+    padding: 6px 8px;
+  }
+
+  /* Code blocks compactos */
+  pre {
+    font-size: 0.7rem;
+    padding: var(--spacing-sm);
+    margin: var(--spacing-sm) calc(-1 * var(--spacing-sm));
+    border-radius: 0;
+  }
+
+  code {
+    font-size: 0.75rem;
+  }
+
+  /* Espaçamentos reduzidos */
+  .content > * + * {
+    margin-top: var(--spacing-md);
+  }
+
+  .content ul,
+  .content ol {
+    padding-left: var(--spacing-md);
+  }
+
+  /* Hero section compacto */
+  div[style*="padding: 32px"] {
+    padding: var(--spacing-lg) var(--spacing-sm) !important;
+  }
+
+  /* Remove espaçamentos desnecessários */
+  .layout {
+    margin: 0;
   }
 }
 
