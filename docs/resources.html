@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentação Resources</title>
+  <link rel="stylesheet" href="site.css" />
+  <script defer src="docs-menu.js"></script>
+</head>
+<body>
+  <button class="menu-toggle" aria-label="Menu" aria-expanded="false">☰</button>
+  <div class="menu-overlay"></div>
+  <header class="top">
+    <button class="menu-toggle" aria-label="Menu" aria-expanded="false">☰</button>
+    <h1>Resources</h1>
+    <p>Arquivos de configuração, dados auxiliares e coleções.</p>
+  </header>
+
+  <div class="menu-overlay"></div>
+
+  <main class="layout">
+    <nav class="menu">
+      <a href="index.html">🏠 Início</a>
+      <a href="quick-start.html">🚀 Guia Rápido</a>
+      <a href="guia-uso-aluno.html">👨‍🎓 Guia do Aluno</a>
+      <a href="guia-uso-secretaria.html">🏢 Guia da Secretaria</a>
+      <a href="proposta-comercial.html">💼 Proposta Comercial</a>
+      <a href="hospedagem-opcoes.html">🌩️ Hospedagem</a>
+      <a href="scripts.html">⚡ Scripts Executores</a>
+      <a href="backend.html">⚙️ Backend API</a>
+      <a href="frontend.html">🎨 Frontend</a>
+      <a href="security.html">🔒 Segurança</a>
+      <a href="init.html">🛠️ Configuração</a>
+      <a href="troubleshooting.html">🔧 Troubleshooting</a>
+      <a href="snippets.html">📝 Snippets</a>
+      <a href="developer-docs.html">📚 Docs Completa</a>
+    </nav>
+    <section class="content">
+      <h2>Configuração Spring</h2>
+      <pre><code>spring.datasource.url=jdbc:mysql://localhost:3306/seja_senai_db?createDatabaseIfNotExist=true
+spring.datasource.username=root
+spring.datasource.password=
+spring.jpa.hibernate.ddl-auto=update
+server.port=8080</code></pre>
+
+      <h2>Postman</h2>
+      <ul>
+        <li><code>docs/postman/postman/collections/New Collection.postman_collection.json</code></li>
+        <li><code>docs/postman/globals/workspace.postman_globals.json</code></li>
+      </ul>
+
+      <h2>Arquivos estáticos frontend</h2>
+      <ul>
+        <li>Imagens em <code>frontend-web/static/imagens</code></li>
+        <li>Estilo principal em <code>frontend-web/static/app.css</code></li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="menu.js"></script>
+</body>
+</html>

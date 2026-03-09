@@ -1,0 +1,20 @@
+spring.application.name=sejasenai
+
+# ============================================
+# PROFILE SELECTION (Escolha: mysql ou h2)
+# ============================================
+# Para usar MySQL: spring.profiles.active=mysql
+# Para usar H2: spring.profiles.active=h2
+spring.profiles.active=h2
+
+server.port=8080
+
+# Configurações de Segurança JWT
+jwt.secret=SejaSenai2025SecretKeyForJWTTokenGenerationAndValidationMustBeLongEnoughForHS256
+jwt.expiration=86400000
+
+# Configurações de Sessão
+server.servlet.session.timeout=30m
+server.servlet.session.cookie.http-only=true
+server.servlet.session.cookie.secure=false
+server.servlet.session.cookie.same-site=strict

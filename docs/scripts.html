@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scripts Executores - SEJA SENAI</title>
+  <link rel="stylesheet" href="site.css" />
+</head>
+<body>
+  <header class="top">
+    <button class="menu-toggle" aria-label="Menu" aria-expanded="false">☰</button>
+    <h1>⚡ Scripts Executores</h1>
+    <p>Automação completa para desenvolver com produtividade máxima</p>
+  </header>
+
+  <div class="menu-overlay"></div>
+
+  <main class="layout">
+    <nav class="menu">
+      <a href="index.html">🏠 Início</a>
+      <a href="quick-start.html">🚀 Guia Rápido</a>
+      <a href="guia-uso-aluno.html">👨‍🎓 Guia do Aluno</a>
+      <a href="guia-uso-secretaria.html">🏢 Guia da Secretaria</a>
+      <a href="proposta-comercial.html">💼 Proposta Comercial</a>
+      <a href="hospedagem-opcoes.html">🌩️ Hospedagem</a>
+      <a href="scripts.html" class="active">⚡ Scripts Executores</a>
+      <a href="backend.html">⚙️ Backend API</a>
+      <a href="frontend.html">🎨 Frontend</a>
+      <a href="security.html">🔒 Segurança</a>
+      <a href="init.html">🛠️ Configuração</a>
+      <a href="troubleshooting.html">🔧 Troubleshooting</a>
+      <a href="snippets.html">📝 Snippets</a>
+      <a href="developer-docs.html">📚 Docs Completa</a>
+    </nav>
+
+    <section class="content">
+      <div class="success-box">
+        <h3>✨ Scripts de Automação Criados!</h3>
+        <p>Criamos <strong>6 scripts .bat</strong> para facilitar sua vida. Execute tudo com 1 comando ou controle cada componente individualmente.</p>
+      </div>
+
+      <h2>📦 Scripts Disponíveis</h2>
+      
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 25%;">Script</th>
+              <th>Descrição</th>
+              <th style="width: 15%;">Recomendação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>iniciar-tudo.bat</code></td>
+              <td>Inicia backend + frontend + popula dados automaticamente</td>
+              <td><span class="badge badge-success">⭐ MELHOR</span></td>
+            </tr>
+            <tr>
+              <td><code>iniciar-backend.bat</code></td>
+              <td>Inicia apenas o backend Spring Boot (porta 8080)</td>
+              <td><span class="badge badge-primary">Controle</span></td>
+            </tr>
+            <tr>
+              <td><code>iniciar-frontend.bat</code></td>
+              <td>Inicia apenas o frontend com servidor HTTP (porta 5500)</td>
+              <td><span class="badge badge-primary">Controle</span></td>
+            </tr>
+            <tr>
+              <td><code>inserir-dados.bat</code></td>
+              <td>Popula banco com dados de teste (1 admin + 3 usuários + 4 unidades + 5 cursos + 3 editais)</td>
+              <td><span class="badge badge-warning">Útil</span></td>
+            </tr>
+            <tr>
+              <td><code>parar-sistema.bat</code></td>
+              <td>Para todos os processos (backend e frontend)</td>
+              <td><span class="badge badge-danger">Essencial</span></td>
+            </tr>
+            <tr>
+              <td><code>verificar-status.bat</code></td>
+              <td>Verifica se backend e frontend estão rodando</td>
+              <td><span class="badge badge-info">Debug</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>⭐ Script Recomendado: iniciar-tudo.bat</h2>
+      
+      <div class="card card-primary" style="margin: 24px 0;">
+        <h3 style="margin-top: 0;">🎯 O Jeito Mais Fácil</h3>
+        <p>Este script faz <strong>TUDO automaticamente</strong>:</p>
+        <ul>
+          <li>✅ Inicia backend Spring Boot</li>
+          <li>✅ Aguarda 45 segundos para inicialização completa</li>
+          <li>✅ Inicia frontend (Python ou Node.js)</li>
+          <li>✅ Popula banco com dados de teste</li>
+        </ul>
+        
+        <h4>Como Usar:</h4>
+        <pre><code>.\iniciar-tudo.bat</code></pre>
+        
+        <h4>O Que Acontece:</h4>
+        <ol>
+          <li>Nova janela: <strong>SEJA SENAI Backend</strong> (console Spring Boot)</li>
+          <li>Nova janela: <strong>SEJA SENAI Frontend</strong> (servidor HTTP)</li>
+          <li>Terminal atual: executa script de dados</li>
+        </ol>
+        
+        <h4>Acessar:</h4>
+        <ul style="margin-bottom: 0;">
+          <li><strong>Frontend:</strong> <a href="http://localhost:5500" target="_blank">http://localhost:5500</a></li>
+          <li><strong>Backend:</strong> <a href="http://localhost:8080/api" target="_blank">http://localhost:8080/api</a></li>
+          <li><strong>H2 Console:</strong> <a href="http://localhost:8080/h2-console" target="_blank">http://localhost:8080/h2-console</a></li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h4>🔑 Login Automático</h4>
+        <p>Após execução, use estas credenciais:</p>
+        <ul style="margin-bottom: 0;">
+          <li><strong>Admin:</strong> <code>admin@senai.com</code> / <code>Admin@123</code></li>
+          <li><strong>Usuário:</strong> <code>joao@teste.com</code> / <code>Senha@123</code></li>
+        </ul>
+      </div>
+
+      <h2>🔧 Scripts Individuais</h2>
+
+      <!-- INICIAR BACKEND -->
+      <div class="card" style="margin: 24px 0;">
+        <h3>1️⃣ iniciar-backend.bat</h3>
+        <p><strong>Descrição:</strong> Inicia apenas o backend Spring Boot</p>
+        
+        <h4>Como Usar:</h4>
+        <pre><code>.\iniciar-backend.bat</code></pre>
+        
+        <h4>O Que Faz:</h4>
+        <ul>
+          <li>Abre nova janela com console Spring Boot</li>
+          <li>Inicia aplicação na porta 8080</li>
+          <li>Usa perfil configurado em <code>application.properties</code></li>
+        </ul>
+        
+        <h4>Verificar Sucesso:</h4>
+        <p>Aguarde mensagem no console:</p>
+        <pre><code>Started SejaSenaiApplication in X.XXX seconds</code></pre>
+        
+        <h4>Testar:</h4>
+        <pre><code>curl http://localhost:8080/api/editais</code></pre>
+      </div>
+
+      <!-- INICIAR FRONTEND -->
+      <div class="card" style="margin: 24px 0;">
+        <h3>2️⃣ iniciar-frontend.bat</h3>
+        <p><strong>Descrição:</strong> Inicia servidor HTTP para o frontend</p>
+        
+        <h4>Como Usar:</h4>
+        <pre><code>.\iniciar-frontend.bat</code></pre>
+        
+        <h4>O Que Faz:</h4>
+        <ul>
+          <li>Detecta Python ou Node.js automaticamente</li>
+          <li>Inicia servidor HTTP na porta 5500</li>
+          <li>Serve arquivos de <code>frontend-web/static/</code></li>
+        </ul>
+        
+        <h4>Detecção Automática:</h4>
+        <pre><code># Tenta Python primeiro
+python -m http.server 5500
+
+# Se não houver Python, usa Node.js
+npx http-server -p 5500</code></pre>
+        
+        <h4>Acessar:</h4>
+        <p><a href="http://localhost:5500" target="_blank">http://localhost:5500</a></p>
+        
+        <h4>Parar:</h4>
+        <ul>
+          <li>Pressione <kbd>Ctrl+C</kbd> na janela do servidor</li>
+          <li>Ou execute <code>.\parar-sistema.bat</code></li>
+        </ul>
+      </div>
+
+      <!-- INSERIR DADOS -->
+      <div class="card" style="margin: 24px 0;">
+        <h3>3️⃣ inserir-dados.bat</h3>
+        <p><strong>Descrição:</strong> Popula banco com dados de teste</p>
+        
+        <div class="warning-box">
+          <strong>⚠️ Pré-requisito:</strong> Backend deve estar rodando!
+        </div>
+        
+        <h4>Como Usar:</h4>
+        <pre><code># 1. Inicie o backend primeiro
+.\iniciar-backend.bat
+
+# 2. Aguarde 30-60 segundos
+
+# 3. Execute o script de dados
+.\inserir-dados.bat</code></pre>
+        
+        <h4>Dados Criados:</h4>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Quantidade</th>
+                <th>Detalhes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Usuários</strong></td>
+                <td>4</td>
+                <td>1 admin (admin@senai.com) + 3 alunos</td>
+              </tr>
+              <tr>
+                <td><strong>Unidades</strong></td>
+                <td>4</td>
+                <td>Brás, Vila Alpina, Ipiranga, Santo Amaro</td>
+              </tr>
+              <tr>
+                <td><strong>Cursos</strong></td>
+                <td>5</td>
+                <td>Informática, Mecânica, Eletroeletrônica, Edificações, Logística</td>
+              </tr>
+              <tr>
+                <td><strong>Editais</strong></td>
+                <td>3</td>
+                <td>Processo Seletivo 2026.1, 2026.2, 2026.3</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <h4>Verificar Dados:</h4>
+        <p>Acesse o <a href="http://localhost:8080/h2-console" target="_blank">H2 Console</a> e execute:</p>
+        <pre><code>SELECT * FROM USUARIO;
+SELECT * FROM CURSO;
+SELECT * FROM EDITAL;</code></pre>
+      </div>
+
+      <!-- PARAR SISTEMA -->
+      <div class="card" style="margin: 24px 0;">
+        <h3>4️⃣ parar-sistema.bat</h3>
+        <p><strong>Descrição:</strong> Para todos os processos do sistema</p>
+        
+        <h4>Como Usar:</h4>
+        <pre><code>.\parar-sistema.bat</code></pre>
+        
+        <h4>O Que Faz:</h4>
+        <ul>
+          <li>🛑 Para backend (mata processos java.exe)</li>
+          <li>🛑 Para frontend (mata servidores HTTP)</li>
+          <li>🛑 Fecha todas as janelas relacionadas</li>
+        </ul>
+        
+        <h4>Quando Usar:</h4>
+        <ul>
+          <li>Ao terminar de usar o sistema</li>
+          <li>Antes de fazer mudanças no código</li>
+          <li>Para liberar portas 8080 e 5500</li>
+          <li>Quando houver erros de "port already in use"</li>
+        </ul>
+      </div>
+
+      <!-- VERIFICAR STATUS -->
+      <div class="card" style="margin: 24px 0;">
+        <h3>5️⃣ verificar-status.bat</h3>
+        <p><strong>Descrição:</strong> Verifica se backend e frontend estão rodando</p>
+        
+        <h4>Como Usar:</h4>
+        <pre><code>.\verificar-status.bat</code></pre>
+        
+        <h4>O Que Verifica:</h4>
+        <ul>
+          <li>✅ Porta 8080 (backend) está aberta</li>
+          <li>✅ Porta 5500 (frontend) está aberta</li>
+          <li>✅ Backend API responde a requisições</li>
+        </ul>
+        
+        <h4>Exemplo de Saída:</h4>
+        <pre><code>==========================================
+SEJA SENAI - Verificar Status do Sistema
+==========================================
+
+Verificando Backend (porta 8080)...
+[OK] Backend esta rodando na porta 8080
+
+Verificando Frontend (porta 5500)...
+[OK] Frontend esta rodando na porta 5500
+
+Testando conexao com Backend API...
+[OK] Backend API respondendo
+
+==========================================
+
+URLs do Sistema:
+  Frontend: http://localhost:5500
+  Backend: http://localhost:8080/api
+  H2 Console: http://localhost:8080/h2-console</code></pre>
+      </div>
+
+      <h2>💼 Fluxos de Trabalho</h2>
+
+      <div class="cards">
+        <!-- PRIMEIRO USO -->
+        <article class="card card-primary">
+          <h3>🎬 Primeiro Uso</h3>
+          <p><strong>Sistema novo - começar do zero</strong></p>
+          <pre style="margin: 12px 0;"><code>.\iniciar-tudo.bat</code></pre>
+          <p style="font-size: 0.9rem; margin: 0;">✅ Faz tudo automaticamente<br>⏱️ Pronto em 1-2 minutos<br>🎯 Acesse http://localhost:5500</p>
+        </article>
+
+        <!-- DESENVOLVIMENTO -->
+        <article class="card card-success">
+          <h3>💻 Desenvolvimento Diário</h3>
+          <p><strong>Controle individual dos componentes</strong></p>
+          <pre style="margin: 12px 0;"><code># Manhã
+.\iniciar-backend.bat
+.\iniciar-frontend.bat
+
+# Durante o dia
+.\verificar-status.bat
+
+# Fim do dia
+.\parar-sistema.bat</code></pre>
+        </article>
+
+        <!-- TESTE COM BANCO LIMPO -->
+        <article class="card card-warning">
+          <h3>🧪 Teste com Banco Limpo</h3>
+          <p><strong>Reiniciar com dados frescos</strong></p>
+          <pre style="margin: 12px 0;"><code># 1. Parar tudo
+.\parar-sistema.bat
+
+# 2. Configurar H2
+# application.properties:
+# spring.profiles.active=h2
+
+# 3. Iniciar novamente
+.\iniciar-tudo.bat</code></pre>
+          <p style="font-size: 0.9rem; margin: 0;">💡 H2 recria banco a cada reinício</p>
+        </article>
+
+        <!-- DEBUG -->
+        <article class="card card-danger">
+          <h3>🐛 Debug de Problemas</h3>
+          <p><strong>Identificar e resolver issues</strong></p>
+          <pre style="margin: 12px 0;"><code># 1. Verificar status
+.\verificar-status.bat
+
+# 2. Se backend não rodando
+.\iniciar-backend.bat
+# Veja logs na janela
+
+# 3. Se frontend não rodando
+.\iniciar-frontend.bat
+
+# 4. Popular dados novamente
+.\inserir-dados.bat</code></pre>
+        </article>
+      </div>
+
+      <h2>🚨 Troubleshooting Rápido</h2>
+
+      <div class="warning-box">
+        <h3>Erro: "Port 8080 already in use"</h3>
+        <p><strong>Causa:</strong> Backend já está rodando ou outra aplicação usa a porta</p>
+        <p><strong>Solução:</strong></p>
+        <pre><code>.\parar-sistema.bat
+# OU
+taskkill /F /IM java.exe</code></pre>
+      </div>
+
+      <div class="warning-box">
+        <h3>Erro: "Python não encontrado"</h3>
+        <p><strong>Causa:</strong> Python não instalado ou não no PATH</p>
+        <p><strong>Solução:</strong> Script tentará Node.js automaticamente. Se não tiver nenhum:</p>
+        <ul style="margin-bottom: 0;">
+          <li>Instale Python: <a href="https://www.python.org/downloads/" target="_blank">python.org/downloads</a></li>
+          <li>Instale Node.js: <a href="https://nodejs.org/" target="_blank">nodejs.org</a></li>
+          <li>Ou abra <code>frontend-web/static/index.html</code> diretamente no navegador</li>
+        </ul>
+      </div>
+
+      <div class="warning-box">
+        <h3>Erro 404 ao inserir dados</h3>
+        <p><strong>Causa:</strong> Backend não está rodando ou não inicializou completamente</p>
+        <p><strong>Solução:</strong></p>
+        <pre><code># 1. Verificar
+.\verificar-status.bat
+
+# 2. Aguardar backend inicializar (30-60s)
+
+# 3. Tentar novamente
+.\inserir-dados.bat</code></pre>
+      </div>
+
+      <h2>📚 Documentação Adicional</h2>
+      <p>Para guia detalhado com mais opções e exemplos:</p>
+      <ul>
+        <li><strong>GUIA-SCRIPTS.md</strong> - Guia completo (150+ linhas)</li>
+        <li><strong>RESUMO-SCRIPTS.md</strong> - Resumo executivo</li>
+        <li><a href="troubleshooting.html">Troubleshooting Completo</a> - Soluções detalhadas</li>
+      </ul>
+
+      <div class="success-box" style="text-align: center; margin-top: 32px;">
+        <h3>🎓 Dica Final</h3>
+        <p>Para produtividade máxima, use <code>iniciar-tudo.bat</code> sempre que começar a trabalhar!</p>
+        <a href="quick-start.html" class="btn btn-primary">🚀 Voltar ao Guia Rápido</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="menu.js"></script>
+</body>
+</html>

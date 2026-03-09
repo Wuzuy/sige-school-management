@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guia Rápido - SEJA SENAI</title>
+  <link rel="stylesheet" href="site.css" />
+</head>
+<body>
+  <header class="top">
+    <button class="menu-toggle" aria-label="Menu" aria-expanded="false">☰</button>
+    <h1>🚀 Guia Rápido de Início</h1>
+    <p>Configure e execute o sistema SEJA SENAI em minutos</p>
+  </header>
+
+  <div class="menu-overlay"></div>
+
+  <main class="layout">
+    <nav class="menu">
+      <a href="index.html">🏠 Início</a>
+      <a href="quick-start.html" class="active">🚀 Guia Rápido</a>
+      <a href="guia-uso-aluno.html">👨‍🎓 Guia do Aluno</a>
+      <a href="guia-uso-secretaria.html">🏢 Guia da Secretaria</a>
+      <a href="proposta-comercial.html">💼 Proposta Comercial</a>
+      <a href="hospedagem-opcoes.html">🌩️ Hospedagem</a>
+      <a href="scripts.html">⚡ Scripts Executores</a>
+      <a href="backend.html">⚙️ Backend API</a>
+      <a href="frontend.html">🎨 Frontend</a>
+      <a href="security.html">🔒 Segurança</a>
+      <a href="init.html">🛠️ Configuração</a>
+      <a href="troubleshooting.html">🔧 Troubleshooting</a>
+      <a href="snippets.html">📝 Snippets</a>
+      <a href="developer-docs.html">📚 Docs Completa</a>
+    </nav>
+
+    <section class="content">
+      <h2>✨ Método Recomendado: Script Automático</h2>
+      
+      <div class="success-box">
+        <h3>🎯 O Jeito Mais Fácil (1 comando)</h3>
+        <p>Use o script que faz <strong>TUDO automaticamente</strong>:</p>
+        <pre><code>.\iniciar-tudo.bat</code></pre>
+        <p><strong>Este script:</strong></p>
+        <ul>
+          <li>✅ Inicia o backend Spring Boot</li>
+          <li>✅ Aguarda inicialização completa</li>
+          <li>✅ Inicia o frontend (Python ou Node.js)</li>
+          <li>✅ Popula banco com dados de teste</li>
+        </ul>
+        <p style="margin-top: 16px;"><strong>Resultado:</strong> Sistema 100% pronto para uso em 1-2 minutos! 🎉</p>
+        <a href="scripts.html" class="btn btn-primary">📖 Ver Todos os Scripts Disponíveis</a>
+      </div>
+
+      <h2>📋 Pré-requisitos</h2>
+      <div class="cards">
+        <article class="card card-primary">
+          <h3>✅ Obrigatórios</h3>
+          <ul style="margin: 8px 0 0; padding-left: 20px;">
+            <li><strong>Java 21+</strong></li>
+            <li><strong>Maven</strong> (incluído via wrapper)</li>
+          </ul>
+        </article>
+        <article class="card card-success">
+          <h3>🔄 Banco de Dados</h3>
+          <ul style="margin: 8px 0 0; padding-left: 20px;">
+            <li><strong>H2</strong> (testes - sem instalação) ⭐</li>
+            <li><strong>MySQL 8.0+</strong> (produção)</li>
+          </ul>
+        </article>
+        <article class="card card-warning">
+          <h3>🌐 Servidor HTTP</h3>
+          <ul style="margin: 8px 0 0; padding-left: 20px;">
+            <li><strong>Python 3.x</strong> OU</li>
+            <li><strong>Node.js</strong></li>
+          </ul>
+        </article>
+      </div>
+
+      <h2>🎬 Primeiro Uso (Passo a Passo)</h2>
+
+      <h3>Passo 1: Configurar Banco de Dados</h3>
+      <p>Edite o arquivo <code>backend/src/main/resources/application.properties</code>:</p>
+      
+      <div class="info-box">
+        <h4>💡 Recomendação para Testes</h4>
+        <p>Use <strong>H2</strong> (banco em memória) - não requer instalação de MySQL:</p>
+        <pre><code>spring.profiles.active=h2</code></pre>
+      </div>
+
+      <div class="warning-box">
+        <h4>🏢 Para Produção</h4>
+        <p>Use <strong>MySQL</strong> com dados persistentes:</p>
+        <pre><code>spring.profiles.active=mysql</code></pre>
+        <p><strong>Nota:</strong> Certifique-se de que o MySQL está instalado e rodando.</p>
+      </div>
+
+      <h3>Passo 2: Executar Script Automático</h3>
+      <p>Na raiz do projeto, execute:</p>
+      <pre><code>.\iniciar-tudo.bat</code></pre>
+      
+      <p><strong>O que acontece:</strong></p>
+      <ol>
+        <li>Nova janela abre com o backend Spring Boot</li>
+        <li>Script aguarda 45 segundos para o backend inicializar</li>
+        <li>Nova janela abre com o frontend (servidor HTTP)</li>
+        <li>Banco é populado automaticamente com dados de teste</li>
+      </ol>
+
+      <h3>Passo 3: Acessar o Sistema</h3>
+      <div class="cards">
+        <article class="card">
+          <h4>🌐 Frontend</h4>
+          <p><a href="http://localhost:5500" target="_blank">http://localhost:5500</a></p>
+          <span class="badge badge-success">Interface do usuário</span>
+        </article>
+        <article class="card">
+          <h4>⚙️ Backend API</h4>
+          <p><a href="http://localhost:8080/api" target="_blank">http://localhost:8080/api</a></p>
+          <span class="badge badge-primary">REST API</span>
+        </article>
+        <article class="card">
+          <h4>🗄️ H2 Console</h4>
+          <p><a href="http://localhost:8080/h2-console" target="_blank">http://localhost:8080/h2-console</a></p>
+          <span class="badge badge-warning">Apenas com H2 ativo</span>
+        </article>
+      </div>
+
+      <div class="info-box">
+        <h4>🔑 Credenciais de Teste</h4>
+        <p>Após popular os dados, use estas credenciais:</p>
+        <ul style="margin-bottom: 0;">
+          <li><strong>Administrador:</strong> <code>admin@senai.com</code> / <code>Admin@123</code></li>
+          <li><strong>Usuário Comum:</strong> <code>joao@teste.com</code> / <code>Senha@123</code></li>
+        </ul>
+      </div>
+
+      <h3>Passo 4: Explorar o Sistema</h3>
+      <div class="cards">
+        <div class="card card-primary">
+          <h4>👨‍🎓 Como Aluno</h4>
+          <ol style="margin: 8px 0 0; padding-left: 20px; font-size: 0.9rem;">
+            <li>Faça login com joao@teste.com</li>
+            <li>Veja cursos disponíveis</li>
+            <li>Realize uma inscrição</li>
+            <li>Acompanhe status na timeline</li>
+            <li>Complete a matrícula (se aprovado)</li>
+          </ol>
+        </div>
+        <div class="card card-success">
+          <h4>🏢 Como Administrador</h4>
+          <ol style="margin: 8px 0 0; padding-left: 20px; font-size: 0.9rem;">
+            <li>Faça login com admin@senai.com</li>
+            <li>Acesse portal administrativo</li>
+            <li>Gerencie cursos e unidades</li>
+            <li>Controle candidatos</li>
+            <li>Visualize estatísticas</li>
+          </ol>
+        </div>
+      </div>
+
+      <h2>🛑 Parar o Sistema</h2>
+      <p>Quando terminar, execute:</p>
+      <pre><code>.\parar-sistema.bat</code></pre>
+      <p>Este comando para o backend e frontend automaticamente.</p>
+
+      <h2>🔍 Verificar Status</h2>
+      <p>Para verificar se backend e frontend estão rodando:</p>
+      <pre><code>.\verificar-status.bat</code></pre>
+      <p>Mostra status das portas 8080 e 5500 + teste de API.</p>
+
+      <h2>⚙️ Configuração Manual (Alternativa)</h2>
+      <div class="warning-box">
+        <h3>Se Preferir Controle Total</h3>
+        <p>Use scripts individuais para iniciar componentes separadamente:</p>
+      </div>
+
+      <h3>1. Iniciar Apenas Backend</h3>
+      <pre><code>.\iniciar-backend.bat</code></pre>
+      <p>Aguarde mensagem: <code>Started SejaSenaiApplication in X seconds</code></p>
+
+      <h3>2. Iniciar Apenas Frontend</h3>
+      <pre><code>.\iniciar-frontend.bat</code></pre>
+      <p>Detecta Python ou Node.js automaticamente.</p>
+
+      <h3>3. Popular Banco (Opcional)</h3>
+      <pre><code>.\inserir-dados.bat</code></pre>
+      <p>⚠️ <strong>Backend deve estar rodando!</strong></p>
+
+      <h2>🎓 Console H2 (Modo Teste)</h2>
+      <div class="info-box">
+        <h3>Acessar Banco de Dados H2</h3>
+        <p>Quando usando perfil H2, acesse:</p>
+        <ul>
+          <li><strong>URL:</strong> <a href="http://localhost:8080/h2-console" target="_blank">http://localhost:8080/h2-console</a></li>
+          <li><strong>JDBC URL:</strong> <code>jdbc:h2:mem:testdb</code></li>
+          <li><strong>Username:</strong> <code>sa</code></li>
+          <li><strong>Password:</strong> (deixe em branco)</li>
+        </ul>
+        <p style="margin-top: 12px;"><strong>Consultas úteis:</strong></p>
+        <pre><code>-- Ver todos os usuários
+SELECT * FROM USUARIO;
+
+-- Ver todas as inscrições
+SELECT * FROM INSCRICAO;
+
+-- Ver cursos
+SELECT * FROM CURSO;</code></pre>
+      </div>
+
+      <h2>📊 Dados de Teste Criados</h2>
+      <p>O script <code>popular-dados-teste.ps1</code> cria automaticamente:</p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Quantidade</th>
+              <th>Exemplos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Usuários</strong></td>
+              <td>4</td>
+              <td>1 admin + 3 alunos (João, Maria, Pedro)</td>
+            </tr>
+            <tr>
+              <td><strong>Unidades</strong></td>
+              <td>4</td>
+              <td>SENAI Brás, Vila Alpina, Ipiranga, Santo Amaro</td>
+            </tr>
+            <tr>
+              <td><strong>Cursos</strong></td>
+              <td>5</td>
+              <td>Informática, Mecânica, Eletroeletrônica, Edificações, Logística</td>
+            </tr>
+            <tr>
+              <td><strong>Editais</strong></td>
+              <td>3</td>
+              <td>Processo Seletivo 2026.1, 2026.2, 2026.3</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>🔗 Próximos Passos</h2>
+      <div class="cards">
+        <article class="card card-primary">
+          <h3>📖 Aprender Mais</h3>
+          <ul style="margin: 8px 0 0; padding-left: 20px;">
+            <li><a href="scripts.html">Scripts Executores</a> - Todos os scripts disponíveis</li>
+            <li><a href="backend.html">Backend API</a> - Endpoints e controllers</li>
+            <li><a href="frontend.html">Frontend</a> - Páginas e fluxos</li>
+          </ul>
+        </article>
+        <article class="card card-success">
+          <h3>🔧 Configurar</h3>
+          <ul style="margin: 8px 0 0; padding-left: 20px;">
+            <li><a href="init.html">Configuração</a> - MySQL, variáveis de ambiente</li>
+            <li><a href="security.html">Segurança</a> - JWT, rate limiting</li>
+            <li><a href="troubleshooting.html">Troubleshooting</a> - Resolver problemas</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="success-box" style="text-align: center; margin-top: 32px;">
+        <h3>✅ Sistema Pronto!</h3>
+        <p>Agora você pode começar a explorar e desenvolver.</p>
+        <a href="scripts.html" class="btn btn-primary">⚡ Ver Todos os Scripts</a>
+        <a href="developer-docs.html" class="btn btn-secondary">📚 Documentação Completa</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="menu.js"></script>
+</body>
+</html>
