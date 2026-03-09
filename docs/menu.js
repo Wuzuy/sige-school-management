@@ -18,7 +18,10 @@
     const menu = document.querySelector('.menu');
     const overlay = document.querySelector('.menu-overlay');
 
-    if (!menuToggle || !menu) return;
+    if (!menuToggle || !menu) {
+      console.error('Menu elements not found!', { menuToggle, menu });
+      return;
+    }
 
     // Função para fechar o menu
     const closeMenu = () => {
