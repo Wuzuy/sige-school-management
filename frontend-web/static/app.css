@@ -63,9 +63,8 @@ a {
 }
 
 .brand img {
-  width: 180px;
-  max-width: 100%;
-  height: auto;
+  height: 40px;
+  width: auto;
   flex-shrink: 0;
 }
 
@@ -414,7 +413,7 @@ th {
   }
 
   .brand img {
-    width: 140px;
+    height: 34px;
   }
 
   .brand span {
@@ -486,7 +485,7 @@ th {
   }
 
   .brand img {
-    width: 120px;
+    height: 30px;
   }
 
   .brand span {
