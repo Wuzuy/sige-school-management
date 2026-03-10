@@ -1,4 +1,4 @@
-# Frontend - SEJA SENAI
+﻿# Frontend - SIGE
 
 Interface web do sistema de inscrição e dashboard de cursos.
 

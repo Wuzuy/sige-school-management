@@ -1,6 +1,6 @@
-# 📜 Scripts Utilitários
+﻿# 📜 Scripts Utilitários
 
-Esta pasta contém scripts auxiliares para facilitar o gerenciamento do projeto SEJA SENAI.
+Esta pasta contém scripts auxiliares para facilitar o gerenciamento do projeto SIGE.
 
 ## � Formatos Disponíveis
 

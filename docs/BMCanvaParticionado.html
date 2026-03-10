@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGE - Business Model Canvas (Multi-page)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 40px;
+            color: #333;
+            box-sizing: border-box;
+        }
+
+        .page {
+            background: #fff;
+            width: 100%;
+            box-sizing: border-box;
+            margin: 0 0 40px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            padding: 40px;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            page-break-after: always;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+            margin-bottom: 0;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            color: #00427a;
+            margin: 0 0 5px 0;
+            font-size: 24px;
+        }
+
+        p.subtitle {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            flex-grow: 1;
+        }
+
+        .box {
+            background: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .box h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            font-size: 16px;
+            color: #00427a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        .box ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .box li {
+            margin-bottom: 10px;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .box li::before {
+            content: "•";
+            color: #00427a;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .highlight {
+            font-weight: 600;
+            color: #222;
+            display: block;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+            }
+            .page {
+                box-shadow: none;
+                margin: 0;
+                padding: 20px;
+                border: none;
+                height: 100vh;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Pagina 1: Mercado e Valor -->
+    <div class="page">
+        <header>
+            <h1>SIGE - Business Model Canvas</h1>
+            <p class="subtitle">Segmentos • Proposta de Valor • Relacionamento</p>
+        </header>
+        <div class="grid-3">
+            <div class="box">
+                <h3><i class="fa-solid fa-users"></i> Segmentos</h3>
+                <span class="highlight">Cliente Pagante (B2B):</span>
+                <ul>
+                    <li>Escolas técnicas e privadas (Principal).</li>
+                    <li>Escolas técnicas e privadas.</li>
+                    <li>Universidades e Prefeituras.</li>
+                    <li>Empresas (capacitação).</li>
+                </ul>
+                <span class="highlight" style="margin-top: 15px;">Usuário Final (B2C):</span>
+                <ul>
+                    <li>Jovens e adultos (candidatos e alunos).</li>
+                </ul>
+            </div>
+
+            <div class="box">
+                <h3><i class="fa-solid fa-gift"></i> Proposta de Valor</h3>
+                <span class="highlight">Para a Escola:</span>
+                <ul>
+                    <li>Gestão centralizada de inscrições.</li>
+                    <li>Controle de editais e datas.</li>
+                    <li>Relatórios e notificações automatizadas.</li>
+                </ul>
+                <span class="highlight" style="margin-top: 15px;">Para o Candidato:</span>
+                <ul>
+                    <li>Inscrição rápida 100% online.</li>
+                    <li>Catálogo claro de cursos.</li>
+                    <li>Acompanhamento de status em tempo real.</li>
+                    <li>Carteirinha digital gerada na hora.</li>
+                </ul>
+            </div>
+
+            <div class="box">
+                <h3><i class="fa-solid fa-heart"></i> Relacionamento</h3>
+                <ul>
+                    <li>Suporte B2B dedicado (SLA).</li>
+                    <li>Gerente de contas ativo.</li>
+                    <li>Onboarding e implantação assistida.</li>
+                    <li>Portal Self-service para alunos.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagina 2: Operacao -->
+    <div class="page">
+        <header>
+            <h1>SIGE - Business Model Canvas</h1>
+            <p class="subtitle">Canais • Atividades Chave • Recursos Chave</p>
+        </header>
+        <div class="grid-3">
+            <div class="box">
+                <h3><i class="fa-solid fa-truck"></i> Canais</h3>
+                <ul>
+                    <li>Venda direta B2B (Outbound).</li>
+                    <li>Site comercial do produto.</li>
+                    <li>Play Store e App Store (Mobile).</li>
+                    <li>Eventos e feiras educacionais.</li>
+                </ul>
+            </div>
+
+            <div class="box">
+                <h3><i class="fa-solid fa-gears"></i> Atividades Chave</h3>
+                <ul>
+                    <li>Desenvolvimento e evolução do SaaS.</li>
+                    <li>Suporte técnico a secretarias.</li>
+                    <li>Treinamento e implantação.</li>
+                    <li>Vendas B2B e marketing.</li>
+                </ul>
+            </div>
+
+            <div class="box">
+                <h3><i class="fa-solid fa-cube"></i> Recursos Chave</h3>
+                <ul>
+                    <li>Plataforma (Spring Boot + React/Vue).</li>
+                    <li>Infraestrutura Cloud escalável.</li>
+                    <li>Equipe Técnica e CS (Customer Success).</li>
+                    <li>Manuais e base de conhecimento.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagina 3: Estrutura Financeira e Parcerias -->
+    <div class="page">
+        <header>
+            <h1>SIGE - Business Model Canvas</h1>
+            <p class="subtitle">Parcerias Chave • Estrutura de Custos • Fontes de Renda</p>
+        </header>
+        <div class="grid-3">
+            <div class="box">
+                <h3><i class="fa-solid fa-link"></i> Parcerias Chave</h3>
+                <ul>
+                    <li>Secretarias de Educação parceiras.</li>
+                    <li>Provedores Cloud (AWS, Cloudflare).</li>
+                    <li>Gateways de Pagamento Integrados.</li>
+                    <li>APIs de Comunicação (SendGrid, Twilio).</li>
+                    <li>Sistemas ERP Educacionais.</li>
+                </ul>
+            </div>
+
+            <div class="box">
+                <h3><i class="fa-solid fa-tags"></i> Estrutura de Custos</h3>
+                <ul>
+                    <li><span class="highlight">Folha de Pagamento:</span> R$ 15.000/mês (Dev e Suporte).</li>
+                    <li><span class="highlight">Infraestrutura Cloud:</span> R$ 1.000/mês (Escalável).</li>
+                    <li><span class="highlight">Marketing e Vendas:</span> R$ 2.000/mês.</li>
+                    <li><span class="highlight">Licenças Dev/Comunicação:</span> R$ 500/mês.</li>
+                    <li><span class="highlight">Variáveis:</span> Comissões de venda (10%) e deslocamentos.</li>
+                </ul>
+            </div>
+
+            <div class="box">
+                <h3><i class="fa-solid fa-money-bill-wave"></i> Fontes de Renda</h3>
+                <ul>
+                    <li><span class="highlight">Implantação:</span> R$ 30.000 (Setup e Treinamento).</li>
+                    <li><span class="highlight">Básico:</span> R$ 997/mês (500 alunos).</li>
+                    <li><span class="highlight">Profissional:</span> R$ 1.997/mês (1.500 alunos).</li>
+                    <li><span class="highlight">Enterprise:</span> R$ 3.497/mês (Ilimitado).</li>
+                    <li><span class="highlight">Customizações:</span> R$ 150/h.</li>
+                    <li><span class="highlight">Integrações:</span> R$ 8k a R$ 15k.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

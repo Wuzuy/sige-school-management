@@ -1,8 +1,8 @@
-@echo off
+﻿@echo off
 chcp 65001 >nul
 echo.
 echo =============================================
-echo   SEJA SENAI - Inicialização do Projeto
+echo   SIGE - Inicialização do Projeto
 echo =============================================
 echo.
 
@@ -16,7 +16,7 @@ if not exist "backend\pom.xml" (
 echo [1/2] Iniciando Backend (porta 8080)...
 echo.
 cd backend
-start "SEJA SENAI - Backend" cmd /k "mvnw.cmd spring-boot:run"
+start "SIGE - Backend" cmd /k "mvnw.cmd spring-boot:run"
 cd ..
 
 echo [OK] Backend iniciando em outra janela...

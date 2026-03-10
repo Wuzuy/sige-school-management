@@ -1,12 +1,12 @@
-# ==========================================
-# SEJA SENAI - Script de Dados de Teste (PowerShell)
+﻿# ==========================================
+# SIGE - Script de Dados de Teste (PowerShell)
 # ==========================================
 
 $ErrorActionPreference = "Continue"  # Mudado para Continue para ver erros
 $BASE_URL = "http://localhost:8080/api"
 
 Write-Host "==========================================" -ForegroundColor Cyan
-Write-Host "SEJA SENAI - Popular Dados de Teste" -ForegroundColor Cyan
+Write-Host "SIGE - Popular Dados de Teste" -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host ""
 

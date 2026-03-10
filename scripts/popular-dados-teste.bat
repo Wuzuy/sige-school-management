@@ -1,8 +1,8 @@
-@echo off
+﻿@echo off
 chcp 65001 >nul
-title SEJA SENAI - Popular Dados de Teste
+title SIGE - Popular Dados de Teste
 echo ==========================================
-echo SEJA SENAI - Popular Dados de Teste
+echo SIGE - Popular Dados de Teste
 echo ==========================================
 echo.
 echo Este script ira popular o banco de dados com dados de teste.

@@ -1,4 +1,4 @@
-# 🔌 Backend API Reference - SEJA SENAI
+﻿# 🔌 Backend API Reference - SIGE
 
 **Documentação Completa de Endpoints REST**
 
@@ -1226,4 +1226,4 @@ Backend configurado para aceitar requisições de:
 
 **Versão da API:** 1.0  
 **Última Atualização:** Março de 2024  
-**Sistema:** SEJA SENAI v1.0
+**Sistema:** SIGE v1.0

@@ -1,6 +1,6 @@
-# 📚 Documentação Técnica - SEJA SENAI
+﻿# 📚 Documentação Técnica - SIGE
 
-Esta pasta contém toda a documentação técnica do sistema SEJA SENAI, incluindo guias de desenvolvimento, APIs, configuração, segurança, deploy e business model.
+Esta pasta contém toda a documentação técnica do sistema SIGE, incluindo guias de desenvolvimento, APIs, configuração, segurança, deploy e business model.
 
 ## ✨ Nova Experiência de Documentação
 
@@ -207,7 +207,7 @@ docs/
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Título - SEJA SENAI</title>
+  <title>Título - SIGE</title>
   <link rel="stylesheet" href="site.css" />
 </head>
 <body>

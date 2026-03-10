@@ -1,4 +1,4 @@
-# 🏢 Guia da Secretaria - SEJA SENAI
+﻿# 🏢 Guia da Secretaria - SIGE
 
 **Manual Completo para Equipe Administrativa**
 
@@ -6,7 +6,7 @@
 
 ## 🎯 Visão Geral
 
-Este guia foi criado para auxiliar a equipe da secretaria no gerenciamento completo do sistema SEJA SENAI, incluindo administração de unidades, cursos, usuários, editais, inscrições e relatórios.
+Este guia foi criado para auxiliar a equipe da secretaria no gerenciamento completo do sistema SIGE, incluindo administração de unidades, cursos, usuários, editais, inscrições e relatórios.
 
 ---
 
@@ -125,7 +125,7 @@ O sistema possui dois tipos de usuário:
 ### 2.2. Navegação
 
 **Menu Superior:**
-- **Logo SEJA SENAI:** Volta para a página inicial
+- **Logo SIGE:** Volta para a página inicial
 - **Portal da Secretaria:** Recarrega o portal
 - **👤 [Nome do Admin]:** Menu com opção "Sair"
 
@@ -1420,7 +1420,7 @@ F12 → Aba "Network"
 
 **Versão do Documento:** 1.0  
 **Última Atualização:** Março de 2024  
-**Sistema:** SEJA SENAI v1.0
+**Sistema:** SIGE v1.0
 
 ---
 

@@ -24,16 +24,16 @@ public class EmailService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(fromEmail);
         message.setTo(toEmail);
-        message.setSubject("SEJA SENAI - Recuperação de Senha");
+        message.setSubject("SIGE - Recuperação de Senha");
         message.setText(
             "Olá,\n\n" +
-            "Você solicitou a recuperação de senha do sistema SEJA SENAI.\n\n" +
+            "Você solicitou a recuperação de senha do sistema SIGE.\n\n" +
             "Clique no link abaixo para redefinir sua senha:\n" +
             resetLink + "\n\n" +
             "Este link é válido por 30 minutos.\n\n" +
             "Se você não solicitou esta recuperação, ignore este email.\n\n" +
             "Atenciosamente,\n" +
-            "Equipe SEJA SENAI"
+            "Equipe SIGE"
         );
         
         mailSender.send(message);

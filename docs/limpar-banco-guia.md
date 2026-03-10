@@ -1,4 +1,4 @@
-# 🗑️ Guia Rápido: Como Zerar o Banco de Dados
+﻿# 🗑️ Guia Rápido: Como Zerar o Banco de Dados
 
 ## 🎯 Método Mais Fácil (Recomendado)
 
@@ -63,8 +63,8 @@ Requer `mysql.exe` no PATH e senha do root.
 2. Conecte ao servidor local
 3. Execute no SQL Editor:
 ```sql
-DROP DATABASE IF EXISTS seja_senai_db;
-CREATE DATABASE seja_senai_db;
+DROP DATABASE IF EXISTS sige_db;
+CREATE DATABASE sige_db;
 ```
 4. Reinicie backend: `.\parar-sistema.bat` → `.\iniciar-backend.bat`
 5. Popule dados: `.\inserir-dados.bat`
@@ -74,8 +74,8 @@ CREATE DATABASE seja_senai_db;
 mysql -u root -p
 # Digite senha
 
-DROP DATABASE IF EXISTS seja_senai_db;
-CREATE DATABASE seja_senai_db;
+DROP DATABASE IF EXISTS sige_db;
+CREATE DATABASE sige_db;
 exit;
 
 # Reinicie backend
@@ -86,7 +86,7 @@ exit;
 
 **Opção 4: Deletar Só Tabelas (Alternativa)**
 ```sql
-USE seja_senai_db;
+USE sige_db;
 SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS inscricao;
@@ -102,7 +102,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 ### 🔒 BACKUP (PRODUÇÃO)
 **SEMPRE faça backup antes de zerar em produção:**
 ```bash
-mysqldump -u root -p seja_senai_db > backup_2026-03-08.sql
+mysqldump -u root -p sige_db > backup_2026-03-08.sql
 ```
 
 ---
@@ -154,12 +154,12 @@ mysqldump -u root -p seja_senai_db > backup_2026-03-08.sql
 2. Teste login: `mysql -u root -p`
 3. Se esqueceu senha, reinstale MySQL
 
-### Problema: "Unknown database 'seja_senai_db'"
+### Problema: "Unknown database 'sige_db'"
 **Causa:** Banco foi deletado ou nunca criado
 
 **Solução:**
 ```sql
-CREATE DATABASE seja_senai_db;
+CREATE DATABASE sige_db;
 ```
 Depois reinicie o backend.
 

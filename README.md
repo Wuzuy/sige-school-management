@@ -1,4 +1,4 @@
-# 🎓 SEJA SENAI
+﻿# 🎓 SIGE
 
 **Sistema de Gerenciamento de Inscrições e Processo Seletivo Online**
 
@@ -12,7 +12,7 @@
 
 ## 📖 Sobre o Projeto
 
-O **SEJA SENAI** é uma plataforma completa para gerenciamento de inscrições e processo seletivo online do SENAI. O sistema permite que alunos se inscrevam em cursos de forma totalmente digital, enquanto a equipe administrativa gerencia todo o processo desde a análise de documentos até a emissão de carteirinhas virtuais.
+O **SIGE** é uma plataforma completa para gerenciamento de inscrições e processo seletivo online do SENAI. O sistema permite que alunos se inscrevam em cursos de forma totalmente digital, enquanto a equipe administrativa gerencia todo o processo desde a análise de documentos até a emissão de carteirinhas virtuais.
 
 **Problema Resolvido:**
 - ❌ Superlotação nas unidades presenciais para inscrições
@@ -107,11 +107,11 @@ O **SEJA SENAI** é uma plataforma completa para gerenciamento de inscrições e
 ## 📁 Estrutura do Projeto
 
 ```
-seja-senai/
+sige/
 ├── backend/                          # Aplicação Spring Boot
 │   ├── src/main/
-│   │   ├── java/com/wuzuy/sejasenai/
-│   │   │   ├── SejaSenaiApplication.java
+│   │   ├── java/com/wuzuy/sige/
+│   │   │   ├── sigeApplication.java
 │   │   │   ├── config/               # Configurações (Security, JWT)
 │   │   │   ├── controller/           # Endpoints REST
 │   │   │   ├── dto/                  # Data Transfer Objects
@@ -172,8 +172,8 @@ seja-senai/
 ### 1️⃣ Clonar o Repositório
 
 ```bash
-git clone https://github.com/Wuzuy/seja-senai.git
-cd seja-senai
+git clone https://github.com/Wuzuy/sige.git
+cd sige
 ```
 
 ---
@@ -208,7 +208,7 @@ INICIAR-PROJETO.bat
 
 ```properties
 # Banco de Dados H2 (Em Memória)
-spring.datasource.url=jdbc:h2:mem:sejasenai
+spring.datasource.url=jdbc:h2:mem:sige
 spring.datasource.driverClassName=org.h2.Driver
 spring.datasource.username=sa
 spring.datasource.password=
@@ -226,14 +226,14 @@ spring.h2.console.enabled=true
 1. Criar banco de dados no MySQL:
 
 ```sql
-CREATE DATABASE sejasenai CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE sige CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 2. Configurar em `application.properties`:
 
 ```properties
 # MySQL
-spring.datasource.url=jdbc:mysql://localhost:3306/sejasenai?useSSL=false&serverTimezone=UTC
+spring.datasource.url=jdbc:mysql://localhost:3306/sige?useSSL=false&serverTimezone=UTC
 spring.datasource.username=root
 spring.datasource.password=sua-senha
 spring.jpa.hibernate.ddl-auto=update
@@ -277,7 +277,7 @@ cd backend
 
 **Ou via IDE:**
 - Abrir projeto no IntelliJ/Eclipse/VS Code
-- Executar `SejaSenaiApplication.java`
+- Executar `sigeApplication.java`
 
 **Verificar:** Backend rodando em `http://localhost:8080`
 
@@ -607,11 +607,11 @@ Contribuições são bem-vindas! Para contribuir:
 
 **Problemas Técnicos:**
 - Email: suporte.ti@senai.br
-- Issues: [GitHub Issues](https://github.com/seu-usuario/seja-senai/issues)
+- Issues: [GitHub Issues](https://github.com/seu-usuario/sige/issues)
 
 **Documentação:**
 - Acesse: `docs/index.html`
-- Wiki: [GitHub Wiki](https://github.com/seu-usuario/seja-senai/wiki)
+- Wiki: [GitHub Wiki](https://github.com/seu-usuario/sige/wiki)
 
 ---
 
@@ -666,7 +666,7 @@ Este script faz TUDO automaticamente:
 ## 📁 Estrutura do Repositório
 
 ```
-seja-senai/
+sige/
 ├── backend/                    # API REST (Java + Spring Boot)
 │   ├── src/main/java/         # Código fonte
 │   ├── src/main/resources/    # Configurações
@@ -737,8 +737,8 @@ O script detecta automaticamente se você está usando H2 ou MySQL e executa o p
 - Requer zerar manualmente (dados persistem)
 - Via MySQL Workbench ou linha de comando:
   ```sql
-  DROP DATABASE seja_senai_db;
-  CREATE DATABASE seja_senai_db;
+  DROP DATABASE sige_db;
+  CREATE DATABASE sige_db;
   ```
 - Reinicie backend para recriar tabelas
 
@@ -763,7 +763,7 @@ O sistema inclui funcionalidade de recuperação de senha via email usando Gmail
 1. Acesse [Google Account Security](https://myaccount.google.com/security)
 2. Ative **Verificação em 2 etapas** (obrigatório)
 3. Acesse **Senhas de app** 
-4. Crie uma senha de app com nome "SEJA SENAI"
+4. Crie uma senha de app com nome "SIGE"
 5. Copie a senha gerada (16 caracteres)
 
 ### 2. Configure application.properties

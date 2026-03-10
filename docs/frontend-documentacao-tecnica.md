@@ -1,6 +1,6 @@
-# 🎨 Frontend - Documentação Técnica Completa
+﻿# 🎨 Frontend - Documentação Técnica Completa
 
-**Sistema SEJA SENAI - Interface Web**
+**Sistema SIGE - Interface Web**
 
 ---
 
@@ -75,7 +75,7 @@ frontend-web/static/
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>SEJA SENAI - Cursos Disponíveis</title>
+    <title>SIGE - Cursos Disponíveis</title>
     <link rel="stylesheet" href="app.css">
     <!-- Notyf CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
@@ -83,7 +83,7 @@ frontend-web/static/
 <body>
     <!-- Topbar com logo e botões de navegação -->
     <div class="topbar">
-        <div class="logo">SEJA SENAI</div>
+        <div class="logo">SIGE</div>
         <nav>
             <a href="index.html">Cursos</a>
             <button onclick="handleLogin()">Login</button>
@@ -1205,4 +1205,4 @@ function formatPhone(phone) {
 
 **Versão da Documentação:** 1.0  
 **Última Atualização:** Março de 2024  
-**Sistema:** SEJA SENAI v1.0
+**Sistema:** SIGE v1.0
