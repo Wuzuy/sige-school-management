@@ -13,8 +13,8 @@
 	<groupId>com.wuzuy</groupId>
 	<artifactId>sejasenai</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>SejaSenai</name>
-	<description>Sistema de inscricao online SEJA SENAI</description>
+<name>SIGE</name>
+	<description>SIGE - Sistema de Inscricao e Gerenciamento Escolar</description>
 
 	<properties>
 		<java.version>17</java.version>

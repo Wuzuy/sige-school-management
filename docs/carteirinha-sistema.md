@@ -1,4 +1,4 @@
-# 🎫 Sistema de Carteirinha Virtual - SEJA SENAI
+﻿# 🎫 Sistema de Carteirinha Virtual - SIGE
 
 **Documentação Técnica e Arquitetural**
 
@@ -801,7 +801,7 @@ public class EmailService {
             
             helper.setFrom(fromEmail);
             helper.setTo(toEmail);
-            helper.setSubject("🎓 Sua Carteirinha Virtual - SEJA SENAI");
+            helper.setSubject("🎓 Sua Carteirinha Virtual - SIGE");
             
             // Carregar template HTML
             String htmlContent = carregarTemplate(nomeAluno, carteirinha);
@@ -1129,7 +1129,7 @@ object RetrofitClient {
 
 ## 🎓 Conclusão
 
-O sistema de Carteirinha Virtual é um componente **essencial** para o SEJA SENAI, proporcionando:
+O sistema de Carteirinha Virtual é um componente **essencial** para o SIGE, proporcionando:
 
 ✅ **Automatização:** Geração e envio automático  
 ✅ **Conveniência:** Acessível via email e app  
@@ -1143,4 +1143,4 @@ O sistema de Carteirinha Virtual é um componente **essencial** para o SEJA SENA
 
 **Versão do Documento:** 1.0  
 **Última Atualização:** Março de 2024  
-**Sistema:** SEJA SENAI v1.0
+**Sistema:** SIGE v1.0

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGE - Business Model Canvas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            box-sizing: border-box;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #00427a; /* Azul SENAI */
+            margin: 0 0 5px 0;
+            font-size: 28px;
+        }
+
+        p.subtitle {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .canvas-wrapper {
+            flex-grow: 1;
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: 1fr 1fr minmax(150px, auto);
+            gap: 15px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .box {
+            background: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .box h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #00427a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 8px;
+        }
+
+        .box ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .box li {
+            margin-bottom: 8px;
+            padding-left: 14px;
+            position: relative;
+        }
+
+        .box li::before {
+            content: "•";
+            color: #00427a;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .highlight {
+            font-weight: 600;
+            color: #222;
+        }
+
+        /* Grid Areas */
+        .parcerias { grid-area: 1 / 1 / 3 / 3; }
+        .atividades { grid-area: 1 / 3 / 2 / 5; }
+        .recursos { grid-area: 2 / 3 / 3 / 5; }
+        .proposta { grid-area: 1 / 5 / 3 / 7; }
+        .relacionamento { grid-area: 1 / 7 / 2 / 9; }
+        .canais { grid-area: 2 / 7 / 3 / 9; }
+        .segmentos { grid-area: 1 / 9 / 3 / 11; }
+        .custos { grid-area: 3 / 1 / 4 / 6; }
+        .receitas { grid-area: 3 / 6 / 4 / 11; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>SIGE</h1>
+        <p class="subtitle">Business Model Canvas - B2B SaaS Educacional</p>
+    </header>
+
+    <div class="canvas-wrapper">
+        
+        <!-- Parcerias Chaves -->
+        <div class="box parcerias">
+            <h3><i class="fa-solid fa-link"></i> Parcerias Chave</h3>
+            <ul>
+                <li>Secretarias de Educação parceiras.</li>
+                <li>Provedores Cloud (AWS, Cloudflare).</li>
+                <li>Gateways de Pagamento Integrados.</li>
+                <li>APIs de Comunicacao (SendGrid, Twilio).</li>
+                <li>Sistemas ERP Educacionais.</li>
+            </ul>
+        </div>
+
+        <!-- Atividades Chaves -->
+        <div class="box atividades">
+            <h3><i class="fa-solid fa-gears"></i> Atividades Chave</h3>
+            <ul>
+                <li>Desenvolvimento e evolucao do SaaS.</li>
+                <li>Suporte tecnico a secretarias.</li>
+                <li>Treinamento e implantacao.</li>
+                <li>Vendas B2B e marketing.</li>
+            </ul>
+        </div>
+
+        <!-- Recursos Chaves -->
+        <div class="box recursos">
+            <h3><i class="fa-solid fa-cube"></i> Recursos Chave</h3>
+            <ul>
+                <li>Plataforma (Spring Boot + React/Vue).</li>
+                <li>Infraestrutura Cloud escalavel.</li>
+                <li>Equipe Tecnica e CS (Customer Success).</li>
+                <li>Manuais e base de conhecimento.</li>
+            </ul>
+        </div>
+
+        <!-- Proposta de Valor -->
+        <div class="box proposta">
+            <h3><i class="fa-solid fa-gift"></i> Proposta de Valor</h3>
+            <span class="highlight">Para a Escola:</span>
+            <ul style="margin-bottom: 12px;">
+                <li>Gestao centralizada de inscricoes.</li>
+                <li>Controle de editais e datas.</li>
+                <li>Relatorios e notificacoes automatizadas.</li>
+            </ul>
+            <span class="highlight">Para o Candidato:</span>
+            <ul>
+                <li>Inscricao rapida 100% online.</li>
+                <li>Catalogo claro de cursos.</li>
+                <li>Acompanhamento de status em tempo real.</li>
+                <li>Carteirinha digital gerada na hora.</li>
+            </ul>
+        </div>
+
+        <!-- Relacionamento -->
+        <div class="box relacionamento">
+            <h3><i class="fa-solid fa-heart"></i> Relacionamento</h3>
+            <ul>
+                <li>Suporte B2B dedicado (SLA).</li>
+                <li>Gerente de contas ativo.</li>
+                <li>Onboarding e implantacao assistida.</li>
+                <li>Portal Self-service para alunos.</li>
+            </ul>
+        </div>
+
+        <!-- Canais -->
+        <div class="box canais">
+            <h3><i class="fa-solid fa-truck"></i> Canais</h3>
+            <ul>
+                <li>Venda direta B2B (Outbound).</li>
+                <li>Site comercial do produto.</li>
+                <li>Play Store e App Store (Mobile).</li>
+                <li>Eventos e feiras educacionais.</li>
+            </ul>
+        </div>
+
+        <!-- Segmentos de Clientes -->
+        <div class="box segmentos">
+            <h3><i class="fa-solid fa-users"></i> Segmentos</h3>
+            <span class="highlight">Cliente Pagante (B2B):</span>
+            <ul style="margin-bottom: 12px;">
+                <li>Escolas técnicas e privadas (Principal).</li>
+                <li>Escolas tecnicas e privadas.</li>
+                <li>Universidades e Prefeituras.</li>
+                <li>Empresas (capacitacao).</li>
+            </ul>
+            <span class="highlight">Usuario Final (B2C):</span>
+            <ul>
+                <li>Jovens e adultos (candidatos e alunos).</li>
+            </ul>
+        </div>
+
+        <!-- Estrutura de Custos -->
+        <div class="box custos">
+            <h3><i class="fa-solid fa-tags"></i> Estrutura de Custos</h3>
+            <ul>
+                <li><span class="highlight">Folha de Pagamento:</span> R$ 15.000/mes (Dev e Suporte).</li>
+                <li><span class="highlight">Infraestrutura Cloud:</span> R$ 1.000/mes (Escalavel).</li>
+                <li><span class="highlight">Marketing e Vendas:</span> R$ 2.000/mes.</li>
+                <li><span class="highlight">Licencas Dev/Comunicacao:</span> R$ 500/mes.</li>
+                <li><span class="highlight">Variaveis:</span> Comissoes de venda (10%) e deslocamentos.</li>
+            </ul>
+        </div>
+
+        <!-- Fontes de Renda -->
+        <div class="box receitas">
+            <h3><i class="fa-solid fa-money-bill-wave"></i> Fontes de Renda</h3>
+            <ul style="column-count: 2; column-gap: 20px;">
+                <li><span class="highlight">Implantacao:</span> R$ 30.000 (Setup e Treinamento).</li>
+                <li><span class="highlight">Basico:</span> R$ 997/mes (500 alunos).</li>
+                <li><span class="highlight">Profissional:</span> R$ 1.997/mes (1.500 alunos).</li>
+                <li><span class="highlight">Enterprise:</span> R$ 3.497/mes (Ilimitado).</li>
+                <li><span class="highlight">Customizacoes:</span> R$ 150/h.</li>
+                <li><span class="highlight">Integracoes:</span> R$ 8k a R$ 15k.</li>
+            </ul>
+        </div>
+
+    </div>
+
+</body>
+</html>
+```

@@ -1,4 +1,4 @@
-# 📱 Guia do Aluno - SEJA SENAI
+﻿# 📱 Guia do Aluno - SIGE
 
 **Sistema de Inscrição e Acompanhamento de Cursos do SENAI**
 
@@ -6,7 +6,7 @@
 
 ## 🎯 Visão Geral
 
-Este guia apresenta todas as funcionalidades disponíveis para alunos no sistema SEJA SENAI, desde o cadastro inicial até o acompanhamento da matrícula e acesso à carteirinha virtual.
+Este guia apresenta todas as funcionalidades disponíveis para alunos no sistema SIGE, desde o cadastro inicial até o acompanhamento da matrícula e acesso à carteirinha virtual.
 
 ---
 
@@ -83,7 +83,7 @@ O menu superior está presente em todas as páginas:
 
 ```
 🏠 Página Inicial
-├── SEJA SENAI (logo) - Volta para a página de cursos
+├── SIGE (logo) - Volta para a página de cursos
 ├── Cursos - Lista todos os cursos disponíveis
 ├── Status - Acompanha suas inscrições
 ├── Portal do Aluno - Acesso ao painel personalizado
@@ -369,7 +369,7 @@ Após a conclusão da matrícula, você receberá uma **carteirinha virtual de a
 
 3. **Envio por Email:**
    - Você receberá um email no endereço cadastrado
-   - **Assunto:** "Sua Carteirinha Virtual - SEJA SENAI"
+   - **Assunto:** "Sua Carteirinha Virtual - SIGE"
    - **Anexo:** Arquivo PDF com a carteirinha
    - **Link:** Link para download do aplicativo mobile
 
@@ -377,7 +377,7 @@ Após a conclusão da matrícula, você receberá uma **carteirinha virtual de a
 
 ### 6.3. Aplicativo Mobile (Em Desenvolvimento)
 
-**📱 Carteirinha APK - SEJA SENAI**
+**📱 Carteirinha APK - SIGE**
 
 Um aplicativo Android será disponibilizado para facilitar o acesso à carteirinha:
 
@@ -557,7 +557,7 @@ R: Sim! A carteirinha fica salva localmente e funciona offline.
 
 **Versão do Documento:** 1.0  
 **Última Atualização:** Março de 2026  
-**Sistema:** SEJA SENAI v1.0
+**Sistema:** SIGE v1.0
 
 ---
 

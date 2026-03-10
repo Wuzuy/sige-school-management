@@ -1,8 +1,8 @@
-@echo off
+﻿@echo off
 chcp 65001 >nul
-title SEJA SENAI - Verificar Status
+title SIGE - Verificar Status
 echo ==========================================
-echo SEJA SENAI - Verificar Status do Sistema
+echo SIGE - Verificar Status do Sistema
 echo ==========================================
 echo.
 

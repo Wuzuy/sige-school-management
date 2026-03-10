@@ -1,4 +1,4 @@
-# 📊 Business Model Canvas - SEJA SENAI
+﻿# 📊 Business Model Canvas - SIGE
 
 ## Visão Geral do Projeto
 
@@ -106,7 +106,7 @@ Plataforma digital que facilita o processo de inscrição em cursos técnicos e 
 #### Canais de Entrega:
 1. **Web Application** (frontend-web)
    - Acesso via navegador desktop/mobile
-   - URL: `seja-senai.pages.dev` ou domínio customizado
+   - URL: `sige.pages.dev` ou domínio customizado
 
 2. **Mobile App** (Android/iOS)
    - Disponível na Play Store e App Store
@@ -119,7 +119,7 @@ Plataforma digital que facilita o processo de inscrição em cursos técnicos e 
 #### Canais de Suporte:
 - **FAQ integrado** no sistema
 - **Chat de atendimento** (futuro)
-- **E-mail de suporte**: suporte@sejasenai.com.br
+- **E-mail de suporte**: suporte@sige.com.br
 - **Telefone** das unidades SENAI
 
 ---
@@ -174,7 +174,7 @@ Plataforma digital que facilita o processo de inscrição em cursos técnicos e 
 
 ## 💰 5. Fontes de Receita
 
-> **Nota:** O SEJA SENAI é um projeto **sem fins lucrativos** do Sistema FIRJAN/SENAI. No entanto, podemos mapear o "valor gerado":
+> **Nota:** O SIGE é um projeto **sem fins lucrativos** do Sistema FIRJAN/SENAI. No entanto, podemos mapear o "valor gerado":
 
 ### Valor Gerado (não monetário):
 
@@ -270,7 +270,7 @@ Se fosse um produto comercial, poderia gerar receita via:
 
 1. **Propriedade Intelectual**
    - Código-fonte proprietário do SENAI
-   - Marca "SEJA SENAI"
+   - Marca "SIGE"
    - Documentação técnica
 
 2. **Conhecimento Especializado**

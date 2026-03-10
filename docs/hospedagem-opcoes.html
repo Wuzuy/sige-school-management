@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <title>Opções de Hospedagem Barata - SEJA SENAI</title>
+  <title>Opções de Hospedagem Barata - SIGE</title>
   <link rel="stylesheet" href="site.css" />
   <script defer src="menu.js"></script>
 </head>
@@ -168,7 +168,7 @@
       <ol>
         <li>No dashboard, clique <strong>"+ New Project"</strong></li>
         <li>Selecione <strong>"Deploy from GitHub repo"</strong></li>
-        <li>Escolha o repositório: <code>seja-senai</code></li>
+        <li>Escolha o repositório: <code>sige</code></li>
         <li>Railway detecta automaticamente que é <strong>Spring Boot</strong></li>
         <li>Clique em <strong>"Deploy Now"</strong></li>
       </ol>
@@ -204,8 +204,8 @@ CORS_ALLOWED_ORIGINS=https://seu-frontend.vercel.app</pre>
       <ol>
         <li>Railway faz deploy automaticamente (aguarde ~3 minutos)</li>
         <li>Na aba <strong>"Settings"</strong> → <strong>"Networking"</strong>, clique <strong>"Generate Domain"</strong></li>
-        <li>✅ Sua API estará disponível em: <code>https://sejasenai-production.up.railway.app</code></li>
-        <li>Teste: <code>https://sejasenai-production.up.railway.app/api/cursos</code></li>
+        <li>✅ Sua API estará disponível em: <code>https://sige-production.up.railway.app</code></li>
+        <li>Teste: <code>https://sige-production.up.railway.app/api/cursos</code></li>
       </ol>
 
       <div class="warning-box">
@@ -220,7 +220,7 @@ CORS_ALLOWED_ORIGINS=https://seu-frontend.vercel.app</pre>
 
       <h3>2.2. Atualizar application.properties</h3>
       <p>No arquivo <code>backend/src/main/resources/application.properties</code>, adicione:</p>
-      <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto;">spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/sejasenai}
+      <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto;">spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/sige}
 spring.datasource.username=${SPRING_DATASOURCE_USERNAME:root}
 spring.datasource.password=${SPRING_DATASOURCE_PASSWORD:root}
 spring.jpa.hibernate.ddl-auto=${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
@@ -260,7 +260,7 @@ server.port=${PORT:8080}</pre>
       <h4>Passo 2: Importar Projeto</h4>
       <ol>
         <li>No dashboard, clique <strong>"Add New..."</strong> → <strong>"Project"</strong></li>
-        <li>Selecione o repositório <strong>seja-senai</strong></li>
+        <li>Selecione o repositório <strong>sige</strong></li>
         <li>Configure:
           <ul>
             <li><strong>Framework Preset:</strong> Other</li>
@@ -275,7 +275,7 @@ server.port=${PORT:8080}</pre>
       <h4>Passo 3: Atualizar URL da API no Frontend</h4>
       <p>No arquivo <code>frontend-web/static/scripts.js</code>, atualize a URL da API:</p>
       <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto;">// No início do arquivo
-const API_BASE_URL = 'https://sejasenai-production.up.railway.app/api';
+const API_BASE_URL = 'https://sige-production.up.railway.app/api';
 
 // Exemplo de fetch:
 fetch(`${API_BASE_URL}/cursos`)
@@ -286,12 +286,12 @@ fetch(`${API_BASE_URL}/cursos`)
       <ol>
         <li>Commit e push das mudanças para GitHub</li>
         <li>✅ Vercel faz deploy automático (1-2 minutos)</li>
-        <li>Acesse seu site em: <code>https://seja-senai.vercel.app</code></li>
+        <li>Acesse seu site em: <code>https://sige.vercel.app</code></li>
       </ol>
 
       <div class="success-box">
         <h3>✅ Seu frontend está no ar!</h3>
-        <p>Domínio: <code>https://seja-senai.vercel.app</code><br>
+        <p>Domínio: <code>https://sige.vercel.app</code><br>
         Deploy automático: toda vez que você der <code>git push</code> na branch <code>main</code></p>
       </div>
 
@@ -313,7 +313,7 @@ fetch(`${API_BASE_URL}/cursos`)
 
       <h4>Passo 1: Ativar GitHub Pages</h4>
       <ol>
-        <li>No GitHub, vá no repositório <strong>seja-senai</strong></li>
+        <li>No GitHub, vá no repositório <strong>sige</strong></li>
         <li>Clique em <strong>"Settings"</strong></li>
         <li>Na barra lateral, clique em <strong>"Pages"</strong></li>
         <li>Em <strong>"Source"</strong>, selecione:
@@ -329,8 +329,8 @@ fetch(`${API_BASE_URL}/cursos`)
       <ol>
         <li>GitHub processa automaticamente (1-2 minutos)</li>
         <li>✅ Documentação estará disponível em:<br>
-          <code>https://lucas.github.io/seja-senai/</code></li>
-        <li>Teste acessando: <code>https://lucas.github.io/seja-senai/index.html</code></li>
+          <code>https://lucas.github.io/sige/</code></li>
+        <li>Teste acessando: <code>https://lucas.github.io/sige/index.html</code></li>
       </ol>
 
       <h4>Passo 3: Configurar Links Relativos</h4>
@@ -339,11 +339,11 @@ fetch(`${API_BASE_URL}/cursos`)
 &lt;link rel="stylesheet" href="site.css" /&gt;
 
 &lt;!-- Para: --&gt;
-&lt;link rel="stylesheet" href="/seja-senai/site.css" /&gt;</pre>
+&lt;link rel="stylesheet" href="/sige/site.css" /&gt;</pre>
 
       <div class="warning-box">
         <h4>⚠️ Atenção aos caminhos</h4>
-        <p>GitHub Pages adiciona o nome do repositório na URL. Use caminhos absolutos começando com <code>/seja-senai/</code></p>
+        <p>GitHub Pages adiciona o nome do repositório na URL. Use caminhos absolutos começando com <code>/sige/</code></p>
       </div>
 
       <h3>4.2. Deploy Automático com GitHub Actions (Opcional)</h3>
@@ -583,9 +583,9 @@ jobs:
           <h3 style="color: white; margin: 0 0 12px; font-size: 1.25rem;">🎉 Após Deploy Completo</h3>
           <p style="margin: 0; font-size: 1.125rem;">Você terá 3 URLs públicas para compartilhar na apresentação:</p>
           <ul style="margin: 12px 0 0; font-size: 1.125rem; line-height: 1.8;">
-            <li>🔗 <strong>Backend API:</strong> https://sejasenai-production.up.railway.app/api</li>
-            <li>🔗 <strong>Frontend:</strong> https://seja-senai.vercel.app</li>
-            <li>🔗 <strong>Documentação:</strong> https://lucas.github.io/seja-senai/</li>
+            <li>🔗 <strong>Backend API:</strong> https://sige-production.up.railway.app/api</li>
+            <li>🔗 <strong>Frontend:</strong> https://sige.vercel.app</li>
+            <li>🔗 <strong>Documentação:</strong> https://lucas.github.io/sige/</li>
           </ul>
         </div>
       </div>
@@ -607,7 +607,7 @@ jobs:
       <div class="warning-box">
         <p><strong>Solução:</strong></p>
         <ol>
-          <li>No Railway, adicione a variável: <code>CORS_ALLOWED_ORIGINS=https://seja-senai.vercel.app</code></li>
+          <li>No Railway, adicione a variável: <code>CORS_ALLOWED_ORIGINS=https://sige.vercel.app</code></li>
           <li>No backend, verifique <code>SecurityConfig.java</code> se está lendo a variável corretamente</li>
           <li>Reinicie o backend após mudanças</li>
         </ol>
@@ -617,7 +617,7 @@ jobs:
       <div class="warning-box">
         <p><strong>Solução:</strong></p>
         <ol>
-          <li>Altere os caminhos nos HTML de <code>href="site.css"</code> para <code>href="/seja-senai/site.css"</code></li>
+          <li>Altere os caminhos nos HTML de <code>href="site.css"</code> para <code>href="/sige/site.css"</code></li>
           <li>Ou use caminhos relativos: <code>href="./site.css"</code></li>
           <li>GitHub Pages adiciona o nome do repositório na URL base</li>
         </ol>
@@ -637,7 +637,7 @@ jobs:
       <!-- CONTATO -->
       <div class="success-box" style="margin-top: 48px;">
         <h3>🚀 Pronto para Deploy!</h3>
-        <p>Com essas instruções, você pode colocar todo o sistema SEJA SENAI online <strong>GRATUITAMENTE</strong> em menos de 1 hora.</p>
+        <p>Com essas instruções, você pode colocar todo o sistema SIGE online <strong>GRATUITAMENTE</strong> em menos de 1 hora.</p>
         <p style="margin-top: 16px;"><strong>Dúvidas?</strong> Consulte as documentações oficiais:</p>
         <ul>
           <li>📚 <a href="https://docs.railway.app" target="_blank" style="color: #0ea5e9;">Railway Docs</a></li>

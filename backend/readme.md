@@ -1,6 +1,6 @@
-# Backend - SEJA SENAI
+﻿# Backend - SIGE
 
-API REST e regras de negócio do sistema SEJA SENAI, desenvolvida com Java e Spring Boot.
+API REST e regras de negócio do sistema SIGE, desenvolvida com Java e Spring Boot.
 
 ## Pré-requisitos
 
@@ -13,4 +13,4 @@ API REST e regras de negócio do sistema SEJA SENAI, desenvolvida com Java e Spr
 Antes de iniciar a aplicação, crie o banco de dados no MySQL:
 
 ```sql
-CREATE DATABASE seja_senai_db;
+CREATE DATABASE sige_db;

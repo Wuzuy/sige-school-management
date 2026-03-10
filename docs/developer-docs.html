@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <title>Documentação Completa - SEJA SENAI</title>
+  <title>Documentação Completa - SIGE</title>
   <link rel="stylesheet" href="site.css" />
   <style>
     .doc-section {
@@ -128,14 +128,14 @@
     <section class="content">
       <div class="success-box">
         <h3 style="margin-top: 0;">✅ Sistema 100% Funcional e Documentado</h3>
-        <p>O sistema SEJA SENAI está completo com todas as funcionalidades implementadas, testadas e documentadas. Pronto para deploy em produção.</p>
+        <p>O sistema SIGE está completo com todas as funcionalidades implementadas, testadas e documentadas. Pronto para deploy em produção.</p>
         <a href="developer-documentation.md" target="_blank" class="download-btn">📄 Baixar Documentação Markdown</a>
       </div>
 
       <!-- VISÃO GERAL -->
       <div class="doc-section">
         <h3>🎯 Visão Geral do Sistema</h3>
-        <p>O <strong>Sistema SEJA SENAI</strong> é uma plataforma completa para gerenciamento de inscrições em cursos profissionalizantes. Permite que candidatos se inscrevam, acompanhem o status através de múltiplas etapas (análise, prova, lista de espera, matrícula) e finalizem o processo de matrícula online.</p>
+        <p>O <strong>Sistema SIGE</strong> é uma plataforma completa para gerenciamento de inscrições em cursos profissionalizantes. Permite que candidatos se inscrevam, acompanhem o status através de múltiplas etapas (análise, prova, lista de espera, matrícula) e finalizem o processo de matrícula online.</p>
         
         <h4>Funcionalidades Principais</h4>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px; margin-top: 16px;">
@@ -437,7 +437,7 @@
           <strong>Backend:</strong>
           <pre style="margin: 8px 0; background: #1e293b; color: #e2e8f0; padding: 12px; border-radius: 4px; max-width: 100%; overflow-x: auto;">cd backend
 ./mvnw clean package -DskipTests
-java -jar target/sejasenai-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod</pre>
+java -jar target/sige-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod</pre>
           
           <strong>Frontend:</strong>
           <pre style="margin: 8px 0; background: #1e293b; color: #e2e8f0; padding: 12px; border-radius: 4px; max-width: 100%; overflow-x: auto;">cd frontend-web/static
@@ -619,7 +619,7 @@ npx http-server . -p 3000</pre>
         </ul>
 
         <h4>Configuração application.properties</h4>
-        <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto; max-width: 100%;">spring.datasource.url=jdbc:postgresql://localhost:5432/sejasenai
+        <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto; max-width: 100%;">spring.datasource.url=jdbc:postgresql://localhost:5432/sige
 spring.datasource.username=seu_usuario
 spring.datasource.password=sua_senha
 spring.jpa.hibernate.ddl-auto=update
@@ -663,10 +663,10 @@ npx http-server . -p 3000</pre>
 
         <h4>Backup de Banco de Dados</h4>
         <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; max-width: 100%; overflow-x: auto;"># PostgreSQL Backup
-pg_dump -U admin -h localhost sejasenai > backup_$(date +%Y%m%d).sql
+pg_dump -U admin -h localhost sige > backup_$(date +%Y%m%d).sql
 
 # Restore
-psql -U admin -h localhost sejasenai < backup_20240315.sql</pre>
+psql -U admin -h localhost sige < backup_20240315.sql</pre>
 
         <h4>Checklist de Manutenção</h4>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px;">
@@ -713,7 +713,7 @@ psql -U admin -h localhost sejasenai < backup_20240315.sql</pre>
       </div>
 
       <div style="text-align: center; margin-top: 40px; padding: 20px; background: #f9fafb; border-radius: 8px;">
-        <h4>✅ Sistema SEJA SENAI - Versão 1.0.0</h4>
+        <h4>✅ Sistema SIGE - Versão 1.0.0</h4>
         <p style="margin: 8px 0; color: #6b7280;">Última atualização: Março 2024</p>
         <p style="margin: 8px 0; color: #6b7280;">Status: <strong style="color: #10b981;">Produção</strong> | 100% Funcional e Documentado</p>
       </div>

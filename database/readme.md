@@ -1,4 +1,4 @@
-# Database - SEJA SENAI
+﻿# Database - SIGE
 
 Scripts de estruturação e alimentação inicial do banco de dados relacional.
 

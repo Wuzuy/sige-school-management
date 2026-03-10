@@ -1,8 +1,8 @@
-@echo off
+﻿@echo off
 chcp 65001 >nul
-title SEJA SENAI - Parar Sistema
+title SIGE - Parar Sistema
 echo ==========================================
-echo SEJA SENAI - Parar Sistema
+echo SIGE - Parar Sistema
 echo ==========================================
 echo.
 echo Este script ira parar todos os processos do sistema.
@@ -11,11 +11,11 @@ pause
 
 echo.
 echo Parando Backend (Spring Boot)...
-taskkill /FI "WindowTitle eq SEJA SENAI Backend*" /F >nul 2>&1
+taskkill /FI "WindowTitle eq SIGE Backend*" /F >nul 2>&1
 taskkill /FI "IMAGENAME eq java.exe" /F >nul 2>&1
 
 echo Parando Frontend (Servidor HTTP)...
-taskkill /FI "WindowTitle eq SEJA SENAI Frontend*" /F >nul 2>&1
+taskkill /FI "WindowTitle eq SIGE Frontend*" /F >nul 2>&1
 
 echo.
 echo Sistema parado!

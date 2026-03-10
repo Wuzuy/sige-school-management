@@ -1,11 +1,11 @@
-# ==========================================
-# SEJA SENAI - Limpar Banco de Dados
+﻿# ==========================================
+# SIGE - Limpar Banco de Dados
 # ==========================================
 
 $ErrorActionPreference = "Continue"
 
 Write-Host "==========================================" -ForegroundColor Cyan
-Write-Host "SEJA SENAI - Limpar Banco de Dados" -ForegroundColor Cyan
+Write-Host "SIGE - Limpar Banco de Dados" -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -93,14 +93,14 @@ if ($profile -eq "h2") {
     Write-Host "OPCAO 1 - Dropar e Recriar Banco (Recomendado)" -ForegroundColor Cyan
     Write-Host "1. Abra MySQL Workbench ou terminal MySQL" -ForegroundColor White
     Write-Host "2. Execute os comandos:" -ForegroundColor White
-    Write-Host "   DROP DATABASE seja_senai_db;" -ForegroundColor Gray
-    Write-Host "   CREATE DATABASE seja_senai_db;" -ForegroundColor Gray
+    Write-Host "   DROP DATABASE sige_db;" -ForegroundColor Gray
+    Write-Host "   CREATE DATABASE sige_db;" -ForegroundColor Gray
     Write-Host "3. Reinicie o backend" -ForegroundColor White
     Write-Host ""
     Write-Host "OPCAO 2 - Deletar Todas as Tabelas" -ForegroundColor Cyan
     Write-Host "1. Abra MySQL Workbench ou terminal MySQL" -ForegroundColor White
     Write-Host "2. Execute os comandos:" -ForegroundColor White
-    Write-Host "   USE seja_senai_db;" -ForegroundColor Gray
+    Write-Host "   USE sige_db;" -ForegroundColor Gray
     Write-Host "   SET FOREIGN_KEY_CHECKS = 0;" -ForegroundColor Gray
     Write-Host "   DROP TABLE IF EXISTS inscricao, edital, curso, unidade, password_reset_tokens, usuario;" -ForegroundColor Gray
     Write-Host "   SET FOREIGN_KEY_CHECKS = 1;" -ForegroundColor Gray
@@ -120,13 +120,13 @@ if ($profile -eq "h2") {
         Write-Host "Executando comandos MySQL..." -ForegroundColor Yellow
         
         $sqlCommands = @"
-DROP DATABASE IF EXISTS seja_senai_db;
-CREATE DATABASE seja_senai_db;
+DROP DATABASE IF EXISTS sige_db;
+CREATE DATABASE sige_db;
 "@
         
         try {
             $sqlCommands | mysql -u root -p"$senhaPlain" 2>&1
-            Write-Host "[OK] Banco seja_senai_db dropado e recriado!" -ForegroundColor Green
+            Write-Host "[OK] Banco sige_db dropado e recriado!" -ForegroundColor Green
             
             Write-Host ""
             Write-Host "Reiniciando backend..." -ForegroundColor Yellow
@@ -160,8 +160,8 @@ CREATE DATABASE seja_senai_db;
             Write-Host $_.Exception.Message -ForegroundColor Red
             Write-Host ""
             Write-Host "Execute manualmente no MySQL Workbench:" -ForegroundColor Yellow
-            Write-Host "DROP DATABASE seja_senai_db;" -ForegroundColor Gray
-            Write-Host "CREATE DATABASE seja_senai_db;" -ForegroundColor Gray
+            Write-Host "DROP DATABASE sige_db;" -ForegroundColor Gray
+            Write-Host "CREATE DATABASE sige_db;" -ForegroundColor Gray
         }
     } else {
         Write-Host ""
