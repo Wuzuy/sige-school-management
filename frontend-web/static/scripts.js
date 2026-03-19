@@ -2013,3 +2013,19 @@ document.addEventListener('DOMContentLoaded', () => {
   if (page === 'portal-aluno') initPortalAlunoPage();
   if (page === 'portal-secretaria') initPortalSecretariaPage();
 });
+
+//FUNÇÃO DA SIDEBAR
+
+	isSidebarTrue = false;
+	function sidebarOpen() {
+		/* PROCURA A BARRA LATERAL NO ARQUIVO */
+		const sidebarVar = document.querySelector('aside');
+		/* ATIVA A CLASSE DE CSS "asideAberto" */
+		sidebarVar.classList.toggle('asideAberto');
+		/* AJUSTA O TAMANHO DA INTERFACE DE ACORDO */
+		let interfaceVar = document.querySelector('.interface');
+		let interfaceState = isSidebarTrue ? '0px':'10%';
+		interfaceVar.style.setProperty('margin-left',interfaceState)
+		/* INTERRUPTOR DA VERACIDADE DA VARIÁVEL DE ATIVAÇÃO */
+		isSidebarTrue = !isSidebarTrue
+	}
