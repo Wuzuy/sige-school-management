@@ -2029,3 +2029,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		/* INTERRUPTOR DA VERACIDADE DA VARIÁVEL DE ATIVAÇÃO */
 		isSidebarTrue = !isSidebarTrue
 	}
+
+//FAZ COM QUE A PADDING DA SIDEBAR FIQUE DO TAMANHO DO HEADER
+  const headerAltura = document.getElementById('headerID').offsetHeight;
+  const sidebarVar = document.getElementById('sidebar');
+  sidebarVar.style.paddingTop = headerAltura + 'px';
+  

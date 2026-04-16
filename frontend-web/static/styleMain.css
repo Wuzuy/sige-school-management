@@ -25,13 +25,13 @@
 		}	
 		/* FONTE NORMAL */
 		@font-face {
-			font-family:'uberMove';
+			font-family:'gontserrat';
 			src: url('\Gontserrat-Regular.ttf');
 			
 		}
 		/* FONTE GROSSA */
 		@font-face {
-			font-family:'uberMoveBold';
+			font-family:'gontserratBold';
 			src: url('\Gontserrat-Regular.ttf');
 		}
 		/* TEXTO GENÉRICO */

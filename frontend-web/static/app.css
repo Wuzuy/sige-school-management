@@ -8,15 +8,23 @@
   --primary-strong: #1643f5;
   --border: #d7dee8;
   --danger: #b91c1c;
-  --shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+  --shadow: 0 0px 24px rgba(15, 23, 42, 0.12);
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  scrollbar-width: none;
 }
-
+@font-face {
+  font-family: 'titulo';
+  src: url("ArchivoBlack-Regular.ttf");
+}
+@font-face {
+	font-family:'gontserrat';
+	src: url('Gontserrat-Regular.ttf');	
+}
 body {
   font-family: Arial, Helvetica, sans-serif;
   color: var(--text);
@@ -49,9 +57,6 @@ a {
    display: flex;
    align-items: center;
   }
-  aside.asideAberto {
-		transform: translateX(0);
-	}
   .interface {
       margin-top: 5px;
       margin-left: 0px;
@@ -59,47 +64,6 @@ a {
       transition: 0.3s ease-in-out;
       overflow-y: scroll;
     }
-  	aside {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 4px;
-		position: fixed;
-		left: 0;
-		top: 6vh;
-		background-color: red;
-		height: 100%;
-		width: 10%;
-		border-right: solid 1px #00AAFF;
-		overflow-y: scrollbar;
-		box-shadow: 2px 1px 12px #000000;
-		padding: 2px;
-    padding-top: 180px;
-		/* TIPO ( ex; rotação, translação, etc ) : DIREÇÃO */
-		transform: translateX(-100%);
-		/* PROPRIEDADE ALTERADA : TEMPO : TIPO */
-		transition: transform 0.3s ease-in-out;
-	}
-  aside.asideAberto {
-		transform: translateX(0);
-	}
- ul {
-  height: 100%;
-  display: flex;
-  justify-content: flex-start; /* Move o conteudo para o topo */
-  align-items: flex-start;
-  flex-direction: column;
-  text-align: left;
-}
-  
-  li {
-    text-align: left;
-  }
-  .containerLista {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; /* Move o conteudo para o topo */
-    align-items: center;
-  } 
 .topbar__inner {
   max-width: 1140px;
   margin: 0 auto;
@@ -239,20 +203,6 @@ a {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: 16px;
-}
-
-.card {
-  grid-column: span 12;
-  background: var(--surface);
-  border: 2px solid #e5e7eb;
-  border-radius: 14px;
-  box-shadow: var(--shadow);
-  padding: 18px;
-}
-
-.card h2 {
-  font-size: 1.15rem;
-  margin-bottom: 12px;
 }
 
 .two-col {
@@ -888,4 +838,146 @@ th {
 
 .hidden {
   display: none !important;
+}
+/*DESIGN DA SIDEBAR*/
+.containerLista {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Move o conteudo para o topo */
+  align-items: center;
+  margin-bottom: 20px;
+}
+.containerLista li,ul,p {
+  color: #FFFFFF;
+  list-style-type: none;
+}
+.containerLista ul {
+  width: 100%;
+  margin-left: 10px;
+}
+.containerLista p {
+  font-weight: 900;
+  font-size: 18px;
+  font-family: 'titulo';
+}
+aside {
+	position: fixed;
+	left: 0;
+	background-color: #75cefa;
+	height: 100%;
+	width: 10%;
+	border-right: solid 1px #00AAFF;
+	overflow-y: scrollbar;
+	box-shadow: 2px 1px 12px #000000;
+	padding: 2px;
+	/* TIPO ( ex; rotação, translação, etc ) : DIREÇÃO */
+	transform: translateX(-100%);
+	/* PROPRIEDADE ALTERADA : TEMPO : TIPO */
+	transition: transform 0.3s ease-in-out;
+}
+aside.asideAberto {
+	transform: translateX(0);
+}
+/* DESIGN DE LISTAS */
+ul {
+  height: 100%;
+  display: flex;
+  justify-content: flex-start; /* Move o conteudo para o topo */
+  align-items: flex-start;
+  flex-direction: column;
+  text-align: left;
+}
+li {
+  text-align: left;
+}
+/* ESTILIZAÇÃO DE IMAGENS */
+figure {
+  width: 100%;  
+  margin-bottom: 20px;
+}
+.banner{
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  transition: box-shadow 0.2s ease-in-out;
+}
+.banner:hover {
+  box-shadow: var(--shadow); 
+  cursor: pointer;
+}
+/* DESIGN DE CARDS */
+.containerCards {
+  display: flex;
+  gap: 20px;
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+.card {
+  grid-column: span 12;
+  background: var(--surface);
+  border: 2px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+.card:hover {
+  cursor: pointer;
+}
+.card h2 {
+  font-size: 1.15rem;
+  margin-bottom: 12px;
+}
+.card p {
+  color: #000000;
+  font-weight: 600;
+  font-family: 'gontserrat';
+}
+.circular {
+  border-radius: 120px;
+}
+/* ESTILIZAÇÃO DO CONTAINER PRINCIPAL */
+main{
+  width: 100%;
+}
+.imagemCircular {
+  border-radius: 120px;
+}
+.celulaContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.celulaContainer p {
+  margin-top: 8px;
+  color: #000000;
+}
+
+@media (max-aspect-ratio: 2/4), (max-width: 480px) {
+  
+  /* Empilha os cards e remove a largura fixa de 500px */
+  .containerCards {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+
+  /* Converte os grids para flexbox em coluna */
+  .grid, .two-col {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  /* Ajusta a largura do menu lateral para ser utilizável no mobile */
+  aside {
+    width: 100%;
+  }
+
+  .card {
+    width: 100%;
+  }
 }

@@ -1,4 +1,3 @@
-- Alterar o display do header
 - ✅ Sala de créditos - CONCLUÍDA 
 	Página criada em: frontend-web/static/credits.html
 	Inclui todas as atribuições de ícones da Flaticon
@@ -13,3 +12,5 @@
 	<a href="https://www.flaticon.com/free-icons/doc" title="doc icons">Doc icons created by hqrloveq - Flaticon</a>
 	<a href="https://www.flaticon.com/free-icons/document" title="document icons">Document icons created by Freepik - Flaticon</a>
 	<a href="https://www.flaticon.com/free-icons/doc" title="doc icons">Doc icons created by hqrloveq - Flaticon</a>
+	
+-
