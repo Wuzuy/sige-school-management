@@ -27,21 +27,16 @@
 		}	
 		/* FONTE NORMAL */
 		@font-face {
-			font-family:'uberMove';
-			src: url('\UberMoveTextRegular.otf');	
-		}
-		/* FONTE GROSSA */
-		@font-face {
-			font-family:'uberMoveBold';
-			src: url('\UberMoveTextBold.otf');
+			font-family:'gontserrat';
+			src: url('Gontserrat-Regular.ttf');	
 		}
 		/* TEXTO GENÉRICO */
 		body {
-			font-family:'uberMove';
+			font-family:'gontserrat';
 			scrollbar-width: none;
 		}
 		button {
-			font-family:'uberMove';
+			font-family:'gontserrat';
 		}
 		p {
 			color: var(--textoTerciario);
