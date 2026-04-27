@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIGE - Inscrição</title>
+  <link rel="stylesheet" href="app.css" />
+  <link rel="icon" href="imagens/sige.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+</head>
+<body data-page="inscricao">
+  <header class="topbar">
+      <div class="brand">
+        <img src="imagens/sige.png" alt="SIGE" />
+        <span>SIGE</span>
+      </div>
+      <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+        <span>☰</span>
+      </button>
+      <nav class="nav">
+        <a href="index.html">Cursos</a>
+        <a href="status.html">Status</a>
+        <a href="portal-aluno.html">Portal do Aluno</a>
+        <a href="portal-secretaria.html" data-admin-only>Portal da Secretaria</a>
+        <button data-logout type="button">Sair</button>
+      </nav>
+  </header>
+  <div class="nav-overlay"></div>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Finalizar Inscrição</h1>
+      <p>Aluno: <strong data-user-name>Aluno</strong></p>
+    </section>
+
+    <section class="grid">
+      <article class="card card-6">
+        <h2>Curso selecionado</h2>
+        <p><strong>Curso/Turno:</strong> <span id="curso-info">Selecione um curso na página inicial</span></p>
+        <p><strong>Unidade:</strong> <span id="unidade-info">-</span></p>
+        <div id="curso-detalhes" class="alert alert-info hidden" style="margin-top: 12px;"></div>
+      </article>
+
+      <article class="card card-6">
+        <h2>Dados para inscrição</h2>
+        <form id="form-inscricao">
+          <div class="field">
+            <label for="nome-completo">Nome completo *</label>
+            <input id="nome-completo" type="text" required />
+          </div>
+          <div class="two-col">
+            <div class="field">
+              <label for="rg">RG *</label>
+              <input id="rg" type="text" placeholder="Ex: 12.345.678-9" required />
+            </div>
+            <div class="field">
+              <label for="cpf">CPF *</label>
+              <input id="cpf" type="text" placeholder="Ex: 123.456.789-00" required />
+            </div>
+          </div>
+          <div class="two-col">
+            <div class="field">
+              <label for="telefone-contato">Melhor número de contato *</label>
+              <input id="telefone-contato" type="tel" placeholder="(00) 00000-0000" required />
+            </div>
+            <div class="field">
+              <label for="email-contato">Melhor email de contato *</label>
+              <input id="email-contato" type="email" placeholder="seu@email.com" required />
+            </div>
+          </div>
+          <div class="field">
+            <label for="data-nascimento">Data de nascimento *</label>
+            <input id="data-nascimento" type="date" required />
+          </div>
+          <div class="field">
+            <label for="escolaridade">Situação de escolaridade *</label>
+            <select id="escolaridade" required>
+              <option value="">Selecione</option>
+              <option>Ensino Fundamental Incompleto</option>
+              <option>Ensino Fundamental Completo</option>
+              <option>Ensino Médio Incompleto</option>
+              <option>Ensino Médio Completo</option>
+              <option>Ensino Técnico Incompleto</option>
+              <option>Ensino Técnico Completo</option>
+              <option>Ensino Superior Incompleto</option>
+              <option>Ensino Superior Completo</option>
+            </select>
+          </div>
+          <div class="alert alert-info">
+            Os dados serão utilizados exclusivamente para o processo seletivo e matrícula.
+          </div>
+          <button class="btn btn-primary" type="submit">Enviar inscrição</button>
+        </form>
+      </article>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  <script src="api-config.js"></script>
+  <script src="scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+﻿<!-- 
+  CONFIGURAÇÃO DA URL DA API - SIGE
+  
+  Este arquivo mostra como configurar a URL da API do backend
+  quando o frontend está hospedado na Cloudflare Pages ou outro serviço.
+  
+  OPÇÃO 1: Adicionar script inline em index.html, login.html, etc.
+  Coloque este script ANTES do <script src="scripts.js"></script>
+-->
+
+<script>
+  // Configure a URL do seu backend aqui
+  window.API_BASE_URL = 'https://abc123.ngrok.io/api';
+  
+  // OU se estiver usando Cloudflare Pages com Environment Variables:
+  // window.ENV = {
+  //   API_BASE_URL: 'https://seu-backend.com/api'
+  // };
+</script>
+<script src="scripts.js"></script>
+
+<!--
+  OPÇÃO 2: Criar arquivo config.js
+  
+  1. Crie um arquivo config.js com:
+     window.API_BASE_URL = 'https://abc123.ngrok.io/api';
+  
+  2. No HTML, carregue ANTES do scripts.js:
+     <script src="config.js"></script>
+     <script src="scripts.js"></script>
+-->
+
+<!--
+  EXEMPLOS DE URLs:
+  
+  - Desenvolvimento local:
+    window.API_BASE_URL = 'http://localhost:8080/api';
+  
+  - Ngrok (testes):
+    window.API_BASE_URL = 'https://abc123.ngrok.io/api';
+  
+  - Cloudflare Tunnel:
+    window.API_BASE_URL = 'https://seu-tunnel.trycloudflare.com/api';
+  
+  - Servidor em produção:
+    window.API_BASE_URL = 'https://api.sige.com.br/api';
+-->
