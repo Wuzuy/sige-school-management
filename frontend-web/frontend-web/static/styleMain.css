@@ -1,0 +1,58 @@
+* ESTILIZAÇÕES GERAIS */
+	/* AJUSTES DE CORES E FONTE */
+		:root {
+			/* FUNDOS E DETALHES */
+			--corBorda: #F0F0F2;
+			--azulPrincipal: #FF0000;
+			--azulSegundario: #FF0000;
+			--fundoCinzaUm: #F0F1F4;
+				/* FUNDOS DE CORES QUENTES */
+				--textoQuentePrincipal: #BD2C1A;
+				--textoQuenteSegundario: #AC4E2D;
+				--fundoQuenteUm: #FFF4E8;
+				--corBordaQuente: #FCE4D6;
+				
+			/* TEXTO */
+			--textoPrincipal: #000000;
+			--textoSegundario: #FFFFFF;
+			--textoTerciario: #767784;
+			--textoQuarternario: #F0F1F4;
+			--fonteGrandeUm: 32px;
+			/* BOTÕES */
+			--botaoInativoLogin: #F0F1F4;
+			--botaoAtivoLogin: #FFFFFF;
+			--fontePequenaUm: 16px;
+		}	
+		/* FONTE NORMAL */
+		@font-face {
+			font-family:'gontserrat';
+			src: url('\Gontserrat-Regular.ttf');
+			
+		}
+		/* FONTE GROSSA */
+		@font-face {
+			font-family:'gontserratBold';
+			src: url('\Gontserrat-Regular.ttf');
+		}
+		/* TEXTO GENÉRICO */
+		p {
+			color: var(--textoTerciario);
+		}
+		.tituloEdital {
+			color: var(--textoQuentePrincipal);
+		}
+		.textoEdital {
+			color: var(--textoQuenteSegundario);
+		}
+	/* AJUSTA O TAMANHO E PROPORÇÕES DO SITE */
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing:border-box;
+		}
+	/* ESTA PARTE EM PARTICULAR AFETA TODOS OS PLACEHOLDERS DE INPUTS DA PÁGINA */
+		input::placeholder,
+		textarea::placeholder {
+			color: var(--textoTerciario);
+			padding-left: 4px;
+		}

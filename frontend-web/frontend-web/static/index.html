@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIGE - Cursos</title>
+  <link rel="stylesheet" href="app.css" />
+  <link rel="icon" href="imagens/sige.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+</head>
+<body data-page="home">
+  <header class="topbar">
+      <div class="brand">
+        <img src="imagens/sige.png" alt="SIGE" />
+        <span>SIGE</span>
+      </div>
+      <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+        <span>☰</span>
+      </button>
+      <nav class="nav">
+        <a href="index.html">Cursos</a>
+        <a href="status.html">Status</a>
+        <a href="portal-aluno.html">Portal do Aluno</a>
+        <a href="portal-secretaria.html" data-admin-only>Portal da Secretaria</a>
+        <button data-logout type="button">Sair</button>
+      </nav>
+  </header>
+  <div class="nav-overlay"></div>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Cursos Disponíveis</h1>
+      <p>Bem-vindo(a), <strong data-user-name>Aluno</strong>. Escolha um curso para se inscrever.</p>
+    </section>
+
+    <section class="card">
+      <h2>Lista de cursos</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Unidade</th>
+              <th>Curso</th>
+              <th>Turno</th>
+              <th>Início</th>
+              <th>Duração</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody id="courses-body">
+            <tr><td colspan="6">Carregando cursos...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  <script src="api-config.js"></script>
+  <script src="scripts.js"></script>
+</body>
+</html>
