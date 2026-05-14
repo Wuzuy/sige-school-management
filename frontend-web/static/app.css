@@ -995,3 +995,54 @@ main{
     width: 100%;
   }
 }
+
+/* CONTAINER DA TELA DE FALTAS */
+.alunoPerfil {
+  display: grid;
+  grid-template-columns: 10% 1fr;
+  width: 100%;
+  border: 2px solid red;
+  align-items: center;
+}
+.alunoPerfil figure {
+  max-width: 10rem;
+  max-height: 10rem;
+}
+.imagemAP {
+  width: 100%;
+  height: auto;
+}
+.alunoPerfil section {
+  margin-left: 0.5rem;
+}
+.alunoPerfil section p {
+  color: #000;
+}
+/* container frequência pizza*/
+.containerFP {
+  border: 2px solid yellow;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 40% 1fr;
+}
+/* container frequência */
+.frequencia {
+  border: 2px solid black;
+}
+/* container pizza status */
+.containerPS {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+}
+.pizza {
+  border: 2px solid green;
+}
+.statusFalta {
+  border: 2px solid rgb(0, 195, 255);
+}
+.pizza, .statusFalta {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
