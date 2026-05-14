@@ -1029,6 +1029,40 @@ main{
 .frequencia {
   border: 2px solid black;
 }
+.frequencia select {
+  width: 100%;
+}
+.containerFInfo {
+  border: 2px solid rgb(255, 0, 212);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.containerFInfo div:nth-child(1), .containerSInfo {
+  display: flex;
+  justify-content: space-between;
+  border: 2px solid red;
+}
+.containerFInfo div:nth-child(1) {
+  width: 100%;
+}
+.containerSInfo {
+  display: flex;
+  width: 60%;
+}
+.containerSInfo p{
+  color: #000;
+}
+.containerFInfo div:nth-child(2) {
+  display: flex;
+  justify-content: start;
+  width: 100%;
+  border: 2px solid blue;
+  gap: 2rem;
+}
+.containerFInfo div:nth-child(2) p {
+  color: #000;
+}
 /* container pizza status */
 .containerPS {
   display: grid;
@@ -1040,9 +1074,15 @@ main{
 .statusFalta {
   border: 2px solid rgb(0, 195, 255);
 }
-.pizza, .statusFalta {
+.pizza, .statusFalta, .frequencia {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+}
+.pizza, .statusFalta {
+  justify-content: center;
+}
+/* CALENDÁRIO DE FALTAS */
+.calendarioFaltas {
+  border: 2px solid rgb(13, 255, 0);
 }
