@@ -995,94 +995,127 @@ main{
     width: 100%;
   }
 }
-
-/* CONTAINER DA TELA DE FALTAS */
-.alunoPerfil {
-  display: grid;
-  grid-template-columns: 10% 1fr;
-  width: 100%;
-  border: 2px solid red;
-  align-items: center;
-}
-.alunoPerfil figure {
-  max-width: 10rem;
-  max-height: 10rem;
-}
-.imagemAP {
-  width: 100%;
-  height: auto;
-}
-.alunoPerfil section {
-  margin-left: 0.5rem;
-}
-.alunoPerfil section p {
-  color: #000;
-}
-/* container frequência pizza*/
-.containerFP {
-  border: 2px solid yellow;
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 40% 1fr;
-}
-/* container frequência */
-.frequencia {
-  border: 2px solid black;
-}
-.frequencia select {
-  width: 100%;
-}
-.containerFInfo {
-  border: 2px solid rgb(255, 0, 212);
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-.containerFInfo div:nth-child(1), .containerSInfo {
-  display: flex;
-  justify-content: space-between;
-  border: 2px solid red;
-}
-.containerFInfo div:nth-child(1) {
-  width: 100%;
-}
-.containerSInfo {
-  display: flex;
-  width: 60%;
-}
-.containerSInfo p{
-  color: #000;
-}
-.containerFInfo div:nth-child(2) {
-  display: flex;
-  justify-content: start;
-  width: 100%;
-  border: 2px solid blue;
-  gap: 2rem;
-}
-.containerFInfo div:nth-child(2) p {
-  color: #000;
-}
-/* container pizza status */
-.containerPS {
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-}
-.pizza {
-  border: 2px solid green;
-}
-.statusFalta {
-  border: 2px solid rgb(0, 195, 255);
-}
-.pizza, .statusFalta, .frequencia {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.pizza, .statusFalta {
-  justify-content: center;
-}
-/* CALENDÁRIO DE FALTAS */
-.calendarioFaltas {
-  border: 2px solid rgb(13, 255, 0);
-}
+/*TELA DE FALTAS */
+	/* CONTAINER DA TELA DE FALTAS */
+	.alunoPerfil {
+	  display: grid;
+	  grid-template-columns: 10% 1fr;
+	  width: 100%;
+	  border: 2px solid red;
+	  align-items: center;
+	}
+	.alunoPerfil figure {
+	  max-width: 10rem;
+	  max-height: 10rem;
+	}
+	.imagemAP {
+	  width: 100%;
+	  height: auto;
+	}
+	.alunoPerfil section {
+	  margin-left: 0.5rem;
+	}
+	.alunoPerfil section p {
+	  color: #000;
+	}
+	/* container frequência pizza*/
+	.containerFP {
+	  border: 2px solid yellow;
+	  min-height: 100vh;
+	  display: grid;
+	  grid-template-columns: 40% 1fr;
+	}
+	/* container frequência */
+	.frequencia {
+	  border: 2px solid black;
+	}
+	.frequencia select {
+	  width: 100%;
+	}
+	.containerFInfo {
+	  border: 2px solid rgb(255, 0, 212);
+	  width: 100%;
+	  display: flex;
+	  flex-direction: column;
+	}
+	.containerFInfo div:nth-child(1), .containerSInfo {
+	  display: flex;
+	  justify-content: space-between;
+	  border: 2px solid red;
+	}
+	.containerFInfo div:nth-child(1) {
+	  width: 100%;
+	}
+	.containerSInfo {
+	  display: flex;
+	  width: 60%;
+	}
+	.containerSInfo p{
+	  color: #000;
+	}
+	.containerFInfo div:nth-child(2) {
+	  display: flex;
+	  justify-content: start;
+	  width: 100%;
+	  border: 2px solid blue;
+	  gap: 2rem;
+	}
+	.containerFInfo div:nth-child(2) p {
+	  color: #000;
+	}
+	/* container pizza status */
+	.containerPS {
+	  display: grid;
+	  grid-template-rows: 1fr 1fr;
+	}
+	.pizza {
+	  border: 2px solid green;
+	}
+	.statusFalta {
+	  border: 2px solid rgb(0, 195, 255);
+	}
+	.pizza, .statusFalta, .frequencia {
+	  display: flex;
+	  flex-direction: column;
+	  align-items: center;
+	}
+	.pizza, .statusFalta {
+	  justify-content: center;
+	}
+	/* CALENDÁRIO DE FALTAS */
+	.calendarioFaltas {
+	  border: 2px solid rgb(13, 255, 0);
+	}
+	
+/* HITÓRICO ESCOLAR */
+	.gridHC {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		align-items: center;
+		align-content: center;
+		width: 100%;
+	}
+	.cardHC {
+		border: 2px solid red;
+		padding: 1rem;
+		min-height: 10rem;
+	}
+	.cardHC div:nth-child(1) {
+		display: flex;
+		flex-direction: row;
+		justify-content: start;
+		align-items: center;
+		border-bottom: 1px solid green;
+		margin-bottom: 0.5rem;
+		padding-bottom: 0.5rem;
+	}
+	.cardHC div:nth-child(1) img {
+		width: 3rem;
+		height: auto;
+		margin-right: 0.5rem;
+	}
+	.cardHC div:nth-child(2) {
+		display: flex;
+		flex-direction: column;
+		justify-content: start;
+	}
