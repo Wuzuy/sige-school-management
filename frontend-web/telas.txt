@@ -1,7 +1,6 @@
-→ Dashboard de notas
 	Consulta a frequencia [ ✅ ]
 	
-	historico escolar
+	historico escolar [ ✅ ]
 	
 	estrutura curricular
 	

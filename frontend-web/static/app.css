@@ -1096,7 +1096,7 @@ main{
 		width: 100%;
 	}
 	.cardHC {
-		border: 2px solid red;
+		border: 2px solid green;
 		padding: 1rem;
 		min-height: 10rem;
 	}
@@ -1118,4 +1118,77 @@ main{
 		display: flex;
 		flex-direction: column;
 		justify-content: start;
+	}
+
+/* ESTRUTURA CURRICULAR */
+	.containerCurricular {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+	}
+	.cardC {
+		border: 1px solid blue;
+		color: #000;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		min-height: 4rem;
+	}
+	.cardC p {
+		color: #000;
+	}
+	.numeroCard {
+		height: 50px;
+		width: 50px;
+		background-color: #0f3fbd;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+	.numeroCard h1 {
+		color: #FFF;
+		margin: 0;
+	}
+	.headerCC, .headerCC2 {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		border: 2px solid yellow;
+		cursor: pointer;
+	}
+	.headerCC {
+		justify-content: space-between;
+	}
+	.headerCC2 {
+		justify-content: start;
+	}
+	.headerCC button{
+		max-height: 100%;
+		height: 3rem;
+		width: auto;
+		background-color: #0f3fbd;
+		color: #FFF;
+		font-size: 1rem;
+		padding: 0.5rem;
+		border: none;
+		border-radius: 8px;
+	}
+	#containerSemestres, .containerCINFO {
+		border: 1px solid red;
+		overflow-y: scroll;
+		max-height: 100vh;
+	}
+	.containerProgresso div:nth-child(1) {
+		display: flex;
+		justify-content: space-between;
+	}
+	.containerProgresso progress{
+		width: 100%;
+	}
+	.statRapido {
+		display: flex;
+		justify-content: space-between;
+	}
+	.statRapido p{
+		color: #000;
 	}
