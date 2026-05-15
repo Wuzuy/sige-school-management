@@ -1,0 +1,20 @@
+→ Dashboard de notas
+	Consulta a frequencia [ ✅ ]
+	
+	historico escolar
+	
+	estrutura curricular
+	
+	quadro de horarios
+	
+	agenda escolar
+	
+	conta
+	
+	reclamaçoes
+	
+	ouvidoria
+	
+	atendimento agendado
+	
+	meus documentos

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIGE - Portal Escolar</title>
+  <link rel="stylesheet" href="app.css" />
+  <link rel="icon" href="imagens/sige.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+</head>
+<body>
+	<!-- HEADER -->
+	<header class="topbar" id="headerID">
+		<div class="brand">
+			<img src="imagens/sige.png" alt="SIGE" />
+			<span>SIGE</span>
+		</div>
+		<nav class="nav">
+			<a href="status.html">Status</a>
+			<a href="portal-secretaria.html" data-admin-only>Portal da Secretaria</a>
+			<button data-logout type="button">Sair</button>
+		</nav>
+  	</header>
+	<aside id="sidebar">
+		<div class="containerLista">
+			<ul>
+				<p>SALGADOS</p>
+				<li>Joelho</li>
+				<li>Bandeclay</li>
+				<li>Tchunflay</li>
+			</ul>
+		</div>
+		<div class="containerLista">
+			<ul>
+				<p>DOCES</p>
+				<li>Chocolates</li>
+				<li>Pirulito</li>
+				<li>Algodão Doce</li>
+			</ul>
+		</div>
+		<div class="containerLista">
+			<ul>
+				<p>FRUTAS</p>
+				<li>Maçã</li>
+				<li>Chuchu</li>
+				<li>Cebola</li>
+			</ul>
+		</div>
+	</aside>
+	<div class="topbar miniTopbar">
+		<button class="botaoMiniHeader" onclick="sidebarOpen()">
+			≡
+		</button>
+		<h1 style="color: #FFFFFF">Portal do Aluno</h1>
+  	</div>
+	<section class="hero interface">
+		<div class="alunoPerfil">
+			<figure>
+				<img src="imagens\sige.png" class="imagemAP">
+			</figure>
+			<section>
+				<h1>Placeholder</h1>
+				<p>Placeholder</p>
+			<section>
+        </div>
+		<h1>Placeholder</h1>
+		<p style="color: #737373;">Placeholder</p>
+		<div class="gridHC">
+			<!-- Card de GPA -->
+			<div class="cardHC">
+				<div>
+					<img src="imagens\sige.png">
+					<p style="color: #737373;">Placeholder</p>
+				</div>
+				<div>
+					<h1>Placeholder</h1>
+					<p style="color: #737373;">Placeholder</p>
+				</div>
+			</div>
+			<!-- Card de Créditos -->
+			<div class="cardHC">
+				<div>
+					<img src="imagens\sige.png">
+					<p style="color: #737373;">Placeholder</p>
+				</div>
+				<div>
+					<h1>Placeholder</h1>
+					<p style="color: #737373;">Placeholder</p>
+				</div>
+			</div>
+			<!-- Card de barra de compleção do curso -->
+			<div class="cardHC">
+				<div>
+					<img src="imagens\sige.png">
+					<p style="color: #737373;">Placeholder</p>
+				</div>
+				<!-- a barra -->
+				<div>
+					<h1>100%</h1>
+					<progress value="100" max="100"> 32% </progress>
+				</div>
+			</div>
+		</div>
+		<table>
+			<tr>
+				<th>Matéria</th>
+				<th>Semestre</th>
+				<th>Nota Final</th>
+				<th>Frequência</th>
+				<th>Status</th>
+			</tr>
+			<tr>
+				<th>Artes</th>
+				<th>1°</th>
+				<th>95/100</th>
+				<th>99%</th>
+				<th>Reprovado</th>
+			</tr>
+			<tr>
+				<th>Inglês</th>
+				<th>1°</th>
+				<th>100/100</th>
+				<th>100%</th>
+				<th>Reprovado</th>
+			</tr>
+		</table>
+	</section>
+<script src="scripts.js">
+</script>
+</body>
