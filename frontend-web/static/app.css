@@ -1192,3 +1192,152 @@ main{
 	.statRapido p{
 		color: #000;
 	}
+	
+/* CALENDÁRIO ESCOLAR */
+	.containerOCE {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr); 
+		margin-bottom: 1rem;
+	}
+	.containerOCE div:nth-child(4) {
+		gap: 0.5rem;
+	}
+	.botaoPDF {
+		background-color: var(--primary-strong);
+		border: 2px solid var(--primary);
+		color: #fff;
+		font-size: 1rem;
+		padding: 0.5rem;
+		min-width: 6rem;
+		border-radius: 12px;
+	}
+	.botaoPDF:hover {
+		background-color: #1135c2;
+	}
+	.cardCalendario {
+		padding: 0.5rem;
+		background-color: var(--primary-strong);
+		border: 2px solid var(--primary);
+		transition: 0.2s;
+		display: flex;
+		overflow-wrap: anywhere;
+	}
+	.cardCalendario h1{
+		color: #fff;
+	}
+	.cardCalendario:hover{
+		transform: scale(1.3);
+	}
+	.calendario tr, .calendario th, .calendario td{
+		border: 2px solid var(--primary);
+	}
+	.calendario td, .calendario th{
+		max-width: 1rem;
+	}
+/* AGENDA ESCOLAR */
+	.containerAgenda {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+	.containerAgenda div:nth-child(1) {
+		display: flex;
+		flex-direction: row;
+	}
+	.evento {
+		color: red;
+	}
+	.cardCalendario2 {
+		background-color: var(--primary-strong);
+		border: 2px solid var(--primary);
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: center;    
+		justify-content: center;
+		width: 100%;
+		box-sizing: border-box;
+		padding: 4px;           
+		min-height: 4.5rem;
+		transition: 0.2s;
+		cursor: pointer;
+	}	
+	.cardCalendario2:hover {
+		transform: scale(1.3);
+	}
+	.diaNumero {
+		font-size: 1.5rem;
+		font-weight: bold;
+	}
+	.diaAlerta {
+		color: red; 
+		font-weight: bold;
+		background-color: green;
+		padding: 0.5rem;
+		width: 2rem;
+		height: 2rem;
+		border-radius: 10px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.containerMes {
+		border: 2px solid blue;
+		border-radius: 8px;
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+	}
+	.lado {
+		background-color: #C3C3C3;
+		margin-left: 1rem;
+	}
+	/* essa parte aqui eu pedi pra IA fazer */
+		.calencard {
+			display: flex;
+			flex-direction: column;
+		}
+		.card-titulo {
+			margin: 0 0 8px 0;
+			font-size: 1.25rem;
+			color: #333333;
+			transition: all 0.3s ease;
+		}
+		.card-descricao {
+			margin: 0;
+			color: #666666;
+			font-size: 0.95rem;
+			transition: all 0.3s ease;
+		}
+		/* --- ESTADO CONCLUÍDO --- */
+		/* Mudança no container do card */
+		.card.concluido {
+			background-color: #e8f5e9;
+			border-color: #4caf50;
+		}
+		/* Riscar e esmaecer o texto */
+		.card.concluido .card-titulo {
+			color: #2e7d32;
+			text-decoration: line-through;
+			opacity: 0.7;
+		}
+		.card.concluido .card-descricao {
+			color: #558b2f;
+			text-decoration: line-through;
+			opacity: 0.5;
+		}
+		/* Pequeno indicador visual de "check" */
+		.card::after {
+			content: '✓';
+			position: absolute;
+			top: 12px;
+			right: 16px;
+			font-size: 1.2rem;
+			color: #4caf50;
+			font-weight: bold;
+			opacity: 0;
+			transition: opacity 0.3s ease;
+		}
+		.card.concluido::after {
+			opacity: 1;
+		}

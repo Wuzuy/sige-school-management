@@ -2,11 +2,11 @@
 	
 	historico escolar [ ✅ ]
 	
-	estrutura curricular
+	estrutura curricular [ ✅ ]
 	
-	quadro de horarios
+	quadro de horarios [ ✅ ]
 	
-	agenda escolar
+	agenda escolar [ ✅ ]
 	
 	conta
 	
@@ -17,3 +17,6 @@
 	atendimento agendado
 	
 	meus documentos
+	
+nota: pedir pro matheus pedir pra IA caçar redundâncias no css quando eu terminar de
+fazer as telas
