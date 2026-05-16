@@ -2035,3 +2035,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const sidebarVar = document.getElementById('sidebar');
   sidebarVar.style.paddingTop = headerAltura + 'px';
   
+//conclusao de card aaa
+function alternarConcluido(elemento) {
+            // O toggle adiciona a classe se ela não existir, e remove se já existir
+            elemento.classList.toggle('concluido');
+        }

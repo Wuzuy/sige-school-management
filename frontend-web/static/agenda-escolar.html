@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIGE - Portal Escolar</title>
+  <link rel="stylesheet" href="app.css" />
+  <link rel="icon" href="imagens/sige.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+</head>
+<body>
+	<!-- HEADER -->
+	<header class="topbar" id="headerID">
+		<div class="brand">
+			<img src="imagens/sige.png" alt="SIGE" />
+			<span>SIGE</span>
+		</div>
+		<nav class="nav">
+			<a href="status.html">Status</a>
+			<a href="portal-secretaria.html" data-admin-only>Portal da Secretaria</a>
+			<button data-logout type="button">Sair</button>
+		</nav>
+  	</header>
+	<aside id="sidebar">
+		<div class="containerLista">
+			<ul>
+				<p>SALGADOS</p>
+				<li>Joelho</li>
+				<li>Bandeclay</li>
+				<li>Tchunflay</li>
+			</ul>
+		</div>
+		<div class="containerLista">
+			<ul>
+				<p>DOCES</p>
+				<li>Chocolates</li>
+				<li>Pirulito</li>
+				<li>Algodão Doce</li>
+			</ul>
+		</div>
+		<div class="containerLista">
+			<ul>
+				<p>FRUTAS</p>
+				<li>Maçã</li>
+				<li>Chuchu</li>
+				<li>Cebola</li>
+			</ul>
+		</div>
+	</aside>
+	<div class="topbar miniTopbar">
+		<button class="botaoMiniHeader" onclick="sidebarOpen()">
+			≡
+		</button>
+		<h1 style="color: #FFFFFF">Portal do Aluno</h1>
+  	</div>
+	<section class="hero interface">
+		<!-- mesma classe pq faz a mesma coisa -->
+		<div class="containerCurricular">
+			<!-- mesma classe pq faz a mesma coisa -->
+			<div class="containerAgenda">
+				<div>
+					<h1>Placeholder</h1>
+				</div>
+				<table class="calendario">
+					<div class="containerMes">
+						<h1>Maio</h1>
+						<div>
+							<button>&gt;</button>
+							<button>&lt;</button>
+						</div>
+					</div>
+					<tr>
+						<th>Domingo</th>
+						<th>Segunda</th>
+						<th>Terça</th>
+						<th>Quarta</th>
+						<th>Quinta</th>
+						<th>Sexta</th>
+						<th>Sábado</th>
+					</tr>
+					<tr>
+						<td>
+							<div class="cardCalendario2">
+								<span class="diaNumero">1</span>
+								<span class="diaAlerta">!</span>
+							</div>
+						</td>
+						<td>
+							<div class="cardCalendario2">
+								<span class="diaNumero">2</span>
+							</div>
+						</td>
+						<td>
+							<div class="cardCalendario2">
+								<span class="diaNumero">3</span>
+							</div>
+						</td>
+						<td>
+							<div class="cardCalendario2">
+								<span class="diaNumero">4</span>
+							</div>
+						</td>
+						<td>
+							<div class="cardCalendario2">
+								<span class="diaNumero">5</span>
+							</div>
+						</td>
+						<td>
+							<div class="cardCalendario2">
+								<span class="diaNumero">6</span>
+							</div>
+						</td>
+						<td>
+							<div class="cardCalendario2">
+								<span class="diaNumero">7</span>
+							</div>
+						</td>
+					</tr>
+					
+				</table>
+			</div>
+			<div class="containerAgenda lado">
+				<h1>Eventos por vir</h1>
+				<div class="card calencard">
+					<h1>Teste de química</h1>
+					<p>Em 2 dias</p>
+				</div>
+				<h1>Atividades diarias</h1>
+				<div class="card" onclick="alternarConcluido(this)">
+					<h3 class="card-titulo">Tarefa Importante</h3>
+					<p class="card-descricao">Clique em qualquer lugar deste card para marcá-lo como concluído.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+<script src="scripts.js">
+</script>
+</body>
