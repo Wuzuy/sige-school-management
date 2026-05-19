@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIGE - Portal Escolar</title>
+  <link rel="stylesheet" href="app.css" />
+  <link rel="icon" href="imagens/sige.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+</head>
+<body>
+	<!-- HEADER -->
+	<header class="topbar" id="headerID">
+		<div class="brand">
+			<img src="imagens/sige.png" alt="SIGE" />
+			<span>SIGE</span>
+		</div>
+		<nav class="nav">
+			<a href="status.html">Status</a>
+			<a href="portal-secretaria.html" data-admin-only>Portal da Secretaria</a>
+			<button data-logout type="button">Sair</button>
+		</nav>
+  	</header>
+	<aside id="sidebar">
+		<div class="containerLista">
+			<ul>
+				<p>SALGADOS</p>
+				<li>Joelho</li>
+				<li>Bandeclay</li>
+				<li>Tchunflay</li>
+			</ul>
+		</div>
+		<div class="containerLista">
+			<ul>
+				<p>DOCES</p>
+				<li>Chocolates</li>
+				<li>Pirulito</li>
+				<li>Algodão Doce</li>
+			</ul>
+		</div>
+		<div class="containerLista">
+			<ul>
+				<p>FRUTAS</p>
+				<li>Maçã</li>
+				<li>Chuchu</li>
+				<li>Cebola</li>
+			</ul>
+		</div>
+	</aside>
+	<div class="topbar miniTopbar">
+		<button class="botaoMiniHeader" onclick="sidebarOpen()">
+			≡
+		</button>
+		<h1 style="color: #FFFFFF">Portal do Aluno</h1>
+  	</div>
+	<section class="hero interface">
+		<div class="containerConta">
+			<div class="containerPerfil">
+				<figure>
+					<img src="imagens/sige.png">
+				</figure>
+				<h1>Nome Perfil</h1>
+				<p>Ocupação</p>
+				<!-- mostra se a conta é legítima e verificada ou não -->
+				<p id="verificar">Verificação</p>
+				<button id="editarFotoPerfil">
+					Editar Foto de Perfil
+				</button>
+			</div>
+			<!-- container das informações -->
+			<div class="containerPInfo">
+				<div class="cardPInfo"> 
+					<h1>Informações pessoais</h1>
+					<div class="containerInput">
+						<p>Informação</p>
+						<p class="conteudo">Conteúdo da Informação</p>
+					</div>
+				</div>
+				<div class="cardPInfo"> 
+					<h1>Informações pessoais</h1>
+					<div class="containerInput">
+						<p>Senha</p>
+						<p class="conteudo">***</p>
+						<!-- Eu nn entendi mto bem o exemplo do figma, eu acho q ao clicar no botão ele ia abrir uma parte pra mudar a senha-->
+						<button>
+							Mudar Senha
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+<script src="scripts.js">
+</script>
+</body>
