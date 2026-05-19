@@ -1415,3 +1415,47 @@ main{
 		flex-direction: column;
 		justify-content: start;
 	}
+	
+/* RECLAMAÇÕES */
+	.containerCardR {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: 1rem;
+		margin-bottom: 1rem;
+	}
+	.cardR {
+		background: var(--surface);
+		border: 2px solid #e5e7eb;
+		border-radius: 14px;
+		box-shadow: var(--shadow);
+		padding: 18px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+	.cardR p {
+		color: #606060;
+	}
+	.cardR div:nth-child(1) {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		width: 100%;
+	}
+	td {
+		max-width: 10rem;
+		overflow-wrap: anywhere;
+	}
+	.botaoDetalhes {
+		padding: 0.5rem;
+		font-size: 1rem;
+		border: 2px solid var(--primary-strong);
+		background-color: var(--primary);
+		border-radius: 12px;
+		color: #fff;
+	}
+	.botaoDetalhes:hover{
+		background-color: var(--primary-strong);
+		cursor: pointer;
+	}
