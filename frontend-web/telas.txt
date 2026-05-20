@@ -1,18 +1,18 @@
-	Consulta a frequencia [ ✅ ]
+	Consulta a frequencia [ ✅ ] [ ✅ ]
 	
-	historico escolar [ ✅ ]
+	historico escolar [ ✅ ] [ ✅ ]
 	
-	estrutura curricular [ ✅ ]
+	estrutura curricular [ ✅ ] [ ✅ ]
 	
-	quadro de horarios [ ✅ ]
+	quadro de horarios [ ✅ ] [ ✅ ]
 	
-	agenda escolar [ ✅ ]
+	agenda escolar [ ✅ ] [ ✅ ]
 	
-	conta [ ✅ ]
+	conta [ ✅ ] [ ✅ ]
 	
-	reclamaçoes
+	reclamaçoes  [ ✅ ] [ ✅ ]
 	
-	ouvidoria
+	ouvidoria [ ✅ ] [ ✅ ]
 	
 	atendimento agendado
 	
