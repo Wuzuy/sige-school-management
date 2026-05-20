@@ -1459,3 +1459,24 @@ main{
 		background-color: var(--primary-strong);
 		cursor: pointer;
 	}
+	
+/* OUVIDORIA */
+	.containerOuvidoria {
+		display: grid;
+		grid-template-columns: 60% 1fr;
+		gap: 1rem;
+	}
+	.containerOuvidoria form{
+		border: 2px solid red;
+		display: flex;
+		justify-content: start;
+		flex-direction: column;
+		padding: 1rem;
+	}
+	.containerOuvidoria div{
+		border: 2px solid blue;
+		display: flex;
+		justify-content: start;
+		flex-direction: column;
+		padding: 1rem;
+	}
