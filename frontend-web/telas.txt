@@ -14,9 +14,11 @@
 	
 	ouvidoria [ ✅ ] [ ✅ ]
 	
-	atendimento agendado
+	atendimento agendado [ ✅ ] [ ✅ ]
 	
-	meus documentos
+	meus documentos [ ✅ ] [ ✅ ] 
 	
 nota: pedir pro matheus pedir pra IA caçar redundâncias no css quando eu terminar de
 fazer as telas
+
+nota 2: pelo amor de DEUS, peça pra IA trocar a cor default do <p> pra preto
