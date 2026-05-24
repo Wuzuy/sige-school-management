@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIGE - Portal Escolar</title>
+  <link rel="stylesheet" href="assets/css/app.css" />
+  <link rel="icon" href="assets/images/sige.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+</head>
+<body data-page="portal-escolar">
+  <header class="topbar">
+      <div class="brand">
+        <img src="assets/images/sige.png" alt="SIGE" />
+        <span>Portal Escolar</span>
+      </div>
+      <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+        <span>☰</span>
+      </button>
+      <nav class="nav">
+        <a href="portal-aluno.html">Aluno</a>
+        <a href="agenda-escolar.html">Agenda</a>
+        <a href="calendario-escolar.html">Calendário</a>
+        <a href="portal-secretaria.html" data-admin-only>Secretaria</a>
+        <button data-logout type="button">Sair</button>
+      </nav>
+  </header>
+  <div class="nav-overlay"></div>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Bem-vindo ao Portal Escolar</h1>
+      <p>Gerencie seus dados e acompanhe informações escolares</p>
+    </section>
+
+    <section class="grid">
+      <article class="card card-6">
+        <h2>📅 Agenda Escolar</h2>
+        <p class="muted" style="margin-bottom: 12px;">Confira eventos e atividades</p>
+        <a href="agenda-escolar.html" class="btn btn-primary">Ver Agenda</a>
+      </article>
+
+      <article class="card card-6">
+        <h2>📆 Calendário</h2>
+        <p class="muted" style="margin-bottom: 12px;">Datas importantes do ano letivo</p>
+        <a href="calendario-escolar.html" class="btn btn-primary">Ver Calendário</a>
+      </article>
+
+      <article class="card card-6">
+        <h2>👤 Meu Perfil</h2>
+        <p class="muted" style="margin-bottom: 12px;">Dados pessoais e acadêmicos</p>
+        <a href="portal-aluno.html" class="btn btn-primary">Acessar Perfil</a>
+      </article>
+
+      <article class="card card-6">
+        <h2>📊 Histórico</h2>
+        <p class="muted" style="margin-bottom: 12px;">Seu histórico escolar</p>
+        <a href="historico-escolar.html" class="btn btn-primary">Ver Histórico</a>
+      </article>
+
+      <article class="card" style="grid-column: span 12;" data-admin-only style="display: none;">
+        <h2>🔐 Área Administrativa</h2>
+        <p class="muted" style="margin-bottom: 12px;">Acesso restrito a secretaria</p>
+        <a href="portal-secretaria.html" class="btn btn-edital">Ir para Portal da Secretaria</a>
+      </article>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  <script src="assets/js/api-config.js"></script>
+  <script src="assets/js/scripts.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      setupMobileMenu();
+      const auth = requireAuth();
+      if (auth) {
+        setupProtectedPage(auth);
+      }
+    });
+  </script>
+</body>
+</html>

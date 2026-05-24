@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIGE - Status de Inscrição</title>
+  <link rel="stylesheet" href="assets/css/app.css" />
+  <link rel="icon" href="assets/images/sige.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+</head>
+<body data-page="status">
+  <header class="topbar">
+      <div class="brand">
+        <img src="assets/images/sige.png" alt="SIGE" />
+        <span>SIGE - Status</span>
+      </div>
+      <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+        <span>☰</span>
+      </button>
+      <nav class="nav">
+        <a href="index.html">Cursos</a>
+        <a href="inscricao.html">Inscrição</a>
+        <a href="../portal-escolar/portal-aluno.html">Portal do Aluno</a>
+        <a href="../portal-escolar/portal-secretaria.html" data-admin-only>Portal da Secretaria</a>
+        <button data-logout type="button">Sair</button>
+      </nav>
+  </header>
+  <div class="nav-overlay"></div>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Status de Inscrição</h1>
+      <p>Acompanhe a situação das suas inscrições</p>
+    </section>
+
+    <section class="grid">
+      <article class="card" style="grid-column: span 12;">
+        <h2>Minhas Inscrições</h2>
+        <p class="muted" style="margin-bottom: 12px;">Status atual: <strong id="status-atual">Carregando...</strong></p>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Curso</th>
+                <th>Unidade</th>
+                <th>Data de Inscrição</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="status-body">
+              <tr>
+                <td colspan="5" style="text-align: center; padding: 40px;">Carregando inscrições...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="card hidden" id="curso-detalhes-card" style="grid-column: span 12;">
+        <h2>Detalhes do Curso</h2>
+        <div class="grid">
+          <div style="grid-column: span 6;">
+            <p><strong>Curso:</strong> <span id="detalhe-curso-nome">-</span></p>
+            <p><strong>Tipo:</strong> <span id="detalhe-curso-tipo">-</span></p>
+            <p><strong>Turno:</strong> <span id="detalhe-curso-turno">-</span></p>
+          </div>
+          <div style="grid-column: span 6;">
+            <p><strong>Unidade:</strong> <span id="detalhe-curso-unidade">-</span></p>
+            <p><strong>Início:</strong> <span id="detalhe-curso-inicio">-</span></p>
+            <p><strong>Duração:</strong> <span id="detalhe-curso-duracao">-</span></p>
+          </div>
+        </div>
+      </article>
+
+      <article class="card hidden" id="etapas-card" style="grid-column: span 12;">
+        <h2>Etapas do Processo</h2>
+        <div id="timeline-etapas"></div>
+      </article>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  <script src="assets/js/api-config.js"></script>
+  <script src="assets/js/scripts.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      setupMobileMenu();
+      const auth = requireAuth();
+      if (auth) initStatusPage();
+    });
+  </script>
+</body>
+</html>

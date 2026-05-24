@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIGE - Portal do Aluno</title>
+  <link rel="stylesheet" href="assets/css/app.css" />
+  <link rel="icon" href="assets/images/sige.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+</head>
+<body data-page="portal-aluno">
+  <header class="topbar">
+      <div class="brand">
+        <img src="assets/images/sige.png" alt="SIGE" />
+        <span>Portal do Aluno</span>
+      </div>
+      <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+        <span>☰</span>
+      </button>
+      <nav class="nav">
+        <a href="portal-aluno.html">Dados Pessoais</a>
+        <a href="historico-escolar.html">Histórico</a>
+        <a href="meus-documentos.html">Documentos</a>
+        <a href="consulta-freq.html">Frequência</a>
+        <a href="porta-secretaria.html" data-admin-only>Portal Secretaria</a>
+        <button data-logout type="button">Sair</button>
+      </nav>
+  </header>
+  <div class="nav-overlay"></div>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Meu Perfil</h1>
+      <p>Atualize seus dados e acompanhe sua vida escolar</p>
+    </section>
+
+    <section class="grid">
+      <article class="card card-6">
+        <h2>Dados Pessoais</h2>
+        <p><strong>Nome:</strong> <span id="aluno-nome">Carregando...</span></p>
+        <p><strong>Email:</strong> <span id="aluno-email">-</span></p>
+        <p><strong>CPF:</strong> <span id="aluno-cpf">-</span></p>
+        <p><strong>Data de Nascimento:</strong> <span id="aluno-nascimento">-</span></p>
+        <p><strong>Telefone:</strong> <span id="aluno-telefone">-</span></p>
+      </article>
+
+      <article class="card card-6">
+        <h2>Informações Acadêmicas</h2>
+        <p><strong>Matrícula:</strong> <span id="aluno-matricula">-</span></p>
+        <p><strong>Série:</strong> <span id="aluno-serie">-</span></p>
+        <p><strong>Turno:</strong> <span id="aluno-turno">-</span></p>
+        <p><strong>Status:</strong> <span id="aluno-status">-</span></p>
+        <button class="btn btn-soft" style="margin-top: 12px;">Editar Dados</button>
+      </article>
+
+      <article class="card" style="grid-column: span 12;">
+        <h2>Atalhos Rápidos</h2>
+        <div class="actions">
+          <a href="historico-escolar.html" class="btn btn-primary">📊 Histórico Escolar</a>
+          <a href="meus-documentos.html" class="btn btn-primary">📄 Meus Documentos</a>
+          <a href="consulta-freq.html" class="btn btn-primary">✓ Frequência</a>
+          <a href="agenda-escolar.html" class="btn btn-primary">📅 Agenda</a>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  <script src="assets/js/api-config.js"></script>
+  <script src="assets/js/scripts.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      setupMobileMenu();
+      const auth = requireAuth();
+      if (auth) {
+        setupProtectedPage(auth);
+        // Carregar dados do aluno
+        document.getElementById('aluno-nome').textContent = auth.usuario?.nomeCompleto || '-';
+        document.getElementById('aluno-email').textContent = auth.usuario?.email || '-';
+      }
+    });
+  </script>
+</body>
+</html>
