@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIGE - Cursos Disponíveis</title>
+  <link rel="stylesheet" href="assets/css/app.css" />
+  <link rel="icon" href="assets/images/sige.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+</head>
+<body data-page="index">
+  <header class="topbar">
+      <div class="brand">
+        <img src="assets/images/sige.png" alt="SIGE" />
+        <span>SIGE - Inscrição</span>
+      </div>
+      <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+        <span>☰</span>
+      </button>
+      <nav class="nav">
+        <a href="status.html">Status</a>
+        <a href="inscricao.html">Inscrição</a>
+        <a href="../portal-escolar/portal-aluno.html">Portal do Aluno</a>
+        <a href="../portal-escolar/portal-secretaria.html" data-admin-only>Portal da Secretaria</a>
+        <button data-logout type="button">Sair</button>
+      </nav>
+  </header>
+  <div class="nav-overlay"></div>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Cursos Disponíveis</h1>
+      <p>Selecione um curso para realizar sua inscrição</p>
+    </section>
+
+    <section class="grid">
+      <article class="card" style="grid-column: span 12;">
+        <h2>Cursos</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Unidade</th>
+                <th>Curso</th>
+                <th>Turno</th>
+                <th>Data Início</th>
+                <th>Duração</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody id="courses-body">
+              <tr>
+                <td colspan="6" style="text-align: center; padding: 40px;">Carregando cursos...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  <script src="assets/js/api-config.js"></script>
+  <script src="assets/js/scripts.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      setupMobileMenu();
+      const auth = requireAuth();
+      if (auth) {
+        initHomePage();
+      }
+    });
+  </script>
+</body>
+</html>

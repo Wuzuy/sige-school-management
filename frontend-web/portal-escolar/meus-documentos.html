@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIGE - Meus Documentos</title>
+  <link rel="stylesheet" href="assets/css/app.css" />
+  <link rel="icon" href="assets/images/sige.png" type="image/png" />
+</head>
+<body data-page="documentos">
+  <header class="topbar">
+      <div class="brand">
+        <img src="assets/images/sige.png" alt="SIGE" />
+        <span>Meus Documentos</span>
+      </div>
+      <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+        <span>☰</span>
+      </button>
+      <nav class="nav">
+        <a href="index.html">Dashboard</a>
+        <a href="portal-aluno.html">Perfil</a>
+        <a href="meus-documentos.html">Documentos</a>
+        <button data-logout type="button">Sair</button>
+      </nav>
+  </header>
+  <div class="nav-overlay"></div>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Meus Documentos</h1>
+      <p>Acesse e baixe seus documentos escolares</p>
+    </section>
+
+    <section class="grid">
+      <article class="card" style="grid-column: span 12;">
+        <h2>Documentos Disponíveis</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Documento</th>
+                <th>Data de Emissão</th>
+                <th>Status</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody id="documentos-body">
+              <tr>
+                <td colspan="4" style="text-align: center; padding: 40px;">Carregando documentos...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script src="assets/js/api-config.js"></script>
+  <script src="assets/js/scripts.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      setupMobileMenu();
+      const auth = requireAuth();
+      if (auth) setupProtectedPage(auth);
+    });
+  </script>
+</body>
+</html>
