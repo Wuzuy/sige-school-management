@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIGE - Portal Escolar</title>
+  <link rel="stylesheet" href="assets/css/app.css" />
+  <link rel="icon" href="assets/images/sige.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+</head>
+<body>
+	<!-- HEADER -->
+	<header class="topbar" id="headerID">
+		<div class="brand">
+			<img src="assets/images/sige.png" alt="SIGE" />
+			<span>SIGE</span>
+		</div>
+		<nav class="nav">
+			<a href="status.html">Status</a>
+			<a href="portal-secretaria.html" data-admin-only>Portal da Secretaria</a>
+			<button data-logout type="button">Sair</button>
+		</nav>
+  	</header>
+	<aside id="sidebar">
+		<div class="containerLista">
+			<ul>
+				<p>SALGADOS</p>
+				<li>Joelho</li>
+				<li>Bandeclay</li>
+				<li>Tchunflay</li>
+			</ul>
+		</div>
+		<div class="containerLista">
+			<ul>
+				<p>DOCES</p>
+				<li>Chocolates</li>
+				<li>Pirulito</li>
+				<li>Algodão Doce</li>
+			</ul>
+		</div>
+		<div class="containerLista">
+			<ul>
+				<p>FRUTAS</p>
+				<li>Maçã</li>
+				<li>Chuchu</li>
+				<li>Cebola</li>
+			</ul>
+		</div>
+	</aside>
+	<div class="topbar miniTopbar">
+		<button class="botaoMiniHeader" onclick="sidebarOpen()">
+			≡
+		</button>
+		<h1 style="color: #FFFFFF">Portal do Aluno</h1>
+  	</div>
+	<section class="hero interface">
+		<h1>Acesso ao SIGE</h1>
+		<figure>
+			<img src="assets/images/banner.png" class="banner">
+		</figure>
+		<div class="containerCards">
+			<div class="card">
+				<p> TESTE </p>
+			</div>
+			<div class="card">
+				<p> TESTE </p>
+			</div>
+			<div class="card">
+				<p> TESTE </p>
+			</div>
+		</div>
+		<div class="containerCards" style="gap: 50px;">
+			<div class="celulaContainer">
+				<div class="card circular">
+					<img src="assets/images/placeholderCircular.png" class="imagemCircular">
+				</div>
+				<p> TESTE </p>
+			</div>
+			<div class="celulaContainer">
+				<div class="card circular">
+					<img src="assets/images/placeholderCircular.png" class="imagemCircular">
+				</div>
+				<p> TESTE </p>
+			</div>
+			<div class="celulaContainer">
+				<div class="card circular">
+					<img src="assets/images/placeholderCircular.png" class="imagemCircular">
+				</div>
+				<p> TESTE </p>
+			</div>
+		</div>
+	</section>
+<script src="assets/js/scripts.js"></script>
+</body>

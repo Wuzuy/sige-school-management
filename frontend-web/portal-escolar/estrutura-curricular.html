@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIGE - Portal Escolar</title>
+  <link rel="stylesheet" href="assets/css/app.css" />
+  <link rel="icon" href="assets/images/sige.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+</head>
+<body>
+	<!-- HEADER -->
+	<header class="topbar" id="headerID">
+		<div class="brand">
+			<img src="assets/images/sige.png" alt="SIGE" />
+			<span>SIGE</span>
+		</div>
+		<nav class="nav">
+			<a href="status.html">Status</a>
+			<a href="portal-secretaria.html" data-admin-only>Portal da Secretaria</a>
+			<button data-logout type="button">Sair</button>
+		</nav>
+  	</header>
+	<aside id="sidebar">
+		<div class="containerLista">
+			<ul>
+				<p>SALGADOS</p>
+				<li>Joelho</li>
+				<li>Bandeclay</li>
+				<li>Tchunflay</li>
+			</ul>
+		</div>
+		<div class="containerLista">
+			<ul>
+				<p>DOCES</p>
+				<li>Chocolates</li>
+				<li>Pirulito</li>
+				<li>Algodão Doce</li>
+			</ul>
+		</div>
+		<div class="containerLista">
+			<ul>
+				<p>FRUTAS</p>
+				<li>Maçã</li>
+				<li>Chuchu</li>
+				<li>Cebola</li>
+			</ul>
+		</div>
+	</aside>
+	<div class="topbar miniTopbar">
+		<button class="botaoMiniHeader" onclick="sidebarOpen()">
+			≡
+		</button>
+		<h1 style="color: #FFFFFF">Portal do Aluno</h1>
+  	</div>
+	<section class="hero interface">
+		<div class="containerCurricular">
+			<div id="containerSemestres">
+				<!-- SEMESTRE 1 -->
+				<!-- ao clicar no header ele iria esconder o container de cards -->
+				<div class="headerCC">
+					<div class="headerCC2">
+						<div class="numeroCard">
+							<h1>1</h1>
+						</div>
+						<div>
+							<h3>1° Semestre</h3>
+							<p style="color: #737373;">Cinco Unidades Curriculares</p>
+						</div>
+					</div>
+					<button>
+						Baixar em PDF
+					</button>
+				</div>
+				<div>
+					<div class="cardC">
+						<p>Nome</p>
+						<p>Código</p>
+						<p>Obrigatório</p>
+					</div>
+					<div class="cardC">
+						<p>Nome</p>
+						<p>Código</p>
+						<p>Obrigatório</p>
+					</div>
+				</div>
+				<!-- SEMESTRE 2 -->
+				<!-- ao clicar no header ele iria esconder o container de cards -->
+				<div class="headerCC">
+					<div class="headerCC2">
+						<div class="numeroCard">
+							<h1>2</h1>
+						</div>
+						<div>
+							<h3>2° Semestre</h3>
+							<p style="color: #737373;">Cinco Unidades Curriculares</p>
+						</div>
+					</div>
+					<button>
+						Baixar em PDF
+					</button>
+				</div>
+				<div>
+					<div class="cardC">
+						<p>Nome</p>
+						<p>Código</p>
+						<p>Obrigatório</p>
+					</div>
+					<div class="cardC">
+						<p>Nome</p>
+						<p>Código</p>
+						<p>Obrigatório</p>
+					</div>
+				</div>
+				<!-- teria um container de semestres para cada sempestre -->
+			</div>
+			<!-- container das informações -->
+			<div class="containerCINFO">
+				<div class="containerProgresso">
+					<div>
+						<h1>Exemplo</h1>
+						<h1>10/10</h1>
+					</div>
+					<progress value="100" max="100"> 32% </progress>
+				</div>
+				<div>
+					<!-- mesma classe pois o container seria parecido com o da consulta-freq -->
+					<div class="statusFalta">
+						<h1>Placeholder</h1>
+						<p style="color: #737373;">Exemplo informações</p>
+					</div>
+				</div>
+				<h3>Status rápidos</h3>
+				<div class="statRapido">
+					<p>Exemplo</p>
+					<p>10/10</p>
+				</div>
+			</div>
+		</div>
+	</section>
+<script src="assets/js/scripts.js"></script>
+</body>
