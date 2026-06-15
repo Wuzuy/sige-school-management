@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIGE - Quadro de Horários</title>
+  <link rel="stylesheet" href="assets/css/app.css" />
+  <link rel="icon" href="assets/images/sige.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+</head>
+<body>
+	<!-- HEADER -->
+	<header class="topbar" id="headerID">
+		<div class="brand">
+			<img src="assets/images/sige.png" alt="SIGE" />
+			<span>SIGE</span>
+		</div>
+		<button class="botaoMiniHeader menu-toggle" aria-label="Menu">
+			☰
+		</button>
+	</header>
+
+	<!-- SIDEBAR -->
+	<aside id="sidebar">
+		<nav id="sidebar-nav"></nav>
+	</aside>
+
+	<!-- MAIN CONTENT -->
+	<section class="hero interface">
+		<h1 style="margin-bottom: 24px; color: #1e293b;">Quadro de Horários</h1>
+		<p style="margin-bottom: 20px; color: var(--muted);">Confira seus horários de aula e eventos</p>
+
+		<div style="background: #ffffff; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow);">
+			<div class="table-wrapper">
+				<table>
+					<thead>
+						<tr>
+							<th>Dia</th>
+							<th>Horário</th>
+							<th>Disciplina</th>
+							<th>Professor</th>
+							<th>Local</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Segunda-feira</td>
+							<td>08:00 - 09:30</td>
+							<td>Cálculo I</td>
+							<td>Prof. João Silva</td>
+							<td>Sala 101</td>
+						</tr>
+						<tr>
+							<td>Segunda-feira</td>
+							<td>09:45 - 11:15</td>
+							<td>Álgebra Linear</td>
+							<td>Prof. Maria Santos</td>
+							<td>Sala 102</td>
+						</tr>
+						<tr>
+							<td>Terça-feira</td>
+							<td>08:00 - 09:30</td>
+							<td>Física I</td>
+							<td>Prof. Carlos Costa</td>
+							<td>Lab. de Física</td>
+						</tr>
+						<tr>
+							<td>Terça-feira</td>
+							<td>14:00 - 15:30</td>
+							<td>Programação</td>
+							<td>Prof. Ana Pereira</td>
+							<td>Lab. de Informática</td>
+						</tr>
+						<tr>
+							<td>Quarta-feira</td>
+							<td>08:00 - 09:30</td>
+							<td>Química</td>
+							<td>Prof. Lucas Oliveira</td>
+							<td>Lab. de Química</td>
+						</tr>
+						<tr>
+							<td>Quarta-feira</td>
+							<td>10:00 - 11:30</td>
+							<td>Inglês</td>
+							<td>Prof. Rebecca Jones</td>
+							<td>Sala 201</td>
+						</tr>
+						<tr>
+							<td>Quinta-feira</td>
+							<td>08:00 - 09:30</td>
+							<td>História</td>
+							<td>Prof. Roberto Lima</td>
+							<td>Sala 103</td>
+						</tr>
+						<tr>
+							<td>Quinta-feira</td>
+							<td>14:00 - 15:30</td>
+							<td>Educação Física</td>
+							<td>Prof. Marcos Souza</td>
+							<td>Ginásio</td>
+						</tr>
+						<tr>
+							<td>Sexta-feira</td>
+							<td>08:00 - 10:00</td>
+							<td>Laboratório</td>
+							<td>Prof. Ana Pereira</td>
+							<td>Lab. de Informática</td>
+						</tr>
+						<tr>
+							<td>Sexta-feira</td>
+							<td>14:00 - 15:30</td>
+							<td>Seminário</td>
+							<td>Diversos</td>
+							<td>Auditório</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div style="margin-top: 24px; background: #f0f9ff; border-left: 4px solid #3b82f6; padding: 16px; border-radius: 8px;">
+			<h3 style="color: #1e40af; margin-bottom: 8px;">ℹ️ Informações Importantes</h3>
+			<p style="color: #1e40af; margin: 0; font-size: 0.9rem;">
+				Os horários podem estar sujeitos a alterações. Verifique regularmente para atualizações.
+				Para reportar conflitos de horários ou dúvidas, entre em contato com a secretaria.
+			</p>
+		</div>
+	</section>
+
+	<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+	<script src="assets/js/scripts.js"></script>
+	<script src="assets/js/sidebar-nav.js"></script>
+</body>
+</html>
