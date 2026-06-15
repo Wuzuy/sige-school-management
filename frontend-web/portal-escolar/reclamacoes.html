@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SIGE - Portal Escolar</title>
+  <title>SIGE - Reclamações e Ouvidoria</title>
   <link rel="stylesheet" href="assets/css/app.css" />
   <link rel="icon" href="assets/images/sige.png" type="image/png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
@@ -15,92 +15,84 @@
 			<img src="assets/images/sige.png" alt="SIGE" />
 			<span>SIGE</span>
 		</div>
-		<nav class="nav">
-			<a href="status.html">Status</a>
-			<a href="portal-secretaria.html" data-admin-only>Portal da Secretaria</a>
-			<button data-logout type="button">Sair</button>
-		</nav>
-  	</header>
-	<aside id="sidebar">
-		<div class="containerLista">
-			<ul>
-				<p>SALGADOS</p>
-				<li>Joelho</li>
-				<li>Bandeclay</li>
-				<li>Tchunflay</li>
-			</ul>
-		</div>
-		<div class="containerLista">
-			<ul>
-				<p>DOCES</p>
-				<li>Chocolates</li>
-				<li>Pirulito</li>
-				<li>Algodão Doce</li>
-			</ul>
-		</div>
-		<div class="containerLista">
-			<ul>
-				<p>FRUTAS</p>
-				<li>Maçã</li>
-				<li>Chuchu</li>
-				<li>Cebola</li>
-			</ul>
-		</div>
-	</aside>
-	<div class="topbar miniTopbar">
-		<button class="botaoMiniHeader" onclick="sidebarOpen()">
-			≡
+		<button class="botaoMiniHeader menu-toggle" aria-label="Menu">
+			☰
 		</button>
-		<h1 style="color: #FFFFFF">Portal do Aluno</h1>
-  	</div>
+	</header>
+
+	<!-- SIDEBAR -->
+	<aside id="sidebar">
+		<nav id="sidebar-nav"></nav>
+	</aside>
 	<section class="hero interface">
 		<div class="containerCardR">
-			<div class="cardR">
+			<div class="cardR" style="border-left: 5px solid #f59e0b;">
 				<div>
 					<h1>Pendentes:</h1>
-					<h1>X</h1>
+					<h1>2</h1>
 				</div>
 				<p>Aguardando análise</p>
 			</div>
-			<div class="cardR">
+			<div class="cardR" style="border-left: 5px solid #3b82f6;">
 				<div>
 					<h1>Em Andamento:</h1>
-					<h1>X</h1>
+					<h1>2</h1>
 				</div>
 				<p>Sendo processadas</p>
 			</div>
-			<div class="cardR">
+			<div class="cardR" style="border-left: 5px solid #10b981;">
 				<div>
 					<h1>Resolvidas:</h1>
-					<h1>X</h1>
+					<h1>3</h1>
 				</div>
 				<p>Finalizadas</p>
 			</div>
 		</div>
-			<!-- O calendário vai ser criado dinamicamente pelo backend -->
-			<table>
-				<tr>
-					<th>Protocolo</th>
-					<th>Data</th>
-					<th>Categoria</th>
-					<th>Assunto</th>
-					<th>Status</th>
-					<th>Ações</th>
-				</tr>
-				<tr>
-					<td>PROT-2024-001236</td>
-					<td>12/05/2024	</td>
-					<td>Financeiro</td>
-					<td>Cobrança duplicada na mensalidade</td>
-					<td>Pendente</td>
-					<td>
-						<button class="botaoDetalhes"> 
-							Ver Detalhes
-						</button>
-					</td>
-				</tr>
-			</table>
-        </div>
+		<!-- Tabela de Reclamações -->
+		<div style="margin-top: 24px;">
+			<h2 style="font-size: 1.2rem; margin-bottom: 16px; color: #1e293b;">Minhas Reclamações</h2>
+			<div class="table-wrapper">
+				<table>
+					<tr>
+						<th>Protocolo</th>
+						<th>Data</th>
+						<th>Categoria</th>
+						<th>Assunto</th>
+						<th>Status</th>
+						<th>Ações</th>
+					</tr>
+					<tr>
+						<td>PROT-2024-001236</td>
+						<td>12/05/2024</td>
+						<td>Infraestrutura</td>
+						<td>Ar-condicionado não funciona na sala 308</td>
+						<td><span class="status" style="background: #fef3c7; color: #b45309;">Resolvido</span></td>
+						<td>
+							<a href="detalhes-reclamacao.html" style="text-decoration: none;">
+								<button class="botaoDetalhes"> 
+									Ver Detalhes
+								</button>
+							</a>
+						</td>
+					</tr>
+					<tr>
+						<td>PROT-2024-001235</td>
+						<td>13/05/2024</td>
+						<td>Acadêmico</td>
+						<td>Dúvida sobre nota do exame final</td>
+						<td><span class="status" style="background: #dbeafe; color: #1e40af;">Em Andamento</span></td>
+						<td>
+							<button class="botaoDetalhes"> 
+								Ver Detalhes
+							</button>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
 	</section>
+<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
 <script src="assets/js/scripts.js"></script>
+<script src="assets/js/sidebar-nav.js"></script>
 </body>
+</html>

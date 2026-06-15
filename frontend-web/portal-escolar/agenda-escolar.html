@@ -8,22 +8,20 @@
   <link rel="icon" href="assets/images/sige.png" type="image/png" />
 </head>
 <body data-page="agenda">
-  <header class="topbar">
-      <div class="brand">
-        <img src="assets/images/sige.png" alt="SIGE" />
-        <span>Agenda Escolar</span>
-      </div>
-      <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
-        <span>☰</span>
-      </button>
-      <nav class="nav">
-        <a href="index.html">Dashboard</a>
-        <a href="agenda-escolar.html">Agenda</a>
-        <a href="calendario-escolar.html">Calendário</a>
-        <button data-logout type="button">Sair</button>
-      </nav>
+  <header class="topbar" id="headerID">
+    <div class="brand">
+      <img src="assets/images/sige.png" alt="SIGE" />
+      <span>SIGE</span>
+    </div>
+    <button class="botaoMiniHeader menu-toggle" aria-label="Menu">
+      ☰
+    </button>
   </header>
-  <div class="nav-overlay"></div>
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <nav id="sidebar-nav"></nav>
+  </aside>
 
   <main class="container">
     <section class="hero">
@@ -43,6 +41,7 @@
 
   <script src="assets/js/api-config.js"></script>
   <script src="assets/js/scripts.js"></script>
+  <script src="assets/js/sidebar-nav.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       setupMobileMenu();

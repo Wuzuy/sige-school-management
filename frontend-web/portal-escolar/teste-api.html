@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIGE - Teste de API</title>
+  <link rel="stylesheet" href="assets/css/app.css" />
+  <link rel="icon" href="assets/images/sige.png" type="image/png" />
+  <style>
+    .teste-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    .teste-card { 
+      background: #fff; 
+      border: 1px solid #ddd; 
+      border-radius: 8px; 
+      padding: 20px; 
+      margin-bottom: 20px;
+    }
+    .teste-button {
+      padding: 10px 20px;
+      background: #1643f5;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin: 5px;
+    }
+    .teste-button:hover { background: #1a66ff; }
+    .teste-button.warning { background: #f59e0b; }
+    .teste-button.warning:hover { background: #d97706; }
+    .teste-button.success { background: #10b981; }
+    .teste-button.success:hover { background: #059669; }
+    .teste-output {
+      background: #1e1e1e;
+      color: #00ff00;
+      padding: 15px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      max-height: 400px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+    .teste-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 768px) { .teste-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="assets/images/sige.png" alt="SIGE" />
+      <span>SIGE - Teste de API</span>
+    </div>
+  </header>
+
+  <div class="teste-container">
+    <h1 style="color: #1e293b; margin-bottom: 10px;">🔧 Teste de Rotas da API SIGE</h1>
+    <p style="color: #666; margin-bottom: 30px;">
+      Use os botões abaixo para testar os endpoints da API. 
+      Certifique-se de que o servidor backend está rodando em <strong>http://localhost:8080</strong>
+    </p>
+
+    <!-- Status da API -->
+    <div class="teste-card">
+      <h2 style="margin-top: 0;">📊 Status da API</h2>
+      <div style="display: flex; gap: 20px; margin-bottom: 15px;">
+        <div>
+          <p style="margin: 0; color: #666; font-size: 0.9rem;">Status:</p>
+          <p style="margin: 0; font-size: 1.2rem; font-weight: bold; color: #10b981;" id="api-status">Verificando...</p>
+        </div>
+        <div>
+          <p style="margin: 0; color: #666; font-size: 0.9rem;">URL:</p>
+          <p style="margin: 0; font-size: 1rem; font-family: monospace;">http://localhost:8080/api</p>
+        </div>
+      </div>
+      <button class="teste-button success" onclick="verificarStatusAPI()">🔄 Verificar Status</button>
+      <button class="teste-button" onclick="limparSaida()">🗑️ Limpar Saída</button>
+    </div>
+
+    <!-- Testes por Categoria -->
+    <div class="teste-grid">
+      <!-- Usuários -->
+      <div class="teste-card">
+        <h2 style="margin-top: 0;">👤 Usuários</h2>
+        <button class="teste-button" onclick="testarRegistro()">Registrar Usuário</button>
+        <button class="teste-button" onclick="testarLogin()">Login</button>
+        <button class="teste-button" onclick="testarObterUsuarioAtual()">Obter Dados do Usuário</button>
+        <button class="teste-button warning" onclick="testarAtualizarPerfil()">Atualizar Perfil</button>
+      </div>
+
+      <!-- Cursos e Inscrições -->
+      <div class="teste-card">
+        <h2 style="margin-top: 0;">📚 Cursos e Inscrições</h2>
+        <button class="teste-button" onclick="testarListarCursos()">Listar Cursos</button>
+        <button class="teste-button" onclick="testarListarInscricoes()">Listar Inscrições</button>
+        <button class="teste-button warning" onclick="testarCriarInscricao()">Criar Inscrição</button>
+      </div>
+    </div>
+
+    <!-- Fluxo de Teste Recomendado -->
+    <div class="teste-card">
+      <h2 style="margin-top: 0;">🧪 Fluxo de Teste Recomendado</h2>
+      <ol style="margin: 0; padding-left: 20px;">
+        <li>Verificar Status da API</li>
+        <li>Registrar um novo usuário</li>
+        <li>Fazer login com o usuário criado</li>
+        <li>Obter dados do usuário autenticado</li>
+        <li>Listar cursos disponíveis</li>
+        <li>Listar inscrições</li>
+      </ol>
+      <button class="teste-button success" onclick="executarFluxoCompleto()" style="margin-top: 15px;">▶️ Executar Fluxo Completo</button>
+    </div>
+
+    <!-- Saída de Testes -->
+    <div class="teste-card">
+      <h2 style="margin-top: 0;">📝 Saída dos Testes</h2>
+      <div class="teste-output" id="output"></div>
+    </div>
+  </div>
+
+  <script src="assets/js/api-test.js"></script>
+  <script>
+    // Salva referência do output
+    const outputDiv = document.getElementById('output');
+
+    // Função para adicionar log
+    function addLog(mensagem, tipo = 'info') {
+      const timestamp = new Date().toLocaleTimeString();
+      const cor = tipo === 'error' ? '#ff6b6b' : tipo === 'success' ? '#51cf66' : '#00ff00';
+      const line = `<span style="color: ${cor};">[${timestamp}] ${mensagem}</span>\n`;
+      outputDiv.innerHTML += line;
+      outputDiv.scrollTop = outputDiv.scrollHeight;
+    }
+
+    // Sobrescreve console.log para adicionar ao output
+    const originalLog = console.log;
+    const originalError = console.error;
+
+    console.log = function(...args) {
+      originalLog(...args);
+      addLog(args.join(' '));
+    };
+
+    console.error = function(...args) {
+      originalError(...args);
+      addLog(args.join(' '), 'error');
+    };
+
+    // Função para verificar status da API
+    async function verificarStatusAPI() {
+      addLog('🔍 Verificando status da API...');
+      try {
+        const response = await fetch('http://localhost:8080/api/cursos');
+        if (response.ok) {
+          document.getElementById('api-status').textContent = '✅ Online';
+          document.getElementById('api-status').style.color = '#10b981';
+          addLog('✅ API está online', 'success');
+        } else {
+          document.getElementById('api-status').textContent = '⚠️ Erro';
+          document.getElementById('api-status').style.color = '#f59e0b';
+          addLog('⚠️ API retornou status ' + response.status, 'error');
+        }
+      } catch (error) {
+        document.getElementById('api-status').textContent = '❌ Offline';
+        document.getElementById('api-status').style.color = '#ef4444';
+        addLog('❌ API está offline: ' + error.message, 'error');
+      }
+    }
+
+    // Função para limpar saída
+    function limparSaida() {
+      outputDiv.innerHTML = '';
+      addLog('🧹 Saída limpa');
+    }
+
+    // Função para executar fluxo completo
+    async function executarFluxoCompleto() {
+      addLog('\n📌 ========== INICIANDO FLUXO COMPLETO ==========');
+      addLog('Passo 1: Verificar Status da API');
+      await verificarStatusAPI();
+      
+      addLog('\nPasso 2: Registrar novo usuário');
+      await testarRegistro();
+      
+      addLog('\nPasso 3: Fazer login');
+      await testarLogin();
+      
+      addLog('\nPasso 4: Obter dados do usuário');
+      await testarObterUsuarioAtual();
+      
+      addLog('\nPasso 5: Listar cursos');
+      await testarListarCursos();
+      
+      addLog('\nPasso 6: Listar inscrições');
+      await testarListarInscricoes();
+      
+      addLog('\n✅ FLUXO COMPLETO FINALIZADO!');
+    }
+
+    // Inicializa verificação de status ao carregar
+    window.addEventListener('load', () => {
+      verificarStatusAPI();
+    });
+  </script>
+</body>
+</html>

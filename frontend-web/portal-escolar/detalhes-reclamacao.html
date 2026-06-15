@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIGE - Detalhes da Reclamação</title>
+  <link rel="stylesheet" href="assets/css/app.css" />
+  <link rel="icon" href="assets/images/sige.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+</head>
+<body>
+	<!-- HEADER -->
+	<header class="topbar" id="headerID">
+		<div class="brand">
+			<img src="assets/images/sige.png" alt="SIGE" />
+			<span>SIGE</span>
+		</div>
+		<button class="botaoMiniHeader menu-toggle" aria-label="Menu">
+			☰
+		</button>
+	</header>
+
+	<!-- SIDEBAR -->
+	<aside id="sidebar">
+		<nav id="sidebar-nav"></nav>
+	</aside>
+
+	<!-- MAIN CONTENT -->
+	<section class="hero interface">
+		<div style="display: flex; gap: 12px; align-items: center; margin-bottom: 24px;">
+			<a href="reclamacoes.html" style="color: var(--primary-strong); text-decoration: underline; cursor: pointer;">← Voltar</a>
+			<h1 style="margin: 0; color: #1e293b;">Detalhes da Reclamação</h1>
+		</div>
+
+		<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+			<!-- Conteúdo Principal -->
+			<div style="background: #ffffff; border: 1px solid var(--border); border-radius: 12px; padding: 24px; box-shadow: var(--shadow);">
+				<!-- Header da Reclamação -->
+				<div style="padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 20px;">
+					<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+						<div>
+							<h2 style="margin: 0 0 4px; color: #1e293b; font-size: 1.4rem;">Ar-condicionado não funciona na sala 308</h2>
+							<p style="margin: 0; color: var(--muted); font-size: 0.9rem;">Protocolo: <strong>PROT-2024-001236</strong></p>
+						</div>
+						<span class="status" style="background: #fef3c7; color: #b45309; padding: 6px 12px; border-radius: 20px; font-weight: 600;">Resolvido</span>
+					</div>
+				</div>
+
+				<!-- Informações Gerais -->
+				<div style="margin-bottom: 24px;">
+					<h3 style="color: #1e293b; margin-bottom: 16px; font-size: 1.1rem;">Informações Gerais</h3>
+					<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+						<div>
+							<p style="font-size: 0.9rem; color: var(--muted); margin: 0 0 4px; text-transform: uppercase; font-weight: 600;">Categoria</p>
+							<p style="font-size: 1rem; color: #1e293b; margin: 0; font-weight: 500;">Infraestrutura</p>
+						</div>
+						<div>
+							<p style="font-size: 0.9rem; color: var(--muted); margin: 0 0 4px; text-transform: uppercase; font-weight: 600;">Data de Abertura</p>
+							<p style="font-size: 1rem; color: #1e293b; margin: 0; font-weight: 500;">12 de Maio, 2024</p>
+						</div>
+						<div>
+							<p style="font-size: 0.9rem; color: var(--muted); margin: 0 0 4px; text-transform: uppercase; font-weight: 600;">Prioridade</p>
+							<p style="font-size: 1rem; color: #1e293b; margin: 0; font-weight: 500;">Normal</p>
+						</div>
+						<div>
+							<p style="font-size: 0.9rem; color: var(--muted); margin: 0 0 4px; text-transform: uppercase; font-weight: 600;">Data de Resolução</p>
+							<p style="font-size: 1rem; color: #1e293b; margin: 0; font-weight: 500;">15 de Maio, 2024</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- Descrição -->
+				<div style="margin-bottom: 24px;">
+					<h3 style="color: #1e293b; margin-bottom: 12px; font-size: 1.1rem;">Descrição</h3>
+					<div style="background: #f8fafb; padding: 16px; border-radius: 8px; border-left: 4px solid #3b82f6;">
+						<p style="margin: 0; color: #1e293b; line-height: 1.6;">
+							O ar-condicionado da sala 308 não está funcionando corretamente. Durante as aulas da tarde, 
+							a temperatura fica muito alta, prejudicando o conforto e o desempenho dos alunos. 
+							Foi relatado que o equipamento parou de funcionar no dia 11 de maio e não foi reparado até agora.
+						</p>
+					</div>
+				</div>
+
+				<!-- Histórico de Atividades -->
+				<div style="margin-bottom: 24px;">
+					<h3 style="color: #1e293b; margin-bottom: 16px; font-size: 1.1rem;">Histórico de Atividades</h3>
+					<div style="border-left: 3px solid var(--border); padding-left: 16px;">
+						<!-- Atividade 1 -->
+						<div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #f3f4f6;">
+							<div style="display: flex; gap: 12px; align-items: flex-start;">
+								<div style="width: 12px; height: 12px; background: #10b981; border-radius: 50%; margin-top: 4px; flex-shrink: 0;"></div>
+								<div style="flex: 1;">
+									<p style="font-weight: 600; color: #1e293b; margin: 0 0 4px;">Reclamação Resolvida</p>
+									<p style="color: var(--muted); margin: 0 0 8px; font-size: 0.9rem;">15 de Maio, 2024 às 10:30</p>
+									<p style="color: #1e293b; margin: 0;">O técnico da manutenção realizou o conserto do ar-condicionado. Equipamento testado e funcionando normalmente.</p>
+								</div>
+							</div>
+						</div>
+
+						<!-- Atividade 2 -->
+						<div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #f3f4f6;">
+							<div style="display: flex; gap: 12px; align-items: flex-start;">
+								<div style="width: 12px; height: 12px; background: #f59e0b; border-radius: 50%; margin-top: 4px; flex-shrink: 0;"></div>
+								<div style="flex: 1;">
+									<p style="font-weight: 600; color: #1e293b; margin: 0 0 4px;">Em Andamento</p>
+									<p style="color: var(--muted); margin: 0 0 8px; font-size: 0.9rem;">13 de Maio, 2024 às 14:15</p>
+									<p style="color: #1e293b; margin: 0;">Técnico agendado para avaliação. Estimativa de reparo: 2 dias.</p>
+								</div>
+							</div>
+						</div>
+
+						<!-- Atividade 3 -->
+						<div>
+							<div style="display: flex; gap: 12px; align-items: flex-start;">
+								<div style="width: 12px; height: 12px; background: #3b82f6; border-radius: 50%; margin-top: 4px; flex-shrink: 0;"></div>
+								<div style="flex: 1;">
+									<p style="font-weight: 600; color: #1e293b; margin: 0 0 4px;">Reclamação Registrada</p>
+									<p style="color: var(--muted); margin: 0 0 8px; font-size: 0.9rem;">12 de Maio, 2024 às 09:00</p>
+									<p style="color: #1e293b; margin: 0;">Reclamação recebida e registrada no sistema. Encaminhada para a manutenção.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Resposta Official -->
+				<div>
+					<h3 style="color: #1e293b; margin-bottom: 12px; font-size: 1.1rem;">Resposta da Administração</h3>
+					<div style="background: #d1fae5; border-left: 4px solid #10b981; padding: 16px; border-radius: 8px;">
+						<p style="margin: 0 0 8px; font-weight: 600; color: #047857;">✓ Reclamação Resolvida</p>
+						<p style="margin: 0; color: #059669; line-height: 1.6;">
+							Agradecemos pela notificação. O equipamento foi reparado com sucesso em 15 de maio. 
+							Para evitar problemas futuros, realizaremos manutenção preventiva em todos os equipamentos de ar-condicionado. 
+							Qualquer dúvida adicional, entre em contato com a administração.
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- Sidebar Direita -->
+			<div style="background: #ffffff; border: 1px solid var(--border); border-radius: 12px; padding: 20px; box-shadow: var(--shadow); height: fit-content;">
+				<h3 style="color: #1e293b; margin-bottom: 16px; font-size: 1rem;">Informações da Reclamação</h3>
+
+				<!-- Card Info -->
+				<div style="margin-bottom: 16px; padding: 12px; background: #f8fafb; border-radius: 8px;">
+					<p style="font-size: 0.85rem; color: var(--muted); margin: 0 0 4px; text-transform: uppercase; font-weight: 600;">Protocolo</p>
+					<p style="font-size: 1rem; color: #1e293b; margin: 0; font-weight: 600; font-family: monospace;">PROT-2024-001236</p>
+				</div>
+
+				<div style="margin-bottom: 16px; padding: 12px; background: #f8fafb; border-radius: 8px;">
+					<p style="font-size: 0.85rem; color: var(--muted); margin: 0 0 4px; text-transform: uppercase; font-weight: 600;">Responsável</p>
+					<p style="font-size: 1rem; color: #1e293b; margin: 0; font-weight: 500;">Adm. de Infraestrutura</p>
+				</div>
+
+				<div style="margin-bottom: 16px; padding: 12px; background: #f8fafb; border-radius: 8px;">
+					<p style="font-size: 0.85rem; color: var(--muted); margin: 0 0 4px; text-transform: uppercase; font-weight: 600;">Tempo de Resolução</p>
+					<p style="font-size: 1rem; color: #1e293b; margin: 0; font-weight: 500;">3 dias</p>
+				</div>
+
+				<div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border);">
+					<button class="btn btn-primary" style="width: 100%; margin-bottom: 8px;">📋 Exportar PDF</button>
+					<button class="btn btn-soft" style="width: 100%;">📧 Enviar por Email</button>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+	<script src="assets/js/scripts.js"></script>
+	<script src="assets/js/sidebar-nav.js"></script>
+</body>
+</html>

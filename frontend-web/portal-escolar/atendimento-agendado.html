@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SIGE - Portal Escolar</title>
+  <title>SIGE - Atendimento Agendado</title>
   <link rel="stylesheet" href="assets/css/app.css" />
   <link rel="icon" href="assets/images/sige.png" type="image/png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
@@ -15,63 +15,34 @@
 			<img src="assets/images/sige.png" alt="SIGE" />
 			<span>SIGE</span>
 		</div>
-		<nav class="nav">
-			<a href="status.html">Status</a>
-			<a href="portal-secretaria.html" data-admin-only>Portal da Secretaria</a>
-			<button data-logout type="button">Sair</button>
-		</nav>
-  	</header>
-	<aside id="sidebar">
-		<div class="containerLista">
-			<ul>
-				<p>SALGADOS</p>
-				<li>Joelho</li>
-				<li>Bandeclay</li>
-				<li>Tchunflay</li>
-			</ul>
-		</div>
-		<div class="containerLista">
-			<ul>
-				<p>DOCES</p>
-				<li>Chocolates</li>
-				<li>Pirulito</li>
-				<li>Algodão Doce</li>
-			</ul>
-		</div>
-		<div class="containerLista">
-			<ul>
-				<p>FRUTAS</p>
-				<li>Maçã</li>
-				<li>Chuchu</li>
-				<li>Cebola</li>
-			</ul>
-		</div>
-	</aside>
-	<div class="topbar miniTopbar">
-		<button class="botaoMiniHeader" onclick="sidebarOpen()">
-			≡
+		<button class="botaoMiniHeader menu-toggle" aria-label="Menu">
+			☰
 		</button>
-		<h1 style="color: #FFFFFF">Portal do Aluno</h1>
-  	</div>
+	</header>
+
+	<!-- SIDEBAR -->
+	<aside id="sidebar">
+		<nav id="sidebar-nav"></nav>
+	</aside>
 	<section class="hero interface">
 		<div class="containerAA">
 			<div class="containerAAG">
 				<div>
-					<h2>Fulano</h2>
-					<h2>XX:XX</h2>
+					<h2>Ana Silva Santos</h2>
+					<h2>22:13</h2>
 				</div>
 				<div class="containerIAAG">
 					<div>
 						<p>Responsável</p>
-						<p>Fulano</p>
+						<p>Maria Silva Santos</p>
 					</div>
 					<div>
-						<p>Razão</p>
-						<p>Motivo da reunião</p>
+						<p>Reunião</p>
+						<p>Academic Performance Discussion</p>
 					</div>
 					<div>
 						<p>Tutor</p>
-						<p>Ciclano</p>
+						<p>Prof. Carlos Mendes</p>
 					</div>
 				</div>
 				<div class="containerBAAG">
@@ -87,33 +58,63 @@
 				</div>
 			</div>
 			<div class="containerCardsAA">
-				<h1>Agenda de Hoje</h1>
+				<h1>Today's Schedule</h1>
 				<div class="cardAA">
 					<div>
-						<!-- criador da reunião -->
-						<p>Fulano</p>
-						<!-- horário -->
-						<p>XX:XX</p>
+						<p><strong>Ana Silva Santos</strong></p>
+						<p>28:13</p>
 					</div>
 					<div>
-						<!-- resto das pessoas na reunião -->
-						<p>Ciclano</p>
-						<p>Beltrano</p>
+						<p>Maria Silva Santos</p>
+						<p>Academic Performance</p>
+					</div>
+				</div>
+				<div class="cardAA">
+					<div>
+						<p><strong>Pedro Costa</strong></p>
+						<p>28:13</p>
+					</div>
+					<div>
+						<p>João Costa</p>
+						<p>Behavioral Concerns</p>
+					</div>
+				</div>
+				<div class="cardAA">
+					<div>
+						<p><strong>Mariana Oliveira</strong></p>
+						<p>08:13</p>
+					</div>
+					<div>
+						<p>Paula Oliveira</p>
+						<p>College Counseling</p>
+					</div>
+				</div>
+				<div class="cardAA">
+					<div>
+						<p><strong>Lucas Fernandes</strong></p>
+						<p>22:13</p>
+					</div>
+					<div>
+						<p>Sandra Fernandes</p>
+						<p>Special Education Plan</p>
 					</div>
 				</div>
 				<!-- quantas reunioes tem esse dia e semana -->
 				<div class="contadorReunioes">
 					<div class="reuniao">
-						<h1>X</h1>
-						<p>Hoje</p>
+						<h1>4</h1>
+						<p>Today</p>
 					</div>
 					<div class="reuniao">
-						<h1>X</h1>
-						<p>Essa semana</p>
+						<h1>12</h1>
+						<p>This Week</p>
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
+<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
 <script src="assets/js/scripts.js"></script>
+<script src="assets/js/sidebar-nav.js"></script>
 </body>
+</html>
