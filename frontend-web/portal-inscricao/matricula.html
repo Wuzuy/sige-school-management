@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIGE - Matrícula</title>
+  <link rel="stylesheet" href="assets/css/app.css" />
+  <link rel="icon" href="assets/images/sige.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+</head>
+<body data-page="matricula">
+  <header class="topbar">
+      <div class="brand">
+        <img src="assets/images/sige.png" alt="SIGE" />
+        <span>SIGE</span>
+      </div>
+      <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+        <span>☰</span>
+      </button>
+      <nav class="nav">
+        <a href="index.html">Cursos</a>
+        <a href="status.html">Status</a>
+        <a href="portal-aluno.html">Portal do Aluno</a>
+        <a href="portal-secretaria.html" data-admin-only>Portal da Secretaria</a>
+        <button data-logout type="button">Sair</button>
+      </nav>
+  </header>
+  <div class="nav-overlay"></div>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Matrícula</h1>
+      <p>Finalize sua matrícula no curso <strong id="curso-matricula-nome">-</strong></p>
+    </section>
+
+    <section class="card">
+      <h2>Dados da Matrícula</h2>
+      <div class="two-col">
+        <div>
+          <p><strong>Aluno:</strong> <span id="mat-aluno-nome">-</span></p>
+          <p><strong>CPF:</strong> <span id="mat-aluno-cpf">-</span></p>
+          <p><strong>Email:</strong> <span id="mat-aluno-email">-</span></p>
+        </div>
+        <div>
+          <p><strong>Curso:</strong> <span id="mat-curso-nome">-</span></p>
+          <p><strong>Turno:</strong> <span id="mat-curso-turno">-</span></p>
+          <p><strong>Data de Início:</strong> <span id="mat-curso-inicio">-</span></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Contrato de Matrícula</h2>
+      <div style="background: #f8fafc; padding: 16px; border-radius: 8px; max-height: 400px; overflow-y: auto; border: 1px solid #e2e8f0; margin-bottom: 16px;">
+        <h3 style="margin-top: 0;">CONTRATO DE PRESTAÇÃO DE SERVIÇOS EDUCACIONAIS</h3>
+        
+        <p><strong>CONTRATANTE:</strong> <span id="contrato-aluno">-</span>, portador do CPF <span id="contrato-cpf">-</span>.</p>
+        
+        <p><strong>CONTRATADA:</strong> SENAI - Serviço Nacional de Aprendizagem Industrial</p>
+        
+        <h4>CLÁUSULA PRIMEIRA - DO OBJETO</h4>
+        <p>O presente contrato tem por objeto a prestação de serviços educacionais referentes ao curso <strong id="contrato-curso">-</strong>, com carga horária de <strong id="contrato-duracao">-</strong> meses, no turno <strong id="contrato-turno">-</strong>.</p>
+        
+        <h4>CLÁUSULA SEGUNDA - DAS OBRIGAÇÕES DO ALUNO</h4>
+        <p>São obrigações do CONTRATANTE:</p>
+        <ul>
+          <li>Cumprir o regulamento interno da instituição;</li>
+          <li>Frequentar no mínimo 75% das aulas;</li>
+          <li>Zelar pelo patrimônio e equipamentos da instituição;</li>
+          <li>Manter conduta adequada e respeitosa com professores, funcionários e colegas;</li>
+          <li>Realizar as avaliações e trabalhos propostos no prazo estabelecido.</li>
+        </ul>
+        
+        <h4>CLÁUSULA TERCEIRA - DAS OBRIGAÇÕES DA INSTITUIÇÃO</h4>
+        <p>São obrigações da CONTRATADA:</p>
+        <ul>
+          <li>Ministrar o curso conforme grade curricular aprovada;</li>
+          <li>Fornecer certificado de conclusão ao aluno aprovado;</li>
+          <li>Disponibilizar infraestrutura adequada para as aulas;</li>
+          <li>Manter corpo docente qualificado;</li>
+          <li>Informar claramente sobre critérios de avaliação e aprovação.</li>
+        </ul>
+        
+        <h4>CLÁUSULA QUARTA - DA RESCISÃO</h4>
+        <p>O presente contrato poderá ser rescindido nas seguintes hipóteses:</p>
+        <ul>
+          <li>Por iniciativa do aluno, mediante comunicação prévia;</li>
+          <li>Por descumprimento do regulamento interno;</li>
+          <li>Por falta de frequência mínima exigida;</li>
+          <li>Por conduta incompatível com o ambiente educacional.</li>
+        </ul>
+        
+        <h4>CLÁUSULA QUINTA - DO FORO</h4>
+        <p>Fica eleito o foro da comarca da unidade de ensino para dirimir quaisquer dúvidas oriundas do presente contrato.</p>
+        
+        <p style="margin-top: 24px;"><strong>Data:</strong> <span id="contrato-data">-</span></p>
+      </div>
+
+      <form id="form-aceite-matricula">
+        <input id="inscricao-id-matricula" type="hidden" />
+        
+        <div class="field">
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input id="aceite-termos" type="checkbox" required style="width: auto;" />
+            <span>Li e concordo com todos os termos do contrato de matrícula</span>
+          </label>
+        </div>
+
+        <div class="field">
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input id="aceite-veracidade" type="checkbox" required style="width: auto;" />
+            <span>Declaro que todas as informações fornecidas são verdadeiras</span>
+          </label>
+        </div>
+
+        <div class="alert alert-info" style="margin-top: 12px;">
+          Ao aceitar a matrícula, você confirma o interesse em cursar e se compromete com as obrigações estabelecidas no contrato.
+        </div>
+
+        <div class="actions" style="margin-top: 16px;">
+          <button class="btn btn-primary" type="submit">Aceitar Matrícula</button>
+          <button class="btn btn-danger" id="recusar-matricula" type="button">Recusar Matrícula</button>
+          <a href="status.html" class="btn btn-soft">Voltar para Status</a>
+        </div>
+      </form>
+    </section>
+
+    <section id="mensagem-sucesso" class="card hidden" style="background: #ecfdf5; border-left: 4px solid #10b981;">
+      <h2 style="color: #065f46;">Matrícula Confirmada!</h2>
+      <p>Sua matrícula foi aceita com sucesso. Em breve você receberá mais informações sobre o início das aulas.</p>
+      <a href="index.html" class="btn btn-primary">Voltar para Página Inicial</a>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  <script src="api-config.js"></script>
+  <script src="scripts.js"></script>
+</body>
+</html>

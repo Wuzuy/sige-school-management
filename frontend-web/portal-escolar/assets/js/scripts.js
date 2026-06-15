@@ -2041,20 +2041,47 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 //FUNÇÃO DA SIDEBAR
+let isSidebarOpen = false;
 
-	isSidebarTrue = false;
-	function sidebarOpen() {
-		/* PROCURA A BARRA LATERAL NO ARQUIVO */
-		const sidebarVar = document.querySelector('aside');
-		/* ATIVA A CLASSE DE CSS "asideAberto" */
-		sidebarVar.classList.toggle('asideAberto');
-		/* AJUSTA O TAMANHO DA INTERFACE DE ACORDO */
-		let interfaceVar = document.querySelector('.interface');
-		let interfaceState = isSidebarTrue ? '0px':'10%';
-		interfaceVar.style.setProperty('margin-left',interfaceState)
-		/* INTERRUPTOR DA VERACIDADE DA VARIÁVEL DE ATIVAÇÃO */
-		isSidebarTrue = !isSidebarTrue
+function sidebarOpen() {
+	const sidebarVar = document.getElementById('sidebar');
+	if (!sidebarVar) return;
+
+	let overlay = document.getElementById('sidebar-overlay');
+	if (!overlay) {
+		overlay = document.createElement('div');
+		overlay.id = 'sidebar-overlay';
+		overlay.className = 'sidebar-overlay';
+		document.body.appendChild(overlay);
+		overlay.addEventListener('click', closeSidebar);
 	}
+
+	const interfaceVar = document.querySelector('.interface');
+	const isOpen = !sidebarVar.classList.contains('asideAberto');
+
+	sidebarVar.classList.toggle('asideAberto', isOpen);
+	overlay.classList.toggle('visible', isOpen);
+
+	if (interfaceVar) {
+		const offset = window.innerWidth > 768 ? '280px' : '0px';
+		interfaceVar.style.setProperty('margin-left', isOpen ? offset : '0px');
+	}
+
+	isSidebarOpen = isOpen;
+}
+
+function closeSidebar() {
+	const sidebarVar = document.getElementById('sidebar');
+	const overlay = document.getElementById('sidebar-overlay');
+	const interfaceVar = document.querySelector('.interface');
+
+	if (!sidebarVar || !sidebarVar.classList.contains('asideAberto')) return;
+
+	sidebarVar.classList.remove('asideAberto');
+	if (overlay) overlay.classList.remove('visible');
+	if (interfaceVar) interfaceVar.style.setProperty('margin-left', '0px');
+	isSidebarOpen = false;
+}
 
 //FAZ COM QUE A PADDING DA SIDEBAR FIQUE DO TAMANHO DO HEADER
   const headerAltura = document.getElementById('headerID').offsetHeight;
