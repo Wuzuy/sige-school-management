@@ -217,7 +217,6 @@ function updateApiStatus(status) {
 
 // Inicializar na carga da página
 document.addEventListener('DOMContentLoaded', () => {
-  createApiStatusIndicator();
   if (API_BASE) {
     updateApiStatus('testing');
     testApiConnection();
@@ -829,7 +828,7 @@ function initLoginPage() {
       if (!token || !usuario) throw new Error('Resposta de login inválida.');
 
       setAuth({ token, usuario });
-      window.location.href = usuario.role === 'ROLE_ADMIN' ? 'portal-secretaria.html' : 'index.html';
+      window.location.href = usuario.role === 'ROLE_ADMIN' ? '../portal-secretaria/portal-secretaria.html' : 'index.html';
     } catch (error) {
       showError(`Não foi possível logar: ${error.message}`);
     }

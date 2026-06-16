@@ -217,7 +217,6 @@ function updateApiStatus(status) {
 
 // Inicializar na carga da página
 document.addEventListener('DOMContentLoaded', () => {
-  createApiStatusIndicator();
   if (API_BASE) {
     updateApiStatus('testing');
     testApiConnection();
@@ -712,7 +711,7 @@ function initLoginPage() {
       if (!token || !usuario) throw new Error('Resposta de login inválida.');
 
       setAuth({ token, usuario });
-      window.location.href = usuario.role === 'ROLE_ADMIN' ? 'portal-secretaria.html' : 'index.html';
+      window.location.href = usuario.role === 'ROLE_ADMIN' ? '../portal-secretaria/portal-secretaria.html' : 'index.html';
     } catch (error) {
       showError(`Não foi possível logar: ${error.message}`);
       showInfo('Se o backend não estiver disponível, use o botão de visualização como visitante.');
@@ -1632,7 +1631,7 @@ async function initPortalSecretariaPage() {
   const reloadData = async () => {
     const [unidades, cursos, usuarios, editais, inscricoes] = await Promise.all([
       request('/unidades', { headers: authHeaders(false) }),
-      request('/cursos', { headers: authHeaders(false) }),
+      request('/cursos?todos=true', { headers: authHeaders(false) }),
       request('/usuarios', { headers: authHeaders(false) }),
       request('/editais', { headers: authHeaders(false) }),
       request('/inscricoes', { headers: authHeaders(false) }),
@@ -2084,9 +2083,13 @@ function closeSidebar() {
 }
 
 //FAZ COM QUE A PADDING DA SIDEBAR FIQUE DO TAMANHO DO HEADER
-  const headerAltura = document.getElementById('headerID').offsetHeight;
+(function ajustarPaddingSidebar() {
+  const headerEl = document.getElementById('headerID');
   const sidebarVar = document.getElementById('sidebar');
+  if (!headerEl || !sidebarVar) return;
+  const headerAltura = headerEl.offsetHeight;
   sidebarVar.style.paddingTop = headerAltura + 'px';
+})();
   
 //conclusao de card aaa
 function alternarConcluido(elemento) {
