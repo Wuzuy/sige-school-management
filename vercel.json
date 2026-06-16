@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "outputDirectory": "frontend-web",
+  "redirects": [
+    { "source": "/", "destination": "/portal-escolar/index.html" }
+  ]
+}
