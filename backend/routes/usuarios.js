@@ -77,15 +77,33 @@ router.get('/me', requireAuth, async (req, res) => {
 
 // Atualizar perfil
 router.put('/me', requireAuth, async (req, res) => {
-  const { nomeCompleto, telefone, dataNascimento } = req.body;
+  const { nomeCompleto, telefone, dataNascimento, senha, senhaAtual } = req.body;
+
+  const updateData = {};
+  if (nomeCompleto !== undefined) updateData.nome_completo = nomeCompleto;
+  if (telefone !== undefined) updateData.telefone = telefone;
+  if (dataNascimento !== undefined) updateData.data_nascimento = dataNascimento;
+
+  // Alteracao de senha
+  if (senha) {
+    if (!senhaAtual) {
+      return res.status(400).json({ error: 'Senha atual é obrigatória.' });
+    }
+    const { data: user, error: userErr } = await supabase
+      .from('usuarios')
+      .select('senha')
+      .eq('id', req.user.id)
+      .single();
+    if (userErr) return res.status(500).json({ error: 'Erro ao verificar senha.' });
+    const valida = await bcrypt.compare(senhaAtual, user.senha);
+    if (!valida) return res.status(401).json({ error: 'Senha atual incorreta.' });
+    const salt = await bcrypt.genSalt(10);
+    updateData.senha = await bcrypt.hash(senha, salt);
+  }
 
   const { data, error } = await supabase
     .from('usuarios')
-    .update({ 
-      nome_completo: nomeCompleto, 
-      telefone, 
-      data_nascimento: dataNascimento 
-    })
+    .update(updateData)
     .eq('id', req.user.id)
     .select()
     .single();

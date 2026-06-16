@@ -7,115 +7,159 @@
   <link rel="stylesheet" href="assets/css/app.css" />
   <link rel="icon" href="assets/images/sige.png" type="image/png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+  <style>
+    .containerAA { display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: start; }
+    @media (max-width: 900px) { .containerAA { grid-template-columns: 1fr; } }
+    .containerAAG { background: white; border-radius: 12px; padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+    .containerAAG h2 { margin: 0 0 4px; color: #1e293b; }
+    .containerAAG .proximo-status { color: var(--muted); font-size: 0.9rem; margin-bottom: 16px; }
+    .containerIAAG { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .containerIAAG div { background: #f8fafc; padding: 12px; border-radius: 8px; }
+    .containerIAAG p { margin: 0; }
+    .containerIAAG p:first-child { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; font-weight: 600; }
+    .containerIAAG p:last-child { font-size: 1rem; font-weight: 500; color: #1e293b; }
+    .containerBAAG { display: flex; gap: 8px; }
+    .containerBAAG button { flex: 1; }
+    .containerCardsAA h1 { font-size: 1.1rem; margin-bottom: 16px; color: #1e293b; }
+    .cardAA { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 10px; box-shadow: var(--shadow); }
+    .cardAA > div:first-child { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .cardAA > div:first-child p { margin: 0; }
+    .cardAA > div:first-child p:first-child { font-weight: 600; color: #1e293b; }
+    .cardAA > div:first-child p:last-child { color: var(--muted); font-size: 0.85rem; }
+    .cardAA > div:last-child { display: flex; gap: 8px; flex-wrap: wrap; }
+    .cardAA > div:last-child p { margin: 0; font-size: 0.85rem; color: var(--muted); }
+    .badge-status { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+    .badge-agendado { background: #dbeafe; color: #1e40af; }
+    .badge-concluido { background: #d1fae5; color: #047857; }
+    .badge-cancelado { background: #fee2e2; color: #b91c1c; }
+    .contadorReunioes { display: flex; gap: 12px; margin-top: 16px; }
+    .reuniao { flex: 1; text-align: center; background: #f8fafc; padding: 12px; border-radius: 8px; }
+    .reuniao h1 { font-size: 1.5rem; margin: 0; color: var(--primary); }
+    .reuniao p { font-size: 0.85rem; margin: 4px 0 0; color: var(--muted); }
+    .empty-state { text-align: center; padding: 40px; color: var(--muted); }
+  </style>
 </head>
-<body>
-	<!-- HEADER -->
-	<header class="topbar" id="headerID">
-		<div class="brand">
-			<img src="assets/images/sige.png" alt="SIGE" />
-			<span>SIGE</span>
-		</div>
-		<button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
-			<span>☰</span>
-		</button>
-	</header>
-	<div class="nav-overlay"></div>
+<body data-page="atendimento-agendado">
+  <header class="topbar">
+    <div class="brand">
+      <img src="assets/images/sige.png" alt="SIGE" />
+      <span>SIGE</span>
+    </div>
+    <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+      <span>☰</span>
+    </button>
+  </header>
+  <div class="nav-overlay"></div>
+  <aside id="sidebar">
+    <nav id="sidebar-nav"></nav>
+  </aside>
+  <section class="hero interface">
+    <h1 style="margin-bottom: 8px; color: #1e293b;">Atendimento Agendado</h1>
+    <p style="margin-bottom: 24px; color: var(--muted);">Acompanhe seus agendamentos e atendimentos</p>
+    <div class="containerAA" id="atendimento-container">
+      <p id="loading-atendimentos" style="color: var(--muted);">Carregando agendamentos...</p>
+    </div>
+  </section>
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  <script src="assets/js/api-config.js"></script>
+  <script src="assets/js/scripts.js"></script>
+  <script src="assets/js/sidebar-nav.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const auth = requireAuth();
+      if (!auth) return;
+      setupProtectedPage(auth);
+      setupMobileMenu();
 
-	<!-- SIDEBAR -->
-	<aside id="sidebar">
-		<nav id="sidebar-nav"></nav>
-	</aside>
-	<section class="hero interface">
-		<div class="containerAA">
-			<div class="containerAAG">
-				<div>
-					<h2>Ana Silva Santos</h2>
-					<h2>22:13</h2>
-				</div>
-				<div class="containerIAAG">
-					<div>
-						<p>Responsável</p>
-						<p>Maria Silva Santos</p>
-					</div>
-					<div>
-						<p>Reunião</p>
-						<p>Academic Performance Discussion</p>
-					</div>
-					<div>
-						<p>Tutor</p>
-						<p>Prof. Carlos Mendes</p>
-					</div>
-				</div>
-				<div class="containerBAAG">
-					<button>
-						Começar Reunião
-					</button>
-					<button>
-						Remarcar
-					</button>
-					<button>
-						Cancelar
-					</button>
-				</div>
-			</div>
-			<div class="containerCardsAA">
-				<h1>Today's Schedule</h1>
-				<div class="cardAA">
-					<div>
-						<p><strong>Ana Silva Santos</strong></p>
-						<p>28:13</p>
-					</div>
-					<div>
-						<p>Maria Silva Santos</p>
-						<p>Academic Performance</p>
-					</div>
-				</div>
-				<div class="cardAA">
-					<div>
-						<p><strong>Pedro Costa</strong></p>
-						<p>28:13</p>
-					</div>
-					<div>
-						<p>João Costa</p>
-						<p>Behavioral Concerns</p>
-					</div>
-				</div>
-				<div class="cardAA">
-					<div>
-						<p><strong>Mariana Oliveira</strong></p>
-						<p>08:13</p>
-					</div>
-					<div>
-						<p>Paula Oliveira</p>
-						<p>College Counseling</p>
-					</div>
-				</div>
-				<div class="cardAA">
-					<div>
-						<p><strong>Lucas Fernandes</strong></p>
-						<p>22:13</p>
-					</div>
-					<div>
-						<p>Sandra Fernandes</p>
-						<p>Special Education Plan</p>
-					</div>
-				</div>
-				<!-- quantas reunioes tem esse dia e semana -->
-				<div class="contadorReunioes">
-					<div class="reuniao">
-						<h1>4</h1>
-						<p>Today</p>
-					</div>
-					<div class="reuniao">
-						<h1>12</h1>
-						<p>This Week</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-<script src="assets/js/scripts.js"></script>
-<script src="assets/js/sidebar-nav.js"></script>
+      try {
+        const atendimentos = await request('/aluno/atendimentos');
+        const container = document.getElementById('atendimento-container');
+
+        if (!atendimentos || atendimentos.length === 0) {
+          container.innerHTML = '<div class="empty-state"><p style="font-size:1.2rem;margin-bottom:8px;">Nenhum atendimento agendado</p><p>Você ainda não possui agendamentos. Entre em contato com a secretaria para agendar.</p></div>';
+          return;
+        }
+
+        const proximo = atendimentos.find(a => a.status === 'AGENDADO' || a.status === 'PENDENTE');
+        const hoje = new Date().toISOString().slice(0, 10);
+        const hojeAtendimentos = atendimentos.filter(a => a.data_atendimento === hoje && a.status !== 'CANCELADO');
+        const totalHoje = hojeAtendimentos.length;
+        const totalSemana = atendimentos.filter(a => a.status !== 'CANCELADO').length;
+
+        let html = '';
+
+        if (proximo) {
+          html += `
+            <div class="containerAAG">
+              <h2>${proximo.id_responsavel?.nome_completo || 'Atendimento'}</h2>
+              <p class="proximo-status">Próximo atendimento &bull; ${proximo.status === 'AGENDADO' ? 'Confirmado' : 'Pendente'}</p>
+              <div class="containerIAAG">
+                <div>
+                  <p>Tipo</p>
+                  <p>${proximo.tipo || 'Atendimento'}</p>
+                </div>
+                <div>
+                  <p>Data</p>
+                  <p>${proximo.data_atendimento ? new Date(proximo.data_atendimento + 'T12:00:00').toLocaleDateString('pt-BR') : '-'}</p>
+                </div>
+                <div>
+                  <p>Horário</p>
+                  <p>${proximo.hora ? proximo.hora.slice(0, 5) : '-'}</p>
+                </div>
+                <div>
+                  <p>Responsável</p>
+                  <p>${proximo.id_responsavel?.nome_completo || 'A definir'}</p>
+                </div>
+              </div>
+              ${proximo.observacoes ? `<p style="background:#f8fafc;padding:12px;border-radius:8px;margin-bottom:16px;color:#475569;">${proximo.observacoes}</p>` : ''}
+            </div>
+          `;
+        } else {
+          html += `
+            <div class="containerAAG">
+              <div class="empty-state">
+                <p style="font-size:1.1rem;margin-bottom:8px;">Nenhum próximo atendimento</p>
+                <p>Todos os atendimentos foram concluídos ou cancelados.</p>
+              </div>
+            </div>
+          `;
+        }
+
+        html += `
+          <div class="containerCardsAA">
+            <h1>Todos os Agendamentos</h1>
+            ${atendimentos.filter(a => a.status !== 'CANCELADO').length === 0 ? '<p style="color:var(--muted);">Nenhum agendamento ativo.</p>' :
+            atendimentos.map(a => `
+              <div class="cardAA">
+                <div>
+                  <p><strong>${a.id_responsavel?.nome_completo || 'Atendimento'}</strong></p>
+                  <p>${a.data_atendimento ? new Date(a.data_atendimento + 'T12:00:00').toLocaleDateString('pt-BR') : '-'}</p>
+                </div>
+                <div>
+                  <span class="badge-status badge-${a.status === 'AGENDADO' ? 'agendado' : a.status === 'CONCLUIDO' ? 'concluido' : 'cancelado'}">${a.status === 'AGENDADO' ? 'Agendado' : a.status === 'CONCLUIDO' ? 'Concluído' : 'Cancelado'}</span>
+                  <p>${a.tipo || ''} ${a.hora ? 'às ' + a.hora.slice(0, 5) : ''}</p>
+                </div>
+              </div>
+            `).join('')}
+            <div class="contadorReunioes">
+              <div class="reuniao">
+                <h1>${totalHoje}</h1>
+                <p>Hoje</p>
+              </div>
+              <div class="reuniao">
+                <h1>${totalSemana}</h1>
+                <p>Total</p>
+              </div>
+            </div>
+          </div>
+        `;
+
+        container.innerHTML = html;
+      } catch (e) {
+        document.getElementById('atendimento-container').innerHTML = '<div class="empty-state"><p style="color:#dc2626;">Erro ao carregar agendamentos.</p></div>';
+        showError('Erro ao carregar atendimentos');
+      }
+    });
+  </script>
 </body>
 </html>

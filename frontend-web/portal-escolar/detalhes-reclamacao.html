@@ -7,167 +7,157 @@
   <link rel="stylesheet" href="assets/css/app.css" />
   <link rel="icon" href="assets/images/sige.png" type="image/png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+  <style>
+    .detalhes-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+    @media (max-width: 768px) { .detalhes-grid { grid-template-columns: 1fr; } }
+    .card-detalhes { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 24px; box-shadow: var(--shadow); }
+    .card-sidebar { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 20px; box-shadow: var(--shadow); height: fit-content; }
+    .historico-item { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #f3f4f6; }
+    .historico-dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+  </style>
 </head>
-<body>
-	<!-- HEADER -->
-	<header class="topbar" id="headerID">
-		<div class="brand">
-			<img src="assets/images/sige.png" alt="SIGE" />
-			<span>SIGE</span>
-		</div>
-		<button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
-			<span>☰</span>
-		</button>
-	</header>
-	<div class="nav-overlay"></div>
+<body data-page="reclamacoes">
+  <header class="topbar">
+    <div class="brand">
+      <img src="assets/images/sige.png" alt="SIGE" />
+      <span>SIGE</span>
+    </div>
+    <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+      <span>☰</span>
+    </button>
+  </header>
+  <div class="nav-overlay"></div>
+  <aside id="sidebar">
+    <nav id="sidebar-nav"></nav>
+  </aside>
+  <section class="hero interface">
+    <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 24px;">
+      <a href="reclamacoes.html" class="btn btn-soft btn-sm">← Voltar</a>
+      <h1 style="margin: 0; color: #1e293b;">Detalhes da Reclamação</h1>
+    </div>
+    <div id="detalhes-content">
+      <p style="color: var(--muted);">Carregando detalhes...</p>
+    </div>
+  </section>
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  <script src="assets/js/api-config.js"></script>
+  <script src="assets/js/scripts.js"></script>
+  <script src="assets/js/sidebar-nav.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const auth = requireAuth();
+      if (!auth) return;
+      setupProtectedPage(auth);
+      setupMobileMenu();
 
-	<!-- SIDEBAR -->
-	<aside id="sidebar">
-		<nav id="sidebar-nav"></nav>
-	</aside>
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      if (!id) {
+        document.getElementById('detalhes-content').innerHTML = '<p style="color:#dc2626;">ID da reclamação não informado.</p>';
+        return;
+      }
 
-	<!-- MAIN CONTENT -->
-	<section class="hero interface">
-		<div style="display: flex; gap: 12px; align-items: center; margin-bottom: 24px;">
-			<a href="reclamacoes.html" style="color: var(--primary-strong); text-decoration: underline; cursor: pointer;">← Voltar</a>
-			<h1 style="margin: 0; color: #1e293b;">Detalhes da Reclamação</h1>
-		</div>
+      try {
+        const r = await request('/aluno/reclamacoes/' + id);
 
-		<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
-			<!-- Conteúdo Principal -->
-			<div style="background: #ffffff; border: 1px solid var(--border); border-radius: 12px; padding: 24px; box-shadow: var(--shadow);">
-				<!-- Header da Reclamação -->
-				<div style="padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 20px;">
-					<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-						<div>
-							<h2 style="margin: 0 0 4px; color: #1e293b; font-size: 1.4rem;">Ar-condicionado não funciona na sala 308</h2>
-							<p style="margin: 0; color: var(--muted); font-size: 0.9rem;">Protocolo: <strong>PROT-2024-001236</strong></p>
-						</div>
-						<span class="status" style="background: #fef3c7; color: #b45309; padding: 6px 12px; border-radius: 20px; font-weight: 600;">Resolvido</span>
-					</div>
-				</div>
+        const statusLabels = { PENDENTE: 'Pendente', EM_ANDAMENTO: 'Em Andamento', RESOLVIDO: 'Resolvido', RESOLVIDA: 'Resolvido' };
+        const statusColors = {
+          PENDENTE: { bg: '#fef3c7', text: '#b45309' },
+          EM_ANDAMENTO: { bg: '#dbeafe', text: '#1e40af' },
+          RESOLVIDO: { bg: '#d1fae5', text: '#047857' },
+          RESOLVIDA: { bg: '#d1fae5', text: '#047857' }
+        };
+        const sc = statusColors[r.status] || { bg: '#f1f5f9', text: '#475569' };
+        const dotColors = { PENDENTE: '#f59e0b', EM_ANDAMENTO: '#3b82f6', RESOLVIDO: '#10b981', RESOLVIDA: '#10b981' };
 
-				<!-- Informações Gerais -->
-				<div style="margin-bottom: 24px;">
-					<h3 style="color: #1e293b; margin-bottom: 16px; font-size: 1.1rem;">Informações Gerais</h3>
-					<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-						<div>
-							<p style="font-size: 0.9rem; color: var(--muted); margin: 0 0 4px; text-transform: uppercase; font-weight: 600;">Categoria</p>
-							<p style="font-size: 1rem; color: #1e293b; margin: 0; font-weight: 500;">Infraestrutura</p>
-						</div>
-						<div>
-							<p style="font-size: 0.9rem; color: var(--muted); margin: 0 0 4px; text-transform: uppercase; font-weight: 600;">Data de Abertura</p>
-							<p style="font-size: 1rem; color: #1e293b; margin: 0; font-weight: 500;">12 de Maio, 2024</p>
-						</div>
-						<div>
-							<p style="font-size: 0.9rem; color: var(--muted); margin: 0 0 4px; text-transform: uppercase; font-weight: 600;">Prioridade</p>
-							<p style="font-size: 1rem; color: #1e293b; margin: 0; font-weight: 500;">Normal</p>
-						</div>
-						<div>
-							<p style="font-size: 0.9rem; color: var(--muted); margin: 0 0 4px; text-transform: uppercase; font-weight: 600;">Data de Resolução</p>
-							<p style="font-size: 1rem; color: #1e293b; margin: 0; font-weight: 500;">15 de Maio, 2024</p>
-						</div>
-					</div>
-				</div>
+        const historico = (r.reclamacoes_historico || []).map(h => ({
+          ...h,
+          dot: dotColors[h.evento?.includes('Registrada') ? 'PENDENTE' : h.evento?.includes('Resolvida') ? 'RESOLVIDO' : 'EM_ANDAMENTO'] || '#3b82f6'
+        }));
 
-				<!-- Descrição -->
-				<div style="margin-bottom: 24px;">
-					<h3 style="color: #1e293b; margin-bottom: 12px; font-size: 1.1rem;">Descrição</h3>
-					<div style="background: #f8fafb; padding: 16px; border-radius: 8px; border-left: 4px solid #3b82f6;">
-						<p style="margin: 0; color: #1e293b; line-height: 1.6;">
-							O ar-condicionado da sala 308 não está funcionando corretamente. Durante as aulas da tarde, 
-							a temperatura fica muito alta, prejudicando o conforto e o desempenho dos alunos. 
-							Foi relatado que o equipamento parou de funcionar no dia 11 de maio e não foi reparado até agora.
-						</p>
-					</div>
-				</div>
+        document.getElementById('detalhes-content').innerHTML = `
+          <div class="detalhes-grid">
+            <div class="card-detalhes">
+              <div style="padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:20px;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+                  <div>
+                    <h2 style="margin:0 0 4px;color:#1e293b;font-size:1.4rem;">${r.assunto || 'Sem assunto'}</h2>
+                    <p style="margin:0;color:var(--muted);font-size:0.9rem;">Protocolo: <strong>${r.protocolo || '-'}</strong></p>
+                  </div>
+                  <span class="status" style="background:${sc.bg};color:${sc.text};padding:6px 12px;border-radius:20px;font-weight:600;">${statusLabels[r.status] || r.status}</span>
+                </div>
+              </div>
 
-				<!-- Histórico de Atividades -->
-				<div style="margin-bottom: 24px;">
-					<h3 style="color: #1e293b; margin-bottom: 16px; font-size: 1.1rem;">Histórico de Atividades</h3>
-					<div style="border-left: 3px solid var(--border); padding-left: 16px;">
-						<!-- Atividade 1 -->
-						<div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #f3f4f6;">
-							<div style="display: flex; gap: 12px; align-items: flex-start;">
-								<div style="width: 12px; height: 12px; background: #10b981; border-radius: 50%; margin-top: 4px; flex-shrink: 0;"></div>
-								<div style="flex: 1;">
-									<p style="font-weight: 600; color: #1e293b; margin: 0 0 4px;">Reclamação Resolvida</p>
-									<p style="color: var(--muted); margin: 0 0 8px; font-size: 0.9rem;">15 de Maio, 2024 às 10:30</p>
-									<p style="color: #1e293b; margin: 0;">O técnico da manutenção realizou o conserto do ar-condicionado. Equipamento testado e funcionando normalmente.</p>
-								</div>
-							</div>
-						</div>
+              <div style="margin-bottom:24px;">
+                <h3 style="color:#1e293b;margin-bottom:16px;font-size:1.1rem;">Informações Gerais</h3>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                  <div>
+                    <p style="font-size:0.9rem;color:var(--muted);margin:0 0 4px;text-transform:uppercase;font-weight:600;">Categoria</p>
+                    <p style="font-size:1rem;color:#1e293b;margin:0;font-weight:500;">${r.categoria || '-'}</p>
+                  </div>
+                  <div>
+                    <p style="font-size:0.9rem;color:var(--muted);margin:0 0 4px;text-transform:uppercase;font-weight:600;">Data de Abertura</p>
+                    <p style="font-size:1rem;color:#1e293b;margin:0;font-weight:500;">${r.data_abertura ? new Date(r.data_abertura + 'T12:00:00').toLocaleDateString('pt-BR') : '-'}</p>
+                  </div>
+                  <div>
+                    <p style="font-size:0.9rem;color:var(--muted);margin:0 0 4px;text-transform:uppercase;font-weight:600;">Prioridade</p>
+                    <p style="font-size:1rem;color:#1e293b;margin:0;font-weight:500;">${r.prioridade || 'NORMAL'}</p>
+                  </div>
+                  ${r.data_resolucao ? `
+                  <div>
+                    <p style="font-size:0.9rem;color:var(--muted);margin:0 0 4px;text-transform:uppercase;font-weight:600;">Data de Resolução</p>
+                    <p style="font-size:1rem;color:#1e293b;margin:0;font-weight:500;">${new Date(r.data_resolucao + 'T12:00:00').toLocaleDateString('pt-BR')}</p>
+                  </div>` : ''}
+                </div>
+              </div>
 
-						<!-- Atividade 2 -->
-						<div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #f3f4f6;">
-							<div style="display: flex; gap: 12px; align-items: flex-start;">
-								<div style="width: 12px; height: 12px; background: #f59e0b; border-radius: 50%; margin-top: 4px; flex-shrink: 0;"></div>
-								<div style="flex: 1;">
-									<p style="font-weight: 600; color: #1e293b; margin: 0 0 4px;">Em Andamento</p>
-									<p style="color: var(--muted); margin: 0 0 8px; font-size: 0.9rem;">13 de Maio, 2024 às 14:15</p>
-									<p style="color: #1e293b; margin: 0;">Técnico agendado para avaliação. Estimativa de reparo: 2 dias.</p>
-								</div>
-							</div>
-						</div>
+              <div style="margin-bottom:24px;">
+                <h3 style="color:#1e293b;margin-bottom:12px;font-size:1.1rem;">Descrição</h3>
+                <div style="background:#f8fafb;padding:16px;border-radius:8px;border-left:4px solid #3b82f6;">
+                  <p style="margin:0;color:#1e293b;line-height:1.6;">${r.descricao || 'Sem descrição.'}</p>
+                </div>
+              </div>
 
-						<!-- Atividade 3 -->
-						<div>
-							<div style="display: flex; gap: 12px; align-items: flex-start;">
-								<div style="width: 12px; height: 12px; background: #3b82f6; border-radius: 50%; margin-top: 4px; flex-shrink: 0;"></div>
-								<div style="flex: 1;">
-									<p style="font-weight: 600; color: #1e293b; margin: 0 0 4px;">Reclamação Registrada</p>
-									<p style="color: var(--muted); margin: 0 0 8px; font-size: 0.9rem;">12 de Maio, 2024 às 09:00</p>
-									<p style="color: #1e293b; margin: 0;">Reclamação recebida e registrada no sistema. Encaminhada para a manutenção.</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+              ${historico.length > 0 ? `
+              <div>
+                <h3 style="color:#1e293b;margin-bottom:16px;font-size:1.1rem;">Histórico de Atividades</h3>
+                <div style="border-left:3px solid var(--border);padding-left:16px;">
+                  ${historico.map(h => `
+                    <div class="historico-item">
+                      <div class="historico-dot" style="background:${h.dot};"></div>
+                      <div style="flex:1;">
+                        <p style="font-weight:600;color:#1e293b;margin:0 0 4px;">${h.evento || '-'}</p>
+                        <p style="color:var(--muted);margin:0 0 8px;font-size:0.9rem;">${h.created_at ? new Date(h.created_at).toLocaleString('pt-BR') : ''}</p>
+                        <p style="color:#1e293b;margin:0;">${h.descricao || ''}</p>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>` : ''}
+            </div>
 
-				<!-- Resposta Official -->
-				<div>
-					<h3 style="color: #1e293b; margin-bottom: 12px; font-size: 1.1rem;">Resposta da Administração</h3>
-					<div style="background: #d1fae5; border-left: 4px solid #10b981; padding: 16px; border-radius: 8px;">
-						<p style="margin: 0 0 8px; font-weight: 600; color: #047857;">✓ Reclamação Resolvida</p>
-						<p style="margin: 0; color: #059669; line-height: 1.6;">
-							Agradecemos pela notificação. O equipamento foi reparado com sucesso em 15 de maio. 
-							Para evitar problemas futuros, realizaremos manutenção preventiva em todos os equipamentos de ar-condicionado. 
-							Qualquer dúvida adicional, entre em contato com a administração.
-						</p>
-					</div>
-				</div>
-			</div>
-
-			<!-- Sidebar Direita -->
-			<div style="background: #ffffff; border: 1px solid var(--border); border-radius: 12px; padding: 20px; box-shadow: var(--shadow); height: fit-content;">
-				<h3 style="color: #1e293b; margin-bottom: 16px; font-size: 1rem;">Informações da Reclamação</h3>
-
-				<!-- Card Info -->
-				<div style="margin-bottom: 16px; padding: 12px; background: #f8fafb; border-radius: 8px;">
-					<p style="font-size: 0.85rem; color: var(--muted); margin: 0 0 4px; text-transform: uppercase; font-weight: 600;">Protocolo</p>
-					<p style="font-size: 1rem; color: #1e293b; margin: 0; font-weight: 600; font-family: monospace;">PROT-2024-001236</p>
-				</div>
-
-				<div style="margin-bottom: 16px; padding: 12px; background: #f8fafb; border-radius: 8px;">
-					<p style="font-size: 0.85rem; color: var(--muted); margin: 0 0 4px; text-transform: uppercase; font-weight: 600;">Responsável</p>
-					<p style="font-size: 1rem; color: #1e293b; margin: 0; font-weight: 500;">Adm. de Infraestrutura</p>
-				</div>
-
-				<div style="margin-bottom: 16px; padding: 12px; background: #f8fafb; border-radius: 8px;">
-					<p style="font-size: 0.85rem; color: var(--muted); margin: 0 0 4px; text-transform: uppercase; font-weight: 600;">Tempo de Resolução</p>
-					<p style="font-size: 1rem; color: #1e293b; margin: 0; font-weight: 500;">3 dias</p>
-				</div>
-
-				<div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border);">
-					<button class="btn btn-primary" style="width: 100%; margin-bottom: 8px;">📋 Exportar PDF</button>
-					<button class="btn btn-soft" style="width: 100%;">📧 Enviar por Email</button>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-	<script src="assets/js/scripts.js"></script>
-	<script src="assets/js/sidebar-nav.js"></script>
+            <div class="card-sidebar">
+              <h3 style="color:#1e293b;margin-bottom:16px;font-size:1rem;">Informações</h3>
+              <div style="margin-bottom:16px;padding:12px;background:#f8fafb;border-radius:8px;">
+                <p style="font-size:0.85rem;color:var(--muted);margin:0 0 4px;text-transform:uppercase;font-weight:600;">Protocolo</p>
+                <p style="font-size:1rem;color:#1e293b;margin:0;font-weight:600;font-family:monospace;">${r.protocolo || '-'}</p>
+              </div>
+              <div style="margin-bottom:16px;padding:12px;background:#f8fafb;border-radius:8px;">
+                <p style="font-size:0.85rem;color:var(--muted);margin:0 0 4px;text-transform:uppercase;font-weight:600;">Status</p>
+                <p style="font-size:1rem;color:#1e293b;margin:0;font-weight:500;">${statusLabels[r.status] || r.status}</p>
+              </div>
+              <div style="margin-bottom:16px;padding:12px;background:#f8fafb;border-radius:8px;">
+                <p style="font-size:0.85rem;color:var(--muted);margin:0 0 4px;text-transform:uppercase;font-weight:600;">Prioridade</p>
+                <p style="font-size:1rem;color:#1e293b;margin:0;font-weight:500;">${r.prioridade || 'NORMAL'}</p>
+              </div>
+            </div>
+          </div>
+        `;
+      } catch (e) {
+        document.getElementById('detalhes-content').innerHTML = '<p style="color:#dc2626;">Erro ao carregar detalhes da reclamação.</p>';
+        showError('Erro ao carregar detalhes');
+      }
+    });
+  </script>
 </body>
 </html>

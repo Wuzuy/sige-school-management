@@ -7,217 +7,160 @@
   <link rel="stylesheet" href="assets/css/app.css" />
   <link rel="icon" href="assets/images/sige.png" type="image/png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+  <style>
+    .containerCurricular { display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: start; }
+    @media (max-width: 900px) { .containerCurricular { grid-template-columns: 1fr; } }
+    .headerCC { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 16px 20px; border-radius: 12px; margin-bottom: 12px; }
+    .headerCC2 { display: flex; gap: 16px; align-items: center; }
+    .numeroCard { width: 48px; height: 48px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+    .numeroCard h1 { color: white; margin: 0; font-size: 1.5rem; }
+    .cardC { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .cardC p { margin: 0; }
+    .semestre-disciplinas { margin-bottom: 28px; }
+    .containerCINFO { background: white; border-radius: 12px; padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); position: sticky; top: 20px; }
+    .containerProgresso { background: #f1f5f9; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+    .containerProgresso h1 { font-size: 1rem; margin: 0 0 8px; }
+    .statusFalta { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+    .statusFalta h1 { font-size: 0.95rem; color: #1e293b; margin: 0; }
+    .statusFalta p { font-weight: 600; color: var(--primary); margin: 0; }
+    .badge-obrigatoria { background: #dbeafe; color: #1e40af; padding: 2px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
+    .badge-eletiva { background: #fef3c7; color: #b45309; padding: 2px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
+  </style>
 </head>
-<body>
-	<!-- HEADER -->
-	<header class="topbar" id="headerID">
-		<div class="brand">
-			<img src="assets/images/sige.png" alt="SIGE" />
-			<span>SIGE</span>
-		</div>
-		<button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
-			<span>☰</span>
-		</button>
-	</header>
-	<div class="nav-overlay"></div>
+<body data-page="estrutura-curricular">
+  <header class="topbar">
+    <div class="brand">
+      <img src="assets/images/sige.png" alt="SIGE" />
+      <span>SIGE</span>
+    </div>
+    <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+      <span>☰</span>
+    </button>
+  </header>
+  <div class="nav-overlay"></div>
+  <aside id="sidebar">
+    <nav id="sidebar-nav"></nav>
+  </aside>
+  <section class="hero interface">
+    <div class="containerCurricular" id="curriculo-container">
+      <div id="containerSemestres">
+        <h2 style="font-size: 1.3rem; margin-bottom: 16px; color: #1e293b;">Estrutura Curricular</h2>
+        <p id="loading-curriculo" style="color: var(--muted);">Carregando disciplinas...</p>
+      </div>
+      <div class="containerCINFO" id="curriculo-summary">
+        <h3 style="font-size: 1.1rem; margin-bottom: 16px; color: #1e293b;">Resumo</h3>
+        <p id="loading-summary" style="color: var(--muted);">Carregando...</p>
+      </div>
+    </div>
+  </section>
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  <script src="assets/js/api-config.js"></script>
+  <script src="assets/js/scripts.js"></script>
+  <script src="assets/js/sidebar-nav.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const auth = requireAuth();
+      if (!auth) return;
+      setupProtectedPage(auth);
+      setupMobileMenu();
 
-	<!-- SIDEBAR -->
-	<aside id="sidebar">
-		<nav id="sidebar-nav"></nav>
-	</aside>
-	<section class="hero interface">
-		<div class="containerCurricular">
-			<div id="containerSemestres">
-				<h2 style="font-size: 1.3rem; margin-bottom: 16px; color: #1e293b;">Curriculum Structure</h2>
-				<!-- SEMESTRE 1 -->
-				<div class="headerCC">
-					<div class="headerCC2">
-						<div class="numeroCard">
-							<h1>1</h1>
-						</div>
-						<div>
-							<h3>1st Semester</h3>
-							<p style="color: #737373;">5 courses • 18 credits</p>
-						</div>
-					</div>
-					<button>
-						Export PDF
-					</button>
-				</div>
-				<div>
-					<div class="cardC">
-						<p><strong>CS101</strong></p>
-						<p>Calculus I</p>
-						<p>4 credits • Mandatory</p>
-					</div>
-					<div class="cardC">
-						<p><strong>MATH101</strong></p>
-						<p>English Composition</p>
-						<p>3 credits • Mandatory</p>
-					</div>
-					<div class="cardC">
-						<p><strong>CS102</strong></p>
-						<p>Digital Logic Design</p>
-						<p>4 credits • Mandatory</p>
-					</div>
-					<div class="cardC">
-						<p><strong>PHY101</strong></p>
-						<p>Physics I</p>
-						<p>3 credits • Mandatory</p>
-					</div>
-					<div class="cardC">
-						<p><strong>ENG101</strong></p>
-						<p>Introduction to CS</p>
-						<p>4 credits • Elective</p>
-					</div>
-				</div>
-				<!-- SEMESTRE 2 -->
-				<div class="headerCC">
-					<div class="headerCC2">
-						<div class="numeroCard">
-							<h1>2</h1>
-						</div>
-						<div>
-							<h3>2nd Semester</h3>
-							<p style="color: #737373;">5 courses • 17 credits</p>
-						</div>
-					</div>
-					<button>
-						Export PDF
-					</button>
-				</div>
-				<div>
-					<div class="cardC">
-						<p><strong>CS201</strong></p>
-						<p>Calculus II</p>
-						<p>4 credits • Mandatory</p>
-					</div>
-					<div class="cardC">
-						<p><strong>CS202</strong></p>
-						<p>Data Structures</p>
-						<p>4 credits • Mandatory</p>
-					</div>
-					<div class="cardC">
-						<p><strong>CS203</strong></p>
-						<p>Web Development</p>
-						<p>3 credits • Elective</p>
-					</div>
-					<div class="cardC">
-						<p><strong>PHY201</strong></p>
-						<p>Physics II</p>
-						<p>3 credits • Mandatory</p>
-					</div>
-					<div class="cardC">
-						<p><strong>ENG202</strong></p>
-						<p>Communications</p>
-						<p>3 credits • Mandatory</p>
-					</div>
-				</div>
-				<!-- SEMESTRE 3 -->
-				<div class="headerCC">
-					<div class="headerCC2">
-						<div class="numeroCard">
-							<h1>3</h1>
-						</div>
-						<div>
-							<h3>3rd Semester</h3>
-							<p style="color: #737373;">4 courses • 16 credits</p>
-						</div>
-					</div>
-					<button>
-						Export PDF
-					</button>
-				</div>
-				<div>
-					<div class="cardC">
-						<p><strong>CS301</strong></p>
-						<p>Algorithms</p>
-						<p>4 credits • Mandatory</p>
-					</div>
-					<div class="cardC">
-						<p><strong>CS302</strong></p>
-						<p>Database Design</p>
-						<p>4 credits • Mandatory</p>
-					</div>
-					<div class="cardC">
-						<p><strong>CS303</strong></p>
-						<p>Software Engineering</p>
-						<p>4 credits • Mandatory</p>
-					</div>
-					<div class="cardC">
-						<p><strong>CS304</strong></p>
-						<p>Operating Systems</p>
-						<p>4 credits • Mandatory</p>
-					</div>
-				</div>
-				<!-- SEMESTRE 4 -->
-				<div class="headerCC">
-					<div class="headerCC2">
-						<div class="numeroCard">
-							<h1>4</h1>
-						</div>
-						<div>
-							<h3>4th Semester</h3>
-							<p style="color: #737373;">3 courses • 15 credits</p>
-						</div>
-					</div>
-					<button>
-						Export PDF
-					</button>
-				</div>
-				<div>
-					<div class="cardC">
-						<p><strong>CS401</strong></p>
-						<p>Machine Learning</p>
-						<p>4 credits • Mandatory</p>
-					</div>
-					<div class="cardC">
-						<p><strong>CS402</strong></p>
-						<p>Network Security</p>
-						<p>4 credits • Elective</p>
-					</div>
-					<div class="cardC">
-						<p><strong>CS403</strong></p>
-						<p>Senior Project</p>
-						<p>7 credits • Mandatory</p>
-					</div>
-				</div>
-			</div>
-			<!-- container das informações -->
-			<div class="containerCINFO">
-				<h3 style="font-size: 1.1rem; margin-bottom: 16px; color: #1e293b;">Curriculum Summary</h3>
-				<div class="containerProgresso">
-					<div>
-						<h1>Total Credits</h1>
-						<h1>120/120</h1>
-					</div>
-					<progress value="100" max="100"></progress>
-				</div>
-				<div class="statusFalta">
-					<h1>Mandatory Courses</h1>
-					<p>28/32</p>
-				</div>
-				<div class="statusFalta">
-					<h1>Elective Courses</h1>
-					<p>6/8</p>
-				</div>
-				<div class="statusFalta">
-					<h1>Completed Semesters</h1>
-					<p>6/8</p>
-				</div>
-				<h3 style="font-size: 0.95rem; margin-top: 16px; margin-bottom: 12px;">Quick Status</h3>
-				<div style="background: #d1fae5; border-left: 4px solid #10b981; border-radius: 6px; padding: 12px; display: flex; align-items: center; gap: 8px;">
-					<span style="font-size: 1.4rem;">✓</span>
-					<div>
-						<p style="font-weight: 700; color: #047857; margin: 0;">On Track</p>
-						<p style="font-size: 0.8rem; color: #059669; margin: 4px 0 0;">Complete 2 more elective course to meet requirements.</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-<script src="assets/js/scripts.js"></script>
-<script src="assets/js/sidebar-nav.js"></script>
+      try {
+        const disciplinas = await request('/aluno/curriculo');
+        if (!disciplinas || disciplinas.length === 0) {
+          document.getElementById('loading-curriculo').textContent = 'Nenhuma disciplina encontrada para seu curso.';
+          document.getElementById('loading-summary').textContent = 'Sem dados.';
+          return;
+        }
+
+        const semestres = {};
+        let totalObrigatorias = 0, totalEletivas = 0;
+        let cursadasObrigatorias = 0, cursadasEletivas = 0;
+        let cargaTotal = 0;
+
+        disciplinas.forEach(d => {
+          const s = d.semestre || 1;
+          if (!semestres[s]) semestres[s] = [];
+          semestres[s].push(d);
+          cargaTotal += d.carga_horaria || 0;
+          if (d.obrigatoria) totalObrigatorias++;
+          else totalEletivas++;
+          if (d.status === 'APROVADA' || d.status === 'CURSADA') {
+            if (d.obrigatoria) cursadasObrigatorias++;
+            else cursadasEletivas++;
+          }
+        });
+
+        const semestresContainer = document.getElementById('containerSemestres');
+        semestresContainer.innerHTML = '<h2 style="font-size: 1.3rem; margin-bottom: 16px; color: #1e293b;">Estrutura Curricular</h2>';
+
+        Object.keys(semestres).sort((a, b) => a - b).forEach(sem => {
+          const disc = semestres[sem];
+          const chSemestre = disc.reduce((acc, d) => acc + (d.carga_horaria || 0), 0);
+          const obrig = disc.filter(d => d.obrigatoria).length;
+          const elet = disc.filter(d => !d.obrigatoria).length;
+          const block = document.createElement('div');
+          block.className = 'semestre-disciplinas';
+          block.innerHTML = `
+            <div class="headerCC">
+              <div class="headerCC2">
+                <div class="numeroCard"><h1>${sem}</h1></div>
+                <div>
+                  <h3>${sem}º Semestre</h3>
+                  <p style="color: #737373;">${disc.length} disciplinas &bull; ${chSemestre}h</p>
+                </div>
+              </div>
+            </div>
+            <div>${disc.map(d => `
+              <div class="cardC">
+                <div>
+                  <p><strong>${d.codigo || ''}</strong> - ${d.nome}</p>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <span class="${d.obrigatoria ? 'badge-obrigatoria' : 'badge-eletiva'}">${d.obrigatoria ? 'Obrigatória' : 'Eletiva'}</span>
+                  <span style="color: #64748b; font-size: 0.85rem;">${d.carga_horaria || 0}h</span>
+                </div>
+              </div>
+            `).join('')}</div>
+          `;
+          semestresContainer.appendChild(block);
+        });
+
+        const total = totalObrigatorias + totalEletivas;
+        const cursadas = cursadasObrigatorias + cursadasEletivas;
+        const pctCompleto = total > 0 ? Math.round((cursadas / total) * 100) : 0;
+
+        document.getElementById('curriculo-summary').innerHTML = `
+          <h3 style="font-size: 1.1rem; margin-bottom: 16px; color: #1e293b;">Resumo</h3>
+          <div class="containerProgresso">
+            <h1>Carga Horária Total</h1>
+            <h1>${cargaTotal}h</h1>
+          </div>
+          <div class="containerProgresso">
+            <h1>Progresso</h1>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <progress value="${pctCompleto}" max="100" style="flex:1;height:8px;"></progress>
+              <span style="font-weight:700;color:var(--primary);">${pctCompleto}%</span>
+            </div>
+          </div>
+          <div class="statusFalta">
+            <h1>Disciplinas Obrigatórias</h1>
+            <p>${cursadasObrigatorias}/${totalObrigatorias}</p>
+          </div>
+          <div class="statusFalta">
+            <h1>Disciplinas Eletivas</h1>
+            <p>${cursadasEletivas}/${totalEletivas}</p>
+          </div>
+          <div class="statusFalta">
+            <h1>Semestres</h1>
+            <p>${Object.keys(semestres).length}</p>
+          </div>
+        `;
+      } catch (e) {
+        document.getElementById('loading-curriculo').textContent = 'Erro ao carregar currículo.';
+        document.getElementById('loading-summary').textContent = 'Erro.';
+        showError('Erro ao carregar estrutura curricular');
+      }
+    });
+  </script>
 </body>
 </html>

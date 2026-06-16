@@ -3,114 +3,129 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SIGE - Portal Escolar</title>
+  <title>SIGE - Ouvidoria</title>
   <link rel="stylesheet" href="assets/css/app.css" />
   <link rel="icon" href="assets/images/sige.png" type="image/png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
 </head>
-<body>
-	<!-- HEADER -->
-	<header class="topbar" id="headerID">
-		<div class="brand">
-			<img src="assets/images/sige.png" alt="SIGE" />
-			<span>SIGE</span>
-		</div>
-		<button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
-			<span>☰</span>
-		</button>
-		<nav class="nav">
-			<a href="status.html">Status</a>
-			<a href="../portal-secretaria/portal-secretaria.html" data-admin-only>Portal da Secretaria</a>
-			<button data-logout type="button">Sair</button>
-		</nav>
-	</header>
-	<div class="nav-overlay"></div>
-	<aside id="sidebar">
-    	<nav id="sidebar-nav"></nav>
-  	</aside>
-	<div class="topbar miniTopbar">
-		<button class="botaoMiniHeader" onclick="sidebarOpen()">
-			≡
-		</button>
-		<h1 style="color: #FFFFFF">Portal do Aluno</h1>
-  	</div>
-	<section class="hero interface">
-		<div class="gridOuvidoria">
-			<!-- SEÇÃO ESQUERDA: ENVIO DE MENSAGENS -->
-			<div class="ouvidoriaForm">
-				<h1>Envie sua Mensagem</h1>
-				<p class="subtitle">Preencha o formulário abaixo. Responderemos o mais breve possível.</p>
-				
-				<form>
-					<div class="field">
-						<label for="nome">Nome <span class="optional">(opcional)</span></label>
-						<input type="text" id="nome" name="nome" placeholder="Seu nome completo">
-					</div>
+<body data-page="ouvidoria">
+  <header class="topbar">
+    <div class="brand">
+      <img src="assets/images/sige.png" alt="SIGE" />
+      <span>SIGE</span>
+    </div>
+    <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+      <span>☰</span>
+    </button>
+  </header>
+  <div class="nav-overlay"></div>
+  <aside id="sidebar">
+    <nav id="sidebar-nav"></nav>
+  </aside>
+  <section class="hero interface">
+    <div class="gridOuvidoria">
+      <div class="ouvidoriaForm">
+        <h1>Envie sua Mensagem</h1>
+        <p class="subtitle">Registre sua reclamação, sugestão ou solicitação. Responderemos o mais breve possível.</p>
 
-					<div class="field">
-						<label for="email">E-mail <span class="required">*</span></label>
-						<input type="email" id="email" name="email" placeholder="seu@email.com" required>
-					</div>
+        <form id="ouvidoria-form">
+          <div class="field">
+            <label for="categoria">Categoria <span class="required">*</span></label>
+            <select id="categoria" name="categoria" required>
+              <option value="">Selecione uma categoria</option>
+              <option value="ACADEMICO">Assunto Acadêmico</option>
+              <option value="ADMINISTRATIVO">Assunto Administrativo</option>
+              <option value="INFRAESTRUTURA">Infraestrutura</option>
+              <option value="OUTRO">Outro</option>
+            </select>
+          </div>
 
-					<div class="field">
-						<label for="categoria">Categoria <span class="required">*</span></label>
-						<select id="categoria" name="categoria" required>
-							<option value="">Selecione uma categoria</option>
-							<option value="pedagogico">Assunto Pedagógico</option>
-							<option value="administrativo">Assunto Administrativo</option>
-							<option value="infraestrutura">Infraestrutura</option>
-							<option value="outro">Outro</option>
-						</select>
-					</div>
+          <div class="field">
+            <label for="assunto">Assunto <span class="required">*</span></label>
+            <input type="text" id="assunto" name="assunto" placeholder="Resumo da sua mensagem" required>
+          </div>
 
-					<div class="field">
-						<label for="mensagem">Mensagem / Descrição <span class="required">*</span></label>
-						<textarea id="mensagem" name="mensagem" placeholder="Descreva sua mensagem em detalhes..." rows="6" required></textarea>
-						<small class="fieldHint">Mínimo de 10 caracteres. Seja claro e objetivo.</small>
-					</div>
+          <div class="field">
+            <label for="mensagem">Mensagem / Descrição <span class="required">*</span></label>
+            <textarea id="mensagem" name="mensagem" placeholder="Descreva sua mensagem em detalhes..." rows="6" required></textarea>
+            <small class="fieldHint">Mínimo de 10 caracteres. Seja claro e objetivo.</small>
+          </div>
 
-					<button type="submit" class="btn btn-primary">Enviar Mensagem</button>
-				</form>
-			</div>
+          <button type="submit" class="btn btn-primary" id="btn-enviar-ouvidoria">Enviar Mensagem</button>
+        </form>
+      </div>
 
-			<!-- SEÇÃO DIREITA: INFORMAÇÕES DA INSTITUIÇÃO -->
-			<div class="ouvidoriaInfo">
-				<h2>Informações de Contato</h2>
-				<p class="infoSubtitle">Outros canais de atendimento</p>
+      <div class="ouvidoriaInfo">
+        <h2>Informações de Contato</h2>
+        <p class="infoSubtitle">Outros canais de atendimento</p>
 
-				<div class="infoCard">
-					<h3>Telefone</h3>
-					<p class="infoContent">(11) 3456-7890</p>
-					<p class="infoSecondary">(11) 98765-4321</p>
-				</div>
+        <div class="infoCard">
+          <h3>E-mail</h3>
+          <p class="infoContent">ouvidoria@escola.edu.br</p>
+        </div>
 
-				<div class="infoCard">
-					<h3>E-mail</h3>
-					<p class="infoContent">ouvidoria@escola.edu.br</p>
-				</div>
+        <div class="infoCard">
+          <h3>Horário de Atendimento</h3>
+          <p class="infoContent">Segunda a Sexta</p>
+          <p class="infoSecondary">8h00 às 18h00</p>
+        </div>
 
-				<div class="infoCard">
-					<h3>Horário de Atendimento</h3>
-					<p class="infoContent">Segunda a Sexta</p>
-					<p class="infoSecondary">8h00 às 18h00</p>
-				</div>
+        <div class="compromissoCard">
+          <h3>Compromisso com Você</h3>
+          <ul class="compromissoList">
+            <li>Todas as manifestações são analisadas com atenção e confidencialidade.</li>
+            <li>Prazo de resposta: até 5 dias úteis.</li>
+            <li>Seu anonimato será preservado, se desejar.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  <script src="assets/js/api-config.js"></script>
+  <script src="assets/js/scripts.js"></script>
+  <script src="assets/js/sidebar-nav.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const auth = requireAuth();
+      if (!auth) return;
+      setupProtectedPage(auth);
+      setupMobileMenu();
 
-				<div class="compromissoCard">
-					<h3>Compromisso com Você</h3>
-					<ul class="compromissoList">
-						<li>Todas as manifestações são analisadas com atenção e confidencialidade.</li>
-						<li>Prazo de resposta: até 5 dias úteis.</li>
-						<li>Seu anonimato será preservado, se desejar.</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</section>
-<script src="assets/js/scripts.js"></script>
-<script src="assets/js/sidebar-nav.js"></script>
-<script>
-	document.addEventListener('DOMContentLoaded', () => {
-		setupMobileMenu();
-	});
-</script>
+      document.getElementById('ouvidoria-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btn-enviar-ouvidoria');
+        btn.disabled = true;
+        btn.textContent = 'Enviando...';
+
+        try {
+          const categoria = document.getElementById('categoria').value;
+          const assunto = document.getElementById('assunto').value.trim();
+          const mensagem = document.getElementById('mensagem').value.trim();
+
+          if (!categoria || !assunto || !mensagem) {
+            showWarning('Preencha todos os campos obrigatórios.');
+            btn.disabled = false;
+            btn.textContent = 'Enviar Mensagem';
+            return;
+          }
+
+          await request('/aluno/reclamacoes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ categoria, assunto, descricao: mensagem })
+          });
+
+          showSuccess('Mensagem enviada com sucesso! Em breve retornaremos.');
+          document.getElementById('ouvidoria-form').reset();
+        } catch (e) {
+          showError('Erro ao enviar mensagem. Tente novamente.');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Enviar Mensagem';
+        }
+      });
+    });
+  </script>
 </body>
+</html>

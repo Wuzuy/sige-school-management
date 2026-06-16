@@ -231,6 +231,43 @@
 
       loadProfile();
 
+      // Alterar senha
+      document.querySelector('.btn-password')?.addEventListener('click', () => {
+        const container = document.getElementById('edit-modal-container');
+        container.innerHTML = `
+          <div class="editModal">
+            <div class="modal-content">
+              <h3>Alterar Senha</h3>
+              <input id="edit-senha-atual" type="password" placeholder="Senha atual" />
+              <input id="edit-senha-nova" type="password" placeholder="Nova senha" />
+              <input id="edit-senha-confirm" type="password" placeholder="Confirmar nova senha" />
+              <div class="actions">
+                <button class="btn btn-soft" onclick="this.closest('.editModal').remove()">Cancelar</button>
+                <button class="btn btn-primary" id="salvar-senha">Salvar</button>
+              </div>
+            </div>
+          </div>`;
+        document.getElementById('salvar-senha').addEventListener('click', async () => {
+          const senhaAtual = document.getElementById('edit-senha-atual').value;
+          const senha = document.getElementById('edit-senha-nova').value;
+          const confirm = document.getElementById('edit-senha-confirm').value;
+          if (!senhaAtual || !senha || !confirm) return showWarning('Preencha todos os campos');
+          if (senha !== confirm) return showWarning('Nova senha e confirmação não conferem');
+          if (senha.length < 6) return showWarning('A senha deve ter no mínimo 6 caracteres');
+          try {
+            await request('/usuarios/me', {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ senhaAtual, senha })
+            });
+            showSuccess('Senha alterada com sucesso!');
+            container.innerHTML = '';
+          } catch (e) {
+            showError('Erro ao alterar senha. Verifique se a senha atual está correta.');
+          }
+        });
+      });
+
       document.querySelectorAll('[data-field]').forEach(btn => {
         btn.addEventListener('click', () => {
           const field = btn.dataset.field;

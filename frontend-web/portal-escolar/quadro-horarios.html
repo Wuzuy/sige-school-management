@@ -8,65 +8,88 @@
   <link rel="icon" href="assets/images/sige.png" type="image/png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
 </head>
-<body data-page="horarios">
-	<!-- HEADER -->
-	<header class="topbar" id="headerID">
-		<div class="brand">
-			<img src="assets/images/sige.png" alt="SIGE" />
-			<span>SIGE</span>
-		</div>
-		<button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
-			<span>☰</span>
-		</button>
-	</header>
-	<div class="nav-overlay"></div>
+<body data-page="quadro-horarios">
+  <header class="topbar">
+    <div class="brand">
+      <img src="assets/images/sige.png" alt="SIGE" />
+      <span>SIGE</span>
+    </div>
+    <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+      <span>☰</span>
+    </button>
+  </header>
+  <div class="nav-overlay"></div>
+  <aside id="sidebar">
+    <nav id="sidebar-nav"></nav>
+  </aside>
+  <section class="hero interface">
+    <h1 style="margin-bottom: 24px; color: #1e293b;">Quadro de Horários</h1>
+    <p style="margin-bottom: 20px; color: var(--muted);">Confira seus horários de aula e eventos</p>
 
-	<!-- SIDEBAR -->
-	<aside id="sidebar">
-		<nav id="sidebar-nav"></nav>
-	</aside>
+    <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow);">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Dia</th>
+              <th>Horário</th>
+              <th>Disciplina</th>
+              <th>Professor</th>
+              <th>Local</th>
+            </tr>
+          </thead>
+          <tbody id="horarios-body">
+            <tr><td colspan="5" class="muted" style="text-align:center; padding:20px;">Carregando horarios...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-	<!-- MAIN CONTENT -->
-	<section class="hero interface">
-		<h1 style="margin-bottom: 24px; color: #1e293b;">Quadro de Horários</h1>
-		<p style="margin-bottom: 20px; color: var(--muted);">Confira seus horários de aula e eventos</p>
+    <div style="margin-top: 24px; background: #f0f9ff; border-left: 4px solid #3b82f6; padding: 16px; border-radius: 8px;">
+      <h3 style="color: #1e40af; margin-bottom: 8px;">ℹ️ Informações Importantes</h3>
+      <p style="color: #1e40af; margin: 0; font-size: 0.9rem;">
+        Os horários podem estar sujeitos a alterações. Verifique regularmente para atualizações.
+        Para reportar conflitos de horários ou dúvidas, entre em contato com a secretaria.
+      </p>
+    </div>
+  </section>
 
-		<div style="background: #ffffff; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow);">
-			<div class="table-wrapper">
-				<table>
-					<thead>
-						<tr>
-							<th>Dia</th>
-							<th>Horário</th>
-							<th>Disciplina</th>
-							<th>Professor</th>
-							<th>Local</th>
-						</tr>
-					</thead>
-					<tbody id="horarios-body">
-						<tr><td colspan="5" class="muted" style="text-align:center; padding:20px;">Carregando horarios...</td></tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  <script src="assets/js/api-config.js"></script>
+  <script src="assets/js/scripts.js"></script>
+  <script src="assets/js/sidebar-nav.js"></script>
+  <script>
+    const DIAS = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
 
-		<div style="margin-top: 24px; background: #f0f9ff; border-left: 4px solid #3b82f6; padding: 16px; border-radius: 8px;">
-			<h3 style="color: #1e40af; margin-bottom: 8px;">ℹ️ Informações Importantes</h3>
-			<p style="color: #1e40af; margin: 0; font-size: 0.9rem;">
-				Os horários podem estar sujeitos a alterações. Verifique regularmente para atualizações.
-				Para reportar conflitos de horários ou dúvidas, entre em contato com a secretaria.
-			</p>
-		</div>
-	</section>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const auth = requireAuth();
+      if (!auth) return;
+      setupProtectedPage(auth);
+      setupMobileMenu();
 
-	<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-	<script src="assets/js/scripts.js"></script>
-	<script src="assets/js/sidebar-nav.js"></script>
-	<script>
-		document.addEventListener('DOMContentLoaded', () => {
-			setupMobileMenu();
-			requireAuth();
-		});
-	</script>
+      try {
+        const horarios = await request('/aluno/horarios');
+        const body = document.getElementById('horarios-body');
+
+        if (!horarios || horarios.length === 0) {
+          body.innerHTML = '<tr><td colspan="5" class="muted" style="text-align:center; padding:20px;">Nenhum horário encontrado para sua turma.</td></tr>';
+          return;
+        }
+
+        body.innerHTML = horarios.map(h => `
+          <tr>
+            <td>${DIAS[h.dia_semana] || 'Dia ' + h.dia_semana}</td>
+            <td>${h.hora_inicio ? h.hora_inicio.slice(0, 5) : '--'} - ${h.hora_fim ? h.hora_fim.slice(0, 5) : '--'}</td>
+            <td>${h.id_disciplina?.nome || '-'}</td>
+            <td>${h.id_professor?.nome_completo || '-'}</td>
+            <td>${h.local || '-'}</td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        document.getElementById('horarios-body').innerHTML = '<tr><td colspan="5" class="muted" style="text-align:center; padding:20px; color:#dc2626;">Erro ao carregar horários.</td></tr>';
+        showError('Erro ao carregar horários');
+      }
+    });
+  </script>
 </body>
 </html>
