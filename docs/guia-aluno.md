@@ -29,7 +29,7 @@ Este guia apresenta todas as funcionalidades disponíveis para alunos no sistema
 
 **Passo a Passo:**
 
-1. Acesse a página inicial: `http://localhost:5500/index.html`
+1. Acesse a página inicial: `http://localhost:5500/portal-escolar/index.html`
 2. Clique no botão **"Login"** no canto superior direito
 3. Na página de login, clique em **"Criar nova conta"**
 4. Preencha o formulário de cadastro:
@@ -53,7 +53,7 @@ Este guia apresenta todas as funcionalidades disponíveis para alunos no sistema
 **⚠️ Validações Importantes:**
 - Email deve ser único (não pode haver dois cadastros com o mesmo email)
 - CPF deve ser válido e único
-- Senha deve ter no mínimo 6 caracteres
+- Senha deve ter no mínimo 8 caracteres com maiuscula, minuscula, numero e caractere especial
 - Telefone deve estar no formato correto
 
 ---
@@ -445,7 +445,7 @@ Um aplicativo Android será disponibilizado para facilitar o acesso à carteirin
 
 4. **Redefinir Senha:**
    - Clique no link recebido no email
-   - Digite sua nova senha (mínimo 6 caracteres)
+   - Digite sua nova senha (mínimo 8 caracteres)
    - Confirme a nova senha
    - Clique em **"Redefinir Senha"**
 

@@ -1,36 +1,39 @@
 ﻿# Database - SIGE
 
-Scripts de estruturação e alimentação inicial do banco de dados relacional.
+Scripts SQL para o banco de dados Supabase (PostgreSQL).
 
 ## Estrutura
 
-* `01-schema.sql`: Comandos DDL (CREATE TABLE, ALTER TABLE).
-* `02-data.sql`: Comandos DML (INSERT) para popular dados de teste (cursos, unidades).
+- `supabase-aluno-tables.sql` - Script completo com tabelas, dados iniciais e triggers
 
-## Como Executar
+## Como Executar no Supabase
 
-Importe os scripts via terminal ou interface gráfica (MySQL Workbench/DBeaver):
+1. Acesse [https://supabase.com/dashboard](https://supabase.com/dashboard)
+2. Selecione o projeto
+3. Va em **SQL Editor**
+4. Cole o conteudo de `supabase-aluno-tables.sql`
+5. Execute
 
-```bash
-mysql -u seu_usuario -p < 01-schema.sql
-mysql -u seu_usuario -p < 02-data.sql
+## Tabelas Principais
 
----
+O banco possui as seguintes tabelas:
+- `usuarios` - Alunos e administradores
+- `unidades` - Unidades do SENAI
+- `cursos` - Cursos oferecidos
+- `editais` - Editais publicados
+- `inscricoes` - Inscricoes em cursos
+- `disciplinas`, `professores`, `turmas`, `matriculas` - Dados academicos
+- `documentos`, `frequencia`, `agenda`, `calendario` - Modulos do aluno
 
-## Script de exemplo para PostgreSQL
+## Dados Iniciais
 
-Além dos scripts existentes, há um script pronto para PostgreSQL que facilita testes rápidos com dados fictícios:
+O script ja inclui:
+- 1 Administrador (admin@senai.com / admin123)
+- 2 Usuarios de teste
+- 4 Unidades SENAI
+- 5 Cursos ativos
+- 3 Editais
 
-- `sample_data.sql` — cria tabelas compatíveis com o frontend e insere um usuário admin (email `admin@local`, senha `admin`), algumas unidades, cursos, editais e inscrições.
+## Tecnologia
 
-Exemplo de carregamento (PostgreSQL):
-
-```bash
-# criar o banco (se necessário)
-createdb sige_demo
-
-# executar o script
-psql -d sige_demo -f database/sample_data.sql
-```
-
-OBS: o `sample_data.sql` usa senha em texto claro apenas para demonstração; se seu backend exigir hash (bcrypt), substitua os valores na coluna `senha` por hashes compatíveis.
+Banco de dados PostgreSQL gerenciado pelo Supabase, acessado via API REST pelo backend Node.js/Express.

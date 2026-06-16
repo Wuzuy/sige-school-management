@@ -33,7 +33,7 @@ Este guia foi criado para auxiliar a equipe da secretaria no gerenciamento compl
 **Login Padrão:**
 ```
 Email: admin@senai.com
-Senha: Admin@123
+Senha: admin123
 ```
 
 **⚠️ IMPORTANTE:**
@@ -43,9 +43,9 @@ Senha: Admin@123
 
 **URL de Acesso:**
 ```
-Homepage: http://localhost:5500/index.html
-Login: http://localhost:5500/login.html
-Portal Secretaria: http://localhost:5500/portal-secretaria.html
+Homepage: http://localhost:5500/portal-escolar/index.html
+Login: http://localhost:5500/portal-escolar/login.html
+Portal Secretaria: http://localhost:5500/portal-escolar/portal-secretaria.html
 ```
 
 ---

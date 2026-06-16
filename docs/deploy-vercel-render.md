@@ -25,7 +25,7 @@
 
 1. Acesse [https://dashboard.render.com](https://dashboard.render.com)
 2. Clique em **New +** > **Web Service**
-3. Conecte seu repositorio do GitHub ou faça upload manual
+3. Conecte seu repositorio do GitHub
 4. Configure:
 
 | Campo | Valor |
@@ -36,19 +36,21 @@
 | **Start Command** | `node server.js` |
 | **Plan** | `Free` |
 
+> O Render vai detectar automaticamente a pasta `backend/` se configurar o root directory como `backend`.
+
 ### 2.2. Variaveis de Ambiente
 
-Na seção **Environment Variables**, adicione:
+Na secao **Environment Variables**, adicione:
 
-| Key | Value | Descricao |
+| Key | Valor | Descricao |
 |-----|-------|-----------|
 | `SUPABASE_URL` | `https://seu-projeto.supabase.co` | URL do Supabase |
 | `SUPABASE_KEY` | `SUA_CHAVE_ANON` | Chave do Supabase |
 | `JWT_SECRET` | `secreta_sige_123` | Segredo JWT (troque em producao) |
 | `PORT` | `10000` | Porta que o Render usa |
 
-> **Importante:** Troque o `JWT_SECRET` por um valor forte em producao!
-> Para gerar: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`
+> Troque o `JWT_SECRET` por um valor forte em producao:
+> `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`
 
 ### 2.3. Fazer deploy
 
@@ -59,12 +61,9 @@ Na seção **Environment Variables**, adicione:
 ### 2.4. URL gerada
 
 Apos o deploy, o Render gera uma URL tipo:
-
 ```
 https://sige-backend.onrender.com
 ```
-
-**Anote essa URL**, voce vai precisar para o frontend.
 
 ---
 
@@ -72,64 +71,46 @@ https://sige-backend.onrender.com
 
 ### 3.1. Estrutura do projeto
 
-O frontend tem tres portais em diretorios separados:
-
+O frontend tem tres portais em diretorios separados dentro de `frontend-web/`:
 ```
 frontend-web/
-  portal-escolar/       # index.html, login, portal-aluno, etc.
-  portal-secretaria/    # portal-secretaria.html
-  portal-inscricao/     # index.html, inscricao.html, status.html, etc.
+  portal-escolar/       # index.html, portal-aluno, historico, documentos, etc.
+  portal-secretaria/    # portal-secretaria.html (dentro de portal-escolar)
+  portal-inscricao/     # login, inscricao, status, matricula
 ```
 
-### 3.2. Criar arquivo vercel.json
+### 3.2. Arquivo vercel.json
 
-Crie o arquivo `vercel.json` na raiz do projeto (`sige/`):
+O arquivo `vercel.json` na raiz do projeto ja esta configurado:
 
 ```json
 {
   "version": 2,
-  "buildCommand": null,
   "outputDirectory": "frontend-web",
-  "routes": [
-    { "src": "/portal-escolar/(.*)", "dest": "/portal-escolar/$1" },
-    { "src": "/portal-secretaria/(.*)", "dest": "/portal-secretaria/$1" },
-    { "src": "/portal-inscricao/(.*)", "dest": "/portal-inscricao/$1" },
-    { "src": "/(.*)", "dest": "/portal-escolar/$1" }
-  ],
-  "rewrites": [
-    { "source": "/", "destination": "/portal-escolar/index.html" },
-    { "source": "/login", "destination": "/portal-escolar/login.html" },
-    { "source": "/secretaria", "destination": "/portal-secretaria/portal-secretaria.html" },
-    { "source": "/inscricao", "destination": "/portal-inscricao/index.html" }
+  "redirects": [
+    { "source": "/", "destination": "/portal-escolar/index.html" }
   ]
 }
 ```
 
 ### 3.3. Fazer deploy
 
-**Opcao A - Via GitHub (recomendado):**
+**Via GitHub (recomendado):**
 
 1. Acesse [https://vercel.com/new](https://vercel.com/new)
 2. Importe o repositorio do GitHub
-3. Configure:
+3. Configure no dashboard:
 
 | Campo | Valor |
 |-------|-------|
 | **Framework Preset** | `Other` |
 | **Root Directory** | `./` (raiz do projeto) |
 | **Build Command** | (deixar vazio) |
-| **Output Directory** | `frontend-web` |
+| **Output Directory** | (deixar vazio - o `vercel.json` define) |
 
-4. **Variavel de Ambiente** (opcional, veja secao 4):
+4. Clique em **Deploy**
 
-| Key | Value |
-|-----|-------|
-| `API_BASE_URL` | `https://sige-backend.onrender.com/api` |
-
-5. Clique em **Deploy**
-
-**Opcao B - Via Vercel CLI:**
-
+**Via Vercel CLI:**
 ```bash
 npm i -g vercel
 vercel --prod
@@ -137,55 +118,39 @@ vercel --prod
 
 ### 3.4. Rotas de acesso
 
-Apos o deploy ficam assim:
-
 | URL | Destino |
 |-----|---------|
-| `https://sige.vercel.app/` | Portal Escolar (index) |
-| `https://sige.vercel.app/portal-escolar/login` | Login |
-| `https://sige.vercel.app/portal-secretaria/portal-secretaria` | Secretaria |
-| `https://sige.vercel.app/portal-inscricao/` | Inscricao |
-| `https://sige.vercel.app/portal-aluno` | Portal do Aluno |
+| `https://sige-iota.vercel.app/` | Portal Escolar (dashboard) |
+| `https://sige-iota.vercel.app/portal-escolar/login` | Login do aluno |
+| `https://sige-iota.vercel.app/portal-escolar/portal-aluno` | Perfil do aluno |
+| `https://sige-iota.vercel.app/portal-escolar/portal-secretaria` | Secretaria |
+| `https://sige-iota.vercel.app/portal-inscricao/` | Inscricao em cursos |
+| `https://sige-iota.vercel.app/portal-inscricao/status` | Status das inscricoes |
 
 ---
 
 ## 4. Conectar Frontend com Backend
 
-### 4.1. Metodo 1: Variavel Global (recomendado)
+### 4.1. Metodo 1: Configuracao via Interface
 
-Na Vercel, va em **Settings > Environment Variables** e adicione:
-
-```
-API_BASE_URL = https://sige-backend.onrender.com/api
-```
-
-Depois crie um arquivo `.env.vercel` na raiz:
-
-```javascript
-// No arquivo frontend-web/portal-escolar/assets/js/api-config.js
-(function() {
-  // Detecta ambiente de producao
-  if (window.location.hostname !== 'localhost') {
-    window.API_BASE_URL = 'https://sige-backend.onrender.com/api';
-  }
-  console.log('API Config:', window.API_BASE_URL || 'auto-detect');
-})();
-```
-
-### 4.2. Metodo 2: Configuracao via Interface
-
-O proprio sistema ja tem um modal de configuracao. Apos o login:
-
+O sistema tem um modal de configuracao. Apos o login:
 1. Clique no indicador **API** no canto superior direito
 2. Digite a URL do backend: `https://sige-backend.onrender.com`
 3. Clique em **Salvar e Testar**
 
 A URL fica salva no `localStorage` do navegador.
 
+### 4.2. Metodo 2: Variavel Global
+
+No arquivo `frontend-web/portal-escolar/assets/js/api-config.js`, adicione:
+```javascript
+window.API_BASE_URL = 'https://sige-backend.onrender.com/api';
+```
+
 ### 4.3. Verificar conexao
 
 Acesse a URL do frontend e veja se o indicador de API fica verde.
-Teste fazendo login com:
+Teste com as credenciais:
 
 | Email | Senha |
 |-------|-------|
@@ -195,9 +160,7 @@ Teste fazendo login com:
 
 ## 5. Variaveis de Ambiente
 
-### 5.1. Resumo de todas as variaveis
-
-**Backend (Render):**
+### Backend (Render)
 
 | Variavel | Exemplo | Obrigatoria |
 |----------|---------|-------------|
@@ -206,26 +169,15 @@ Teste fazendo login com:
 | `JWT_SECRET` | `secreta_sige_123` | Sim |
 | `PORT` | `10000` | Sim (Render define) |
 
-**Frontend (Vercel):**
+### Frontend (Vercel)
 
 | Variavel | Exemplo | Obrigatoria |
 |----------|---------|-------------|
 | `API_BASE_URL` | `https://sige-backend.onrender.com/api` | Nao (configuravel via UI) |
 
-### 5.2. Trocando o JWT_SECRET em producao
+### SQL do Supabase
 
-```bash
-# Gere um segredo forte
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-# Exemplo de saida: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1
-```
-
-Atualize no Render: **Dashboard > sige-backend > Environment > JWT_SECRET**
-
-### 5.3. SQL do Supabase
-
-Nao esqueca de rodar o script SQL no Supabase:
-
+Execute o script SQL no Supabase:
 1. Acesse [https://supabase.com/dashboard](https://supabase.com/dashboard)
 2. Selecione o projeto
 3. Va em **SQL Editor**
@@ -237,22 +189,16 @@ Nao esqueca de rodar o script SQL no Supabase:
 ## Troubleshooting
 
 ### "Failed to fetch" no frontend
-
 - Verifique se o backend esta rodando: `https://sige-backend.onrender.com/api/usuarios/count`
 - Confirme a URL no modal de configuracao da API
-- Verifique CORS: o backend usa `cors()` sem restricao, entao deve funcionar
 
 ### Backend nao inicia no Render
-
 - Veja os logs em **Dashboard > sige-backend > Logs**
 - Confirme as variaveis de ambiente
-- Verifique se o `npm install` rodou sem erros
 
 ### Erro 404 nas rotas
-
-- O `vercel.json` pode precisar de ajustes
-- Confira se os caminhos no `routes` estao corretos
-- Teste localmente com `vercel dev` antes de fazer deploy
+- O `vercel.json` usa `redirects`, nao `routes`
+- Verifique se os caminhos dos arquivos estao corretos
 
 ---
 

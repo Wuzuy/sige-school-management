@@ -47,8 +47,8 @@ if ($profile -eq "h2") {
         Write-Host ""
         Write-Host "[1/3] Parando sistema..." -ForegroundColor Yellow
         
-        # Parar processos Java e Python/Node
-        Get-Process -Name "java" -ErrorAction SilentlyContinue | Stop-Process -Force
+        # Parar processos Node.js e Python
+        Get-Process -Name "node" -ErrorAction SilentlyContinue | Stop-Process -Force
         Get-Process -Name "python" -ErrorAction SilentlyContinue | Stop-Process -Force
         Get-Process -Name "node" -ErrorAction SilentlyContinue | Stop-Process -Force
         
@@ -57,7 +57,7 @@ if ($profile -eq "h2") {
         
         Write-Host ""
         Write-Host "[2/3] Iniciando backend..." -ForegroundColor Yellow
-        Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$PWD'; .\backend\mvnw.cmd spring-boot:run"
+            Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$PWD'; .\backend\npm run dev"
         
         Write-Host "[OK] Backend iniciando..." -ForegroundColor Green
         Write-Host "Aguardando inicializacao (30 segundos)..." -ForegroundColor Gray
@@ -74,7 +74,7 @@ if ($profile -eq "h2") {
         
         Write-Host ""
         Write-Host "==========================================" -ForegroundColor Cyan
-        Write-Host "Banco H2 zerado e backend reiniciado!" -ForegroundColor Green
+        Write-Host "Banco Supabase zerado e backend reiniciado!" -ForegroundColor Green
         Write-Host "==========================================" -ForegroundColor Cyan
     } else {
         Write-Host ""
@@ -132,11 +132,11 @@ CREATE DATABASE sige_db;
             Write-Host "Reiniciando backend..." -ForegroundColor Yellow
             
             # Parar processos
-            Get-Process -Name "java" -ErrorAction SilentlyContinue | Stop-Process -Force
+            Get-Process -Name "node" -ErrorAction SilentlyContinue | Stop-Process -Force
             Start-Sleep -Seconds 2
             
             # Iniciar backend
-            Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$PWD'; .\backend\mvnw.cmd spring-boot:run"
+        Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$PWD'; .\backend\npm run dev"
             
             Write-Host "[OK] Backend iniciando..." -ForegroundColor Green
             Write-Host "Aguardando inicializacao (30 segundos)..." -ForegroundColor Gray

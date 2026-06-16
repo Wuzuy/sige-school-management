@@ -44,7 +44,7 @@
         <pre><code>.\iniciar-tudo.bat</code></pre>
         <p><strong>Este script:</strong></p>
         <ul>
-          <li>✅ Inicia o backend Spring Boot</li>
+          <li>✅ Inicia o backend Node.js/Express</li>
           <li>✅ Aguarda inicialização completa</li>
           <li>✅ Inicia o frontend (Python ou Node.js)</li>
           <li>✅ Popula banco com dados de teste</li>
@@ -58,15 +58,14 @@
         <article class="card card-primary">
           <h3>✅ Obrigatórios</h3>
           <ul style="margin: 8px 0 0; padding-left: 20px;">
-            <li><strong>Java 21+</strong></li>
-            <li><strong>Maven</strong> (incluído via wrapper)</li>
+            <li><strong>Node.js 22+</strong></li>
+            <li><strong>npm</strong> (incluído com Node.js)</li>
           </ul>
         </article>
         <article class="card card-success">
           <h3>🔄 Banco de Dados</h3>
           <ul style="margin: 8px 0 0; padding-left: 20px;">
-            <li><strong>H2</strong> (testes - sem instalação) ⭐</li>
-            <li><strong>MySQL 8.0+</strong> (produção)</li>
+            <li><strong>Supabase</strong> (PostgreSQL gerenciado)</li>
           </ul>
         </article>
         <article class="card card-warning">
@@ -80,21 +79,13 @@
 
       <h2>🎬 Primeiro Uso (Passo a Passo)</h2>
 
-      <h3>Passo 1: Configurar Banco de Dados</h3>
-      <p>Edite o arquivo <code>backend/src/main/resources/application.properties</code>:</p>
-      
-      <div class="info-box">
-        <h4>💡 Recomendação para Testes</h4>
-        <p>Use <strong>H2</strong> (banco em memória) - não requer instalação de MySQL:</p>
-        <pre><code>spring.profiles.active=h2</code></pre>
-      </div>
-
-      <div class="warning-box">
-        <h4>🏢 Para Produção</h4>
-        <p>Use <strong>MySQL</strong> com dados persistentes:</p>
-        <pre><code>spring.profiles.active=mysql</code></pre>
-        <p><strong>Nota:</strong> Certifique-se de que o MySQL está instalado e rodando.</p>
-      </div>
+      <h3>Passo 1: Configurar Ambiente</h3>
+      <p>O banco de dados usa <strong>Supabase</strong> (PostgreSQL gerenciado na nuvem).</p>
+      <p>Crie o arquivo <code>backend/.env</code> com as credenciais:</p>
+      <pre><code>SUPABASE_URL=https://seu-projeto.supabase.co
+SUPABASE_KEY=SUA_CHAVE_ANON
+JWT_SECRET=secreta_sige_123
+PORT=8080</code></pre>
 
       <h3>Passo 2: Executar Script Automático</h3>
       <p>Na raiz do projeto, execute:</p>
@@ -102,8 +93,8 @@
       
       <p><strong>O que acontece:</strong></p>
       <ol>
-        <li>Nova janela abre com o backend Spring Boot</li>
-        <li>Script aguarda 45 segundos para o backend inicializar</li>
+        <li>Nova janela abre com o backend Node.js/Express</li>
+        <li>Script aguarda o backend inicializar</li>
         <li>Nova janela abre com o frontend (servidor HTTP)</li>
         <li>Banco é populado automaticamente com dados de teste</li>
       </ol>
@@ -121,9 +112,9 @@
           <span class="badge badge-primary">REST API</span>
         </article>
         <article class="card">
-          <h4>🗄️ H2 Console</h4>
-          <p><a href="http://localhost:8080/h2-console" target="_blank">http://localhost:8080/h2-console</a></p>
-          <span class="badge badge-warning">Apenas com H2 ativo</span>
+          <h4>🗄️ Supabase Studio</h4>
+          <p><a href="https://supabase.com/dashboard/project/seu-projeto" target="_blank">Supabase Dashboard</a></p>
+          <span class="badge badge-warning">Banco PostgreSQL na nuvem</span>
         </article>
       </div>
 
@@ -131,8 +122,8 @@
         <h4>🔑 Credenciais de Teste</h4>
         <p>Após popular os dados, use estas credenciais:</p>
         <ul style="margin-bottom: 0;">
-          <li><strong>Administrador:</strong> <code>admin@senai.com</code> / <code>Admin@123</code></li>
-          <li><strong>Usuário Comum:</strong> <code>joao@teste.com</code> / <code>Senha@123</code></li>
+          <li><strong>Administrador:</strong> <code>admin@senai.com</code> / <code>admin123</code></li>
+          <li><strong>Usuário Comum:</strong> <code>joao@email.com</code> / <code>123456</code></li>
         </ul>
       </div>
 
@@ -141,7 +132,7 @@
         <div class="card card-primary">
           <h4>👨‍🎓 Como Aluno</h4>
           <ol style="margin: 8px 0 0; padding-left: 20px; font-size: 0.9rem;">
-            <li>Faça login com joao@teste.com</li>
+            <li>Faça login com joao@email.com</li>
             <li>Veja cursos disponíveis</li>
             <li>Realize uma inscrição</li>
             <li>Acompanhe status na timeline</li>
@@ -177,40 +168,41 @@
       </div>
 
       <h3>1. Iniciar Apenas Backend</h3>
-      <pre><code>.\iniciar-backend.bat</code></pre>
-      <p>Aguarde mensagem: <code>Started SejaSenaiApplication in X seconds</code></p>
+      <pre><code>cd backend
+npm install
+npm run dev</code></pre>
+      <p>Servidor rodando em <code>http://localhost:8080</code></p>
 
       <h3>2. Iniciar Apenas Frontend</h3>
       <pre><code>.\iniciar-frontend.bat</code></pre>
       <p>Detecta Python ou Node.js automaticamente.</p>
 
       <h3>3. Popular Banco (Opcional)</h3>
-      <pre><code>.\inserir-dados.bat</code></pre>
-      <p>⚠️ <strong>Backend deve estar rodando!</strong></p>
+      <p>Execute o script SQL <code>database/supabase-aluno-tables.sql</code> no SQL Editor do Supabase.</p>
+      <p>Ou use um cliente SQL como DBeaver para conectar ao banco.</p>
 
-      <h2>🎓 Console H2 (Modo Teste)</h2>
+      <h2>🎓 Acessar Banco de Dados (Supabase)</h2>
       <div class="info-box">
-        <h3>Acessar Banco de Dados H2</h3>
-        <p>Quando usando perfil H2, acesse:</p>
+        <h3>Acessar Supabase Studio</h3>
+        <p>O banco PostgreSQL fica hospedado no Supabase. Acesse:</p>
         <ul>
-          <li><strong>URL:</strong> <a href="http://localhost:8080/h2-console" target="_blank">http://localhost:8080/h2-console</a></li>
-          <li><strong>JDBC URL:</strong> <code>jdbc:h2:mem:testdb</code></li>
-          <li><strong>Username:</strong> <code>sa</code></li>
-          <li><strong>Password:</strong> (deixe em branco)</li>
+          <li><strong>URL:</strong> <a href="https://supabase.com/dashboard/project/seu-projeto" target="_blank">Supabase Dashboard</a></li>
+          <li><strong>Table Editor:</strong> Visualize e edite dados diretamente</li>
+          <li><strong>SQL Editor:</strong> Execute consultas SQL</li>
         </ul>
-        <p style="margin-top: 12px;"><strong>Consultas úteis:</strong></p>
+        <p style="margin-top: 12px;"><strong>Consultas úteis (SQL Editor):</strong></p>
         <pre><code>-- Ver todos os usuários
-SELECT * FROM USUARIO;
+SELECT * FROM usuarios;
 
 -- Ver todas as inscrições
-SELECT * FROM INSCRICAO;
+SELECT * FROM inscricoes;
 
 -- Ver cursos
-SELECT * FROM CURSO;</code></pre>
+SELECT * FROM cursos;</code></pre>
       </div>
 
       <h2>📊 Dados de Teste Criados</h2>
-      <p>O script <code>popular-dados-teste.ps1</code> cria automaticamente:</p>
+      <p>O script SQL <code>database/supabase-aluno-tables.sql</code> cria automaticamente:</p>
 
       <div class="table-wrapper">
         <table>
@@ -259,7 +251,7 @@ SELECT * FROM CURSO;</code></pre>
         <article class="card card-success">
           <h3>🔧 Configurar</h3>
           <ul style="margin: 8px 0 0; padding-left: 20px;">
-            <li><a href="init.html">Configuração</a> - MySQL, variáveis de ambiente</li>
+            <li><a href="init.html">Configuração</a> - Variáveis de ambiente, Supabase</li>
             <li><a href="security.html">Segurança</a> - JWT, rate limiting</li>
             <li><a href="troubleshooting.html">Troubleshooting</a> - Resolver problemas</li>
           </ul>

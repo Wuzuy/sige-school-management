@@ -100,10 +100,8 @@ Condição 2: status_matricula = 'CONCLUIDA'
     </dependency>
     
     <!-- Email Sending -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-mail</artifactId>
-    </dependency>
+    <!-- Email Sending -->
+    <!-- npm i nodemailer -->
 </dependencies>
 ```
 
@@ -201,7 +199,7 @@ Condição 2: status_matricula = 'CONCLUIDA'
 ```
 📦 Sistema de Carteirinha
 │
-├── 🗄️ BACKEND (Spring Boot)
+├── 🗄️ BACKEND (Node.js + Express)
 │   ├── Model: Carteirinha.java
 │   ├── Repository: CarteirinhaRepository.java
 │   ├── Service: CarteirinhaService.java

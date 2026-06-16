@@ -96,7 +96,7 @@ frontend-web/
 A URL da API é detectada automaticamente em ordem de prioridade:
 
 1. **LocalStorage** - Configurado manualmente pelo usuário
-2. **Variáveis de Ambiente** - Em produção (Cloudflare Pages)
+2. **Variáveis de Ambiente** - Em produção (Vercel)
 3. **Window Global** - Para testes
 4. **Localhost** - Fallback para desenvolvimento (`http://localhost:8080/api`)
 
@@ -140,14 +140,11 @@ Após a reorganização, considere:
 # → Abra portal-escolar/index.html
 ```
 
-### Production (Cloudflare Pages)
+### Production (Vercel)
 
-1. Deploy a pasta completa `frontend-web/`
-2. Configure as variáveis de ambiente:
-   ```
-   API_BASE_URL=https://seu-api.com/api
-   ```
-3. O sistema detectará automaticamente e usará essa URL
+1. Deploy a pasta `frontend-web/` configurada no `vercel.json`
+2. URL do frontend: `https://sige-iota.vercel.app`
+3. Configure a URL da API via modal no próprio sistema
 
 ## 🔒 Segurança
 

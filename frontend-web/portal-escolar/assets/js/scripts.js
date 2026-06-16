@@ -9,9 +9,9 @@ function getApiBaseUrl() {
     return savedUrl;
   }
   
-  // 2. Variável de ambiente Cloudflare Pages
+  // 2. Variável de ambiente (Vercel/Render)
   if (window.ENV?.API_BASE_URL) {
-    console.log('✅ API via Cloudflare ENV:', window.ENV.API_BASE_URL);
+    console.log('✅ API via ENV:', window.ENV.API_BASE_URL);
     return window.ENV.API_BASE_URL;
   }
   
@@ -21,10 +21,9 @@ function getApiBaseUrl() {
     return window.API_BASE_URL;
   }
   
-  // 4. Detectar ambiente Pages.dev / Workers.dev
-  if (window.location.hostname.includes('pages.dev') || window.location.hostname.includes('workers.dev')) {
-    console.info('⚠️ Rodando no Cloudflare Pages sem API configurada; usando fallback para localhost.');
-    // Não bloqueia a interface: a página continua carregando sem backend.
+  // 4. Detectar ambiente Vercel
+  if (window.location.hostname.includes('vercel.app')) {
+    console.info('⚠️ Rodando no Vercel sem API configurada; usando fallback para localhost.');
   }
   
   // 5. Fallback: localhost (desenvolvimento local)
@@ -72,12 +71,12 @@ function showApiConfigModal() {
         <div style="background: white; padding: 30px; border-radius: 12px; max-width: 600px; width: 100%; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
           <h2 style="margin: 0 0 15px 0; color: #667eea; font-size: 24px;">⚙️ Configurar API Backend</h2>
           <p style="margin: 0 0 20px 0; color: #666; line-height: 1.6;">
-            Para acessar o backend, você precisa configurar a URL do <strong>Cloudflare Tunnel</strong>.<br>
+            Para acessar o backend, você precisa configurar a URL da <strong>API Render</strong>.<br>
             Siga os passos:
           </p>
           <ol style="margin: 0 0 20px 0; padding-left: 20px; color: #555; line-height: 1.8;">
-            <li>Inicie o backend com: <code style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px;">iniciar-backend-cloudflare-tunnel.bat</code></li>
-            <li>Copie a URL gerada (ex: <code style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px;">https://random-words.trycloudflare.com</code>)</li>
+            <li>O backend está hospedado no Render (ex: <code style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px;">https://sige-api.onrender.com</code>)</li>
+            <li>Ou use localhost para desenvolvimento: <code style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px;">http://localhost:8080/api</code></li>
             <li>Cole abaixo e clique em <strong>Salvar e Testar</strong></li>
           </ol>
           <input type="text" id="api-url-input" placeholder="https://seu-tunnel.trycloudflare.com" 

@@ -110,52 +110,52 @@
 
       <h3>📋 Pré-requisitos</h3>
       <ul>
-        <li><strong>Java 21+</strong> - Necessário para o backend Spring Boot</li>
-        <li><strong>Maven</strong> - Incluído via wrapper (mvnw.cmd)</li>
-        <li><strong>MySQL 8.0+</strong> (produção) ou <strong>H2</strong> (testes - sem instalação)</li>
+        <li><strong>Node.js 22+</strong> - Necessário para o backend Express</li>
+        <li><strong>Conta Supabase</strong> - Banco PostgreSQL gerenciado</li>
         <li><strong>Python 3.x</strong> ou <strong>Node.js</strong> - Para servidor HTTP do frontend</li>
         <li><strong>Navegador moderno</strong> - Chrome, Firefox, Edge, Safari</li>
       </ul>
 
-      <h3>⚡ Passo a Passo Manual (Se preferir controle total)</h3>
+      <h3>⚡ Passo a Passo Manual</h3>
       
-      <h4>1. Configurar Banco de Dados</h4>
-      <p>Edite <code>backend/src/main/resources/application.properties</code>:</p>
-      <pre><code># Para testes (recomendado) - Banco em memória, sem instalação
-spring.profiles.active=h2
-
-# OU para produção
-spring.profiles.active=mysql</code></pre>
-
-      <h4>2. Iniciar Backend</h4>
+      <h4>1. Instalar dependências do Backend</h4>
       <pre><code>cd backend
-mvnw.cmd spring-boot:run</code></pre>
-      <p>Aguarde a mensagem: <code>Started SejaSenaiApplication in X seconds</code></p>
+npm install</code></pre>
 
-      <h4>3. Iniciar Frontend</h4>
+      <h4>2. Configurar variáveis de ambiente</h4>
+      <p>Crie <code>backend/.env</code>:</p>
+      <pre><code>SUPABASE_URL=https://seu-projeto.supabase.co
+SUPABASE_KEY=SUA_CHAVE_ANON
+JWT_SECRET=secreta_sige_123
+PORT=8080</code></pre>
+
+      <h4>3. Iniciar Backend</h4>
+      <pre><code>cd backend
+npm run dev</code></pre>
+      <p>Servidor rodando em <code>http://localhost:8080</code></p>
+
+      <h4>4. Iniciar Frontend</h4>
       <pre><code># Com Python
-cd frontend-web/static
+cd frontend-web
 python -m http.server 5500
 
 # OU com Node.js
-npx http-server frontend-web/static -p 5500</code></pre>
+npx http-server frontend-web -p 5500</code></pre>
 
-      <h4>4. Popular com Dados de Teste (Opcional)</h4>
-      <pre><code>powershell -ExecutionPolicy Bypass -File popular-dados-teste.ps1</code></pre>
-      <p><strong>Cria automaticamente:</strong> 1 admin, 3 usuários, 4 unidades, 5 cursos e 3 editais</p>
+      <h4>5. Popular com Dados de Teste (Opcional)</h4>
+      <p>Execute o script SQL <code>database/supabase-aluno-tables.sql</code> no SQL Editor do Supabase.</p>
 
-      <h4>5. Acessar Sistema</h4>
+      <h4>6. Acessar Sistema</h4>
       <ul>
-        <li><strong>Frontend:</strong> <a href="http://localhost:5500" target="_blank">http://localhost:5500</a></li>
+        <li><strong>Frontend:</strong> <a href="http://localhost:5500/portal-escolar" target="_blank">http://localhost:5500/portal-escolar</a></li>
         <li><strong>Backend API:</strong> <a href="http://localhost:8080/api" target="_blank">http://localhost:8080/api</a></li>
-        <li><strong>H2 Console:</strong> <a href="http://localhost:8080/h2-console" target="_blank">http://localhost:8080/h2-console</a> (se H2 ativo)</li>
       </ul>
 
       <div class="info-box">
         <h4>🔑 Credenciais de Teste</h4>
         <ul style="margin-bottom: 0;">
-          <li><strong>Administrador:</strong> admin@senai.com / Admin@123</li>
-          <li><strong>Usuário Comum:</strong> joao@teste.com / Senha@123</li>
+          <li><strong>Administrador:</strong> admin@senai.com / admin123</li>
+          <li><strong>Usuário Comum:</strong> joao@email.com / 123456</li>
         </ul>
       </div>
 
@@ -166,13 +166,12 @@ npx http-server frontend-web/static -p 5500</code></pre>
         <article class="card">
           <h3>Backend</h3>
           <div style="margin-top: 12px;">
-            <span class="badge badge-primary">Java 21</span>
-            <span class="badge badge-primary">Spring Boot 3.4.5</span>
-            <span class="badge badge-primary">Spring Security</span>
-            <span class="badge badge-primary">Spring Data JPA</span>
-            <span class="badge badge-primary">JWT (jjwt 0.11.5)</span>
-            <span class="badge badge-primary">Bucket4j 8.1.0</span>
-            <span class="badge badge-primary">BCrypt</span>
+            <span class="badge badge-primary">Node.js 22</span>
+            <span class="badge badge-primary">Express 5</span>
+            <span class="badge badge-primary">Supabase Client</span>
+            <span class="badge badge-primary">JWT (jsonwebtoken)</span>
+            <span class="badge badge-primary">bcrypt</span>
+            <span class="badge badge-primary">CORS</span>
           </div>
         </article>
 
@@ -191,19 +190,18 @@ npx http-server frontend-web/static -p 5500</code></pre>
         <article class="card">
           <h3>Banco de Dados</h3>
           <div style="margin-top: 12px;">
-            <span class="badge badge-warning">MySQL 8.0+</span>
-            <span class="badge badge-warning">H2 Database</span>
-            <span class="badge badge-warning">JPA/Hibernate</span>
+            <span class="badge badge-warning">Supabase (PostgreSQL)</span>
+            <span class="badge badge-warning">SQL Editor</span>
           </div>
         </article>
 
         <article class="card">
           <h3>DevOps</h3>
           <div style="margin-top: 12px;">
-            <span class="badge badge-purple">Maven</span>
+            <span class="badge badge-purple">Vercel (Frontend)</span>
+            <span class="badge badge-purple">Render (Backend)</span>
             <span class="badge badge-purple">Git</span>
-            <span class="badge badge-purple">Scripts PowerShell</span>
-            <span class="badge badge-purple">Postman</span>
+            <span class="badge badge-purple">npm</span>
           </div>
         </article>
       </div>
@@ -211,29 +209,26 @@ npx http-server frontend-web/static -p 5500</code></pre>
       <!-- ESTRUTURA DO PROJETO -->
       <h2>📁 Estrutura do Projeto</h2>
       <pre><code>sige/
-├── backend/                      # API REST Spring Boot
-│   ├── src/main/java/           # Código fonte Java
-│   │   └── com/wuzuy/sige/
-│   │       ├── controller/      # Controllers REST
-│   │       ├── model/           # Entidades JPA
-│   │       ├── repository/      # Repositórios Spring Data
-│   │       ├── dto/             # Data Transfer Objects
-│   │       └── config/          # Configurações de segurança
-│   ├── src/main/resources/      # Configurações
-│   │   ├── application.properties
-│   │   ├── application-h2.properties
-│   │   └── application-mysql.properties
-│   └── pom.xml                  # Dependências Maven
+├── backend/                      # API REST Express (Node.js)
+│   ├── routes/                  # Rotas da API
+│   ├── middleware/              # Middlewares (auth, etc.)
+│   ├── server.js                # Servidor Express
+│   ├── package.json             # Dependências Node.js
+│   └── .env                     # Variáveis de ambiente
 │
-├── frontend-web/static/         # Interface Web
+├── frontend-web/                # Interface Web
+│   ├── portal-escolar/          # Portal escolar
+│   ├── portal-inscricao/        # Portal de inscrição
 │   ├── index.html               # Página inicial
 │   ├── login.html               # Login
 │   ├── inscricao.html           # Formulário de inscrição
-│   ├── matricula.html           # Matrícula online
 │   ├── portal-aluno.html        # Portal do aluno
 │   ├── portal-secretaria.html   # Portal administrativo
 │   ├── scripts.js               # Lógica JavaScript
 │   └── app.css                  # Estilos
+│
+├── database/                    # Scripts SQL
+│   └── supabase-aluno-tables.sql
 │
 ├── docs/                        # Documentação (você está aqui!)
 │   ├── index.html               # Esta página
@@ -262,7 +257,7 @@ npx http-server frontend-web/static -p 5500</code></pre>
           <h3>🚀 Começar Desenvolvimento</h3>
           <p><strong><a href="quick-start.html">Guia Rápido</a></strong> - Setup inicial passo a passo</p>
           <p><strong><a href="scripts.html">Scripts Executores</a></strong> - Automação completa</p>
-          <p><strong><a href="init.html">Configuração</a></strong> - MySQL, H2 e ambiente</p>
+          <p><strong><a href="init.html">Configuração</a></strong> - Supabase, variáveis de ambiente</p>
         </article>
 
         <article class="card card-success">

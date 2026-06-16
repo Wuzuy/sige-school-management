@@ -190,7 +190,7 @@ const headers = {
 1. Abra um **CMD externo** (não PowerShell do VS Code)
 2. Navegue até a pasta backend:
    ```bash
-   cd C:\Users\Java\Desktop\sige\backend
+   cd backend
    ```
 3. Execute um dos comandos:
    ```bash
@@ -206,7 +206,7 @@ const headers = {
 **Novo arquivo criado:** `teste-api.html`
 
 1. Abra seu navegador
-2. Acesse: `file:///C:\Users\Java\Desktop\sige\frontend-web\portal-escolar\teste-api.html`
+2. Acesse: `http://localhost:5500/portal-escolar/teste-api.html`
 3. Clique em "Verificar Status" para confirmar que a API está respondendo
 4. Execute o "Fluxo Completo" para testar todos os endpoints
 
@@ -222,11 +222,11 @@ const headers = {
 
 ### 6.3 Acessar as Páginas do Portal
 
-1. **Reclamações:** `file:///C:\Users\Java\Desktop\sige\frontend-web\portal-escolar\reclamacoes.html`
-2. **Atendimento Agendado:** `file:///C:\Users\Java\Desktop\sige\frontend-web\portal-escolar\atendimento-agendado.html`
-3. **Estrutura Curricular:** `file:///C:\Users\Java\Desktop\sige\frontend-web\portal-escolar\estrutura-curricular.html`
-4. **Quadro de Horários:** `file:///C:\Users\Java\Desktop\sige\frontend-web\portal-escolar\quadro-horarios.html`
-5. **Detalhes de Reclamação:** `file:///C:\Users\Java\Desktop\sige\frontend-web\portal-escolar\detalhes-reclamacao.html`
+1. **Reclamações:** `http://localhost:5500/portal-escolar/reclamacoes.html`
+2. **Atendimento Agendado:** `http://localhost:5500/portal-escolar/atendimento-agendado.html`
+3. **Estrutura Curricular:** `http://localhost:5500/portal-escolar/estrutura-curricular.html`
+4. **Quadro de Horários:** `http://localhost:5500/portal-escolar/quadro-horarios.html`
+5. **Detalhes de Reclamação:** `http://localhost:5500/portal-escolar/detalhes-reclamacao.html`
 
 ### 6.4 Testar Rotas da API com curl
 
@@ -271,7 +271,7 @@ Para acesso rápido durante testes:
 
 **Para Iniciar o Backend:**
 ```bash
-cd C:\Users\Java\Desktop\sige\backend
+cd backend
 npm run dev
 # ou
 iniciar-backend-dev.bat
@@ -279,15 +279,15 @@ iniciar-backend-dev.bat
 
 **Para Testar a API (Recomendado):**
 ```
-file:///C:\Users\Java\Desktop\sige\frontend-web\portal-escolar\teste-api.html
+http://localhost:5500/portal-escolar/teste-api.html
 ```
 
 **URLs Diretas das Páginas:**
-- Reclamações: `file:///C:\Users\Java\Desktop\sige\frontend-web\portal-escolar\reclamacoes.html`
-- Atendimento: `file:///C:\Users\Java\Desktop\sige\frontend-web\portal-escolar\atendimento-agendado.html`
-- Currículo: `file:///C:\Users\Java\Desktop\sige\frontend-web\portal-escolar\estrutura-curricular.html`
-- Horários: `file:///C:\Users\Java\Desktop\sige\frontend-web\portal-escolar\quadro-horarios.html`
-- Detalhes: `file:///C:\Users\Java\Desktop\sige\frontend-web\portal-escolar\detalhes-reclamacao.html`
+- Reclamações: `http://localhost:5500/portal-escolar/reclamacoes.html`
+- Atendimento: `http://localhost:5500/portal-escolar/atendimento-agendado.html`
+- Currículo: `http://localhost:5500/portal-escolar/estrutura-curricular.html`
+- Horários: `http://localhost:5500/portal-escolar/quadro-horarios.html`
+- Detalhes: `http://localhost:5500/portal-escolar/detalhes-reclamacao.html`
 
 ---
 

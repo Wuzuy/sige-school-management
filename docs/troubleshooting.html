@@ -47,19 +47,13 @@
         
         <div class="danger-box">
           <h4>Sintoma</h4>
-          <pre><code>***************************
-APPLICATION FAILED TO START
-***************************
-
-Description:
-
-Web server failed to start. Port 8080 was already in use.</code></pre>
+          <pre><code>Error: listen EADDRINUSE: address already in use :::8080</code></pre>
         </div>
 
         <h4>Causas Possíveis</h4>
         <ul>
           <li>Backend já está rodando em outra janela</li>
-          <li>Outra aplicação (Tomcat, outro Spring Boot) usando porta 8080</li>
+          <li>Outra aplicação usando porta 8080</li>
           <li>Processo ficou travado após encerramento incorreto</li>
         </ul>
 
@@ -68,8 +62,8 @@ Web server failed to start. Port 8080 was already in use.</code></pre>
         <strong>Solução 1: Usar script para parar</strong>
         <pre><code>.\parar-sistema.bat</code></pre>
 
-        <strong>Solução 2: Matar processo Java manualmente</strong>
-        <pre><code>taskkill /F /IM java.exe</code></pre>
+        <strong>Solução 2: Matar processo Node.js manualmente</strong>
+        <pre><code>taskkill /F /IM node.exe</code></pre>
 
         <strong>Solução 3: Identificar e matar processo específico</strong>
         <pre><code># Ver qual processo usa a porta 8080
@@ -82,79 +76,73 @@ netstat -ano | findstr :8080
 taskkill /F /PID 12345</code></pre>
 
         <strong>Solução 4: Mudar a porta do backend</strong>
-        <p>Edite <code>application.properties</code>:</p>
-        <pre><code>server.port=8081</code></pre>
-        <p>⚠️ <strong>Atenção:</strong> Se mudar a porta, atualize também no frontend (scripts.js)</p>
+        <p>Edite <code>backend/.env</code>:</p>
+        <pre><code>PORT=8081</code></pre>
+        <p>⚠️ <strong>Atenção:</strong> Se mudar a porta, atualize também a URL no frontend</p>
       </div>
 
-      <!-- COMPILATION ERROR -->
+      <!-- ERRO DE DEPENDÊNCIAS -->
       <div class="card" style="margin: 24px 0;">
-        <h3>❌ Erro de Compilação</h3>
+        <h3>❌ Erro de Dependências (node_modules)</h3>
 
         <div class="danger-box">
           <h4>Sintoma</h4>
-          <pre><code>[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin
-[ERROR] Compilation failure
-[ERROR] ... cannot find symbol</code></pre>
+          <pre><code>Error: Cannot find module 'express'
+Require stack:
+- C:\Users\...\sige\backend\server.js</code></pre>
         </div>
 
         <h4>Soluções</h4>
 
-        <strong>Solução 1: Limpar e recompilar</strong>
+        <strong>Solução 1: Instalar dependências</strong>
         <pre><code>cd backend
-mvnw.cmd clean compile</code></pre>
+npm install</code></pre>
 
-        <strong>Solução 2: Reimportar dependências</strong>
-        <pre><code>mvnw.cmd clean install -U</code></pre>
+        <strong>Solução 2: Reinstalar do zero</strong>
+        <pre><code>cd backend
+rm -rf node_modules package-lock.json
+npm install</code></pre>
 
-        <strong>Solução 3: Verificar versão do Java</strong>
-        <pre><code>java -version
-# Deve ser Java 21 ou superior</code></pre>
+        <strong>Solução 3: Verificar versão do Node.js</strong>
+        <pre><code>node --version
+# Deve ser Node.js 22 ou superior</code></pre>
       </div>
 
-      <!-- CONEXÃO MYSQL -->
+      <!-- CONEXÃO SUPABASE -->
       <div class="card" style="margin: 24px 0;">
-        <h3>❌ Erro de Conexão MySQL</h3>
+        <h3>❌ Erro de Conexão Supabase</h3>
 
         <div class="danger-box">
           <h4>Sintoma</h4>
-          <pre><code>com.mysql.cj.jdbc.exceptions.CommunicationsException: 
-Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago.</code></pre>
+          <pre><code>Error: connect ECONNREFUSED
+{
+  code: 'ECONNREFUSED',
+  errno: -4078,
+  syscall: 'connect'
+}</code></pre>
         </div>
 
         <h4>Causas Possíveis</h4>
         <ul>
-          <li>MySQL não está instalado</li>
-          <li>MySQL não está rodando</li>
-          <li>Credenciais incorretas em application-mysql.properties</li>
-          <li>Banco de dados não existe</li>
+          <li>Credenciais incorretas em backend/.env</li>
+          <li>Projeto Supabase pausado/inativo</li>
+          <li>Chave (SUPABASE_KEY) expirou ou foi revogada</li>
+          <li>URL do projeto errada</li>
         </ul>
 
         <h4>Soluções</h4>
 
-        <strong>Solução Rápida: Usar H2</strong>
-        <p>Edite <code>application.properties</code>:</p>
-        <pre><code>spring.profiles.active=h2</code></pre>
+        <strong>Verificar credenciais</strong>
+        <p>Edite <code>backend/.env</code> e confirme:</p>
+        <pre><code>SUPABASE_URL=https://seu-projeto.supabase.co
+SUPABASE_KEY=SUA_CHAVE_ANON</code></pre>
 
-        <strong>Solução MySQL: Verificar serviço</strong>
-        <pre><code># Windows - Verificar se MySQL está rodando
-sc query MySQL80
+        <strong>Verificar projeto no Supabase Dashboard</strong>
+        <pre><code>Acesse: https://supabase.com/dashboard/project/seu-projeto
+Verifique se o projeto está ativo (não pausado)</code></pre>
 
-# Iniciar MySQL
-net start MySQL80</code></pre>
-
-        <strong>Solução MySQL: Verificar credenciais</strong>
-        <p>Edite <code>application-mysql.properties</code>:</p>
-        <pre><code>spring.datasource.url=jdbc:mysql://localhost:3306/seja_senai_db
-spring.datasource.username=root
-spring.datasource.password=SUA_SENHA_AQUI</code></pre>
-
-        <strong>Solução MySQL: Criar banco</strong>
-        <pre><code>mysql -u root -p
-CREATE DATABASE seja_senai_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;</code></pre>
-      </div>
+        <strong>Gerar nova chave</strong>
+        <p>No Supabase Dashboard: Settings → API → Project API keys → anon public</p>
 
       <h2>🌐 Problemas Comuns do Frontend</h2>
 
@@ -222,7 +210,7 @@ Microsoft Store...</code></pre>
         </ol>
 
         <strong>Solução 4: Abrir HTML diretamente</strong>
-        <p>Navegue até <code>frontend-web/static/index.html</code> e abra no navegador.</p>
+        <p>Navegue até <code>frontend-web/index.html</code> e abra no navegador.</p>
         <p>⚠️ <strong>Limitações:</strong> Pode ter problemas com CORS em algumas funcionalidades.</p>
       </div>
 
@@ -244,7 +232,7 @@ has been blocked by CORS policy</code></pre>
         <pre><code>.\iniciar-frontend.bat
 
 # OU manualmente
-cd frontend-web/static
+cd frontend-web
 python -m http.server 5500</code></pre>
       </div>
 
@@ -326,19 +314,17 @@ location.reload();</code></pre>
           <li>Copie a senha gerada (16 caracteres)</li>
         </ol>
 
-        <h4>⚙️ Passo 2: Configurar application.properties</h4>
-        <p>Edite: <code>backend/src/main/resources/application.properties</code></p>
+        <h4>⚙️ Passo 2: Configurar backend/.env</h4>
+        <p>Edite: <code>backend/.env</code></p>
         <pre><code># Email remetente (Gmail)
-spring.mail.username=seu-email@gmail.com
+EMAIL_USER=seu-email@gmail.com
 
 # Senha de app gerada (não é a senha da conta!)
-spring.mail.password=abcd efgh ijkl mnop
+EMAIL_PASS=abcd efgh ijkl mnop
 
-# Configurações SMTP do Gmail (já configuradas)
-spring.mail.host=smtp.gmail.com
-spring.mail.port=587
-spring.mail.properties.mail.smtp.auth=true
-spring.mail.properties.mail.smtp.starttls.enable=true</code></pre>
+# SMTP
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587</code></pre>
 
         <h4>🔄 Passo 3: Reiniciar Backend</h4>
         <pre><code>.\parar-sistema.bat
@@ -346,7 +332,7 @@ spring.mail.properties.mail.smtp.starttls.enable=true</code></pre>
 
         <h4>✅ Passo 4: Testar Recuperação</h4>
         <ol>
-          <li>Acesse: <a href="http://localhost:5500/static/forgot-password.html" target="_blank">forgot-password.html</a></li>
+          <li>Acesse: <a href="http://localhost:5500/portal-escolar/forgot-password.html" target="_blank">forgot-password.html</a></li>
           <li>Digite um email cadastrado (ex: <code>admin@senai.com</code>)</li>
           <li>Verifique a caixa de entrada do email</li>
           <li>Clique no link de recuperação</li>
@@ -401,7 +387,7 @@ spring.mail.properties.mail.smtp.starttls.enable=true</code></pre>
         <p>Se ainda estiver com problemas:</p>
         <ol>
           <li>Pare o backend: <code>.\parar-sistema.bat</code></li>
-          <li>Limpe o banco H2 (automático ao reiniciar)</li>
+          <li>Limpe as tabelas no SQL Editor do Supabase</li>
           <li>Inicie novamente: <code>.\iniciar-tudo.bat</code></li>
         </ol>
 
@@ -468,58 +454,25 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser</code></pre
         <pre><code>.\inserir-dados.bat</code></pre>
       </div>
 
-      <h2>🗄️ Problemas com Banco de Dados</h2>
+      <h2>🗄️ Problemas com Banco de Dados (Supabase)</h2>
 
-      <!-- H2 CONSOLE NÃO ABRE -->
+      <!-- SUPABASE NÃO CONECTA -->
       <div class="card" style="margin: 24px 0;">
-        <h3>❌ H2 Console Não Abre</h3>
+        <h3>❌ Supabase Não Conecta</h3>
 
         <h4>Verificações</h4>
         
-        <strong>1. Perfil H2 está ativo?</strong>
-        <p>Verifique <code>application.properties</code>:</p>
-        <pre><code>spring.profiles.active=h2</code></pre>
+        <strong>1. Credenciais estão corretas?</strong>
+        <p>Verifique <code>backend/.env</code>:</p>
+        <pre><code>SUPABASE_URL=https://seu-projeto.supabase.co
+SUPABASE_KEY=SUA_CHAVE_ANON</code></pre>
 
         <strong>2. Backend está rodando?</strong>
         <pre><code>.\verificar-status.bat</code></pre>
 
-        <strong>3. URL correta?</strong>
-        <p><a href="http://localhost:8080/h2-console" target="_blank">http://localhost:8080/h2-console</a></p>
-
-        <strong>4. Credenciais corretas?</strong>
-        <ul>
-          <li><strong>JDBC URL:</strong> <code>jdbc:h2:mem:testdb</code></li>
-          <li><strong>Username:</strong> <code>sa</code></li>
-          <li><strong>Password:</strong> (deixe em branco)</li>
-        </ul>
-
-        <div class="success-box" style="margin-top: 16px;">
-          <h4>✅ Correção Aplicada (Março 2026)</h4>
-          <p>SecurityConfig foi atualizado para permitir H2 Console:</p>
-          <ul>
-            <li>CSRF desabilitado para <code>/h2-console/**</code></li>
-            <li>Frame options alterado de <code>deny()</code> para <code>sameOrigin()</code></li>
-            <li>Endpoint público configurado</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- DADOS SUMIRAM H2 -->
-      <div class="card" style="margin: 24px 0;">
-        <h3>⚠️ Dados Sumiram no H2</h3>
-
-        <div class="info-box">
-          <h4>Comportamento Esperado</h4>
-          <p>H2 é um banco <strong>em memória</strong>. Dados são perdidos quando o backend para.</p>
-        </div>
-
-        <h4>Soluções</h4>
-
-        <strong>Para manter dados entre reinícios:</strong>
-        <ul>
-          <li><strong>Opção 1:</strong> Use MySQL (<code>spring.profiles.active=mysql</code>)</li>
-          <li><strong>Opção 2:</strong> Execute <code>inserir-dados.bat</code> após cada reinício do backend</li>
-        </ul>
+        <strong>3. Projeto está ativo?</strong>
+        <p>Acesse: <a href="https://supabase.com/dashboard/project/seu-projeto" target="_blank">Supabase Dashboard</a></p>
+        <p>Verifique se o projeto não está pausado (projetos gratuitos pausam após 1 semana de inatividade).</p>
       </div>
 
       <!-- COMO ZERAR BANCO -->
@@ -527,133 +480,32 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser</code></pre
         <h3>🗑️ Como Zerar o Banco de Dados</h3>
 
         <div class="info-box">
-          <h4>💡 Script Automatizado (Recomendado)</h4>
-          <p>Use o script que detecta automaticamente o perfil ativo:</p>
-          <pre><code>.\limpar-banco.bat</code></pre>
-          <p>O script irá:</p>
-          <ul>
-            <li>Detectar se está usando H2 ou MySQL</li>
-            <li>Executar o procedimento correto para cada banco</li>
-            <li>Opcionalmente reiniciar backend e popular dados</li>
-          </ul>
+          <h4>💡 Limpar via SQL Editor</h4>
+          <p>Use o SQL Editor do Supabase para truncar todas as tabelas:</p>
         </div>
 
-        <h4>📘 Zerar Banco H2 (Banco em Memória)</h4>
-        
-        <strong>Método 1: Automático (Recomendado)</strong>
-        <p>O H2 é automaticamente zerado ao reiniciar o backend devido à configuração:</p>
-        <pre><code>spring.jpa.hibernate.ddl-auto=create-drop</code></pre>
-        
-        <p><strong>Passos:</strong></p>
+        <strong>Passos:</strong>
         <ol>
-          <li>Pare o backend: <code>.\parar-sistema.bat</code></li>
-          <li>Inicie novamente: <code>.\iniciar-backend.bat</code></li>
-          <li>(Opcional) Popule dados: <code>.\inserir-dados.bat</code></li>
+          <li>Acesse o <a href="https://supabase.com/dashboard/project/seu-projeto" target="_blank">Supabase Dashboard</a></li>
+          <li>Vá em <strong>SQL Editor</strong></li>
+          <li>Execute o script abaixo</li>
         </ol>
+        <pre><code>TRUNCATE TABLE inscricoes CASCADE;
+TRUNCATE TABLE editais CASCADE;
+TRUNCATE TABLE cursos CASCADE;
+TRUNCATE TABLE unidades CASCADE;
+TRUNCATE TABLE usuarios CASCADE;</code></pre>
 
-        <strong>Método 2: Via Script</strong>
-        <pre><code>.\limpar-banco.bat</code></pre>
-        <p>Detecta H2 automaticamente e oferece reiniciar + popular em um único comando.</p>
-
-        <div class="success-box" style="margin-top: 16px;">
-          <h4>✅ Quando usar</h4>
-          <ul>
-            <li>Corrigir dados inconsistentes</li>
-            <li>Começar teste do zero</li>
-            <li>Resetar após mudanças nas entidades</li>
-          </ul>
-        </div>
-
-        <h4>📙 Zerar Banco MySQL (Banco Persistente)</h4>
-        
-        <div class="warning-box">
-          <h4>⚠️ Atenção</h4>
-          <p>MySQL usa <code>spring.jpa.hibernate.ddl-auto=update</code> - dados persistem entre reinícios!</p>
-        </div>
-
-        <strong>Método 1: Script Automatizado</strong>
-        <pre><code>.\limpar-banco.bat</code></pre>
-        <p>Detecta MySQL e tenta executar comandos automaticamente (requer mysql CLI no PATH).</p>
-
-        <strong>Método 2: MySQL Workbench (Manual)</strong>
-        <ol>
-          <li>Abra MySQL Workbench</li>
-          <li>Conecte ao servidor local</li>
-          <li>Execute no SQL Editor:</li>
-        </ol>
-        <pre><code>DROP DATABASE IF EXISTS seja_senai_db;
-CREATE DATABASE seja_senai_db;</code></pre>
-        <ol start="4">
-          <li>Reinicie o backend (tabelas serão recriadas)</li>
-          <li>Execute <code>.\inserir-dados.bat</code> para popular</li>
-        </ol>
-
-        <strong>Método 3: MySQL Command Line</strong>
-        <pre><code>mysql -u root -p
-# Digite a senha quando solicitado
-
-DROP DATABASE IF EXISTS seja_senai_db;
-CREATE DATABASE seja_senai_db;
-exit;
-
-# Reinicie backend
-.\parar-sistema.bat
-.\iniciar-backend.bat
-
-# Popule dados
-.\inserir-dados.bat</code></pre>
-
-        <strong>Método 4: Deletar Apenas Tabelas (Alternativa)</strong>
-        <pre><code>USE seja_senai_db;
-SET FOREIGN_KEY_CHECKS = 0;
-
-DROP TABLE IF EXISTS inscricao;
-DROP TABLE IF EXISTS edital;
-DROP TABLE IF EXISTS curso;
-DROP TABLE IF EXISTS unidade;
-DROP TABLE IF EXISTS password_reset_tokens;
-DROP TABLE IF EXISTS usuario;
-
-SET FOREIGN_KEY_CHECKS = 1;</code></pre>
+        <p>Ou use o script <code>.\limpar-banco.bat</code> para automatizar.</p>
 
         <div class="danger-box" style="margin-top: 16px;">
           <h4>🚨 Backup Antes de Zerar (Produção)</h4>
-          <p>Se estiver usando MySQL em produção, SEMPRE faça backup antes:</p>
-          <pre><code>mysqldump -u root -p seja_senai_db > backup_$(date +%Y%m%d).sql</code></pre>
+          <p>Sempre faça backup antes de limpar dados em produção. No Supabase:</p>
+          <ol>
+            <li>Vá em <strong>Database → Backups</strong></li>
+            <li>Clique em <strong>Create a backup</strong></li>
+          </ol>
         </div>
-
-        <h4>🎯 Comparação Rápida</h4>
-        <table style="width: 100%; margin-top: 16px; border-collapse: collapse;">
-          <thead>
-            <tr style="background: #f0f0f0;">
-              <th style="padding: 12px; border: 1px solid #ddd;">Característica</th>
-              <th style="padding: 12px; border: 1px solid #ddd;">H2</th>
-              <th style="padding: 12px; border: 1px solid #ddd;">MySQL</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="padding: 10px; border: 1px solid #ddd;"><strong>Zerar Banco</strong></td>
-              <td style="padding: 10px; border: 1px solid #ddd;">Automático ao reiniciar</td>
-              <td style="padding: 10px; border: 1px solid #ddd;">Manual (DROP DATABASE)</td>
-            </tr>
-            <tr>
-              <td style="padding: 10px; border: 1px solid #ddd;"><strong>Persistência</strong></td>
-              <td style="padding: 10px; border: 1px solid #ddd;">Em memória (perde ao parar)</td>
-              <td style="padding: 10px; border: 1px solid #ddd;">Disco (mantém sempre)</td>
-            </tr>
-            <tr>
-              <td style="padding: 10px; border: 1px solid #ddd;"><strong>Dificuldade</strong></td>
-              <td style="padding: 10px; border: 1px solid #ddd;">⭐ Muito Fácil</td>
-              <td style="padding: 10px; border: 1px solid #ddd;">⭐⭐⭐ Requer comandos SQL</td>
-            </tr>
-            <tr>
-              <td style="padding: 10px; border: 1px solid #ddd;"><strong>Uso Recomendado</strong></td>
-              <td style="padding: 10px; border: 1px solid #ddd;">Desenvolvimento e Testes</td>
-              <td style="padding: 10px; border: 1px solid #ddd;">Produção</td>
-            </tr>
-          </tbody>
-        </table>
       </div>
 
       <h2>🔍 Comandos Úteis para Diagnóstico</h2>
@@ -666,8 +518,8 @@ netstat -ano | findstr :8080
 # Frontend (5500)
 netstat -ano | findstr :5500</code></pre>
 
-        <h3>Verificar Processos Java</h3>
-        <pre><code>tasklist | findstr "java.exe"</code></pre>
+        <h3>Verificar Processos Node.js</h3>
+        <pre><code>tasklist | findstr "node.exe"</code></pre>
 
         <h3>Testar API com curl</h3>
         <pre><code># Listar editais (público)
@@ -676,7 +528,7 @@ curl http://localhost:8080/api/editais
 # Login
 curl -X POST http://localhost:8080/api/usuarios/login ^
   -H "Content-Type: application/json" ^
-  -d "{\"email\":\"admin@senai.com\",\"senha\":\"Admin@123\"}"</code></pre>
+  -d "{\"email\":\"admin@senai.com\",\"senha\":\"admin123\"}"</code></pre>
 
         <h3>Ver Logs do Backend</h3>
         <p>Os logs aparecem na janela que foi aberta ao executar <code>iniciar-backend.bat</code></p>

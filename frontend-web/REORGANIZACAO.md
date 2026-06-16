@@ -131,11 +131,11 @@ Os portais são independentes mas conectados:
 
 3. Use **Live Server** (extensão VS Code) para auto-reload
 
-### Production (Cloudflare Pages)
+### Production (Vercel)
 
-1. Deploy toda a pasta `frontend-web/`
-2. Configure a URL da API nas variáveis de ambiente
-3. Sistema detecta automaticamente
+1. Deploy via Vercel com `vercel.json` na raiz
+2. URL do frontend: `https://sige-iota.vercel.app`
+3. Configure a URL da API via modal no sistema
 
 ## 📦 Assets Copiados
 

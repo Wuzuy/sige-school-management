@@ -230,8 +230,8 @@ Se fosse um produto comercial, poderia gerar receita via:
 ### Recursos Tecnológicos:
 
 1. **Infraestrutura Backend**
-   - ☕ **Java 17 + Spring Boot 3.2**
-   - 🗄️ **Banco de dados H2** (desenvolvimento) / PostgreSQL (produção)
+   - ☕ **Node.js + Express 5.x**
+   - 🗄️ **PostgreSQL (Supabase)**
    - 🔐 **JWT Authentication** (segurança)
    - 📡 **API REST** (arquitetura escalável)
 
@@ -246,7 +246,7 @@ Se fosse um produto comercial, poderia gerar receita via:
    - 💾 **Cache offline**
 
 4. **Hospedagem e Deploy**
-   - ☁️ **Cloudflare Pages** (frontend)
+   - ☁️ **Vercel** (frontend) + **Render** (backend)
    - 🌐 **Ngrok / Cloudflare Tunnel** (backend para testes)
    - 🐳 **Docker** (containerização)
    - 🚀 **CI/CD** com GitHub Actions
@@ -438,7 +438,7 @@ Se fosse um produto comercial, poderia gerar receita via:
 
 | Item | Custo Estimado (R$/mês) |
 |------|--------------------------|
-| **Hospedagem Frontend** (Cloudflare Pages) | R$ 0 (plano gratuito) |
+| **Hospedagem Frontend** (Vercel) | R$ 0 (plano gratuito) |
 | **Hospedagem Backend** (Cloud - 1 instância) | R$ 150-300 |
 | **Banco de Dados** (PostgreSQL gerenciado) | R$ 100-200 |
 | **CDN e Cache** (Cloudflare Pro) | R$ 80 |
@@ -511,11 +511,11 @@ Se fosse um produto comercial, poderia gerar receita via:
 
 #### Para Reduzir Custos (plano mínimo viável):
 
-1. **Usar Cloudflare Pages** (gratuito) em vez de servidores pagos
+1. **Usar Vercel** (gratuito) para frontend + **Render** (gratuito) para backend
 2. **Ngrok gratuito** para testes (em vez de servidor dedicado)
 3. **Equipe interna** do SENAI (sem terceirização)
 4. **Marketing orgânico** (redes sociais) em vez de ads pagos
-5. **Banco H2** (em memória) para ambientes de teste
+5. **Supabase (PostgreSQL)** para ambiente de produção
 
 **Custo mínimo mensal:** < R$ 500/mês (apenas infraestrutura essencial)
 

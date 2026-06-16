@@ -2,7 +2,7 @@
 
 ## Problema Reportado
 
-Ao acessar o site hospedado na Cloudflare Pages pelo **celular no 4G**, aparece erro:
+Ao acessar o site hospedado na Vercel pelo **celular no 4G**, aparece erro:
 ```
 Loaded Failed
 ```
@@ -26,7 +26,7 @@ O mesmo site funciona normalmente no WiFi ou no PC.
 ```bash
 # Terminal 1: Inicie o backend
 cd backend
-./mvnw spring-boot:run
+npm run dev
 
 # Terminal 2: Inicie o Ngrok
 ngrok http 8080
@@ -242,7 +242,7 @@ https://SEU-NGROK.ngrok.io/api/editais
 **Backend em Railway:**
 1. Acesse: https://railway.app
 2. Conecte repositório GitHub
-3. Deploy Spring Boot (automático)
+3. Deploy Node.js (automático)
 4. Copie URL pública: `https://seu-app.railway.app`
 
 **Vantagens:**
@@ -311,7 +311,7 @@ Execute na ordem:
 
 6. [ ] **HTTPS funcionando?**
    - Ngrok sempre usa HTTPS ✅
-   - Cloudflare Pages sempre usa HTTPS ✅
+   - Vercel sempre usa HTTPS ✅
    - Não deve ter problema de Mixed Content
 
 ---

@@ -37,10 +37,10 @@
     <section class="content">
       <h2>Camadas</h2>
       <ul>
-        <li><strong>Model:</strong> entidades JPA (<code>Usuario</code>, <code>Curso</code>, <code>Unidade</code>, <code>Inscricao</code>, <code>Edital</code>).</li>
-        <li><strong>Repository:</strong> interfaces Spring Data para persistência.</li>
-        <li><strong>Controller:</strong> APIs REST para operações de negócio.</li>
-        <li><strong>Security:</strong> JWT stateless com regras por rota e perfil.</li>
+        <li><strong>Routes:</strong> definições de rotas Express (<code>/api/usuarios</code>, <code>/api/cursos</code>, etc.).</li>
+        <li><strong>Middleware:</strong> autenticação JWT, validação, CORS.</li>
+        <li><strong>Controller:</strong> funções manipuladoras das requisições REST.</li>
+        <li><strong>Database:</strong> consultas Supabase (PostgreSQL) para persistência.</li>
       </ul>
 
       <h2>Endpoints de destaque</h2>

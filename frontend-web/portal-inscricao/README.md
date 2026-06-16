@@ -80,10 +80,10 @@ portal-inscricao/
 A URL da API é detectada automaticamente:
 
 1. **LocalStorage**: Se configurado manualmente no navegador
-2. **Variáveis de ambiente**: Em produção (Cloudflare Pages)
+2. **Variáveis de ambiente**: Em produção (Vercel)
 3. **Localhost**: Para desenvolvimento (`http://localhost:8080/api`)
 
-Se estiver usando Cloudflare Pages, configure a URL da API através do modal que aparecerá na primeira visita.
+Se estiver usando Vercel, configure a URL da API através do modal que aparecerá na primeira visita.
 
 ## Fluxo de Usuário
 

@@ -10,9 +10,9 @@ echo.
 pause
 
 echo.
-echo Parando Backend (Spring Boot)...
+echo Parando Backend (Node.js)...
 taskkill /FI "WindowTitle eq SIGE Backend*" /F >nul 2>&1
-taskkill /FI "IMAGENAME eq java.exe" /F >nul 2>&1
+taskkill /FI "IMAGENAME eq node.exe" /F >nul 2>&1
 
 echo Parando Frontend (Servidor HTTP)...
 taskkill /FI "WindowTitle eq SIGE Frontend*" /F >nul 2>&1

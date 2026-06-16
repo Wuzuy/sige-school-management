@@ -177,13 +177,13 @@
                ▼
 ┌─────────────────────────────────────────┐
 │         BACKEND (Server)                │
-│   Spring Boot 3.x + Java 21             │
-│   JPA/Hibernate + Spring Security       │
+│   Node.js 22 + Express 5                │
+│   Supabase Client + JWT Auth            │
 └──────────────┬──────────────────────────┘
-               │ JDBC
+               │ REST API
                ▼
 ┌─────────────────────────────────────────┐
-│      DATABASE (PostgreSQL/MySQL)        │
+│      DATABASE (Supabase PostgreSQL)     │
 └─────────────────────────────────────────┘
         </pre>
 
@@ -203,14 +203,12 @@
         
         <h4>Backend</h4>
         <div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0;">
-          <span class="tech-badge">Java 21</span>
-          <span class="tech-badge">Spring Boot 3.4.5</span>
-          <span class="tech-badge">Spring Data JPA</span>
-          <span class="tech-badge">Spring Security</span>
-          <span class="tech-badge">JWT</span>
-          <span class="tech-badge">BCrypt</span>
-          <span class="tech-badge">Maven</span>
-          <span class="tech-badge">PostgreSQL/MySQL</span>
+          <span class="tech-badge">Node.js 22</span>
+          <span class="tech-badge">Express 5</span>
+          <span class="tech-badge">Supabase Client</span>
+          <span class="tech-badge">JWT (jsonwebtoken)</span>
+          <span class="tech-badge">bcrypt</span>
+          <span class="tech-badge">Supabase PostgreSQL</span>
         </div>
 
         <h4>Frontend</h4>
@@ -436,12 +434,12 @@
         <div class="highlight-box">
           <strong>Backend:</strong>
           <pre style="margin: 8px 0; background: #1e293b; color: #e2e8f0; padding: 12px; border-radius: 4px; max-width: 100%; overflow-x: auto;">cd backend
-./mvnw clean package -DskipTests
-java -jar target/sige-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod</pre>
+npm install
+npm run dev</pre>
           
           <strong>Frontend:</strong>
-          <pre style="margin: 8px 0; background: #1e293b; color: #e2e8f0; padding: 12px; border-radius: 4px; max-width: 100%; overflow-x: auto;">cd frontend-web/static
-npx http-server . -p 3000</pre>
+          <pre style="margin: 8px 0; background: #1e293b; color: #e2e8f0; padding: 12px; border-radius: 4px; max-width: 100%; overflow-x: auto;">cd frontend-web
+npx http-server . -p 5500</pre>
         </div>
 
         <h4>Opção 2: Docker</h4>
@@ -598,7 +596,7 @@ npx http-server . -p 3000</pre>
             <strong>🗄️ Diagramas ER</strong>
             <ul style="margin-bottom: 0; font-size: 0.9rem;">
               <li>dbdiagram.io</li>
-              <li>MySQL Workbench</li>
+              <li>DBeaver</li>
               <li>pgModeler</li>
               <li>Draw.io (ER shapes)</li>
             </ul>
@@ -612,52 +610,38 @@ npx http-server . -p 3000</pre>
         
         <h4>Pré-requisitos</h4>
         <ul>
-          <li><strong>Java JDK 21+</strong> - <a href="https://adoptium.net/" target="_blank">Download</a></li>
-          <li><strong>PostgreSQL 14+</strong> ou MySQL 8+</li>
-          <li><strong>Maven 3.8+</strong> (ou usar mvnw incluído)</li>
-          <li><strong>IDE:</strong> IntelliJ IDEA ou VS Code com extensões Java</li>
+          <li><strong>Node.js 22+</strong> - <a href="https://nodejs.org/" target="_blank">Download</a></li>
+          <li><strong>Conta Supabase</strong> (PostgreSQL gerenciado na nuvem)</li>
+          <li><strong>npm</strong> (incluído com Node.js)</li>
+          <li><strong>IDE:</strong> VS Code</li>
         </ul>
 
-        <h4>Configuração application.properties</h4>
-        <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto; max-width: 100%;">spring.datasource.url=jdbc:postgresql://localhost:5432/sige
-spring.datasource.username=seu_usuario
-spring.datasource.password=sua_senha
-spring.jpa.hibernate.ddl-auto=update
-
-jwt.secret=sua_chave_secreta_muito_longa_e_segura
-jwt.expiration=86400000
-
-server.port=8080</pre>
+        <h4>Configuração .env</h4>
+        <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto; max-width: 100%;">SUPABASE_URL=https://seu-projeto.supabase.co
+SUPABASE_KEY=SUA_CHAVE_ANON
+JWT_SECRET=secreta_sige_123
+PORT=8080</pre>
 
         <h4>Executar o Sistema</h4>
         <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; max-width: 100%; overflow-x: auto;">cd backend
-./mvnw spring-boot:run
+npm install
+npm run dev
 
 # Em outro terminal
-cd frontend-web/static
-npx http-server . -p 3000</pre>
+cd frontend-web
+npx http-server . -p 5500</pre>
       </div>
 
       <!-- MONITORAMENTO -->
       <div class="doc-section">
         <h3>📈 Monitoramento e Manutenção</h3>
         
-        <h4>Spring Boot Actuator</h4>
+        <h4>Health Check</h4>
         <ul style="list-style: none; padding: 0;">
           <li style="margin: 8px 0;">
             <span class="endpoint-method method-get">GET</span>
-            <code>/actuator/health</code>
+            <code>/api/health</code>
             <span style="color: #6b7280;"> - Status da aplicação</span>
-          </li>
-          <li style="margin: 8px 0;">
-            <span class="endpoint-method method-get">GET</span>
-            <code>/actuator/info</code>
-            <span style="color: #6b7280;"> - Informações da build</span>
-          </li>
-          <li style="margin: 8px 0;">
-            <span class="endpoint-method method-get">GET</span>
-            <code>/actuator/metrics</code>
-            <span style="color: #6b7280;"> - Métricas de performance</span>
           </li>
         </ul>
 
