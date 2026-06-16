@@ -54,20 +54,74 @@
 		<h1 style="color: #FFFFFF">Portal do Aluno</h1>
   	</div>
 	<section class="hero interface">
-		<div class="containerOuvidoria">
-			<form>
-				<h1>Placeholder</h1>
-				<label>Placeholder</label>
-				<input>
-				<label>Placeholder</label>
-				<textarea></textarea>
-			</form>
-			<div>
-				<h1>Informações de contato</h1>
-				<h2>Telefone</h2>
-				<h2>(XX)XXXXX-XXXX</h2>
-				<h2>Email</h2>
-				<h2>email@email.com</h2>
+		<div class="gridOuvidoria">
+			<!-- SEÇÃO ESQUERDA: ENVIO DE MENSAGENS -->
+			<div class="ouvidoriaForm">
+				<h1>Envie sua Mensagem</h1>
+				<p class="subtitle">Preencha o formulário abaixo. Responderemos o mais breve possível.</p>
+				
+				<form>
+					<div class="field">
+						<label for="nome">Nome <span class="optional">(opcional)</span></label>
+						<input type="text" id="nome" name="nome" placeholder="Seu nome completo">
+					</div>
+
+					<div class="field">
+						<label for="email">E-mail <span class="required">*</span></label>
+						<input type="email" id="email" name="email" placeholder="seu@email.com" required>
+					</div>
+
+					<div class="field">
+						<label for="categoria">Categoria <span class="required">*</span></label>
+						<select id="categoria" name="categoria" required>
+							<option value="">Selecione uma categoria</option>
+							<option value="pedagogico">Assunto Pedagógico</option>
+							<option value="administrativo">Assunto Administrativo</option>
+							<option value="infraestrutura">Infraestrutura</option>
+							<option value="outro">Outro</option>
+						</select>
+					</div>
+
+					<div class="field">
+						<label for="mensagem">Mensagem / Descrição <span class="required">*</span></label>
+						<textarea id="mensagem" name="mensagem" placeholder="Descreva sua mensagem em detalhes..." rows="6" required></textarea>
+						<small class="fieldHint">Mínimo de 10 caracteres. Seja claro e objetivo.</small>
+					</div>
+
+					<button type="submit" class="btn btn-primary">Enviar Mensagem</button>
+				</form>
+			</div>
+
+			<!-- SEÇÃO DIREITA: INFORMAÇÕES DA INSTITUIÇÃO -->
+			<div class="ouvidoriaInfo">
+				<h2>Informações de Contato</h2>
+				<p class="infoSubtitle">Outros canais de atendimento</p>
+
+				<div class="infoCard">
+					<h3>Telefone</h3>
+					<p class="infoContent">(11) 3456-7890</p>
+					<p class="infoSecondary">(11) 98765-4321</p>
+				</div>
+
+				<div class="infoCard">
+					<h3>E-mail</h3>
+					<p class="infoContent">ouvidoria@escola.edu.br</p>
+				</div>
+
+				<div class="infoCard">
+					<h3>Horário de Atendimento</h3>
+					<p class="infoContent">Segunda a Sexta</p>
+					<p class="infoSecondary">8h00 às 18h00</p>
+				</div>
+
+				<div class="compromissoCard">
+					<h3>Compromisso com Você</h3>
+					<ul class="compromissoList">
+						<li>Todas as manifestações são analisadas com atenção e confidencialidade.</li>
+						<li>Prazo de resposta: até 5 dias úteis.</li>
+						<li>Seu anonimato será preservado, se desejar.</li>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</section>

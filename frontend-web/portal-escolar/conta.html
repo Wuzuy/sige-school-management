@@ -54,37 +54,89 @@
 		<h1 style="color: #FFFFFF">Portal do Aluno</h1>
   	</div>
 	<section class="hero interface">
-		<div class="containerConta">
-			<div class="containerPerfil">
-				<figure>
-					<img src="assets/images/sige.png">
-				</figure>
-				<h1>Nome Perfil</h1>
-				<p>Ocupação</p>
-				<!-- mostra se a conta é legítima e verificada ou não -->
-				<p id="verificar">Verificação</p>
-				<button id="editarFotoPerfil">
-					Editar Foto de Perfil
-				</button>
-			</div>
-			<!-- container das informações -->
-			<div class="containerPInfo">
-				<div class="cardPInfo"> 
-					<h1>Informações pessoais</h1>
-					<div class="containerInput">
-						<p>Informação</p>
-						<p class="conteudo">Conteúdo da Informação</p>
+		<div class="gridConta">
+			<!-- SEÇÃO ESQUERDA: DADOS SENSÍVEIS -->
+			<div class="contaDadosSensiveis">
+				<h2>Dados Sensíveis</h2>
+
+				<div class="dataField">
+					<div class="dataInfo">
+						<label>CPF</label>
+						<p class="dataContent">123.456.789-10</p>
 					</div>
+					<button class="btn-edit" title="Editar CPF">✎</button>
 				</div>
-				<div class="cardPInfo"> 
-					<h1>Informações pessoais</h1>
-					<div class="containerInput">
-						<p>Senha</p>
-						<p class="conteudo">***</p>
-						<!-- Eu nn entendi mto bem o exemplo do figma, eu acho q ao clicar no botão ele ia abrir uma parte pra mudar a senha-->
-						<button>
-							Mudar Senha
-						</button>
+
+				<div class="dataField">
+					<div class="dataInfo">
+						<label>Matrícula</label>
+						<p class="dataContent">202400001</p>
+					</div>
+					<button class="btn-edit" title="Editar Matrícula">✎</button>
+				</div>
+
+				<div class="dataField">
+					<div class="dataInfo">
+						<label>Data de Nascimento</label>
+						<p class="dataContent">15 de Março de 1985</p>
+					</div>
+					<button class="btn-edit" title="Editar Data de Nascimento">✎</button>
+				</div>
+
+				<div class="dividerSenha"></div>
+
+				<div class="dataField">
+					<div class="dataInfo">
+						<label>Senha</label>
+						<p class="dataContent">••••••••</p>
+					</div>
+					<button class="btn-edit btn-password" title="Alterar Senha">Alterar</button>
+				</div>
+
+				<div class="dataField">
+					<div class="dataInfo">
+						<label>Autenticação de Dois Fatores</label>
+						<p class="dataContent">Desativado</p>
+					</div>
+					<button class="btn-edit" title="Ativar Autenticação 2FA">✎</button>
+				</div>
+			</div>
+
+			<!-- SEÇÃO DIREITA: PERFIL E INFORMAÇÕES GERAIS -->
+			<div class="contaPerfil">
+				<div class="profileCard">
+					<figure class="profilePicture">
+						<img src="assets/images/sige.png" alt="Foto de Perfil">
+					</figure>
+					<button class="btn btn-soft editProfilePic">Editar Foto de Perfil</button>
+				</div>
+
+				<div class="profileInfoCard">
+					<h2>Informações Gerais</h2>
+
+					<div class="infoRow">
+						<label>Nome Completo</label>
+						<p>Prof. Sarah Jenkins</p>
+					</div>
+
+					<div class="infoRow">
+						<label>Email</label>
+						<p>sarah.jenkins@highschool.edu</p>
+					</div>
+
+					<div class="infoRow">
+						<label>Cargo / Ocupação</label>
+						<p>Senior Mathematics Faculty</p>
+					</div>
+
+					<div class="infoRow">
+						<label>Telefone</label>
+						<p>+1 (555) 123-4567</p>
+					</div>
+
+					<div class="infoRow">
+						<label>Status da Conta</label>
+						<p class="statusVerified">✓ Conta Verificada</p>
 					</div>
 				</div>
 			</div>
