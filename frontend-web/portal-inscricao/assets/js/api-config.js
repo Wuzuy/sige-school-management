@@ -1,7 +1,14 @@
-﻿// Sistema de configuracao automatica de API
-// Deixe vazio para usar localhost em desenvolvimento
-// ou configure manualmente no Pages.dev quando necessario
+﻿// Configuracao automatica de ambiente
+// Local: usa localhost:8080 | Producao: usa Render
 (function() {
-  // Sem URL pre-configurada - usa deteccao automatica
-  console.log('API Config: Sistema de deteccao automatica ativo');
+  const host = window.location.hostname;
+  if (host === 'localhost' || host === '127.0.0.1') {
+    console.log('API: modo local (localhost:8080)');
+    return;
+  }
+  if (host.includes('vercel.app')) {
+    // Substitua pela URL do seu backend no Render
+    window.API_BASE_URL = 'https://sige-1gqx.onrender.com/api';
+    console.log('API: modo producao ->', window.API_BASE_URL);
+  }
 })();
