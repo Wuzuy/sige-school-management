@@ -204,8 +204,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Compatibilidade: também escuta botões com a classe antiga `botaoMiniHeader`
+  const miniButtons = document.querySelectorAll('.botaoMiniHeader');
+  if (miniButtons && miniButtons.length) {
+    miniButtons.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleSidebar();
+      });
+    });
+  }
+
   // Fecha sidebar ao clicar fora dela
-  const navOverlay = document.querySelector('.sidebar-overlay');
+  const navOverlay = document.querySelector('.sidebar-overlay') || document.querySelector('.nav-overlay');
   if (navOverlay) {
     navOverlay.addEventListener('click', closeSidebar);
   }
