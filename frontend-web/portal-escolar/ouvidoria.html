@@ -15,38 +15,19 @@
 			<img src="assets/images/sige.png" alt="SIGE" />
 			<span>SIGE</span>
 		</div>
+		<button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+			<span>☰</span>
+		</button>
 		<nav class="nav">
 			<a href="status.html">Status</a>
 			<a href="../portal-secretaria/portal-secretaria.html" data-admin-only>Portal da Secretaria</a>
 			<button data-logout type="button">Sair</button>
 		</nav>
-  	</header>
+	</header>
+	<div class="nav-overlay"></div>
 	<aside id="sidebar">
-		<div class="containerLista">
-			<ul>
-				<p>SALGADOS</p>
-				<li>Joelho</li>
-				<li>Bandeclay</li>
-				<li>Tchunflay</li>
-			</ul>
-		</div>
-		<div class="containerLista">
-			<ul>
-				<p>DOCES</p>
-				<li>Chocolates</li>
-				<li>Pirulito</li>
-				<li>Algodão Doce</li>
-			</ul>
-		</div>
-		<div class="containerLista">
-			<ul>
-				<p>FRUTAS</p>
-				<li>Maçã</li>
-				<li>Chuchu</li>
-				<li>Cebola</li>
-			</ul>
-		</div>
-	</aside>
+    	<nav id="sidebar-nav"></nav>
+  	</aside>
 	<div class="topbar miniTopbar">
 		<button class="botaoMiniHeader" onclick="sidebarOpen()">
 			≡
@@ -126,4 +107,10 @@
 		</div>
 	</section>
 <script src="assets/js/scripts.js"></script>
+<script src="assets/js/sidebar-nav.js"></script>
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		setupMobileMenu();
+	});
+</script>
 </body>
