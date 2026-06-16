@@ -55,7 +55,29 @@
         <p><strong>Série:</strong> <span id="aluno-serie">-</span></p>
         <p><strong>Turno:</strong> <span id="aluno-turno">-</span></p>
         <p><strong>Status:</strong> <span id="aluno-status">-</span></p>
-        <button class="btn btn-soft" style="margin-top: 12px;">Editar Dados</button>
+        <button class="btn btn-soft" id="btn-editar-dados" style="margin-top: 12px;">Editar Dados</button>
+      </article>
+
+      <article class="card" id="editar-dados-form" style="grid-column: span 12; display: none;">
+        <h2>Editar Dados Pessoais</h2>
+        <form id="form-perfil">
+          <div class="form-group">
+            <label for="perfil-nome">Nome Completo</label>
+            <input type="text" id="perfil-nome" class="form-control" required minlength="3" maxlength="200">
+          </div>
+          <div class="form-group">
+            <label for="telefone">Telefone</label>
+            <input type="tel" id="telefone" class="form-control" placeholder="(XX) XXXXX-XXXX">
+          </div>
+          <div class="form-group">
+            <label for="perfil-data-nascimento">Data de Nascimento</label>
+            <input type="date" id="perfil-data-nascimento" class="form-control">
+          </div>
+          <div class="actions" style="margin-top: 16px;">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <button type="button" class="btn btn-soft" id="btn-cancelar-edicao">Cancelar</button>
+          </div>
+        </form>
       </article>
 
       <article class="card" style="grid-column: span 12;">
@@ -73,21 +95,33 @@
   <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
   <script src="assets/js/api-config.js"></script>
   <script src="assets/js/scripts.js"></script>
-<<<<<<< Updated upstream
-    <script>
-=======
   <script src="assets/js/sidebar-nav.js"></script>
   <script>
->>>>>>> Stashed changes
     document.addEventListener('DOMContentLoaded', () => {
       setupMobileMenu();
       const auth = requireAuth();
-      if (auth) {
-        setupProtectedPage(auth);
-        document.getElementById('aluno-nome').textContent = auth.usuario?.nomeCompleto || '-';
-        document.getElementById('aluno-email').textContent = auth.usuario?.email || '-';
-        document.getElementById('aluno-telefone').textContent = auth.usuario?.telefone || '-';
+      if (!auth) return;
+      setupProtectedPage(auth);
+
+      document.getElementById('aluno-nome').textContent = auth.usuario?.nomeCompleto || '-';
+      document.getElementById('aluno-email').textContent = auth.usuario?.email || '-';
+      document.getElementById('aluno-telefone').textContent = auth.usuario?.telefone || '-';
+
+      const btnEditar = document.getElementById('btn-editar-dados');
+      const formCard = document.getElementById('editar-dados-form');
+      const btnCancelar = document.getElementById('btn-cancelar-edicao');
+
+      function toggleForm(show) {
+        if (formCard) formCard.style.display = show ? 'block' : 'none';
+        if (btnEditar) btnEditar.textContent = show ? 'Fechar Edição' : 'Editar Dados';
       }
+
+      btnEditar?.addEventListener('click', () => {
+        const isVisible = formCard && formCard.style.display === 'block';
+        toggleForm(!isVisible);
+      });
+
+      btnCancelar?.addEventListener('click', () => toggleForm(false));
     });
   </script>
 </body>
