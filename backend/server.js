@@ -11,14 +11,16 @@ app.use(express.json());
 const cursosRoutes = require('./routes/cursos');
 const usuariosRoutes = require('./routes/usuarios');
 const inscricoesRoutes = require('./routes/inscricoes');
-const unidadesRoutes = require('./routes/unidades'); // Adicionado
-const editaisRoutes = require('./routes/editais');   // Adicionado
+const unidadesRoutes = require('./routes/unidades');
+const editaisRoutes = require('./routes/editais');
+const alunoRoutes = require('./routes/aluno');
 
 app.use('/api/cursos', cursosRoutes);
 app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/inscricoes', inscricoesRoutes);
-app.use('/api/unidades', unidadesRoutes); // Adicionado
-app.use('/api/editais', editaisRoutes);   // Adicionado
+app.use('/api/unidades', unidadesRoutes);
+app.use('/api/editais', editaisRoutes);
+app.use('/api/aluno', alunoRoutes);
 
 const PORT = process.env.PORT || 8080;
 

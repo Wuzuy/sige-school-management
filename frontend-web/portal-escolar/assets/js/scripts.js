@@ -1230,12 +1230,27 @@ async function initPortalAlunoPage() {
     document.querySelector('#aluno-email').textContent = usuario.email;
     document.querySelector('#aluno-cpf').textContent = usuario.cpf || '-';
     document.querySelector('#aluno-data-nascimento').textContent = formatDate(usuario.dataNascimento);
+    document.querySelector('#aluno-telefone').textContent = usuario.telefone || '-';
 
     document.querySelector('#perfil-nome').value = usuario.nomeCompleto || '';
     document.querySelector('#telefone').value = usuario.telefone || '';
     document.querySelector('#perfil-data-nascimento').value = toDateInputValue(usuario.dataNascimento);
   } catch (error) {
     showError(`Erro ao carregar seus dados: ${error.message}`);
+  }
+
+  try {
+    const matriculas = await request('/aluno/matriculas', { headers: authHeaders(false) });
+    if (matriculas && matriculas.length > 0) {
+      const m = matriculas[0];
+      document.querySelector('#aluno-matricula').textContent = m.numero_matricula || `MAT-${String(m.id).padStart(6, '0')}`;
+      document.querySelector('#aluno-serie').textContent = m.id_turma?.nome || m.id_curso?.nome_curso || '-';
+      document.querySelector('#aluno-turno').textContent = m.id_turma?.turno || m.id_curso?.turno || '-';
+      const statusMap = { 'ATIVO': 'Ativo', 'TRANCADO': 'Trancado', 'CONCLUIDO': 'Concluido', 'CANCELADO': 'Cancelado' };
+      document.querySelector('#aluno-status').textContent = statusMap[m.status] || m.status;
+    }
+  } catch (e) {
+    // Silencioso - informacao academica nao essencial
   }
 
   form?.addEventListener('submit', async (event) => {
@@ -2025,6 +2040,175 @@ async function initPortalSecretariaPage() {
   });
 }
 
+// ============================================
+// INIT FUNCTIONS - PAGINAS DO ALUNO
+// ============================================
+
+async function initHistoricoPage() {
+  const auth = requireAuth();
+  if (!auth) return;
+  setupProtectedPage(auth);
+
+  const body = document.querySelector('#historico-body');
+  if (!body) return;
+
+  try {
+    const data = await request('/aluno/historico', { headers: authHeaders(false) });
+    body.innerHTML = data.length
+      ? data.map((h) => `
+        <tr>
+          <td>${h.id_disciplina?.nome || '-'}</td>
+          <td>${h.id_professor?.nome_completo || '-'}</td>
+          <td>${h.nota_final != null ? h.nota_final.toFixed(1) : '-'}</td>
+          <td>${h.frequencia_percentual != null ? h.frequencia_percentual.toFixed(0) + '%' : '-'}</td>
+          <td><span class="status ${h.status === 'APROVADO' ? 'alert-ok' : h.status === 'REPROVADO' ? 'alert-danger' : 'alert-info'}">${h.status || 'CURSANDO'}</span></td>
+        </tr>`).join('')
+      : '<tr><td colspan="5">Nenhum historico encontrado.</td></tr>';
+  } catch (error) {
+    showError('Erro ao carregar historico: ' + error.message);
+    body.innerHTML = '<tr><td colspan="5">Erro ao carregar dados.</td></tr>';
+  }
+}
+
+async function initDocumentosPage() {
+  const auth = requireAuth();
+  if (!auth) return;
+  setupProtectedPage(auth);
+
+  const body = document.querySelector('#documentos-body');
+  if (!body) return;
+
+  try {
+    const data = await request('/aluno/documentos', { headers: authHeaders(false) });
+    body.innerHTML = data.length
+      ? data.map((d) => `
+        <tr>
+          <td>${d.nome}</td>
+          <td>${d.data_envio ? new Date(d.data_envio).toLocaleDateString('pt-BR') : '-'}</td>
+          <td><span class="status ${d.status === 'APROVADO' ? 'alert-ok' : d.status === 'RECUSADO' ? 'alert-danger' : 'alert-info'}">${d.status || 'PENDENTE'}</span></td>
+          <td>${d.arquivo_url ? `<a href="${d.arquivo_url}" target="_blank" class="btn btn-soft">Download</a>` : '-'}</td>
+        </tr>`).join('')
+      : '<tr><td colspan="4">Nenhum documento encontrado.</td></tr>';
+  } catch (error) {
+    showError('Erro ao carregar documentos: ' + error.message);
+    body.innerHTML = '<tr><td colspan="4">Erro ao carregar dados.</td></tr>';
+  }
+}
+
+async function initFrequenciaPage() {
+  const auth = requireAuth();
+  if (!auth) return;
+  setupProtectedPage(auth);
+
+  const body = document.querySelector('#frequencia-body');
+  if (!body) return;
+
+  try {
+    const data = await request('/aluno/frequencia', { headers: authHeaders(false) });
+    body.innerHTML = data.length
+      ? data.map((f) => `
+        <tr>
+          <td>${f.disciplina}</td>
+          <td>${f.totalAulas}</td>
+          <td>${f.presencas}</td>
+          <td>${f.faltas}</td>
+          <td>${f.frequenciaPercentual}%</td>
+        </tr>`).join('')
+      : '<tr><td colspan="5">Nenhum registro de frequencia encontrado.</td></tr>';
+  } catch (error) {
+    showError('Erro ao carregar frequencia: ' + error.message);
+    body.innerHTML = '<tr><td colspan="5">Erro ao carregar dados.</td></tr>';
+  }
+}
+
+async function initAgendaPage() {
+  const auth = requireAuth();
+  if (!auth) return;
+  setupProtectedPage(auth);
+
+  const container = document.querySelector('#agenda-events');
+  if (!container) return;
+
+  try {
+    const data = await request('/aluno/agenda', { headers: authHeaders(false) });
+
+    if (!data.length) {
+      container.innerHTML = '<p class="muted">Nenhum evento agendado.</p>';
+      return;
+    }
+
+    container.innerHTML = data.map((e) => `
+      <div class="card" style="margin-bottom: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: start;">
+          <div>
+            <h3 style="margin: 0 0 4px;">${e.titulo}</h3>
+            <p class="muted" style="margin: 0;">${e.descricao || ''}</p>
+          </div>
+          <span class="status ${e.tipo === 'PROVA' ? 'alert-danger' : e.tipo === 'FERIADO' ? 'alert-ok' : 'alert-info'}">${e.tipo || 'EVENTO'}</span>
+        </div>
+        <p style="margin: 8px 0 0; font-size: 0.85rem; color: var(--muted);">
+          ${new Date(e.data_inicio).toLocaleDateString('pt-BR')}
+          ${e.data_fim && e.data_fim !== e.data_inicio ? ' a ' + new Date(e.data_fim).toLocaleDateString('pt-BR') : ''}
+        </p>
+      </div>`).join('');
+  } catch (error) {
+    showError('Erro ao carregar agenda: ' + error.message);
+    container.innerHTML = '<p class="muted">Erro ao carregar agenda.</p>';
+  }
+}
+
+async function initCalendarioPage() {
+  const auth = requireAuth();
+  if (!auth) return;
+  setupProtectedPage(auth);
+
+  const body = document.querySelector('#calendario-body');
+  if (!body) return;
+
+  try {
+    const data = await request('/aluno/calendario', { headers: authHeaders(false) });
+    body.innerHTML = data.length
+      ? data.map((e) => `
+        <tr>
+          <td>${e.titulo}</td>
+          <td>${new Date(e.data_inicio).toLocaleDateString('pt-BR')}</td>
+          <td>${e.descricao || ''}</td>
+        </tr>`).join('')
+      : '<tr><td colspan="3">Nenhum evento encontrado.</td></tr>';
+  } catch (error) {
+    showError('Erro ao carregar calendario: ' + error.message);
+    body.innerHTML = '<tr><td colspan="3">Erro ao carregar dados.</td></tr>';
+  }
+}
+
+async function initQuadroHorariosPage() {
+  const auth = requireAuth();
+  if (!auth) return;
+  setupProtectedPage(auth);
+
+  const body = document.querySelector('#horarios-body');
+  if (!body) return;
+
+  const dias = ['Domingo', 'Segunda-feira', 'Terca-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sabado'];
+
+  try {
+    const data = await request('/aluno/horarios', { headers: authHeaders(false) });
+    body.innerHTML = data.length
+      ? data.map((h) => `
+        <tr>
+          <td>${dias[h.dia_semana] || h.dia_semana}</td>
+          <td>${h.hora_inicio?.slice(0, 5) || ''} - ${h.hora_fim?.slice(0, 5) || ''}</td>
+          <td>${h.id_disciplina?.nome || '-'}</td>
+          <td>${h.id_professor?.nome_completo || '-'}</td>
+          <td>${h.local || '-'}</td>
+        </tr>`).join('')
+      : '<tr><td colspan="5">Nenhum horario cadastrado.</td></tr>';
+  } catch (error) {
+    showError('Erro ao carregar horarios: ' + error.message);
+    body.innerHTML = '<tr><td colspan="5">Erro ao carregar dados.</td></tr>';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   setupMobileMenu();
   
@@ -2037,6 +2221,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (page === 'matricula') initMatriculaPage();
   if (page === 'portal-aluno') initPortalAlunoPage();
   if (page === 'portal-secretaria') initPortalSecretariaPage();
+  if (page === 'historico') initHistoricoPage();
+  if (page === 'documentos') initDocumentosPage();
+  if (page === 'frequencia') initFrequenciaPage();
+  if (page === 'agenda') initAgendaPage();
+  if (page === 'calendario') initCalendarioPage();
+  if (page === 'horarios') initQuadroHorariosPage();
 });
 
 //FUNÇÃO DA SIDEBAR

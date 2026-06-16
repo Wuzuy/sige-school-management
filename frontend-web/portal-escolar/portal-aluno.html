@@ -40,7 +40,7 @@
         <p><strong>Nome:</strong> <span id="aluno-nome">Carregando...</span></p>
         <p><strong>Email:</strong> <span id="aluno-email">-</span></p>
         <p><strong>CPF:</strong> <span id="aluno-cpf">-</span></p>
-        <p><strong>Data de Nascimento:</strong> <span id="aluno-nascimento">-</span></p>
+        <p><strong>Data de Nascimento:</strong> <span id="aluno-data-nascimento">-</span></p>
         <p><strong>Telefone:</strong> <span id="aluno-telefone">-</span></p>
       </article>
 
@@ -68,15 +68,15 @@
   <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
   <script src="assets/js/api-config.js"></script>
   <script src="assets/js/scripts.js"></script>
-  <script>
+    <script>
     document.addEventListener('DOMContentLoaded', () => {
       setupMobileMenu();
       const auth = requireAuth();
       if (auth) {
         setupProtectedPage(auth);
-        // Carregar dados do aluno
         document.getElementById('aluno-nome').textContent = auth.usuario?.nomeCompleto || '-';
         document.getElementById('aluno-email').textContent = auth.usuario?.email || '-';
+        document.getElementById('aluno-telefone').textContent = auth.usuario?.telefone || '-';
       }
     });
   </script>

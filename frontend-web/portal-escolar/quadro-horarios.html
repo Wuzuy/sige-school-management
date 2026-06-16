@@ -8,7 +8,7 @@
   <link rel="icon" href="assets/images/sige.png" type="image/png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
 </head>
-<body>
+<body data-page="horarios">
 	<!-- HEADER -->
 	<header class="topbar" id="headerID">
 		<div class="brand">
@@ -42,77 +42,8 @@
 							<th>Local</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							<td>Segunda-feira</td>
-							<td>08:00 - 09:30</td>
-							<td>Cálculo I</td>
-							<td>Prof. João Silva</td>
-							<td>Sala 101</td>
-						</tr>
-						<tr>
-							<td>Segunda-feira</td>
-							<td>09:45 - 11:15</td>
-							<td>Álgebra Linear</td>
-							<td>Prof. Maria Santos</td>
-							<td>Sala 102</td>
-						</tr>
-						<tr>
-							<td>Terça-feira</td>
-							<td>08:00 - 09:30</td>
-							<td>Física I</td>
-							<td>Prof. Carlos Costa</td>
-							<td>Lab. de Física</td>
-						</tr>
-						<tr>
-							<td>Terça-feira</td>
-							<td>14:00 - 15:30</td>
-							<td>Programação</td>
-							<td>Prof. Ana Pereira</td>
-							<td>Lab. de Informática</td>
-						</tr>
-						<tr>
-							<td>Quarta-feira</td>
-							<td>08:00 - 09:30</td>
-							<td>Química</td>
-							<td>Prof. Lucas Oliveira</td>
-							<td>Lab. de Química</td>
-						</tr>
-						<tr>
-							<td>Quarta-feira</td>
-							<td>10:00 - 11:30</td>
-							<td>Inglês</td>
-							<td>Prof. Rebecca Jones</td>
-							<td>Sala 201</td>
-						</tr>
-						<tr>
-							<td>Quinta-feira</td>
-							<td>08:00 - 09:30</td>
-							<td>História</td>
-							<td>Prof. Roberto Lima</td>
-							<td>Sala 103</td>
-						</tr>
-						<tr>
-							<td>Quinta-feira</td>
-							<td>14:00 - 15:30</td>
-							<td>Educação Física</td>
-							<td>Prof. Marcos Souza</td>
-							<td>Ginásio</td>
-						</tr>
-						<tr>
-							<td>Sexta-feira</td>
-							<td>08:00 - 10:00</td>
-							<td>Laboratório</td>
-							<td>Prof. Ana Pereira</td>
-							<td>Lab. de Informática</td>
-						</tr>
-						<tr>
-							<td>Sexta-feira</td>
-							<td>14:00 - 15:30</td>
-							<td>Seminário</td>
-							<td>Diversos</td>
-							<td>Auditório</td>
-						</tr>
+					<tbody id="horarios-body">
+						<tr><td colspan="5" class="muted" style="text-align:center; padding:20px;">Carregando horarios...</td></tr>
 					</tbody>
 				</table>
 			</div>
@@ -130,5 +61,11 @@
 	<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
 	<script src="assets/js/scripts.js"></script>
 	<script src="assets/js/sidebar-nav.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			setupMobileMenu();
+			requireAuth();
+		});
+	</script>
 </body>
 </html>
