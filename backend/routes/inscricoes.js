@@ -1,24 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const supabase = require('../config/supabase');
-const jwt = require('jsonwebtoken');
-
-const JWT_SECRET = process.env.JWT_SECRET || 'secreta_sige_123';
-
-// Middleware de autenticacao simples
-const authMiddleware = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) return res.status(401).json({ error: 'Nao autorizado' });
-  try {
-    req.user = jwt.verify(token, JWT_SECRET);
-    next();
-  } catch (e) {
-    res.status(401).json({ error: 'Token invalido' });
-  }
-};
+const { requireAuth, requireRole } = require('../middleware/auth');
 
 // Criar inscricao
-router.post('/', authMiddleware, async (req, res) => {
+router.post('/', requireAuth, async (req, res) => {
   const payload = req.body;
   
   const insertData = {
@@ -71,7 +57,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Atualizar inscricao (Admin)
-router.put('/:id', authMiddleware, async (req, res) => {
+router.put('/:id', requireAuth, async (req, res) => {
   const { data, error } = await supabase
     .from('inscricoes')
     .update(req.body)
@@ -82,8 +68,8 @@ router.put('/:id', authMiddleware, async (req, res) => {
   res.json(data[0]);
 });
 
-// Aceitar/Recusar matricula (Aluno)
-router.put('/:id/matricula', authMiddleware, async (req, res) => {
+// Aceitar/Recusar matricula (Aluno) + promove ROLE_USER para ROLE_STUDENT
+router.put('/:id/matricula', requireAuth, async (req, res) => {
   const { status_matricula, data_aceite_matricula } = req.body;
   const { data, error } = await supabase
     .from('inscricoes')
@@ -92,6 +78,24 @@ router.put('/:id/matricula', authMiddleware, async (req, res) => {
     .select();
 
   if (error) return res.status(400).json({ error: error.message });
+
+  // Se matricula foi aceita, promover usuario para ROLE_STUDENT
+  if (status_matricula === 'ACEITA' && data && data.length > 0) {
+    const inscricao = data[0];
+    const { data: userData } = await supabase
+      .from('usuarios')
+      .select('role')
+      .eq('id', inscricao.id_usuario)
+      .single();
+
+    if (userData && userData.role === 'ROLE_USER') {
+      await supabase
+        .from('usuarios')
+        .update({ role: 'ROLE_STUDENT' })
+        .eq('id', inscricao.id_usuario);
+    }
+  }
+
   res.json(data[0]);
 });
 

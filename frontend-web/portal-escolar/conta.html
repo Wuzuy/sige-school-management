@@ -3,126 +3,270 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SIGE - Portal Escolar</title>
+  <title>SIGE - Minha Conta</title>
   <link rel="stylesheet" href="assets/css/app.css" />
   <link rel="icon" href="assets/images/sige.png" type="image/png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+  <style>
+    .gridConta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    @media (max-width: 768px) {
+      .gridConta { grid-template-columns: 1fr; }
+    }
+    .contaDadosSensiveis, .contaPerfil {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .dataField {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .dataField:last-child { border-bottom: none; }
+    .dataInfo label {
+      display: block;
+      font-size: 0.8rem;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+    .dataInfo p {
+      margin: 0;
+      font-size: 1rem;
+      color: #1e293b;
+      font-weight: 500;
+    }
+    .dividerSenha {
+      height: 1px;
+      background: #e2e8f0;
+      margin: 8px 0;
+    }
+    .btn-edit {
+      background: #f1f5f9;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: #475569;
+      transition: all 0.2s;
+    }
+    .btn-edit:hover { background: #e2e8f0; color: #1e293b; }
+    .profileCard {
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #f1f5f9;
+      margin-bottom: 20px;
+    }
+    .profilePicture {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin: 0 auto 12px;
+      background: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .profilePicture img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .profileInfoCard h2 {
+      margin: 0 0 16px;
+      font-size: 1.2rem;
+      color: #1e293b;
+    }
+    .infoRow {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #f8fafc;
+    }
+    .infoRow label { color: #64748b; font-size: 0.9rem; }
+    .infoRow p { margin: 0; font-weight: 500; color: #1e293b; }
+    .statusVerified { color: #059669; }
+    .editModal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .editModal .modal-content {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+    }
+    .editModal .modal-content h3 { margin: 0 0 16px; }
+    .editModal .modal-content input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      box-sizing: border-box;
+    }
+    .editModal .modal-content .actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+  </style>
 </head>
-<body>
-	<!-- HEADER -->
-	<header class="topbar" id="headerID">
-		<div class="brand">
-			<img src="assets/images/sige.png" alt="SIGE" />
-			<span>SIGE</span>
-		</div>
-		<button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
-        <span>☰</span>
-      </button>
-		<nav class="nav">
-			<a href="status.html">Status</a>
-			<a href="../portal-secretaria/portal-secretaria.html" data-admin-only>Portal da Secretaria</a>
-			<button data-logout type="button">Sair</button>
-		</nav>
-  	</header>
-	<div class="nav-overlay"></div>
-	<!-- SIDEBAR -->
-	<aside id="sidebar">
-		<nav id="sidebar-nav"></nav>
-	</aside>
-	<section class="hero interface">
-		<div class="gridConta">
-			<!-- SEÇÃO ESQUERDA: DADOS SENSÍVEIS -->
-			<div class="contaDadosSensiveis">
-				<h2>Dados Sensíveis</h2>
+<body data-page="conta">
+  <header class="topbar">
+    <div class="brand">
+      <img src="assets/images/sige.png" alt="SIGE" />
+      <span>SIGE</span>
+    </div>
+    <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+      <span>☰</span>
+    </button>
+    <nav class="nav">
+      <button data-logout type="button">Sair</button>
+    </nav>
+  </header>
+  <div class="nav-overlay"></div>
+  <aside id="sidebar">
+    <nav id="sidebar-nav"></nav>
+  </aside>
+  <section class="hero interface">
+    <div class="gridConta">
+      <div class="contaDadosSensiveis">
+        <h2>Dados Pessoais</h2>
+        <div class="dataField">
+          <div class="dataInfo">
+            <label>CPF</label>
+            <p class="dataContent" id="conta-cpf">Carregando...</p>
+          </div>
+        </div>
+        <div class="dataField">
+          <div class="dataInfo">
+            <label>Data de Nascimento</label>
+            <p class="dataContent" id="conta-nascimento">Carregando...</p>
+          </div>
+          <button class="btn-edit" data-field="dataNascimento" title="Editar">Editar</button>
+        </div>
+        <div class="dividerSenha"></div>
+        <div class="dataField">
+          <div class="dataInfo">
+            <label>Senha</label>
+            <p class="dataContent">••••••••</p>
+          </div>
+          <button class="btn-edit btn-password" title="Alterar Senha">Alterar</button>
+        </div>
+      </div>
+      <div class="contaPerfil">
+        <div class="profileCard">
+          <figure class="profilePicture">
+            <img src="assets/images/sige.png" alt="Foto de Perfil">
+          </figure>
+        </div>
+        <div class="profileInfoCard">
+          <h2>Informações Gerais</h2>
+          <div class="infoRow">
+            <label>Nome Completo</label>
+            <p id="conta-nome">Carregando...</p>
+          </div>
+          <div class="infoRow">
+            <label>Email</label>
+            <p id="conta-email">Carregando...</p>
+          </div>
+          <div class="infoRow">
+            <label>Cargo</label>
+            <p id="conta-role">Carregando...</p>
+          </div>
+          <div class="infoRow">
+            <label>Telefone</label>
+            <p id="conta-telefone">Carregando...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div id="edit-modal-container"></div>
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  <script src="assets/js/api-config.js"></script>
+  <script src="assets/js/scripts.js"></script>
+  <script src="assets/js/sidebar-nav.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const auth = requireAuth();
+      if (!auth) return;
+      setupProtectedPage(auth);
+      setupMobileMenu();
 
-				<div class="dataField">
-					<div class="dataInfo">
-						<label>CPF</label>
-						<p class="dataContent">123.456.789-10</p>
-					</div>
-					<button class="btn-edit" title="Editar CPF">✎</button>
-				</div>
+      async function loadProfile() {
+        try {
+          const data = await request('/usuarios/me');
+          document.getElementById('conta-nome').textContent = data.nomeCompleto || '-';
+          document.getElementById('conta-email').textContent = data.email || '-';
+          document.getElementById('conta-cpf').textContent = data.cpf || '-';
+          document.getElementById('conta-telefone').textContent = data.telefone || '-';
+          document.getElementById('conta-nascimento').textContent = data.dataNascimento || '-';
+          const roleLabels = { ROLE_USER: 'Usuário', ROLE_STUDENT: 'Aluno', ROLE_ADMIN: 'Administrador', ROLE_TEACHER: 'Professor' };
+          document.getElementById('conta-role').textContent = roleLabels[data.role] || data.role || '-';
+        } catch (e) {
+          showError('Erro ao carregar perfil');
+        }
+      }
 
-				<div class="dataField">
-					<div class="dataInfo">
-						<label>Matrícula</label>
-						<p class="dataContent">202400001</p>
-					</div>
-					<button class="btn-edit" title="Editar Matrícula">✎</button>
-				</div>
+      loadProfile();
 
-				<div class="dataField">
-					<div class="dataInfo">
-						<label>Data de Nascimento</label>
-						<p class="dataContent">15 de Março de 1985</p>
-					</div>
-					<button class="btn-edit" title="Editar Data de Nascimento">✎</button>
-				</div>
-
-				<div class="dividerSenha"></div>
-
-				<div class="dataField">
-					<div class="dataInfo">
-						<label>Senha</label>
-						<p class="dataContent">••••••••</p>
-					</div>
-					<button class="btn-edit btn-password" title="Alterar Senha">Alterar</button>
-				</div>
-
-				<div class="dataField">
-					<div class="dataInfo">
-						<label>Autenticação de Dois Fatores</label>
-						<p class="dataContent">Desativado</p>
-					</div>
-					<button class="btn-edit" title="Ativar Autenticação 2FA">✎</button>
-				</div>
-			</div>
-
-			<!-- SEÇÃO DIREITA: PERFIL E INFORMAÇÕES GERAIS -->
-			<div class="contaPerfil">
-				<div class="profileCard">
-					<figure class="profilePicture">
-						<img src="assets/images/sige.png" alt="Foto de Perfil">
-					</figure>
-					<button class="btn btn-soft editProfilePic">Editar Foto de Perfil</button>
-				</div>
-
-				<div class="profileInfoCard">
-					<h2>Informações Gerais</h2>
-
-					<div class="infoRow">
-						<label>Nome Completo</label>
-						<p>Prof. Sarah Jenkins</p>
-					</div>
-
-					<div class="infoRow">
-						<label>Email</label>
-						<p>sarah.jenkins@highschool.edu</p>
-					</div>
-
-					<div class="infoRow">
-						<label>Cargo / Ocupação</label>
-						<p>Senior Mathematics Faculty</p>
-					</div>
-
-					<div class="infoRow">
-						<label>Telefone</label>
-						<p>+1 (555) 123-4567</p>
-					</div>
-
-					<div class="infoRow">
-						<label>Status da Conta</label>
-						<p class="statusVerified">✓ Conta Verificada</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-<script src="assets/js/scripts.js"></script>
-<script src="assets/js/sidebar-nav.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    setupMobileMenu();
-  });
-</script>
+      document.querySelectorAll('[data-field]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const field = btn.dataset.field;
+          const labelMap = { dataNascimento: 'Data de Nascimento', telefone: 'Telefone', nomeCompleto: 'Nome Completo' };
+          const container = document.getElementById('edit-modal-container');
+          container.innerHTML = `
+            <div class="editModal">
+              <div class="modal-content">
+                <h3>Editar ${labelMap[field] || field}</h3>
+                <input id="edit-input" type="text" placeholder="${labelMap[field] || field}" />
+                <div class="actions">
+                  <button class="btn btn-soft" onclick="this.closest('.editModal').remove()">Cancelar</button>
+                  <button class="btn btn-primary" id="salvar-edit">Salvar</button>
+                </div>
+              </div>
+            </div>`;
+          document.getElementById('salvar-edit').addEventListener('click', async () => {
+            const valor = document.getElementById('edit-input').value.trim();
+            if (!valor) return showWarning('Preencha o campo');
+            try {
+              await request('/usuarios/me', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ [field]: valor }),
+                auth: true
+              });
+              showSuccess('Dado atualizado!');
+              container.innerHTML = '';
+              loadProfile();
+            } catch (e) {
+              showError('Erro ao atualizar');
+            }
+          });
+        });
+      });
+    });
+  </script>
 </body>
+</html>

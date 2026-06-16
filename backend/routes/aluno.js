@@ -1,29 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const supabase = require('../config/supabase');
-const jwt = require('jsonwebtoken');
+const { requireAuth, requireRole } = require('../middleware/auth');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'secreta_sige_123';
-
-// Middleware de autenticacao
-const authMiddleware = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) return res.status(401).json({ error: 'Nao autorizado' });
-  try {
-    req.user = jwt.verify(token, JWT_SECRET);
-    next();
-  } catch (e) {
-    res.status(401).json({ error: 'Token invalido' });
-  }
-};
-
-// Helper: extrai id_usuario do token
 const userId = (req) => req.user.id;
 
 // ============================================
 // MATRICULAS DO ALUNO
 // ============================================
-router.get('/matriculas', authMiddleware, async (req, res) => {
+router.get('/matriculas', requireAuth, async (req, res) => {
   const { data, error } = await supabase
     .from('matriculas')
     .select(`
@@ -41,7 +26,7 @@ router.get('/matriculas', authMiddleware, async (req, res) => {
 // ============================================
 // HISTORICO ESCOLAR
 // ============================================
-router.get('/historico', authMiddleware, async (req, res) => {
+router.get('/historico', requireAuth, async (req, res) => {
   const uid = userId(req);
 
   // Busca matriculas do aluno
@@ -76,7 +61,7 @@ router.get('/historico', authMiddleware, async (req, res) => {
 // ============================================
 // DOCUMENTOS DO ALUNO
 // ============================================
-router.get('/documentos', authMiddleware, async (req, res) => {
+router.get('/documentos', requireAuth, async (req, res) => {
   const { data, error } = await supabase
     .from('documentos')
     .select('*')
@@ -90,7 +75,7 @@ router.get('/documentos', authMiddleware, async (req, res) => {
 // ============================================
 // FREQUENCIA
 // ============================================
-router.get('/frequencia', authMiddleware, async (req, res) => {
+router.get('/frequencia', requireAuth, async (req, res) => {
   const uid = userId(req);
 
   const { data: matriculas, error: errMat } = await supabase
@@ -138,7 +123,7 @@ router.get('/frequencia', authMiddleware, async (req, res) => {
 // ============================================
 // AGENDA / EVENTOS
 // ============================================
-router.get('/agenda', authMiddleware, async (req, res) => {
+router.get('/agenda', requireAuth, async (req, res) => {
   const { data, error } = await supabase
     .from('agenda_eventos')
     .select('*')
@@ -152,7 +137,7 @@ router.get('/agenda', authMiddleware, async (req, res) => {
 // ============================================
 // CALENDARIO
 // ============================================
-router.get('/calendario', authMiddleware, async (req, res) => {
+router.get('/calendario', requireAuth, async (req, res) => {
   const { mes, ano } = req.query;
   let query = supabase.from('agenda_eventos').select('*').eq('publico', true);
 
@@ -171,7 +156,7 @@ router.get('/calendario', authMiddleware, async (req, res) => {
 // ============================================
 // HORARIOS DO ALUNO
 // ============================================
-router.get('/horarios', authMiddleware, async (req, res) => {
+router.get('/horarios', requireAuth, async (req, res) => {
   const uid = userId(req);
 
   const { data: matriculas, error: errMat } = await supabase
@@ -204,7 +189,7 @@ router.get('/horarios', authMiddleware, async (req, res) => {
 // ============================================
 // RECLAMACOES
 // ============================================
-router.get('/reclamacoes', authMiddleware, async (req, res) => {
+router.get('/reclamacoes', requireAuth, async (req, res) => {
   const { data, error } = await supabase
     .from('reclamacoes')
     .select('*')
@@ -215,7 +200,7 @@ router.get('/reclamacoes', authMiddleware, async (req, res) => {
   res.json(data || []);
 });
 
-router.get('/reclamacoes/:id', authMiddleware, async (req, res) => {
+router.get('/reclamacoes/:id', requireAuth, async (req, res) => {
   const { data, error } = await supabase
     .from('reclamacoes')
     .select(`
@@ -230,7 +215,7 @@ router.get('/reclamacoes/:id', authMiddleware, async (req, res) => {
   res.json(data);
 });
 
-router.post('/reclamacoes', authMiddleware, async (req, res) => {
+router.post('/reclamacoes', requireAuth, async (req, res) => {
   const uid = userId(req);
   const { categoria, assunto, descricao, prioridade } = req.body;
 
@@ -266,7 +251,7 @@ router.post('/reclamacoes', authMiddleware, async (req, res) => {
 // ============================================
 // ATENDIMENTOS AGENDADOS
 // ============================================
-router.get('/atendimentos', authMiddleware, async (req, res) => {
+router.get('/atendimentos', requireAuth, async (req, res) => {
   const { data, error } = await supabase
     .from('atendimentos')
     .select(`
@@ -280,7 +265,7 @@ router.get('/atendimentos', authMiddleware, async (req, res) => {
   res.json(data || []);
 });
 
-router.post('/atendimentos', authMiddleware, async (req, res) => {
+router.post('/atendimentos', requireAuth, async (req, res) => {
   const { tipo, data_atendimento, hora, observacoes } = req.body;
 
   const { data, error } = await supabase
@@ -303,7 +288,7 @@ router.post('/atendimentos', authMiddleware, async (req, res) => {
 // ============================================
 // CURRICULO (disciplinas do curso do aluno)
 // ============================================
-router.get('/curriculo', authMiddleware, async (req, res) => {
+router.get('/curriculo', requireAuth, async (req, res) => {
   const uid = userId(req);
 
   const { data: matriculas, error: errMat } = await supabase

@@ -606,8 +606,15 @@ function requireAuth(requiredRole) {
     return null;
   }
 
-  if (requiredRole && auth.usuario.role !== requiredRole) {
+  const role = auth.usuario.role;
+  if (requiredRole && role !== requiredRole) {
     window.location.href = 'index.html';
+    return null;
+  }
+
+  // ROLE_USER so pode acessar portal de inscricao
+  if (role === 'ROLE_USER') {
+    window.location.href = '../portal-inscricao/index.html';
     return null;
   }
 
@@ -710,7 +717,13 @@ function initLoginPage() {
       if (!token || !usuario) throw new Error('Resposta de login inválida.');
 
       setAuth({ token, usuario });
-      window.location.href = usuario.role === 'ROLE_ADMIN' ? '../portal-secretaria/portal-secretaria.html' : 'index.html';
+      if (usuario.role === 'ROLE_ADMIN') {
+        window.location.href = '../portal-secretaria/portal-secretaria.html';
+      } else if (usuario.role === 'ROLE_USER') {
+        window.location.href = '../portal-inscricao/index.html';
+      } else {
+        window.location.href = 'index.html';
+      }
     } catch (error) {
       showError(`Não foi possível logar: ${error.message}`);
       showInfo('Se o backend não estiver disponível, use o botão de visualização como visitante.');

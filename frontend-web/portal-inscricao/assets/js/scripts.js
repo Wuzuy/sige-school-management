@@ -726,9 +726,15 @@ function requireAuth(requiredRole) {
     return null;
   }
 
-  if (requiredRole && auth.usuario.role !== requiredRole) {
+  const role = auth.usuario.role;
+  if (requiredRole && role !== requiredRole) {
     window.location.href = 'index.html';
     return null;
+  }
+
+  // ROLE_STUDENT pode acessar tanto inscricao quanto portal do aluno
+  if (role === 'ROLE_STUDENT' && window.location.pathname.includes('portal-inscricao')) {
+    // Permitido - pode acessar inscricao tambem
   }
 
   setupTopNav(auth);
@@ -827,7 +833,13 @@ function initLoginPage() {
       if (!token || !usuario) throw new Error('Resposta de login inválida.');
 
       setAuth({ token, usuario });
-      window.location.href = usuario.role === 'ROLE_ADMIN' ? '../portal-secretaria/portal-secretaria.html' : 'index.html';
+      if (usuario.role === 'ROLE_ADMIN') {
+        window.location.href = '../portal-secretaria/portal-secretaria.html';
+      } else if (usuario.role === 'ROLE_STUDENT') {
+        window.location.href = '../portal-escolar/index.html';
+      } else {
+        window.location.href = 'index.html';
+      }
     } catch (error) {
       showError(`Não foi possível logar: ${error.message}`);
     }

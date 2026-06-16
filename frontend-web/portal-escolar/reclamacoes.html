@@ -8,7 +8,7 @@
   <link rel="icon" href="assets/images/sige.png" type="image/png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
 </head>
-<body>
+<body data-page="reclamacoes">
 	<!-- HEADER -->
 	<header class="topbar" id="headerID">
 		<div class="brand">
@@ -93,7 +93,35 @@
 		</div>
 	</section>
 <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+<script src="assets/js/api-config.js"></script>
 <script src="assets/js/scripts.js"></script>
 <script src="assets/js/sidebar-nav.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    const auth = requireAuth();
+    if (!auth) return;
+    setupProtectedPage(auth);
+    setupMobileMenu();
+
+    try {
+      const reclamacoes = await request('/aluno/reclamacoes');
+      const body = document.querySelector('#reclamacoes-table tbody');
+      if (body && reclamacoes.length) {
+        body.innerHTML = reclamacoes.map(r => `
+          <tr>
+            <td>${r.protocolo || '-'}</td>
+            <td>${r.categoria || '-'}</td>
+            <td>${r.assunto || '-'}</td>
+            <td>${r.data_abertura || '-'}</td>
+            <td><span class="badge ${r.status === 'RESOLVIDO' ? 'badge-success' : r.status === 'EM_ANDAMENTO' ? 'badge-warning' : 'badge-danger'}">${r.status || 'PENDENTE'}</span></td>
+            <td><a href="detalhes-reclamacao.html?id=${r.id}" class="btn btn-soft btn-sm">Ver Detalhes</a></td>
+          </tr>
+        `).join('');
+      }
+    } catch (e) {
+      console.error('Erro ao carregar reclamacoes', e);
+    }
+  });
+</script>
 </body>
 </html>
