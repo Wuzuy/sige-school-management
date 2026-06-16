@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotyf } from '@/components/NotyfProvider';
-import Header from '@/components/Header';
-import Sidebar from '@/components/Sidebar';
+import HeaderInscricao from '@/components/HeaderInscricao';
+import SidebarInscricao from '@/components/SidebarInscricao';
 
 function AuthGuard({ children }) {
   const { user, loading, isAuthenticated } = useAuth();
@@ -30,11 +30,10 @@ export default function PortalInscricaoLayout({ children }) {
 
   return (
     <AuthGuard>
-      <Header
-        brandText="Portal de Inscrição"
+      <HeaderInscricao
         onToggleSidebar={() => setSidebarOpen((v) => !v)}
       />
-      <Sidebar
+      <SidebarInscricao
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
       />

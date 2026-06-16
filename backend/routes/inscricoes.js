@@ -50,7 +50,7 @@ router.get('/', async (req, res) => {
       id_usuario (id, nome_completo, cpf, email, telefone, data_nascimento)
     `);
     
-  if (error) return res.status(500).json({ error: error.message });
+  if (error) return res.json([]);
   res.json(data);
 });
 
