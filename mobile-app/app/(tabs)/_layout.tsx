@@ -26,9 +26,18 @@ export default function TabLayout() {
         name="autenticacao"
         options={{
           title: 'Acesso',
-          headerTitle: 'Autenticacao',
+          headerTitle: 'Meu Acesso',
           headerTintColor: '#003366',
           tabBarIcon: ({ color }) => <Ionicons name="qr-code" size={22} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="explore"
+        options={{
+          title: 'Catraca',
+          headerTitle: 'Autenticador',
+          headerTintColor: '#003366',
+          tabBarIcon: ({ color }) => <Ionicons name="scan-outline" size={22} color={color} />,
         }}
       />
     </Tabs>
