@@ -25,14 +25,23 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "usesCleartextTraffic": true
+      "usesCleartextTraffic": true,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.wuzuy.mobileapp"
     },
     "web": {
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
     "extra": {
-      "API_BASE_URL": "https://sige-1gqx.onrender.com/api"
+      "API_BASE_URL": "https://sige-1gqx.onrender.com/api",
+      "router": {},
+      "eas": {
+        "projectId": "84969dd3-5fa9-45c0-b492-b6349fd1d648"
+      }
     },
     "plugins": [
       "expo-router",
