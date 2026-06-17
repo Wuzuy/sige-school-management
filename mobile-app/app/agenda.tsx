@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { request } from '@/services/api';
 
+const DIAS = ['Segunda', 'Terca', 'Quarta', 'Quinta', 'Sexta', 'Sabado'];
+
 export default function AgendaScreen() {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -9,18 +11,13 @@ export default function AgendaScreen() {
   useState(() => {
     (async () => {
       try {
-        const [horarios, calendario] = await Promise.all([
-          request('/aluno/horarios').catch(() => []),
-          request('/aluno/calendario').catch(() => []),
-        ]);
-        setData(horarios || []);
+        const r = await request('/aluno/horarios');
+        setData(r || []);
       } catch {} finally { setLoading(false); }
     })();
   });
 
   if (loading) return <View style={s.center}><ActivityIndicator size="large" color="#00aaff" /></View>;
-
-  const diasSemana = ['Segunda', 'Terca', 'Quarta', 'Quinta', 'Sexta', 'Sabado'];
 
   return (
     <ScrollView style={s.container}>
@@ -29,10 +26,11 @@ export default function AgendaScreen() {
       ) : data.map((h: any, i: number) => (
         <View key={i} style={s.card}>
           <View style={s.diaBadge}>
-            <Text style={s.diaText}>{diasSemana[(h.dia_semana || 1) - 1] || `Dia ${h.dia_semana}`}</Text>
+            <Text style={s.diaText}>{DIAS[(h.dia_semana || 1) - 1] || `Dia ${h.dia_semana}`}</Text>
           </View>
           <Text style={s.hora}>{h.hora_inicio?.slice(0, 5) || '-'} - {h.hora_fim?.slice(0, 5) || '-'}</Text>
-          <Text style={s.disc}>{h.id_disciplina?.nome_disciplina || h.disciplina_nome || '-'}</Text>
+          <Text style={s.disc}>{h.id_disciplina?.nome || '-'}</Text>
+          {h.id_professor?.nome_completo && <Text style={s.prof}>{h.id_professor.nome_completo}</Text>}
           {h.local && <Text style={s.local}>{h.local}</Text>}
         </View>
       ))}
@@ -48,6 +46,7 @@ const s = StyleSheet.create({
   diaBadge: { marginBottom: 4 },
   diaText: { fontSize: 12, fontWeight: '700', color: '#003366', textTransform: 'uppercase' },
   hora: { fontSize: 13, color: '#666', marginTop: 2 },
-  disc: { fontSize: 14, fontWeight: '600', color: '#1a1a1a', marginTop: 2 },
-  local: { fontSize: 12, color: '#999', marginTop: 2 },
+  disc: { fontSize: 15, fontWeight: '600', color: '#1a1a1a', marginTop: 2 },
+  prof: { fontSize: 12, color: '#999', marginTop: 1 },
+  local: { fontSize: 12, color: '#999', marginTop: 1 },
 });

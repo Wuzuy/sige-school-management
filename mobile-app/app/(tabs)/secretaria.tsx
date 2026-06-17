@@ -5,30 +5,23 @@ import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, Text, Toucha
 import { useAuth } from '@/contexts/AuthContext';
 import { request } from '@/services/api';
 
-type DashboardData = {
-  matriculas: any[];
-  frequencia: any[];
-  horarios: any[];
-  notas: any[];
-  documentos: any[];
-};
-
 export default function Dashboard() {
   const { user, logout } = useAuth();
-  const [data, setData] = useState<DashboardData | null>(null);
+  const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchData = useCallback(async () => {
     try {
-      const [matriculas, frequencia, horarios, documentos] = await Promise.all([
+      const [matriculas, frequencia, horarios, documentos, historico] = await Promise.all([
         request('/aluno/matriculas').catch(() => []),
         request('/aluno/frequencia').catch(() => []),
         request('/aluno/horarios').catch(() => []),
         request('/aluno/documentos').catch(() => []),
+        request('/aluno/historico').catch(() => []),
       ]);
-      setData({ matriculas, frequencia, horarios, notas: [], documentos });
-    } catch { } finally {
+      setData({ matriculas, frequencia, horarios, documentos, historico });
+    } catch {} finally {
       setLoading(false);
       setRefreshing(false);
     }
@@ -38,30 +31,28 @@ export default function Dashboard() {
 
   const onRefresh = () => { setRefreshing(true); fetchData(); };
 
-  const matricula = data?.matriculas?.[0];
-  const cursoNome = matricula?.id_curso?.nome_curso || 'Curso nao encontrado';
-  const turmaNome = matricula?.id_turma?.nome_turma || '';
-  const statusMat = matricula?.status || 'ATIVO';
+  const m = data?.matriculas?.[0];
+  const cursoNome = m?.id_curso?.nome_curso || 'Curso nao encontrado';
+  const turmaNome = m?.id_turma?.nome || '';
+  const statusMat = m?.status || 'ATIVO';
   const freq = data?.frequencia || [];
-  const presencas = freq.filter((f: any) => f.presente).length;
-  const totalAulas = freq.length || 1;
-  const percFreq = Math.round((presencas / totalAulas) * 100);
+  const totalAulas = freq.reduce((s: number, f: any) => s + f.totalAulas, 0);
+  const totalPresencas = freq.reduce((s: number, f: any) => s + f.presencas, 0);
+  const percFreq = totalAulas > 0 ? Math.round((totalPresencas / totalAulas) * 100) : 0;
+  const qtdDocs = data?.documentos?.length || 0;
+  const qtdNotas = data?.historico?.length || 0;
 
   if (loading) {
-    return (
-      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-        <ActivityIndicator size="large" color="#00aaff" />
-      </View>
-    );
+    return <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}><ActivityIndicator size="large" color="#00aaff" /></View>;
   }
 
   return (
-    <ScrollView
-      style={styles.container}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-    >
+    <ScrollView style={styles.container} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
       <View style={styles.header}>
-        <Text style={styles.greeting}>Ola, {user?.nomeCompleto?.split(' ')[0] || 'Aluno'}!</Text>
+        <View>
+          <Text style={styles.greeting}>Ola, {user?.nomeCompleto?.split(' ')[0] || 'Aluno'}!</Text>
+          <Text style={styles.subGreeting}>Bem-vindo ao seu portal</Text>
+        </View>
         <TouchableOpacity onPress={() => { logout(); router.replace('/'); }}>
           <Ionicons name="log-out-outline" size={24} color="#e74c3c" />
         </TouchableOpacity>
@@ -73,7 +64,7 @@ export default function Dashboard() {
         <View style={styles.divider} />
         <Text style={styles.cardTitle}>{cursoNome}</Text>
         {turmaNome ? <Text style={styles.cardSmall}>Turma: {turmaNome}</Text> : null}
-        <Text style={styles.cardSmall}>Matricula: {matricula?.numero_matricula || '-'}</Text>
+        {m?.numero_matricula ? <Text style={styles.cardSmall}>Matricula: {m.numero_matricula}</Text> : null}
       </View>
 
       <View style={styles.statsRow}>
@@ -86,27 +77,18 @@ export default function Dashboard() {
           <Text style={styles.statLabel}>Frequencia</Text>
         </View>
         <View style={styles.statBox}>
-          <Text style={styles.statNumber}>{data?.documentos?.length || 0}</Text>
+          <Text style={styles.statNumber}>{qtdDocs}</Text>
           <Text style={styles.statLabel}>Documentos</Text>
         </View>
       </View>
 
       <Text style={styles.sectionTitle}>Academico</Text>
-      <View style={styles.grid}>
-        <MenuItem icon="book-outline" title="Notas" route="/notas" />
-        <MenuItem icon="calendar-outline" title="Agenda" route="/agenda" />
-        <MenuItem icon="checkmark-circle-outline" title="Frequencia" route="/faltas" />
-        <MenuItem icon="layers-outline" title="Curriculo" route="/curriculo" />
-        <MenuItem icon="wallet-outline" title="Financeiro" route="/financeiro" />
-        <MenuItem icon="chatbubble-ellipses-outline" title="Reclamacoes" route="/reclamacoes" />
-        <MenuItem icon="megaphone-outline" title="Ouvidoria" route="/ouvidoria" />
-        <MenuItem icon="time-outline" title="Atendimento" route="/atendimento" />
-      </View>
+      <View style={styles.grid}><Menu icon="book-outline" title="Notas" route="/notas" /><Menu icon="calendar-outline" title="Agenda" route="/agenda" /><Menu icon="checkmark-circle-outline" title="Frequencia" route="/faltas" /><Menu icon="layers-outline" title="Curriculo" route="/curriculo" /><Menu icon="wallet-outline" title="Financeiro" route="/financeiro" /><Menu icon="chatbubble-ellipses-outline" title="Reclamacoes" route="/reclamacoes" /><Menu icon="megaphone-outline" title="Ouvidoria" route="/ouvidoria" /><Menu icon="time-outline" title="Atendimento" route="/atendimento" /></View>
     </ScrollView>
   );
 }
 
-function MenuItem({ icon, title, route }: { icon: any; title: string; route: string }) {
+function Menu({ icon, title, route }: { icon: any; title: string; route: string }) {
   return (
     <TouchableOpacity style={styles.itemCard} onPress={() => router.push(route as any)}>
       <Ionicons name={icon} size={28} color="#00aaff" />
@@ -119,6 +101,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f8f9fe', padding: 20 },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, marginTop: 10 },
   greeting: { fontSize: 24, fontWeight: '800', color: '#1a1a1a' },
+  subGreeting: { fontSize: 13, color: '#999', marginTop: 2 },
   highlightCard: { backgroundColor: '#003366', padding: 20, borderRadius: 20, marginBottom: 20 },
   cardLabel: { color: '#ffffff80', fontSize: 12, marginBottom: 4 },
   cardStatus: { color: '#fff', fontSize: 20, fontWeight: 'bold', marginBottom: 12 },

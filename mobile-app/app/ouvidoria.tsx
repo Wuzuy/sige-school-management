@@ -4,23 +4,18 @@ import { request } from '@/services/api';
 
 export default function OuvidoriaScreen() {
   const [assunto, setAssunto] = useState('');
-  const [mensagem, setMensagem] = useState('');
+  const [descricao, setDescricao] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async () => {
-    if (!assunto || !mensagem) { Alert.alert('Erro', 'Preencha todos os campos'); return; }
+    if (!assunto || !descricao) { Alert.alert('Erro', 'Preencha todos os campos'); return; }
     setSubmitting(true);
     try {
-      await request('/aluno/reclamacoes', {
-        method: 'POST',
-        body: JSON.stringify({ assunto, descricao: mensagem }),
-      });
+      await request('/aluno/reclamacoes', { method: 'POST', body: JSON.stringify({ assunto, descricao, categoria: 'OUVIDORIA' }) });
       Alert.alert('Sucesso', 'Mensagem enviada a ouvidoria');
-      setAssunto('');
-      setMensagem('');
-    } catch (e: any) {
-      Alert.alert('Erro', e.message);
-    } finally { setSubmitting(false); }
+      setAssunto(''); setDescricao('');
+    } catch (e: any) { Alert.alert('Erro', e.message); }
+    finally { setSubmitting(false); }
   };
 
   return (
@@ -28,10 +23,8 @@ export default function OuvidoriaScreen() {
       <View style={s.card}>
         <Text style={s.title}>Ouvidoria</Text>
         <Text style={s.subtitle}>Envie sua mensagem para a ouvidoria da instituicao</Text>
-
         <TextInput style={s.input} placeholder="Assunto" value={assunto} onChangeText={setAssunto} />
-        <TextInput style={[s.input, s.textArea]} placeholder="Descreva sua mensagem..." value={mensagem} onChangeText={setMensagem} multiline />
-
+        <TextInput style={[s.input, s.textArea]} placeholder="Descreva sua mensagem..." value={descricao} onChangeText={setDescricao} multiline />
         <TouchableOpacity style={s.button} onPress={handleSubmit} disabled={submitting}>
           <Text style={s.buttonText}>{submitting ? 'Enviando...' : 'Enviar'}</Text>
         </TouchableOpacity>

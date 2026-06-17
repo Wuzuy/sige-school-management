@@ -28,8 +28,10 @@ export default function CurriculoScreen() {
           <Text style={s.semTitle}>{sem}o Semestre</Text>
           {data.filter((d: any) => (d.semestre || 1) === sem).map((d: any, i: number) => (
             <View key={i} style={s.card}>
-              <Text style={s.disc}>{d.id_disciplina?.nome_disciplina || d.nome_disciplina || '-'}</Text>
-              <Text style={s.status}>{d.status || (d.obrigatoria ? 'Obrigatoria' : 'Optativa')}</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={s.disc}>{d.nome || '-'}</Text>
+                <Text style={s.tipo}>{d.obrigatoria ? 'Obrigatoria' : 'Optativa'}</Text>
+              </View>
               {d.carga_horaria && <Text style={s.ch}>{d.carga_horaria}h</Text>}
             </View>
           ))}
@@ -45,8 +47,8 @@ const s = StyleSheet.create({
   empty: { textAlign: 'center', color: '#999', marginTop: 40 },
   semestre: { marginBottom: 20 },
   semTitle: { fontSize: 16, fontWeight: '700', color: '#003366', marginBottom: 8, paddingLeft: 4 },
-  card: { backgroundColor: '#fff', borderRadius: 12, padding: 14, marginBottom: 6, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  disc: { fontSize: 13, fontWeight: '600', color: '#1a1a1a', flex: 2 },
-  status: { fontSize: 11, color: '#666', flex: 1, textAlign: 'center' },
-  ch: { fontSize: 11, color: '#999', flex: 0.5, textAlign: 'right' },
+  card: { backgroundColor: '#fff', borderRadius: 12, padding: 14, marginBottom: 6, flexDirection: 'row', alignItems: 'center' },
+  disc: { fontSize: 14, fontWeight: '600', color: '#1a1a1a' },
+  tipo: { fontSize: 11, color: '#999', marginTop: 2 },
+  ch: { fontSize: 13, color: '#666', fontWeight: '600', marginLeft: 8 },
 });

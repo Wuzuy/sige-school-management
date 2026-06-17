@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { request } from '@/services/api';
 
 export default function NotasScreen() {
@@ -23,7 +23,7 @@ export default function NotasScreen() {
         <Text style={s.empty}>Nenhuma nota encontrada</Text>
       ) : data.map((item: any, i: number) => (
         <View key={i} style={s.card}>
-          <Text style={s.disc}>{item.id_disciplina?.nome_disciplina || item.disciplina_nome || `Disciplina #${item.id_disciplina}`}</Text>
+          <Text style={s.disc}>{item.id_disciplina?.nome || `Disciplina #${item.id_disciplina}`}</Text>
           <View style={s.row}>
             <Text style={s.label}>Nota:</Text>
             <Text style={[s.value, { color: (item.nota || 0) >= 6 ? '#27ae60' : '#e74c3c' }]}>{item.nota ?? '-'}</Text>
@@ -32,6 +32,8 @@ export default function NotasScreen() {
             <Text style={s.label}>Situacao:</Text>
             <Text style={s.value}>{item.status || (item.nota >= 6 ? 'Aprovado' : 'Reprovado')}</Text>
           </View>
+          {item.ano && <View style={s.row}><Text style={s.label}>Ano:</Text><Text style={s.value}>{item.ano}</Text></View>}
+          {item.semestre && <View style={s.row}><Text style={s.label}>Semestre:</Text><Text style={s.value}>{item.semestre}</Text></View>}
         </View>
       ))}
     </ScrollView>

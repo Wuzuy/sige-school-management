@@ -17,27 +17,28 @@ export default function FaltasScreen() {
 
   if (loading) return <View style={s.center}><ActivityIndicator size="large" color="#00aaff" /></View>;
 
-  const presencas = data.filter((f: any) => f.presente).length;
-  const total = data.length || 1;
-  const perc = Math.round((presencas / total) * 100);
+  const totalAulas = data.reduce((s: number, f: any) => s + f.totalAulas, 0);
+  const totalPresencas = data.reduce((s: number, f: any) => s + f.presencas, 0);
+  const totalFaltas = data.reduce((s: number, f: any) => s + f.faltas, 0);
+  const percGeral = totalAulas > 0 ? Math.round((totalPresencas / totalAulas) * 100) : 0;
 
   return (
     <ScrollView style={s.container}>
       <View style={s.resumo}>
         <View style={s.resumoItem}>
-          <Text style={s.resumoNum}>{total}</Text>
+          <Text style={s.resumoNum}>{totalAulas}</Text>
           <Text style={s.resumoLabel}>Total Aulas</Text>
         </View>
         <View style={s.resumoItem}>
-          <Text style={[s.resumoNum, { color: '#27ae60' }]}>{presencas}</Text>
+          <Text style={[s.resumoNum, { color: '#27ae60' }]}>{totalPresencas}</Text>
           <Text style={s.resumoLabel}>Presencas</Text>
         </View>
         <View style={s.resumoItem}>
-          <Text style={[s.resumoNum, { color: '#e74c3c' }]}>{total - presencas}</Text>
+          <Text style={[s.resumoNum, { color: '#e74c3c' }]}>{totalFaltas}</Text>
           <Text style={s.resumoLabel}>Faltas</Text>
         </View>
         <View style={s.resumoItem}>
-          <Text style={[s.resumoNum, { color: perc >= 75 ? '#27ae60' : '#e74c3c' }]}>{perc}%</Text>
+          <Text style={[s.resumoNum, { color: percGeral >= 75 ? '#27ae60' : '#e74c3c' }]}>{percGeral}%</Text>
           <Text style={s.resumoLabel}>Frequencia</Text>
         </View>
       </View>
@@ -46,11 +47,11 @@ export default function FaltasScreen() {
         <Text style={s.empty}>Nenhum registro de frequencia</Text>
       ) : data.map((f: any, i: number) => (
         <View key={i} style={s.card}>
-          <Text style={s.data}>{f.data_aula || '-'}</Text>
-          <Text style={s.disc}>{f.disciplina_nome || f.id_disciplina || '-'}</Text>
-          <Text style={[s.status, { color: f.presente ? '#27ae60' : '#e74c3c' }]}>
-            {f.presente ? 'Presente' : 'Ausente'}
-          </Text>
+          <View style={{ flex: 1 }}>
+            <Text style={s.disc}>{f.disciplina}</Text>
+            <Text style={s.detalhe}>{f.totalAulas} aulas · {f.presencas} presencas · {f.faltas} faltas</Text>
+          </View>
+          <Text style={[s.perc, { color: f.frequenciaPercentual >= 75 ? '#27ae60' : '#e74c3c' }]}>{f.frequenciaPercentual}%</Text>
         </View>
       ))}
     </ScrollView>
@@ -65,8 +66,8 @@ const s = StyleSheet.create({
   resumoNum: { fontSize: 24, fontWeight: '800', color: '#1a1a1a' },
   resumoLabel: { fontSize: 11, color: '#999', marginTop: 2 },
   empty: { textAlign: 'center', color: '#999', marginTop: 40 },
-  card: { backgroundColor: '#fff', borderRadius: 12, padding: 14, marginBottom: 8, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  data: { fontSize: 12, color: '#999', flex: 1 },
-  disc: { fontSize: 13, color: '#333', fontWeight: '600', flex: 2 },
-  status: { fontSize: 12, fontWeight: '700', flex: 1, textAlign: 'right' },
+  card: { backgroundColor: '#fff', borderRadius: 12, padding: 14, marginBottom: 8, flexDirection: 'row', alignItems: 'center' },
+  disc: { fontSize: 14, fontWeight: '600', color: '#1a1a1a' },
+  detalhe: { fontSize: 11, color: '#999', marginTop: 2 },
+  perc: { fontSize: 18, fontWeight: '800', marginLeft: 12 },
 });
