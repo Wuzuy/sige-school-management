@@ -64,10 +64,12 @@ function confirmAction(msg) {
   });
 }
 
-// --- Module switching ---
+// --- Module switching (sidebar items + fallback for old tabs) ---
 document.querySelectorAll('[data-module-target]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.module-tabs .btn').forEach(b => b.classList.remove('active'));
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    // Remove active from sidebar items and old tab buttons
+    document.querySelectorAll('.sec-sidebar-item, .module-tabs .btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     document.querySelectorAll('.module-panel').forEach(p => p.classList.add('hidden'));
     const target = document.getElementById(btn.dataset.moduleTarget);
@@ -584,7 +586,6 @@ document.addEventListener('click', async (e) => {
   const wrapper = document.querySelector(`#modulo-${id === 'cursos' ? 'cursos' : id === 'unidades' ? 'unidades' : id === 'usuarios' ? 'usuarios' : id === 'editais' ? 'editais' : 'alunos'} .table-wrapper`);
   if (!wrapper) return;
 
-  // Add empty state if not exists
   if (!document.getElementById(`${id}-empty`)) {
     const empty = document.createElement('div');
     empty.id = `${id}-empty`;
@@ -592,7 +593,6 @@ document.addEventListener('click', async (e) => {
     empty.innerHTML = `<div class="empty-icon">&#128196;</div><h3>Nenhum registro encontrado</h3><p>Tente ajustar os filtros.</p>`;
     wrapper.parentNode.insertBefore(empty, wrapper.nextSibling);
   }
-  // Add skeleton if not exists
   if (!document.getElementById(`${id}-skeleton`)) {
     const skel = document.createElement('div');
     skel.id = `${id}-skeleton`;
@@ -605,9 +605,104 @@ document.addEventListener('click', async (e) => {
 });
 
 // ======================================
+// SIDEBAR: User Info + Mobile Toggle
+// ======================================
+function populateSidebarUser() {
+  const auth = (typeof getAuth === 'function') ? getAuth() : null;
+  if (!auth?.usuario) return;
+
+  const u = auth.usuario;
+  const initials = (u.nomeCompleto || '?').split(' ').map(s => s[0]).join('').slice(0, 2).toUpperCase();
+  const roleLabel = u.role === 'ROLE_ADMIN' ? 'Admin' : u.role === 'ROLE_TEACHER' ? 'Professor' : 'Usuário';
+
+  const avatar = document.getElementById('sec-user-avatar');
+  const name = document.getElementById('sec-user-name');
+  const email = document.getElementById('sec-user-email');
+  const role = document.getElementById('sec-user-role');
+  if (avatar) avatar.textContent = initials;
+  if (name) name.textContent = u.nomeCompleto || 'Usuário';
+  if (email) email.textContent = u.email || '';
+  if (role) role.textContent = roleLabel;
+}
+
+// Mobile sidebar toggle
+document.getElementById('sec-sidebar-toggle')?.addEventListener('click', () => {
+  document.getElementById('sec-sidebar')?.classList.toggle('open');
+});
+
+// Close sidebar on nav item click (mobile)
+document.querySelectorAll('.sec-sidebar-item').forEach(item => {
+  item.addEventListener('click', () => {
+    if (window.innerWidth < 768) {
+      document.getElementById('sec-sidebar')?.classList.remove('open');
+    }
+  });
+});
+
+// ======================================
+// CONFIGURACOES: Dark Mode + Font Size
+// ======================================
+function loadSettings() {
+  const theme = localStorage.getItem('sec-theme') || 'light';
+  const fontSize = localStorage.getItem('sec-font-size') || 'md';
+  return { theme, fontSize };
+}
+
+function applySettings() {
+  const { theme, fontSize } = loadSettings();
+  document.documentElement.setAttribute('data-theme', theme);
+  document.documentElement.setAttribute('data-font-size', fontSize);
+
+  // Sync switch
+  const toggle = document.getElementById('toggle-dark-mode');
+  if (toggle) toggle.checked = theme === 'dark';
+
+  // Sync font buttons
+  document.querySelectorAll('.config-font-selector .btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.font === fontSize);
+    if (b.dataset.font === fontSize) b.classList.add('btn-primary');
+    else b.classList.remove('btn-primary');
+  });
+}
+
+function initSettings() {
+  applySettings();
+
+  const toggle = document.getElementById('toggle-dark-mode');
+  if (toggle) {
+    toggle.addEventListener('change', () => {
+      const theme = toggle.checked ? 'dark' : 'light';
+      localStorage.setItem('sec-theme', theme);
+      document.documentElement.setAttribute('data-theme', theme);
+    });
+  }
+
+  document.querySelectorAll('.config-font-selector .btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const size = btn.dataset.font;
+      localStorage.setItem('sec-font-size', size);
+      document.documentElement.setAttribute('data-font-size', size);
+      document.querySelectorAll('.config-font-selector .btn').forEach(b => {
+        b.classList.remove('active', 'btn-primary');
+      });
+      btn.classList.add('active', 'btn-primary');
+    });
+  });
+}
+
+// ======================================
 // INIT
 // ======================================
 document.addEventListener('DOMContentLoaded', () => {
+  populateSidebarUser();
+  initSettings();
+  // Force dashboard as initial module (scripts.js setupSecretariaModuleTabs defaults to unidades)
+  document.querySelectorAll('.sec-sidebar-item').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.module-panel').forEach(p => p.classList.add('hidden'));
+  const dash = document.querySelector('.sec-sidebar-item[data-module-target="modulo-dashboard"]');
+  if (dash) dash.classList.add('active');
+  document.getElementById('modulo-dashboard')?.classList.remove('hidden');
+
   loadDashboard();
   loadInscricoes(getFiltros());
   loadCursos();
