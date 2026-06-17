@@ -9,15 +9,17 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
 </head>
 <body data-page="login">
-  <header class="topbar">
-    <div class="topbar__inner">
-      <div class="brand">
+  <header class="insc-header">
+    <div class="insc-header-inner">
+      <div class="insc-brand">
         <img src="assets/images/sige.png" alt="SIGE" />
         <span>Sistema de Inscrição e Gestão</span>
       </div>
+      <nav class="insc-nav">
+        <button class="insc-nav-link" id="btn-acessibilidade" title="Acessibilidade">&#9881;</button>
+      </nav>
     </div>
   </header>
-  <div class="nav-overlay"></div>
 
   <main class="container">
     <section class="hero">
@@ -80,6 +82,34 @@
       </div>
     </section>
   </main>
+
+  <div class="acessibilidade-popup" id="acessibilidade-popup">
+    <div class="acessibilidade-header">
+      <strong>Acessibilidade</strong>
+      <button id="acessibilidade-fechar">&times;</button>
+    </div>
+    <div class="acessibilidade-body">
+      <div class="acessibilidade-item">
+        <span class="acessibilidade-label">
+          <span id="acessibilidade-icone-tema">&#127769;</span> Modo Noturno
+        </span>
+        <label class="acessibilidade-switch">
+          <input type="checkbox" id="toggle-dark-mode">
+          <span class="acessibilidade-slider"></span>
+        </label>
+      </div>
+      <div class="acessibilidade-item">
+        <span class="acessibilidade-label">&#128207; Tamanho da Fonte</span>
+        <div class="acessibilidade-font">
+          <button class="btn btn-sm" data-font="sm">A-</button>
+          <button class="btn btn-sm btn-primary active" data-font="md">A</button>
+          <button class="btn btn-sm" data-font="lg">A+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acessibilidade-overlay" id="acessibilidade-overlay"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
   <script src="assets/js/api-config.js"></script>

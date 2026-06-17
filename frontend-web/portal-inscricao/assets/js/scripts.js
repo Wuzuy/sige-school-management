@@ -664,58 +664,25 @@ function setupLogoutButtons() {
 }
 
 function setupMobileMenu() {
-  const menuToggle = document.querySelector('.menu-toggle');
-  const nav = document.querySelector('.nav');
-  const overlay = document.querySelector('.nav-overlay');
-
-  if (!menuToggle || !nav) return;
-
-  const closeMenu = () => {
-    nav.classList.remove('open');
-    if (overlay) overlay.classList.remove('visible');
-    menuToggle.setAttribute('aria-expanded', 'false');
-  };
-
-  const toggleMenu = () => {
-    const isOpen = nav.classList.toggle('open');
-    if (overlay) overlay.classList.toggle('visible', isOpen);
-    menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-  };
-
-  menuToggle.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleMenu();
-  });
-
-  // Fechar ao clicar em um link
-  nav.querySelectorAll('a, button').forEach((item) => {
-    item.addEventListener('click', closeMenu);
-  });
-
-  // Fechar ao clicar no overlay
-  if (overlay) {
-    overlay.addEventListener('click', closeMenu);
-  }
-
-  // Fechar ao pressionar ESC
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && nav.classList.contains('open')) {
-      closeMenu();
-    }
-  });
+  // No-op: links are always visible in the header
 }
 
 function setupTopNav(auth) {
   const isAdmin = auth?.usuario?.role === 'ROLE_ADMIN';
+  const isStudent = auth?.usuario?.role === 'ROLE_STUDENT';
 
   document.querySelectorAll('[data-admin-only]').forEach((element) => {
     element.classList.toggle('visible', isAdmin);
   });
 
+  document.querySelectorAll('[data-student-only]').forEach((element) => {
+    element.classList.toggle('visible', isStudent);
+  });
+
   const currentFile = getCurrentFileName();
-  document.querySelectorAll('.nav a[href]').forEach((link) => {
+  document.querySelectorAll('.insc-nav-link[href]').forEach((link) => {
     const href = link.getAttribute('href');
-    link.classList.toggle('nav-link-active', href === currentFile);
+    link.classList.toggle('active', href === currentFile);
   });
 }
 
@@ -990,23 +957,19 @@ async function initInscricaoPage() {
   let usingMock = false;
 
   if (!cursoId) {
-    usingMock = true;
-    curso = getMockCourseById(1);
-    cursoId = String(curso.id);
+    window.location.href = 'index.html';
+    return;
   }
 
   try {
-    const cursoPromise = curso ? Promise.resolve(curso) : request(`/cursos/${cursoId}`, { headers: authHeaders(false) });
-    const usuarioPromise = request('/usuarios/me', { headers: authHeaders(false) });
-
-    const [cursoResponse, usuarioResponse] = await Promise.all([cursoPromise, usuarioPromise]);
+    const cursoResponse = await request(`/cursos/${cursoId}`, { headers: authHeaders(false) });
+    const usuarioResponse = await request('/usuarios/me', { headers: authHeaders(false) });
     curso = getSafeCourse(cursoResponse, cursoId);
     usuario = getSafeUser({ usuario: usuarioResponse });
   } catch (error) {
-    usingMock = true;
-    showInfo('Falha ao carregar dados reais. Exibindo exemplo de inscrição.');
-    curso = getSafeCourse(curso, cursoId);
-    usuario = getSafeUser(auth);
+    showError('Falha ao carregar dados do curso. Tente novamente.');
+    window.location.href = 'index.html';
+    return;
   }
 
   document.querySelector('#curso-info').textContent = `${curso.nome_curso} - ${curso.turno}`;
@@ -2215,8 +2178,63 @@ async function initPortalSecretariaPage() {
   });
 }
 
+// ======================================
+// ACESSIBILIDADE: Dark Mode + Font Size
+// ======================================
+function initAcessibilidade() {
+  // Load saved preferences
+  const theme = localStorage.getItem('insc-theme') || 'light';
+  const fontSize = localStorage.getItem('insc-font-size') || 'md';
+  document.documentElement.setAttribute('data-theme', theme);
+  document.documentElement.setAttribute('data-font-size', fontSize);
+
+  // Sync toggle switch
+  const toggle = document.getElementById('toggle-dark-mode');
+  if (toggle) toggle.checked = theme === 'dark';
+
+  // Sync font buttons
+  document.querySelectorAll('.acessibilidade-font .btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.font === fontSize);
+    if (b.dataset.font === fontSize) b.classList.add('btn-primary');
+    else b.classList.remove('btn-primary');
+  });
+
+  // Open/close popup
+  const btn = document.getElementById('btn-acessibilidade');
+  const popup = document.getElementById('acessibilidade-popup');
+  const overlay = document.getElementById('acessibilidade-overlay');
+  const closeBtn = document.getElementById('acessibilidade-fechar');
+
+  const open = () => { popup.classList.add('open'); overlay.classList.add('open'); };
+  const close = () => { popup.classList.remove('open'); overlay.classList.remove('open'); };
+
+  btn?.addEventListener('click', open);
+  closeBtn?.addEventListener('click', close);
+  overlay?.addEventListener('click', close);
+
+  // Dark mode toggle
+  toggle?.addEventListener('change', () => {
+    const t = toggle.checked ? 'dark' : 'light';
+    localStorage.setItem('insc-theme', t);
+    document.documentElement.setAttribute('data-theme', t);
+  });
+
+  // Font size buttons
+  document.querySelectorAll('.acessibilidade-font .btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const size = btn.dataset.font;
+      localStorage.setItem('insc-font-size', size);
+      document.documentElement.setAttribute('data-font-size', size);
+      document.querySelectorAll('.acessibilidade-font .btn').forEach(b => {
+        b.classList.remove('active', 'btn-primary');
+      });
+      btn.classList.add('active', 'btn-primary');
+    });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  setupMobileMenu();
+  initAcessibilidade();
   
   const page = document.body.dataset.page;
 

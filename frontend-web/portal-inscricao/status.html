@@ -9,23 +9,22 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
 </head>
 <body data-page="status">
-  <header class="topbar">
-      <div class="brand">
+  <header class="insc-header">
+    <div class="insc-header-inner">
+      <a href="index.html" class="insc-brand">
         <img src="assets/images/sige.png" alt="SIGE" />
-        <span>SIGE - Status</span>
-      </div>
-      <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
-        <span>☰</span>
-      </button>
-      <nav class="nav">
-        <a href="index.html">Cursos</a>
-        <a href="inscricao.html">Inscrição</a>
-        <a href="../portal-escolar/portal-aluno.html">Portal do Aluno</a>
-        <a href="../portal-secretaria/portal-secretaria.html" data-admin-only>Portal da Secretaria</a>
-        <button data-logout type="button">Sair</button>
+        <span>SIGE</span>
+      </a>
+      <nav class="insc-nav">
+        <a href="index.html" class="insc-nav-link">Cursos</a>
+        <a href="status.html" class="insc-nav-link">Status</a>
+        <a href="../portal-escolar/portal-aluno.html" class="insc-nav-link" data-student-only>Portal do Aluno</a>
+        <a href="../portal-secretaria/portal-secretaria.html" class="insc-nav-link" data-admin-only>Secretaria</a>
+        <button class="insc-nav-link" id="btn-acessibilidade" title="Acessibilidade">&#9881;</button>
+        <button class="insc-nav-link insc-nav-logout" data-logout>Sair</button>
       </nav>
+    </div>
   </header>
-  <div class="nav-overlay"></div>
 
   <main class="container">
     <section class="hero">
@@ -48,15 +47,7 @@
                 <th>Ações</th>
               </tr>
             </thead>
-            <tbody id="status-body">
-              <tr>
-                <td>Técnico em Informática</td>
-                <td>Campus Central</td>
-                <td>10/06/2026</td>
-                <td><span class="status">Em análise</span></td>
-                <td><button class="btn btn-soft" disabled>Carregando...</button></td>
-              </tr>
-            </tbody>
+            <tbody id="status-body"></tbody>
           </table>
         </div>
       </article>
@@ -85,12 +76,39 @@
     </section>
   </main>
 
+  <div class="acessibilidade-popup" id="acessibilidade-popup">
+    <div class="acessibilidade-header">
+      <strong>Acessibilidade</strong>
+      <button id="acessibilidade-fechar">&times;</button>
+    </div>
+    <div class="acessibilidade-body">
+      <div class="acessibilidade-item">
+        <span class="acessibilidade-label">
+          <span id="acessibilidade-icone-tema">&#127769;</span> Modo Noturno
+        </span>
+        <label class="acessibilidade-switch">
+          <input type="checkbox" id="toggle-dark-mode">
+          <span class="acessibilidade-slider"></span>
+        </label>
+      </div>
+      <div class="acessibilidade-item">
+        <span class="acessibilidade-label">&#128207; Tamanho da Fonte</span>
+        <div class="acessibilidade-font">
+          <button class="btn btn-sm" data-font="sm">A-</button>
+          <button class="btn btn-sm btn-primary active" data-font="md">A</button>
+          <button class="btn btn-sm" data-font="lg">A+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acessibilidade-overlay" id="acessibilidade-overlay"></div>
+
   <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
   <script src="assets/js/api-config.js"></script>
   <script src="assets/js/scripts.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      setupMobileMenu();
       const auth = requireAuth();
       if (auth) initStatusPage();
     });
