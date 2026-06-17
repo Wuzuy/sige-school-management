@@ -1,112 +1,100 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { useState } from 'react';
+import { ActivityIndicator, Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { request } from '@/services/api';
 
-import { Collapsible } from '@/components/ui/collapsible';
-import { ExternalLink } from '@/components/external-link';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Fonts } from '@/constants/theme';
+export default function ExploreScreen() {
+  const [codigo, setCodigo] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<any>(null);
 
-export default function TabTwoScreen() {
+  const validar = async () => {
+    if (!codigo.trim()) { Alert.alert('Erro', 'Digite o codigo'); return; }
+    setLoading(true);
+    setResult(null);
+    try {
+      const data = await request('/auth/validar-codigo', {
+        method: 'POST',
+        body: JSON.stringify({ codigo: codigo.trim() }),
+      });
+      setResult(data);
+    } catch (e: any) {
+      Alert.alert('Acesso Negado', e.message || 'Codigo invalido');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
+    <KeyboardAvoidingView style={s.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <ScrollView contentContainerStyle={s.inner}>
+        <Ionicons name="scan-outline" size={56} color="#003366" />
+        <Text style={s.title}>Autenticacao de Acesso</Text>
+        <Text style={s.subtitle}>Digite o codigo gerado no app do aluno</Text>
+
+        <TextInput
+          style={s.input}
+          placeholder="Codigo de 6 digitos"
+          value={codigo}
+          onChangeText={setCodigo}
+          keyboardType="number-pad"
+          maxLength={6}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText
-          type="title"
-          style={{
-            fontFamily: Fonts.rounded,
-          }}>
-          Explore
-        </ThemedText>
-      </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image
-          source={require('@/assets/images/react-logo.png')}
-          style={{ width: 100, height: 100, alignSelf: 'center' }}
-        />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful{' '}
-          <ThemedText type="defaultSemiBold" style={{ fontFamily: Fonts.mono }}>
-            react-native-reanimated
-          </ThemedText>{' '}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
+        <TouchableOpacity style={s.button} onPress={validar} disabled={loading}>
+          <Text style={s.buttonText}>{loading ? 'Validando...' : 'Validar Acesso'}</Text>
+        </TouchableOpacity>
+
+        {result && (
+          <View style={s.resultCard}>
+            <Ionicons name="checkmark-circle" size={32} color="#27ae60" />
+            <Text style={s.resultTitle}>Acesso Liberado</Text>
+            <View style={s.infoRow}>
+              <Text style={s.label}>Aluno:</Text>
+              <Text style={s.value}>{result.usuario?.nome_completo || '-'}</Text>
+            </View>
+            <View style={s.infoRow}>
+              <Text style={s.label}>CPF:</Text>
+              <Text style={s.value}>{result.usuario?.cpf || '-'}</Text>
+            </View>
+            {result.matricula && (
+              <>
+                <View style={s.infoRow}>
+                  <Text style={s.label}>Curso:</Text>
+                  <Text style={s.value}>{result.matricula.curso || '-'}</Text>
+                </View>
+                <View style={s.infoRow}>
+                  <Text style={s.label}>Turma:</Text>
+                  <Text style={s.value}>{result.matricula.turma || '-'}</Text>
+                </View>
+                <View style={s.infoRow}>
+                  <Text style={s.label}>Matricula:</Text>
+                  <Text style={s.value}>{result.matricula.numero || '-'}</Text>
+                </View>
+                <View style={s.infoRow}>
+                  <Text style={s.label}>Status:</Text>
+                  <Text style={[s.value, { color: result.matricula.status === 'ATIVO' ? '#27ae60' : '#e74c3c' }]}>{result.matricula.status}</Text>
+                </View>
+              </>
+            )}
+          </View>
+        )}
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
-const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    gap: 8,
-  },
+const s = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#f0f1f4' },
+  inner: { padding: 24, alignItems: 'center', paddingTop: 40 },
+  title: { fontSize: 20, fontWeight: '700', color: '#1a1a1a', marginTop: 12 },
+  subtitle: { fontSize: 13, color: '#999', textAlign: 'center', marginTop: 4, marginBottom: 28 },
+  input: { backgroundColor: '#fff', padding: 16, borderRadius: 12, fontSize: 24, letterSpacing: 6, textAlign: 'center', width: '100%', marginBottom: 16, borderWidth: 1, borderColor: '#d7dee8' },
+  button: { backgroundColor: '#003366', padding: 16, borderRadius: 12, width: '100%', alignItems: 'center' },
+  buttonText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
+  resultCard: { backgroundColor: '#fff', borderRadius: 16, padding: 20, width: '100%', marginTop: 24, alignItems: 'center' },
+  resultTitle: { fontSize: 18, fontWeight: '700', color: '#27ae60', marginTop: 8, marginBottom: 16 },
+  infoRow: { flexDirection: 'row', justifyContent: 'space-between', width: '100%', paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: '#f0f0f0' },
+  label: { fontSize: 13, color: '#999' },
+  value: { fontSize: 13, fontWeight: '600', color: '#333', maxWidth: '60%', textAlign: 'right' },
 });

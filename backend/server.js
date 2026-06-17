@@ -15,6 +15,7 @@ const unidadesRoutes = require('./routes/unidades');
 const editaisRoutes = require('./routes/editais');
 const alunoRoutes = require('./routes/aluno');
 const alunosRoutes = require('./routes/alunos');
+const authCodigoRoutes = require('./routes/auth-codigo');
 
 app.use('/api/cursos', cursosRoutes);
 app.use('/api/usuarios', usuariosRoutes);
@@ -23,6 +24,7 @@ app.use('/api/unidades', unidadesRoutes);
 app.use('/api/editais', editaisRoutes);
 app.use('/api/aluno', alunoRoutes);
 app.use('/api/alunos', alunosRoutes);
+app.use('/api/auth', authCodigoRoutes);
 
 const PORT = process.env.PORT || 8080;
 

@@ -1,166 +1,136 @@
-import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { useCallback, useState } from 'react';
+import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useAuth } from '@/contexts/AuthContext';
+import { request } from '@/services/api';
 
-export default function Secretaria() {
+type DashboardData = {
+  matriculas: any[];
+  frequencia: any[];
+  horarios: any[];
+  notas: any[];
+  documentos: any[];
+};
+
+export default function Dashboard() {
+  const { user, logout } = useAuth();
+  const [data, setData] = useState<DashboardData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchData = useCallback(async () => {
+    try {
+      const [matriculas, frequencia, horarios, documentos] = await Promise.all([
+        request('/aluno/matriculas').catch(() => []),
+        request('/aluno/frequencia').catch(() => []),
+        request('/aluno/horarios').catch(() => []),
+        request('/aluno/documentos').catch(() => []),
+      ]);
+      setData({ matriculas, frequencia, horarios, notas: [], documentos });
+    } catch { } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
+
+  useState(() => { fetchData(); });
+
+  const onRefresh = () => { setRefreshing(true); fetchData(); };
+
+  const matricula = data?.matriculas?.[0];
+  const cursoNome = matricula?.id_curso?.nome_curso || 'Curso nao encontrado';
+  const turmaNome = matricula?.id_turma?.nome_turma || '';
+  const statusMat = matricula?.status || 'ATIVO';
+  const freq = data?.frequencia || [];
+  const presencas = freq.filter((f: any) => f.presente).length;
+  const totalAulas = freq.length || 1;
+  const percFreq = Math.round((presencas / totalAulas) * 100);
+
+  if (loading) {
+    return (
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color="#00aaff" />
+      </View>
+    );
+  }
+
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* Header */}
+    <ScrollView
+      style={styles.container}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+    >
       <View style={styles.header}>
-        <Text style={styles.greeting}>Olá, Lucas!</Text>
-        <Text style={styles.subGreeting}>
-          Bem-vindo ao seu portal acadêmico.
-        </Text>
+        <Text style={styles.greeting}>Ola, {user?.nomeCompleto?.split(' ')[0] || 'Aluno'}!</Text>
+        <TouchableOpacity onPress={() => { logout(); router.replace('/'); }}>
+          <Ionicons name="log-out-outline" size={24} color="#e74c3c" />
+        </TouchableOpacity>
       </View>
 
-      {/* Card de Status (Destaque) */}
       <View style={styles.highlightCard}>
-        <Text style={styles.cardTitle}>Status do Curso</Text>
-        <Text style={styles.cardStatus}>Ativo</Text>
+        <Text style={styles.cardLabel}>Status do Curso</Text>
+        <Text style={styles.cardStatus}>{statusMat === 'ATIVO' ? 'Ativo' : statusMat}</Text>
         <View style={styles.divider} />
-        <Text style={styles.cardInfo}>
-          Técnico em Desenvolvimento de Sistemas
-        </Text>
-        <Text style={styles.cardSmall}>Turma: TEC00412025</Text>
+        <Text style={styles.cardTitle}>{cursoNome}</Text>
+        {turmaNome ? <Text style={styles.cardSmall}>Turma: {turmaNome}</Text> : null}
+        <Text style={styles.cardSmall}>Matricula: {matricula?.numero_matricula || '-'}</Text>
       </View>
 
-      {/* Seção de Ações Rápidas */}
-      <Text style={styles.sectionTitle}>Acadêmico</Text>
+      <View style={styles.statsRow}>
+        <View style={styles.statBox}>
+          <Text style={styles.statNumber}>{totalAulas}</Text>
+          <Text style={styles.statLabel}>Aulas</Text>
+        </View>
+        <View style={styles.statBox}>
+          <Text style={[styles.statNumber, { color: percFreq >= 75 ? '#27ae60' : '#e74c3c' }]}>{percFreq}%</Text>
+          <Text style={styles.statLabel}>Frequencia</Text>
+        </View>
+        <View style={styles.statBox}>
+          <Text style={styles.statNumber}>{data?.documentos?.length || 0}</Text>
+          <Text style={styles.statLabel}>Documentos</Text>
+        </View>
+      </View>
+
+      <Text style={styles.sectionTitle}>Academico</Text>
       <View style={styles.grid}>
-        <DashboardItem
-          icon="book-outline"
-          title="Notas"
-          subtitle="Consulte aqui"
-          route="/notas"
-        />
-        <DashboardItem
-          icon="calendar-outline"
-          title="Agenda"
-          subtitle="Suas aulas"
-          route="/agenda"
-        />
-        <DashboardItem
-          icon="checkmark-circle-outline"
-          title="Faltas"
-          subtitle="Presença"
-          route="/faltas"
-        />
-        <DashboardItem
-          icon="wallet-outline"
-          title="Financeiro"
-          subtitle="Boletos"
-          route="/financeiro"
-        />
+        <MenuItem icon="book-outline" title="Notas" route="/notas" />
+        <MenuItem icon="calendar-outline" title="Agenda" route="/agenda" />
+        <MenuItem icon="checkmark-circle-outline" title="Frequencia" route="/faltas" />
+        <MenuItem icon="layers-outline" title="Curriculo" route="/curriculo" />
+        <MenuItem icon="wallet-outline" title="Financeiro" route="/financeiro" />
+        <MenuItem icon="chatbubble-ellipses-outline" title="Reclamacoes" route="/reclamacoes" />
+        <MenuItem icon="megaphone-outline" title="Ouvidoria" route="/ouvidoria" />
+        <MenuItem icon="time-outline" title="Atendimento" route="/atendimento" />
       </View>
-
-      {/* Rodapé de Contato */}
-      <TouchableOpacity style={styles.contactButton}>
-        <Ionicons name="chatbubble-ellipses-outline" size={20} color="#fff" />
-        <Text style={styles.contactText}>Falar com a Secretaria</Text>
-      </TouchableOpacity>
     </ScrollView>
   );
 }
 
-// Componente helper para os cards pequenos atualizado
-function DashboardItem({
-  icon,
-  title,
-  subtitle,
-  route,
-}: {
-  icon: any;
-  title: string;
-  subtitle: string;
-  route: any;
-}) {
+function MenuItem({ icon, title, route }: { icon: any; title: string; route: string }) {
   return (
-    <TouchableOpacity
-      style={styles.itemCard}
-      onPress={() => router.push(route)}
-    >
+    <TouchableOpacity style={styles.itemCard} onPress={() => router.push(route as any)}>
       <Ionicons name={icon} size={28} color="#00aaff" />
       <Text style={styles.itemTitle}>{title}</Text>
-      <Text style={styles.itemSubtitle}>{subtitle}</Text>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f8f9fe", padding: 20 },
-  header: { marginBottom: 25, marginTop: 10 },
-  greeting: { fontSize: 28, fontWeight: "800", color: "#1a1a1a" },
-  subGreeting: { fontSize: 16, color: "#7a7a7a" },
-
-  highlightCard: {
-    backgroundColor: "#003366",
-    padding: 24,
-    borderRadius: 20,
-    marginBottom: 30,
-    shadowColor: "#003366",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-  cardTitle: { color: "#ffffff80", fontSize: 14, marginBottom: 5 },
-  cardStatus: {
-    color: "#fff",
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 15,
-  },
-  divider: { height: 1, backgroundColor: "#ffffff20", marginBottom: 15 },
-  cardInfo: { color: "#fff", fontSize: 16, fontWeight: "600" },
-  cardSmall: { color: "#ffffff80", fontSize: 12, marginTop: 5 },
-
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: "#1a1a1a",
-    marginBottom: 15,
-  },
-  grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-  },
-  itemCard: {
-    width: "47%",
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 16,
-    marginBottom: 15,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  itemTitle: { fontSize: 14, fontWeight: "700", color: "#333", marginTop: 10 },
-  itemSubtitle: { fontSize: 11, color: "#999", marginTop: 2 },
-
-  contactButton: {
-    flexDirection: "row",
-    backgroundColor: "#00aaff",
-    padding: 18,
-    borderRadius: 16,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 10,
-    marginBottom: 40,
-  },
-  contactText: {
-    color: "#fff",
-    fontWeight: "bold",
-    marginLeft: 10,
-    fontSize: 16,
-  },
+  container: { flex: 1, backgroundColor: '#f8f9fe', padding: 20 },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, marginTop: 10 },
+  greeting: { fontSize: 24, fontWeight: '800', color: '#1a1a1a' },
+  highlightCard: { backgroundColor: '#003366', padding: 20, borderRadius: 20, marginBottom: 20 },
+  cardLabel: { color: '#ffffff80', fontSize: 12, marginBottom: 4 },
+  cardStatus: { color: '#fff', fontSize: 20, fontWeight: 'bold', marginBottom: 12 },
+  divider: { height: 1, backgroundColor: '#ffffff20', marginBottom: 12 },
+  cardTitle: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  cardSmall: { color: '#ffffff80', fontSize: 12, marginTop: 4 },
+  statsRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 24 },
+  statBox: { flex: 1, backgroundColor: '#fff', padding: 14, borderRadius: 14, marginHorizontal: 4, alignItems: 'center' },
+  statNumber: { fontSize: 22, fontWeight: '800', color: '#1a1a1a' },
+  statLabel: { fontSize: 11, color: '#999', marginTop: 2 },
+  sectionTitle: { fontSize: 18, fontWeight: '700', color: '#1a1a1a', marginBottom: 12 },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },
+  itemCard: { width: '47%', backgroundColor: '#fff', padding: 18, borderRadius: 16, marginBottom: 14, alignItems: 'center' },
+  itemTitle: { fontSize: 13, fontWeight: '700', color: '#333', marginTop: 8 },
 });

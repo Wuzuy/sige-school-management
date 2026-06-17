@@ -1,74 +1,91 @@
-import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import QRCode from "react-native-qrcode-svg";
+import { Ionicons } from '@expo/vector-icons';
+import { useState } from 'react';
+import { ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { request } from '@/services/api';
 
-export default function Autenticacao() {
-  // Simulação de um token que seria assinado pelo seu Backend/Supabase
-  const [token, setToken] = useState("sige-token-" + Date.now());
-  const [timer, setTimer] = useState(30);
+let timer: ReturnType<typeof setInterval> | null = null;
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimer((prev) => {
-        if (prev <= 1) {
-          // Em produção, aqui você buscaria um novo token no Supabase
-          setToken("sige-token-" + Date.now());
-          return 30;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+export default function AutenticacaoScreen() {
+  const [codigo, setCodigo] = useState<string | null>(null);
+  const [expiraEm, setExpiraEm] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [segundos, setSegundos] = useState(0);
+  const [info, setInfo] = useState<{ curso?: string; turma?: string } | null>(null);
+
+  const iniciarContagem = (expiresAt: string) => {
+    if (timer) clearInterval(timer);
+    const atualizar = () => {
+      const diff = Math.max(0, Math.floor((new Date(expiresAt).getTime() - Date.now()) / 1000));
+      setSegundos(diff);
+      if (diff <= 0) {
+        if (timer) clearInterval(timer);
+        setCodigo(null);
+      }
+    };
+    atualizar();
+    timer = setInterval(atualizar, 1000);
+  };
+
+  const gerarCodigo = async () => {
+    setLoading(true);
+    try {
+      const data = await request('/auth/gerar-codigo', { method: 'POST' });
+      setCodigo(data.codigo);
+      setExpiraEm(data.expira_em);
+      setInfo({ curso: data.curso, turma: data.turma });
+      iniciarContagem(data.expira_em);
+    } catch (e: any) {
+      Alert.alert('Erro', e.message || 'Falha ao gerar codigo');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Autenticação</Text>
-      <Text style={styles.subtitle}>Aproxime seu dispositivo do leitor</Text>
+      <View style={styles.card}>
+        <Ionicons name="shield-checkmark" size={48} color="#003366" />
+        <Text style={styles.title}>Autenticacao de Acesso</Text>
+        <Text style={styles.subtitle}>
+          Gere um codigo unico para liberar o acesso na catraca
+        </Text>
 
-      <View style={styles.qrCard}>
-        <QRCode
-          value={token}
-          size={220}
-          backgroundColor="white"
-          color="#003366" // Cor do logo SENAI
-        />
-      </View>
+        <TouchableOpacity style={styles.generateButton} onPress={gerarCodigo} disabled={loading}>
+          <Ionicons name="refresh" size={20} color="#fff" />
+          <Text style={styles.generateText}>{loading ? 'Gerando...' : 'Gerar Codigo'}</Text>
+        </TouchableOpacity>
 
-      <View style={styles.timerContainer}>
-        <Text style={styles.timerLabel}>Código renova em</Text>
-        <Text style={styles.timerValue}>{timer}s</Text>
+        {codigo && (
+          <View style={styles.codeContainer}>
+            <Text style={styles.codeLabel}>Seu codigo de acesso</Text>
+            <Text style={styles.codeText}>{codigo}</Text>
+            <Text style={styles.timerText}>
+              Expira em {segundos}s
+            </Text>
+            {info?.curso && (
+              <View style={styles.infoBox}>
+                <Text style={styles.infoText}>{info.curso}</Text>
+                {info.turma && <Text style={styles.infoText}>Turma: {info.turma}</Text>}
+              </View>
+            )}
+          </View>
+        )}
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f8f9fe",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-  title: { fontSize: 24, fontWeight: "800", color: "#1a1a1a", marginBottom: 8 },
-  subtitle: {
-    fontSize: 16,
-    color: "#7a7a7a",
-    marginBottom: 40,
-    textAlign: "center",
-  },
-  qrCard: {
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 24,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 5,
-  },
-  timerContainer: { marginTop: 40, alignItems: "center" },
-  timerLabel: { fontSize: 14, color: "#999", marginBottom: 4 },
-  timerValue: { fontSize: 24, fontWeight: "bold", color: "#00aaff" },
+  container: { flex: 1, backgroundColor: '#f0f1f4', justifyContent: 'center', padding: 24 },
+  card: { backgroundColor: '#fff', borderRadius: 24, padding: 28, alignItems: 'center', shadowColor: '#000', shadowOpacity: 0.06, shadowRadius: 12, elevation: 4 },
+  title: { fontSize: 20, fontWeight: '700', color: '#1a1a1a', marginTop: 12 },
+  subtitle: { fontSize: 13, color: '#999', textAlign: 'center', marginTop: 6, marginBottom: 24, lineHeight: 18 },
+  generateButton: { flexDirection: 'row', backgroundColor: '#003366', paddingVertical: 14, paddingHorizontal: 28, borderRadius: 12, alignItems: 'center', gap: 8 },
+  generateText: { color: '#fff', fontWeight: 'bold', fontSize: 15 },
+  codeContainer: { marginTop: 28, alignItems: 'center', backgroundColor: '#f8f9fe', padding: 20, borderRadius: 16, width: '100%' },
+  codeLabel: { fontSize: 12, color: '#999', marginBottom: 8 },
+  codeText: { fontSize: 42, fontWeight: '800', color: '#003366', letterSpacing: 8, fontVariant: ['tabular-nums'] },
+  timerText: { fontSize: 13, color: '#e74c3c', marginTop: 8, fontWeight: '600' },
+  infoBox: { marginTop: 12, alignItems: 'center' },
+  infoText: { fontSize: 12, color: '#666', marginTop: 2 },
 });

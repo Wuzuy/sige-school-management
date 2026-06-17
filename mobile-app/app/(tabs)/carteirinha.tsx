@@ -1,117 +1,85 @@
-import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet, Text, View } from "react-native";
+import { useCallback, useState } from 'react';
+import { ActivityIndicator, Image, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useAuth } from '@/contexts/AuthContext';
+import { request } from '@/services/api';
 
-export default function Carteirinha() {
+export default function CarteirinhaScreen() {
+  const { user } = useAuth();
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useState(() => {
+    (async () => {
+      try {
+        const mats = await request('/aluno/matriculas');
+        setData(mats?.[0] || null);
+      } catch {} finally {
+        setLoading(false);
+      }
+    })();
+  });
+
+  if (loading) {
+    return (
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color="#00aaff" />
+      </View>
+    );
+  }
+
+  const curso = data?.id_curso?.nome_curso || '---';
+  const turma = data?.id_turma?.nome_turma || '---';
+  const matriculaNum = data?.numero_matricula || '---';
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Carteirinha Digital</Text>
-
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
       <View style={styles.card}>
-        <View style={styles.cardHeader}>
-          <Text style={styles.headerText}>Firjan SENAI</Text>
-          <Ionicons name="school" size={24} color="#fff" />
+        <View style={styles.topBar}>
+          <Text style={styles.senaiText}>SIGE</Text>
+          <Text style={styles.senaiSub}>Sistema Integrado de Gestao Escolar</Text>
         </View>
-
-        <View style={styles.cardContent}>
-          <View style={styles.row}>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.label}>Aluno</Text>
-              <Text style={styles.value}>Lucas Matheus Lima Sandin</Text>
-            </View>
-            <View style={styles.avatarPlaceholder}>
-              <Ionicons name="person" size={32} color="#003366" />
-            </View>
+        <View style={styles.photoArea}>
+          <View style={styles.photoPlaceholder}>
+            <Text style={styles.photoText}>{user?.nomeCompleto?.charAt(0) || 'A'}</Text>
           </View>
-
-          <View style={styles.field}>
-            <Text style={styles.label}>Matrícula</Text>
-            <Text style={styles.value}>00470472</Text>
-          </View>
-
-          <View style={styles.field}>
-            <Text style={styles.label}>Curso</Text>
-            <Text style={styles.value}>
-              Técnico em Desenvolvimento de Sistemas
-            </Text>
-          </View>
-
-          <View style={styles.footerRow}>
-            <View>
-              <Text style={styles.label}>Validade</Text>
-              <Text style={styles.valueHighlight}>17/07/2026</Text>
-            </View>
-            <Text style={styles.status}>ATIVO</Text>
-          </View>
+        </View>
+        <Text style={styles.nome}>{user?.nomeCompleto || '---'}</Text>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>CPF:</Text>
+          <Text style={styles.value}>{user?.cpf || '---'}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Matricula:</Text>
+          <Text style={styles.value}>{matriculaNum}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Curso:</Text>
+          <Text style={styles.value}>{curso}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Turma:</Text>
+          <Text style={styles.value}>{turma}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Email:</Text>
+          <Text style={styles.value}>{user?.email || '---'}</Text>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f8f9fe",
-    padding: 20,
-    paddingTop: 40,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "800",
-    color: "#1a1a1a",
-    marginBottom: 20,
-  },
-  card: {
-    backgroundColor: "#fff",
-    borderRadius: 24,
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.1,
-    shadowRadius: 20,
-    elevation: 10,
-  },
-  cardHeader: {
-    backgroundColor: "#003366",
-    padding: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  headerText: { color: "#fff", fontSize: 18, fontWeight: "bold" },
-  cardContent: { padding: 20 },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 20,
-  },
-  avatarPlaceholder: {
-    width: 60,
-    height: 60,
-    backgroundColor: "#f0f0f0",
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  field: { marginBottom: 15 },
-  label: { fontSize: 12, color: "#999", marginBottom: 2 },
-  value: { fontSize: 16, fontWeight: "600", color: "#333" },
-  valueHighlight: { fontSize: 16, fontWeight: "800", color: "#00aaff" },
-  footerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-    marginTop: 10,
-    paddingTop: 15,
-    borderTopWidth: 1,
-    borderTopColor: "#f0f0f0",
-  },
-  status: {
-    backgroundColor: "#e6f7ff",
-    color: "#00aaff",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
-    fontWeight: "bold",
-  },
+  container: { flex: 1, backgroundColor: '#f0f1f4', padding: 20 },
+  card: { backgroundColor: '#fff', borderRadius: 20, padding: 24, shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 10, elevation: 4 },
+  topBar: { marginBottom: 20 },
+  senaiText: { fontSize: 22, fontWeight: '800', color: '#003366' },
+  senaiSub: { fontSize: 10, color: '#999', marginTop: 2 },
+  photoArea: { alignItems: 'center', marginBottom: 16 },
+  photoPlaceholder: { width: 80, height: 80, borderRadius: 40, backgroundColor: '#003366', justifyContent: 'center', alignItems: 'center' },
+  photoText: { color: '#fff', fontSize: 32, fontWeight: 'bold' },
+  nome: { fontSize: 20, fontWeight: '700', color: '#1a1a1a', textAlign: 'center', marginBottom: 20 },
+  infoRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: '#f0f0f0' },
+  label: { fontSize: 13, color: '#999', fontWeight: '500' },
+  value: { fontSize: 13, color: '#333', fontWeight: '600', maxWidth: '60%', textAlign: 'right' },
 });
