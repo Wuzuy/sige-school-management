@@ -58,17 +58,18 @@ export default function ExploreScreen() {
     <View style={s.container}>
       {mode === 'camera' && !result && (
         <View style={s.cameraContainer}>
-          <CameraView
-            style={s.camera}
-            facing="back"
-            barcodeScannerSettings={{ barcodeTypes: ['qr'] }}
-            onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
-          >
+          <View style={s.cameraWrapper}>
+            <CameraView
+              style={StyleSheet.absoluteFill}
+              facing="back"
+              barcodeScannerSettings={{ barcodeTypes: ['qr'] }}
+              onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+            />
             <View style={s.overlay}>
               <View style={s.scanFrame} />
               <Text style={s.scanHint}>Aproxime o QR Code do aluno</Text>
             </View>
-          </CameraView>
+          </View>
           <View style={s.cameraFooter}>
             <TouchableOpacity onPress={() => { setScanned(false); setResult(null); }}>
               <Text style={s.linkText}>Escanear novamente</Text>
@@ -167,6 +168,7 @@ const s = StyleSheet.create({
 
   // Camera
   cameraContainer: { flex: 1 },
+  cameraWrapper: { flex: 1, position: 'relative' },
   camera: { flex: 1 },
   overlay: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.3)' },
   scanFrame: { width: 220, height: 220, borderWidth: 3, borderColor: '#00aaff', borderRadius: 16, backgroundColor: 'transparent' },

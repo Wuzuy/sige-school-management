@@ -50,7 +50,7 @@ router.post('/validar-codigo', async (req, res) => {
 
   const { data, error } = await supabase
     .from('codigos_acesso')
-    .select('*, id_usuario (id, nome_completo, email, cpf, foto_url)')
+    .select('*, id_usuario (id, nome_completo, email, cpf)')
     .eq('codigo', codigo)
     .eq('usado', false)
     .gt('expira_em', now)
