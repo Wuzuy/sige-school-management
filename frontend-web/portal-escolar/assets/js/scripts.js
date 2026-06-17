@@ -629,10 +629,23 @@ function setupProtectedPage(auth) {
 }
 
 async function request(path, options = {}) {
+  const auth = getAuth();
+  const headers = { ...(options.headers || {}) };
+  if (auth?.token) {
+    headers.Authorization = `Bearer ${auth.token}`;
+  }
+  if (!headers['Content-Type'] && options.method && options.method !== 'GET') {
+    headers['Content-Type'] = 'application/json';
+  }
+  options.headers = headers;
   const response = await fetch(`${API_BASE}${path}`, options);
 
   if (!response.ok) {
     const raw = await response.text();
+    if (response.status === 401) {
+      clearAuth();
+      window.location.href = 'login.html';
+    }
     throw new Error(raw || 'Falha na requisição');
   }
 
@@ -1345,6 +1358,7 @@ async function initPortalSecretariaPage() {
     usuarios: [],
     editais: [],
     inscricoes: [],
+    alunos: [],
   };
 
   const unidadeForm = document.querySelector('#form-unidade');
@@ -1622,12 +1636,54 @@ async function initPortalSecretariaPage() {
     }
   };
 
+  const renderAlunos = () => {
+    const body = document.querySelector('#lista-alunos');
+    if (!body) return;
+    const query = document.querySelector('#filtro-aluno-texto')?.value.trim() || '';
+    const cursoFilter = document.querySelector('#filtro-aluno-curso')?.value || 'TODOS';
+    const statusFilter = document.querySelector('#filtro-aluno-status-matricula')?.value || 'TODOS';
+
+    let data = filterByQuery(state.alunos, query, (item) => `${item.nome_completo} ${item.email} ${item.cpf}`);
+    if (cursoFilter !== 'TODOS') {
+      data = data.filter((a) => (a.matriculas || []).some((m) => String(m.id_curso?.id) === cursoFilter));
+    }
+    if (statusFilter !== 'TODOS') {
+      data = data.filter((a) => (a.matriculas || []).some((m) => m.status === statusFilter));
+    }
+
+    body.innerHTML = data
+      .map(
+        (aluno) => {
+          const matricula = (aluno.matriculas || [])[0] || {};
+          return `
+            <tr>
+              <td>${aluno.nome_completo}</td>
+              <td>${aluno.email}</td>
+              <td>${matricula.id_curso?.nome_curso || '-'}</td>
+              <td>${matricula.id_turma?.nome || '-'}</td>
+              <td><span class="badge badge-${matricula.status === 'ATIVO' ? 'success' : matricula.status === 'TRANCADO' ? 'warning' : 'info'}">${matricula.status || 'SEM MATRICULA'}</span></td>
+              <td>
+                <div class="actions">
+                  <button class="btn btn-soft" data-aluno-view="${aluno.id}">Detalhes</button>
+                  ${matricula.id ? `<button class="btn btn-soft" data-aluno-matricula="${matricula.id}" data-aluno-status="${matricula.status || ''}">Alterar Status</button>` : ''}
+                </div>
+              </td>
+            </tr>
+          `;
+        }
+      )
+      .join('');
+
+    if (!body.innerHTML) body.innerHTML = '<tr><td colspan="6">Nenhum aluno encontrado.</td></tr>';
+  };
+
   const renderAll = () => {
     renderUnidades();
     renderCursos();
     renderUsuarios();
     renderEditais();
     renderInscricoes();
+    renderAlunos();
     renderRelatorios();
   };
 
@@ -1656,12 +1712,13 @@ async function initPortalSecretariaPage() {
   };
 
   const reloadData = async () => {
-    const [unidades, cursos, usuarios, editais, inscricoes] = await Promise.all([
+    const [unidades, cursos, usuarios, editais, inscricoes, alunos] = await Promise.all([
       request('/unidades', { headers: authHeaders(false) }),
       request('/cursos?todos=true', { headers: authHeaders(false) }),
       request('/usuarios', { headers: authHeaders(false) }),
       request('/editais', { headers: authHeaders(false) }),
       request('/inscricoes', { headers: authHeaders(false) }),
+      request('/alunos', { headers: authHeaders(false) }),
     ]);
 
     state.unidades = unidades;
@@ -1669,6 +1726,7 @@ async function initPortalSecretariaPage() {
     state.usuarios = usuarios;
     state.editais = editais;
     state.inscricoes = inscricoes;
+    state.alunos = alunos || [];
 
     // Popular select de unidade no formulário de curso
     const unidadeSelect = document.querySelector('#curso-unidade');
@@ -1714,7 +1772,7 @@ async function initPortalSecretariaPage() {
   }
 
   document.querySelectorAll(
-    '#filtro-unidade-texto, #filtro-unidade-estado, #filtro-curso-texto, #filtro-curso-unidade, #filtro-curso-status, #filtro-usuario-texto, #filtro-usuario-role, #filtro-edital-texto, #filtro-edital-status, #filtro-inscricao-texto, #filtro-inscricao-curso, #filtro-inscricao-status'
+    '#filtro-unidade-texto, #filtro-unidade-estado, #filtro-curso-texto, #filtro-curso-unidade, #filtro-curso-status, #filtro-usuario-texto, #filtro-usuario-role, #filtro-edital-texto, #filtro-edital-status, #filtro-inscricao-texto, #filtro-inscricao-curso, #filtro-inscricao-status, #filtro-aluno-texto, #filtro-aluno-curso, #filtro-aluno-status-matricula'
   ).forEach((field) => {
     field.addEventListener('input', renderAll);
     field.addEventListener('change', renderAll);
@@ -1969,6 +2027,193 @@ async function initPortalSecretariaPage() {
     }
   });
 
+  // Event listener para lista de alunos - Ver detalhes
+  document.querySelector('#lista-alunos')?.addEventListener('click', async (event) => {
+    const viewBtn = event.target.closest('[data-aluno-view]');
+    const matBtn = event.target.closest('[data-aluno-matricula]');
+
+    if (viewBtn) {
+      const id = viewBtn.getAttribute('data-aluno-view');
+      document.querySelector('#modulo-alunos').classList.add('hidden');
+      document.querySelector('#modulo-aluno-detalhes').classList.remove('hidden');
+
+      const content = document.querySelector('#aluno-detalhes-content');
+      content.innerHTML = '<p class="muted">Carregando detalhes...</p>';
+
+      try {
+        const aluno = await request(`/alunos/${id}`, { headers: authHeaders(false) });
+        const matricula = (aluno.matriculas || [])[0] || {};
+
+        content.innerHTML = `
+          <div class="detail-section">
+            <h3>Dados Pessoais</h3>
+            <div class="detail-grid">
+              <div class="detail-item"><span class="detail-label">Nome</span><span class="detail-value">${aluno.nome_completo || '-'}</span></div>
+              <div class="detail-item"><span class="detail-label">E-mail</span><span class="detail-value">${aluno.email || '-'}</span></div>
+              <div class="detail-item"><span class="detail-label">CPF</span><span class="detail-value">${aluno.cpf || '-'}</span></div>
+              <div class="detail-item"><span class="detail-label">Telefone</span><span class="detail-value">${aluno.telefone || '-'}</span></div>
+              <div class="detail-item"><span class="detail-label">Data Nasc.</span><span class="detail-value">${aluno.data_nascimento ? new Date(aluno.data_nascimento).toLocaleDateString('pt-BR') : '-'}</span></div>
+              <div class="detail-item"><span class="detail-label">Role</span><span class="detail-value">${aluno.role || '-'}</span></div>
+            </div>
+          </div>
+          <div class="detail-section">
+            <h3>Matrícula</h3>
+            <div class="detail-grid">
+              <div class="detail-item"><span class="detail-label">Número</span><span class="detail-value">${matricula.numero_matricula || '-'}</span></div>
+              <div class="detail-item"><span class="detail-label">Curso</span><span class="detail-value">${matricula.id_curso?.nome_curso || '-'}</span></div>
+              <div class="detail-item"><span class="detail-label">Turma</span><span class="detail-value">${matricula.id_turma?.nome || '-'}</span></div>
+              <div class="detail-item"><span class="detail-label">Status</span><span class="detail-value">${matricula.status || '-'}</span></div>
+              <div class="detail-item"><span class="detail-label">Data Matrícula</span><span class="detail-value">${matricula.data_matricula ? new Date(matricula.data_matricula).toLocaleDateString('pt-BR') : '-'}</span></div>
+              <div class="detail-item"><span class="detail-label">Data Conclusão</span><span class="detail-value">${matricula.data_conclusao ? new Date(matricula.data_conclusao).toLocaleDateString('pt-BR') : '-'}</span></div>
+            </div>
+            ${matricula.id ? `
+              <div class="field" style="margin-top: 12px;">
+                <label for="aluno-matricula-status">Alterar Status da Matrícula</label>
+                <div style="display:flex;gap:8px;">
+                  <select id="aluno-matricula-status" class="field">
+                    <option value="ATIVO" ${matricula.status === 'ATIVO' ? 'selected' : ''}>Ativo</option>
+                    <option value="TRANCADO" ${matricula.status === 'TRANCADO' ? 'selected' : ''}>Trancado</option>
+                    <option value="CONCLUIDO" ${matricula.status === 'CONCLUIDO' ? 'selected' : ''}>Concluído</option>
+                  </select>
+                  <button class="btn btn-primary" id="salvar-status-matricula" data-matricula-id="${matricula.id}">Salvar</button>
+                </div>
+              </div>
+            ` : ''}
+          </div>
+          <div class="two-col" style="margin-top: 16px;">
+            <div class="detail-section">
+              <h3>Histórico (${(aluno.historico || []).length})</h3>
+              <div class="table-wrapper">
+                <table>
+                  <thead><tr><th>Disciplina</th><th>Nota</th><th>Freq.</th><th>Status</th></tr></thead>
+                  <tbody>${(aluno.historico || []).map(h => `
+                    <tr>
+                      <td>${h.id_disciplina?.nome || '-'}</td>
+                      <td>${h.nota_final || '-'}</td>
+                      <td>${h.frequencia_percentual || '-'}%</td>
+                      <td>${h.status || '-'}</td>
+                    </tr>
+                  `).join('') || '<tr><td colspan="4">Sem histórico.</td></tr>'}</tbody>
+                </table>
+              </div>
+            </div>
+            <div>
+              <div class="detail-section">
+                <h3>Documentos (${(aluno.documentos || []).length})</h3>
+                <div class="table-wrapper">
+                  <table>
+                    <thead><tr><th>Nome</th><th>Tipo</th><th>Status</th></tr></thead>
+                    <tbody>${(aluno.documentos || []).map(d => `
+                      <tr>
+                        <td>${d.nome || '-'}</td>
+                        <td>${d.tipo || '-'}</td>
+                        <td>${d.status || '-'}</td>
+                      </tr>
+                    `).join('') || '<tr><td colspan="3">Sem documentos.</td></tr>'}</tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="detail-section" style="margin-top: 12px;">
+                <h3>Reclamações (${(aluno.reclamacoes || []).length})</h3>
+                <div class="table-wrapper">
+                  <table>
+                    <thead><tr><th>Protocolo</th><th>Assunto</th><th>Status</th></tr></thead>
+                    <tbody>${(aluno.reclamacoes || []).map(r => `
+                      <tr>
+                        <td>${r.protocolo || '-'}</td>
+                        <td>${r.assunto || '-'}</td>
+                        <td>${r.status || '-'}</td>
+                      </tr>
+                    `).join('') || '<tr><td colspan="3">Sem reclamações.</td></tr>'}</tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="detail-section" style="margin-top: 12px;">
+                <h3>Atendimentos (${(aluno.atendimentos || []).length})</h3>
+                <div class="table-wrapper">
+                  <table>
+                    <thead><tr><th>Tipo</th><th>Data</th><th>Status</th></tr></thead>
+                    <tbody>${(aluno.atendimentos || []).map(a => `
+                      <tr>
+                        <td>${a.tipo || '-'}</td>
+                        <td>${a.data_atendimento ? new Date(a.data_atendimento).toLocaleDateString('pt-BR') : '-'}</td>
+                        <td>${a.status || '-'}</td>
+                      </tr>
+                    `).join('') || '<tr><td colspan="3">Sem atendimentos.</td></tr>'}</tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        // Evento do botao salvar status matricula
+        document.querySelector('#salvar-status-matricula')?.addEventListener('click', async () => {
+          const matId = document.querySelector('#salvar-status-matricula').getAttribute('data-matricula-id');
+          const status = document.querySelector('#aluno-matricula-status').value;
+          try {
+            await request(`/alunos/${matId}/matricula`, {
+              method: 'PUT',
+              headers: authHeaders(),
+              body: JSON.stringify({ status }),
+            });
+            showSuccess('Status da matrícula atualizado!');
+            // Reabrir detalhes
+            document.querySelector('#aluno-detalhes-content').innerHTML = '<p class="muted">Carregando...</p>';
+            await reloadData();
+            viewBtn.click();
+          } catch (e) {
+            showError('Erro ao atualizar status');
+          }
+        });
+      } catch (e) {
+        content.innerHTML = '<p style="color:#dc2626;">Erro ao carregar detalhes do aluno.</p>';
+      }
+    }
+
+    if (matBtn) {
+      const matId = matBtn.getAttribute('data-aluno-matricula');
+      const currentStatus = matBtn.getAttribute('data-aluno-status');
+      const newStatus = prompt(`Status atual: ${currentStatus}\nNovo status (ATIVO, TRANCADO, CONCLUIDO):`, currentStatus);
+      if (!newStatus || newStatus === currentStatus) return;
+      try {
+        await request(`/alunos/${matId}/matricula`, {
+          method: 'PUT',
+          headers: authHeaders(),
+          body: JSON.stringify({ status: newStatus }),
+        });
+        showSuccess('Status alterado!');
+        await reloadData();
+      } catch (e) {
+        showError('Erro ao alterar status');
+      }
+    }
+  });
+
+  // Botao voltar lista alunos
+  document.querySelector('#voltar-lista-alunos')?.addEventListener('click', () => {
+    document.querySelector('#modulo-aluno-detalhes').classList.add('hidden');
+    document.querySelector('#modulo-alunos').classList.remove('hidden');
+  });
+
+  // Preencher select de cursos no filtro de alunos
+  const filtroAlunoCurso = document.querySelector('#filtro-aluno-curso');
+  if (filtroAlunoCurso) {
+    const observer = new MutationObserver(() => {
+      if (state.cursos.length > 0) {
+        filtroAlunoCurso.innerHTML = '<option value="TODOS">Todos os cursos</option>';
+        state.cursos.forEach((curso) => {
+          const opt = document.createElement('option');
+          opt.value = curso.id;
+          opt.textContent = curso.nome_curso;
+          filtroAlunoCurso.appendChild(opt);
+        });
+        observer.disconnect();
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+
   // Event listener para lista de inscrições - Ver detalhes
   document.querySelector('#lista-inscricoes')?.addEventListener('click', async (event) => {
     const viewBtn = event.target.closest('[data-inscricao-view]');
@@ -1996,12 +2241,7 @@ async function initPortalSecretariaPage() {
       // Preencher formulário de gerenciamento
       document.querySelector('#inscricao-id-edicao').value = inscricao.id;
       document.querySelector('#inscricao-status-aprovacao').value = inscricao?.status_aprovacao || 'EM_ANALISE';
-      document.querySelector('#inscricao-realiza-prova').value = inscricao?.realiza_prova || '';
-      document.querySelector('#inscricao-data-prova').value = inscricao?.data_prova || '';
-      document.querySelector('#inscricao-situacao-prova').value = inscricao?.situacao_aprovacao_prova || '';
-      document.querySelector('#inscricao-lista-espera').value = inscricao?.lista_espera || '';
       document.querySelector('#inscricao-status-matricula').value = inscricao?.status_matricula || '';
-      document.querySelector('#inscricao-observacoes').value = inscricao?.observacoes || '';
 
       // Mostrar painel de detalhes e esconder lista
       document.querySelector('#modulo-inscricoes').classList.add('hidden');
@@ -2018,13 +2258,13 @@ async function initPortalSecretariaPage() {
 
     const payload = {
       status_aprovacao: document.querySelector('#inscricao-status-aprovacao').value,
-      realiza_prova: document.querySelector('#inscricao-realiza-prova').value || null,
-      data_prova: document.querySelector('#inscricao-data-prova').value || null,
-      situacao_aprovacao_prova: document.querySelector('#inscricao-situacao-prova').value || null,
-      lista_espera: document.querySelector('#inscricao-lista-espera').value || null,
       status_matricula: document.querySelector('#inscricao-status-matricula').value || null,
-      observacoes: document.querySelector('#inscricao-observacoes').value || null,
     };
+
+    // Aceitar matricula: registrar data
+    if (payload.status_matricula === 'ACEITA') {
+      payload.data_aceite_matricula = new Date().toISOString().slice(0, 10);
+    }
 
     try {
       await request(`/inscricoes/${id}`, {

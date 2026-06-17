@@ -58,14 +58,74 @@ router.get('/:id', async (req, res) => {
 
 // Atualizar inscricao (Admin)
 router.put('/:id', requireAuth, async (req, res) => {
+  const COLUNAS_VALIDAS = [
+    'status_aprovacao', 'status_matricula', 'data_aceite_matricula',
+    'escolaridade_declarada', 'data_inscricao'
+  ];
+  const updates = {};
+  for (const key of COLUNAS_VALIDAS) {
+    if (req.body[key] !== undefined) updates[key] = req.body[key];
+  }
+
+  if (Object.keys(updates).length === 0) {
+    return res.status(400).json({ error: 'Nenhum campo valido para atualizar.' });
+  }
+
   const { data, error } = await supabase
     .from('inscricoes')
-    .update(req.body)
+    .update(updates)
     .eq('id', req.params.id)
     .select();
 
   if (error) return res.status(400).json({ error: error.message });
-  res.json(data[0]);
+  if (!data || data.length === 0) return res.status(404).json({ error: 'Inscricao nao encontrada.' });
+
+  const inscricao = data[0];
+
+  // Se matricula foi aceita, promover usuario e criar registro em matriculas
+  if (updates.status_matricula === 'ACEITA') {
+    // Promover ROLE_USER para ROLE_STUDENT
+    const { data: userData } = await supabase
+      .from('usuarios')
+      .select('role')
+      .eq('id', inscricao.id_usuario)
+      .single();
+
+    if (userData && userData.role === 'ROLE_USER') {
+      await supabase
+        .from('usuarios')
+        .update({ role: 'ROLE_STUDENT' })
+        .eq('id', inscricao.id_usuario);
+    }
+
+    // Criar registro em matriculas se ainda nao existir
+    const { data: matExisting } = await supabase
+      .from('matriculas')
+      .select('id')
+      .eq('id_usuario', inscricao.id_usuario)
+      .limit(1);
+
+    if (!matExisting || matExisting.length === 0) {
+      // Buscar turma do curso
+      const { data: turmas } = await supabase
+        .from('turmas')
+        .select('id')
+        .eq('id_curso', inscricao.id_curso)
+        .eq('ativo', true)
+        .limit(1);
+
+      await supabase.from('matriculas').insert([{
+        id_usuario: inscricao.id_usuario,
+        id_curso: inscricao.id_curso,
+        id_turma: turmas?.[0]?.id || null,
+        numero_matricula: 'MAT-' + new Date().getFullYear() + '-' + String(inscricao.id_usuario).padStart(4, '0'),
+        status: 'ATIVO',
+        data_matricula: new Date().toISOString().slice(0, 10)
+      }]);
+    }
+  }
+
+  res.json(inscricao);
 });
 
 // Aceitar/Recusar matricula (Aluno) + promove ROLE_USER para ROLE_STUDENT
@@ -79,7 +139,7 @@ router.put('/:id/matricula', requireAuth, async (req, res) => {
 
   if (error) return res.status(400).json({ error: error.message });
 
-  // Se matricula foi aceita, promover usuario para ROLE_STUDENT
+  // Se matricula foi aceita, promover usuario e criar matricula
   if (status_matricula === 'ACEITA' && data && data.length > 0) {
     const inscricao = data[0];
     const { data: userData } = await supabase
@@ -93,6 +153,31 @@ router.put('/:id/matricula', requireAuth, async (req, res) => {
         .from('usuarios')
         .update({ role: 'ROLE_STUDENT' })
         .eq('id', inscricao.id_usuario);
+    }
+
+    // Criar registro em matriculas se ainda nao existir
+    const { data: matExisting } = await supabase
+      .from('matriculas')
+      .select('id')
+      .eq('id_usuario', inscricao.id_usuario)
+      .limit(1);
+
+    if (!matExisting || matExisting.length === 0) {
+      const { data: turmas } = await supabase
+        .from('turmas')
+        .select('id')
+        .eq('id_curso', inscricao.id_curso)
+        .eq('ativo', true)
+        .limit(1);
+
+      await supabase.from('matriculas').insert([{
+        id_usuario: inscricao.id_usuario,
+        id_curso: inscricao.id_curso,
+        id_turma: turmas?.[0]?.id || null,
+        numero_matricula: 'MAT-' + new Date().getFullYear() + '-' + String(inscricao.id_usuario).padStart(4, '0'),
+        status: 'ATIVO',
+        data_matricula: new Date().toISOString().slice(0, 10)
+      }]);
     }
   }
 

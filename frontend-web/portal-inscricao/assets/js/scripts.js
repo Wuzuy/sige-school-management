@@ -748,10 +748,23 @@ function setupProtectedPage(auth) {
 }
 
 async function request(path, options = {}) {
+  const auth = getAuth();
+  const headers = { ...(options.headers || {}) };
+  if (auth?.token) {
+    headers.Authorization = `Bearer ${auth.token}`;
+  }
+  if (!headers['Content-Type'] && options.method && options.method !== 'GET') {
+    headers['Content-Type'] = 'application/json';
+  }
+  options.headers = headers;
   const response = await fetch(`${API_BASE}${path}`, options);
 
   if (!response.ok) {
     const raw = await response.text();
+    if (response.status === 401) {
+      clearAuth();
+      window.location.href = 'login.html';
+    }
     throw new Error(raw || 'Falha na requisição');
   }
 
