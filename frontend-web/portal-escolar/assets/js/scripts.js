@@ -597,6 +597,33 @@ function setupTopNav(auth) {
     const href = link.getAttribute('href');
     link.classList.toggle('nav-link-active', href === currentFile);
   });
+
+  // Injeta botoes de logout + acessibilidade agrupados fora do .nav
+  // para ficarem visiveis no mobile tambem
+  const topbar = document.querySelector('.topbar');
+  if (topbar) {
+    if (!topbar.querySelector(':scope > .topbar-actions')) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'topbar-actions';
+
+      const acessBtn = document.createElement('button');
+      acessBtn.className = 'btn-acessibilidade';
+      acessBtn.id = 'btnAcessibilidade';
+      acessBtn.title = 'Acessibilidade';
+      acessBtn.setAttribute('aria-label', 'Acessibilidade');
+      acessBtn.innerHTML = '⚙️';
+      wrapper.appendChild(acessBtn);
+
+      const logoutBtn = document.createElement('button');
+      logoutBtn.setAttribute('data-logout', '');
+      logoutBtn.type = 'button';
+      logoutBtn.textContent = '🚪 Sair';
+      wrapper.appendChild(logoutBtn);
+
+      topbar.appendChild(wrapper);
+      setupLogoutButtons();
+    }
+  }
 }
 
 function requireAuth(requiredRole) {
@@ -805,7 +832,10 @@ async function initHomePage() {
   if (!auth) return;
   setupProtectedPage(auth);
 
+  // Esta pagina espera #courses-body (pagina de cursos)
+  // Se nao existir, apenas retorna (ex: dashboard index.html)
   const body = document.querySelector('#courses-body');
+  if (!body) return;
 
   try {
     const [cursos, inscricoes] = await Promise.all([
@@ -813,10 +843,8 @@ async function initHomePage() {
       request('/inscricoes', { headers: authHeaders(false) })
     ]);
 
-    // Filtrar apenas cursos ativos
     const cursosAtivos = cursos.filter(curso => curso.status === 'ATIVO');
 
-    // IDs dos cursos em que o usuário já está inscrito
     const cursosInscritos = new Set(
       inscricoes
         .filter(insc => insc?.id_usuario?.id === auth.usuario.id)
@@ -2538,3 +2566,101 @@ function alternarConcluido(elemento) {
             // O toggle adiciona a classe se ela não existir, e remove se já existir
             elemento.classList.toggle('concluido');
         }
+
+// ========== ACESSIBILIDADE (modo escuro + fonte) ==========
+(function initAcessibilidade() {
+  const STORAGE_THEME = 'esc-theme';
+  const STORAGE_FONT = 'esc-font-size';
+
+  // Cria overlay + popup
+  const overlay = document.createElement('div');
+  overlay.className = 'acessibilidade-overlay';
+  overlay.id = 'acessibilidadeOverlay';
+  document.body.appendChild(overlay);
+
+  const popup = document.createElement('div');
+  popup.className = 'acessibilidade-popup';
+  popup.id = 'acessibilidadePopup';
+  popup.innerHTML = `
+    <button class="close-btn" id="fecharAcessibilidade">&times;</button>
+    <h3>⚙️ Acessibilidade</h3>
+    <div class="acessibilidade-item">
+      <label>Modo Escuro</label>
+      <button id="toggleDarkModeBtn">${document.documentElement.getAttribute('data-theme') === 'dark' ? '🌙' : '☀️'}</button>
+    </div>
+    <div class="acessibilidade-item">
+      <label>Tamanho da Fonte</label>
+      <div class="font-size-controls">
+        <button data-font-size-action="decrease" title="Diminuir fonte">A-</button>
+        <span class="current-size" id="currentFontSize">M</span>
+        <button data-font-size-action="increase" title="Aumentar fonte">A+</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(popup);
+
+  // Abrir popup
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('#btnAcessibilidade');
+    if (btn) {
+      overlay.classList.add('open');
+      popup.classList.add('open');
+    }
+  });
+
+  // Fechar popup
+  const closePopup = () => {
+    overlay.classList.remove('open');
+    popup.classList.remove('open');
+  };
+  document.getElementById('fecharAcessibilidade')?.addEventListener('click', closePopup);
+  overlay.addEventListener('click', closePopup);
+
+  // Dark mode toggle
+  const darkBtn = document.getElementById('toggleDarkModeBtn');
+  if (darkBtn) {
+    darkBtn.addEventListener('click', () => {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? '' : 'dark');
+      darkBtn.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem(STORAGE_THEME, isDark ? '' : 'dark');
+    });
+  }
+
+  // Font size
+  const fontSizes = ['sm', 'md', 'lg'];
+  const fontLabels = { sm: 'P', md: 'M', lg: 'G' };
+  let currentFontIdx = fontSizes.indexOf(localStorage.getItem(STORAGE_FONT)) || 1;
+
+  const updateFontDisplay = () => {
+    const label = document.getElementById('currentFontSize');
+    if (label) label.textContent = fontLabels[fontSizes[currentFontIdx]];
+    document.documentElement.setAttribute('data-font-size', fontSizes[currentFontIdx]);
+    localStorage.setItem(STORAGE_FONT, fontSizes[currentFontIdx]);
+  };
+
+  document.querySelectorAll('[data-font-size-action]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (btn.dataset.fontSizeAction === 'increase') {
+        currentFontIdx = Math.min(currentFontIdx + 1, fontSizes.length - 1);
+      } else {
+        currentFontIdx = Math.max(currentFontIdx - 1, 0);
+      }
+      updateFontDisplay();
+    });
+  });
+
+  // Restore saved preferences
+  const savedTheme = localStorage.getItem(STORAGE_THEME);
+  if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    if (darkBtn) darkBtn.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+  }
+  const savedFont = localStorage.getItem(STORAGE_FONT);
+  if (savedFont) {
+    currentFontIdx = fontSizes.indexOf(savedFont);
+    if (currentFontIdx < 0) currentFontIdx = 1;
+    updateFontDisplay();
+  }
+})();

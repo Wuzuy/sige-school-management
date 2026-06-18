@@ -10,28 +10,30 @@
   <style>
     .containerCurricular { display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: start; }
     @media (max-width: 900px) { .containerCurricular { grid-template-columns: 1fr; } }
-    .headerCC { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 16px 20px; border-radius: 12px; margin-bottom: 12px; }
+    .headerCC { display: flex; justify-content: space-between; align-items: center; background: var(--surface); padding: 16px 20px; border-radius: 12px; margin-bottom: 12px; }
     .headerCC2 { display: flex; gap: 16px; align-items: center; }
     .numeroCard { width: 48px; height: 48px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
     .numeroCard h1 { color: white; margin: 0; font-size: 1.5rem; }
-    .cardC { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .cardC { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
     .cardC p { margin: 0; }
     .semestre-disciplinas { margin-bottom: 28px; }
-    .containerCINFO { background: white; border-radius: 12px; padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); position: sticky; top: 20px; }
-    .containerProgresso { background: #f1f5f9; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
-    .containerProgresso h1 { font-size: 1rem; margin: 0 0 8px; }
-    .statusFalta { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
-    .statusFalta h1 { font-size: 0.95rem; color: #1e293b; margin: 0; }
+    .containerCINFO { background: var(--surface); border-radius: 12px; padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); position: sticky; top: 20px; }
+    .containerProgresso { background: var(--surface-soft); border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+    .containerProgresso h1 { font-size: 1rem; margin: 0 0 8px; color: var(--text); }
+    .statusFalta { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .statusFalta h1 { font-size: 0.95rem; color: var(--text); margin: 0; }
     .statusFalta p { font-weight: 600; color: var(--primary); margin: 0; }
     .badge-obrigatoria { background: #dbeafe; color: #1e40af; padding: 2px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
     .badge-eletiva { background: #fef3c7; color: #b45309; padding: 2px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
+    [data-theme="dark"] .badge-obrigatoria { background: #1e3a5f; color: #93c5fd; }
+    [data-theme="dark"] .badge-eletiva { background: #451a03; color: #fbbf24; }
   </style>
 </head>
 <body data-page="estrutura-curricular">
   <header class="topbar">
     <div class="brand">
       <img src="assets/images/sige.png" alt="SIGE" />
-      <span>SIGE</span>
+      <span>Portal Escolar - SIGE</span>
     </div>
     <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
       <span>☰</span>
@@ -44,11 +46,11 @@
   <section class="hero interface">
     <div class="containerCurricular" id="curriculo-container">
       <div id="containerSemestres">
-        <h2 style="font-size: 1.3rem; margin-bottom: 16px; color: #1e293b;">Estrutura Curricular</h2>
+        <h2 style="font-size: 1.3rem; margin-bottom: 16px; color: var(--text);">Estrutura Curricular</h2>
         <p id="loading-curriculo" style="color: var(--muted);">Carregando disciplinas...</p>
       </div>
       <div class="containerCINFO" id="curriculo-summary">
-        <h3 style="font-size: 1.1rem; margin-bottom: 16px; color: #1e293b;">Resumo</h3>
+        <h3 style="font-size: 1.1rem; margin-bottom: 16px; color: var(--text);">Resumo</h3>
         <p id="loading-summary" style="color: var(--muted);">Carregando...</p>
       </div>
     </div>
@@ -91,7 +93,7 @@
         });
 
         const semestresContainer = document.getElementById('containerSemestres');
-        semestresContainer.innerHTML = '<h2 style="font-size: 1.3rem; margin-bottom: 16px; color: #1e293b;">Estrutura Curricular</h2>';
+        semestresContainer.innerHTML = '<h2 style="font-size: 1.3rem; margin-bottom: 16px; color: var(--text);">Estrutura Curricular</h2>';
 
         Object.keys(semestres).sort((a, b) => a - b).forEach(sem => {
           const disc = semestres[sem];
@@ -106,7 +108,7 @@
                 <div class="numeroCard"><h1>${sem}</h1></div>
                 <div>
                   <h3>${sem}º Semestre</h3>
-                  <p style="color: #737373;">${disc.length} disciplinas &bull; ${chSemestre}h</p>
+                  <p style="color: var(--muted);">${disc.length} disciplinas &bull; ${chSemestre}h</p>
                 </div>
               </div>
             </div>
@@ -117,7 +119,7 @@
                 </div>
                 <div style="display: flex; gap: 8px; align-items: center;">
                   <span class="${d.obrigatoria ? 'badge-obrigatoria' : 'badge-eletiva'}">${d.obrigatoria ? 'Obrigatória' : 'Eletiva'}</span>
-                  <span style="color: #64748b; font-size: 0.85rem;">${d.carga_horaria || 0}h</span>
+                  <span style="color: var(--muted); font-size: 0.85rem;">${d.carga_horaria || 0}h</span>
                 </div>
               </div>
             `).join('')}</div>
@@ -130,7 +132,7 @@
         const pctCompleto = total > 0 ? Math.round((cursadas / total) * 100) : 0;
 
         document.getElementById('curriculo-summary').innerHTML = `
-          <h3 style="font-size: 1.1rem; margin-bottom: 16px; color: #1e293b;">Resumo</h3>
+          <h3 style="font-size: 1.1rem; margin-bottom: 16px; color: var(--text);">Resumo</h3>
           <div class="containerProgresso">
             <h1>Carga Horária Total</h1>
             <h1>${cargaTotal}h</h1>

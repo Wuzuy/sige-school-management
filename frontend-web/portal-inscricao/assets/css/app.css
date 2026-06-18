@@ -9,8 +9,8 @@
   --border: #d7dee8;
   --danger: #b91c1c;
   --shadow: 0 0px 24px rgba(15, 23, 42, 0.12);
-  --header-bg: #f0f6fc;
-  --header-border: #c8d8e8;
+  --header-bg: #dce8f5;
+  --header-border: #b8cde0;
   --nav-active-bg: #dbeafe;
   --nav-active-color: #1e40af;
   --radius: 0.625rem;
@@ -149,6 +149,34 @@ a {
   background: var(--nav-active-bg);
   color: var(--nav-active-color);
   font-weight: 600;
+}
+
+#btn-acessibilidade {
+  font-size: 1.15rem;
+  color: #1e40af;
+  background: rgba(30, 64, 175, 0.08);
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+#btn-acessibilidade:hover {
+  background: rgba(30, 64, 175, 0.16);
+  transform: scale(1.1);
+}
+
+[data-theme="dark"] #btn-acessibilidade {
+  color: #93c5fd;
+  background: rgba(147, 197, 253, 0.1);
+}
+
+[data-theme="dark"] #btn-acessibilidade:hover {
+  background: rgba(147, 197, 253, 0.2);
 }
 
 .insc-nav-logout {

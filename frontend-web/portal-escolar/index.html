@@ -8,23 +8,22 @@
   <link rel="icon" href="assets/images/sige.png" type="image/png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
 </head>
-<body data-page="home">
+<body data-page="dashboard">
   <header class="topbar">
-      <div class="brand">
-        <img src="assets/images/sige.png" alt="SIGE" />
-        <span>Portal Escolar</span>
-      </div>
-      <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
-        <span>☰</span>
-      </button>
-      <nav class="nav">
-        <a href="../portal-secretaria/portal-secretaria.html" data-admin-only>Secretaria</a>
-        <button data-logout type="button">Sair</button>
-      </nav>
+    <div class="brand">
+      <img src="assets/images/sige.png" alt="SIGE" />
+      <span>Portal Escolar - SIGE</span>
+    </div>
+    <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+      <span>☰</span>
+    </button>
+    <nav class="nav">
+      <a href="../portal-secretaria/portal-secretaria.html" data-admin-only>Secretaria</a>
+      <button data-logout type="button">🚪 Sair</button>
+    </nav>
   </header>
   <div class="nav-overlay"></div>
 
-  <!-- SIDEBAR -->
   <aside id="sidebar">
     <nav id="sidebar-nav"></nav>
   </aside>
@@ -36,34 +35,55 @@
     </section>
 
     <section class="grid">
-      <article class="card card-6">
-        <h2>📅 Agenda Escolar</h2>
-        <p class="muted" style="margin-bottom: 12px;">Confira eventos e atividades</p>
-        <a href="agenda-escolar.html" class="btn btn-primary">Ver Agenda</a>
-      </article>
+      <a href="agenda-escolar.html" class="card card-6 clickable" style="text-decoration: none;">
+        <div style="display: flex; align-items: flex-start; gap: 16px;">
+          <span style="font-size: 2rem; line-height: 1;">📅</span>
+          <div style="flex: 1;">
+            <h2>Agenda Escolar</h2>
+            <p class="muted">Confira eventos, atividades e compromissos</p>
+          </div>
+        </div>
+      </a>
 
-      <article class="card card-6">
-        <h2>📆 Calendário</h2>
-        <p class="muted" style="margin-bottom: 12px;">Datas importantes do ano letivo</p>
-        <a href="calendario-escolar.html" class="btn btn-primary">Ver Calendário</a>
-      </article>
+      <a href="calendario-escolar.html" class="card card-6 clickable" style="text-decoration: none;">
+        <div style="display: flex; align-items: flex-start; gap: 16px;">
+          <span style="font-size: 2rem; line-height: 1;">📆</span>
+          <div style="flex: 1;">
+            <h2>Calendário</h2>
+            <p class="muted">Datas importantes do ano letivo</p>
+          </div>
+        </div>
+      </a>
 
-      <article class="card card-6">
-        <h2>👤 Meu Perfil</h2>
-        <p class="muted" style="margin-bottom: 12px;">Dados pessoais e acadêmicos</p>
-        <a href="portal-aluno.html" class="btn btn-primary">Acessar Perfil</a>
-      </article>
+      <a href="portal-aluno.html" class="card card-6 clickable" style="text-decoration: none;">
+        <div style="display: flex; align-items: flex-start; gap: 16px;">
+          <span style="font-size: 2rem; line-height: 1;">👤</span>
+          <div style="flex: 1;">
+            <h2>Meu Perfil</h2>
+            <p class="muted">Dados pessoais e acadêmicos</p>
+          </div>
+        </div>
+      </a>
 
-      <article class="card card-6">
-        <h2>📊 Histórico</h2>
-        <p class="muted" style="margin-bottom: 12px;">Seu histórico escolar</p>
-        <a href="historico-escolar.html" class="btn btn-primary">Ver Histórico</a>
-      </article>
+      <a href="historico-escolar.html" class="card card-6 clickable" style="text-decoration: none;">
+        <div style="display: flex; align-items: flex-start; gap: 16px;">
+          <span style="font-size: 2rem; line-height: 1;">📊</span>
+          <div style="flex: 1;">
+            <h2>Histórico</h2>
+            <p class="muted">Seu histórico escolar completo</p>
+          </div>
+        </div>
+      </a>
 
-      <article class="card" style="grid-column: span 12;" data-admin-only style="display: none;">
-        <h2>🔐 Área Administrativa</h2>
-        <p class="muted" style="margin-bottom: 12px;">Acesso restrito a secretaria</p>
-        <a href="../portal-secretaria/portal-secretaria.html" class="btn btn-edital">Ir para Portal da Secretaria</a>
+      <article class="card clickable" style="grid-column: span 12;" data-admin-only>
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <span style="font-size: 2rem; line-height: 1;">🔐</span>
+          <div style="flex: 1;">
+            <h2>Área Administrativa</h2>
+            <p class="muted">Acesso restrito à secretaria</p>
+          </div>
+          <a href="../portal-secretaria/portal-secretaria.html" class="btn btn-primary">Acessar</a>
+        </div>
       </article>
     </section>
   </main>

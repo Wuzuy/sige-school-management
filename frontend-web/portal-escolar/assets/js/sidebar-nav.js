@@ -6,6 +6,13 @@
 const SIDEBAR_NAVIGATION = {
   sections: [
     {
+      title: 'Navegação',
+      icon: '🏠',
+      items: [
+        { label: 'Página Inicial', icon: '🏠', href: 'index.html' },
+      ]
+    },
+    {
       title: 'Académico',
       icon: '📚',
       items: [
@@ -112,7 +119,7 @@ function buildSidebar() {
   // Adiciona botão de logout no final
   const logoutBtn = document.createElement('button');
   logoutBtn.className = 'logout-btn';
-  logoutBtn.innerHTML = '🚪 Sair';
+  logoutBtn.innerHTML = '🚪 Sair da Conta';
   logoutBtn.addEventListener('click', (e) => {
     e.preventDefault();
     if (confirm('Tem certeza que deseja sair?')) {

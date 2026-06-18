@@ -20,7 +20,8 @@
       .gridConta { grid-template-columns: 1fr; }
     }
     .contaDadosSensiveis, .contaPerfil {
-      background: white;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 12px;
       padding: 24px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.08);
@@ -30,13 +31,13 @@
       justify-content: space-between;
       align-items: center;
       padding: 12px 0;
-      border-bottom: 1px solid #f1f5f9;
+      border-bottom: 1px solid var(--border);
     }
     .dataField:last-child { border-bottom: none; }
     .dataInfo label {
       display: block;
       font-size: 0.8rem;
-      color: #64748b;
+      color: var(--muted);
       text-transform: uppercase;
       letter-spacing: 0.5px;
       margin-bottom: 2px;
@@ -44,29 +45,29 @@
     .dataInfo p {
       margin: 0;
       font-size: 1rem;
-      color: #1e293b;
+      color: var(--text);
       font-weight: 500;
     }
     .dividerSenha {
       height: 1px;
-      background: #e2e8f0;
+      background: var(--border);
       margin: 8px 0;
     }
     .btn-edit {
-      background: #f1f5f9;
+      background: var(--surface-alt);
       border: none;
       padding: 6px 12px;
       border-radius: 6px;
       cursor: pointer;
       font-size: 0.85rem;
-      color: #475569;
+      color: var(--text);
       transition: all 0.2s;
     }
-    .btn-edit:hover { background: #e2e8f0; color: #1e293b; }
+    .btn-edit:hover { background: var(--hover-bg); }
     .profileCard {
       text-align: center;
       padding-bottom: 20px;
-      border-bottom: 1px solid #f1f5f9;
+      border-bottom: 1px solid var(--border);
       margin-bottom: 20px;
     }
     .profilePicture {
@@ -75,7 +76,7 @@
       border-radius: 50%;
       overflow: hidden;
       margin: 0 auto 12px;
-      background: #e2e8f0;
+      background: var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -88,17 +89,18 @@
     .profileInfoCard h2 {
       margin: 0 0 16px;
       font-size: 1.2rem;
-      color: #1e293b;
+      color: var(--text);
     }
     .infoRow {
       display: flex;
       justify-content: space-between;
       padding: 10px 0;
-      border-bottom: 1px solid #f8fafc;
+      border-bottom: 1px solid var(--border);
     }
-    .infoRow label { color: #64748b; font-size: 0.9rem; }
-    .infoRow p { margin: 0; font-weight: 500; color: #1e293b; }
+    .infoRow label { color: var(--muted); font-size: 0.9rem; }
+    .infoRow p { margin: 0; font-weight: 500; color: var(--text); }
     .statusVerified { color: #059669; }
+    [data-theme="dark"] .statusVerified { color: #34d399; }
     .editModal {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -109,17 +111,17 @@
       z-index: 1000;
     }
     .editModal .modal-content {
-      background: white;
+      background: var(--surface);
       padding: 24px;
       border-radius: 12px;
       width: 90%;
       max-width: 400px;
     }
-    .editModal .modal-content h3 { margin: 0 0 16px; }
+    .editModal .modal-content h3 { margin: 0 0 16px; color: var(--text); }
     .editModal .modal-content input {
       width: 100%;
       padding: 10px;
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--border);
       border-radius: 6px;
       margin-bottom: 12px;
       box-sizing: border-box;
@@ -135,13 +137,13 @@
   <header class="topbar">
     <div class="brand">
       <img src="assets/images/sige.png" alt="SIGE" />
-      <span>SIGE</span>
+      <span>Portal Escolar - SIGE</span>
     </div>
     <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
       <span>☰</span>
     </button>
     <nav class="nav">
-      <button data-logout type="button">Sair</button>
+      <button data-logout type="button">🚪 Sair</button>
     </nav>
   </header>
   <div class="nav-overlay"></div>
