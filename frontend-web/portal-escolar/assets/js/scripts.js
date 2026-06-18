@@ -2569,8 +2569,8 @@ function alternarConcluido(elemento) {
 
 // ========== ACESSIBILIDADE (modo escuro + fonte) ==========
 (function initAcessibilidade() {
-  const STORAGE_THEME = 'esc-theme';
-  const STORAGE_FONT = 'esc-font-size';
+  const STORAGE_THEME = 'sige-theme';
+  const STORAGE_FONT = 'sige-font-size';
 
   // Cria overlay + popup
   const overlay = document.createElement('div');
@@ -2651,13 +2651,15 @@ function alternarConcluido(elemento) {
     });
   });
 
-  // Restore saved preferences
-  const savedTheme = localStorage.getItem(STORAGE_THEME);
+  // Restore saved preferences (supports old keys for migration)
+  let savedTheme = localStorage.getItem(STORAGE_THEME);
+  if (savedTheme === null) savedTheme = localStorage.getItem('esc-theme');
   if (savedTheme) {
     document.documentElement.setAttribute('data-theme', savedTheme);
     if (darkBtn) darkBtn.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
   }
-  const savedFont = localStorage.getItem(STORAGE_FONT);
+  let savedFont = localStorage.getItem(STORAGE_FONT);
+  if (savedFont === null) savedFont = localStorage.getItem('esc-font-size');
   if (savedFont) {
     currentFontIdx = fontSizes.indexOf(savedFont);
     if (currentFontIdx < 0) currentFontIdx = 1;

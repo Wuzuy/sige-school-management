@@ -2182,10 +2182,13 @@ async function initPortalSecretariaPage() {
 // ACESSIBILIDADE: Dark Mode + Font Size
 // ======================================
 function initAcessibilidade() {
-  // Load saved preferences
-  const theme = localStorage.getItem('insc-theme') || 'light';
-  const fontSize = localStorage.getItem('insc-font-size') || 'md';
-  document.documentElement.setAttribute('data-theme', theme);
+  // Load saved preferences (shared keys across portals)
+  let theme = localStorage.getItem('sige-theme');
+  if (theme === null) theme = localStorage.getItem('insc-theme') || '';
+  let fontSize = localStorage.getItem('sige-font-size');
+  if (fontSize === null) fontSize = localStorage.getItem('insc-font-size') || 'md';
+
+  document.documentElement.setAttribute('data-theme', theme || '');
   document.documentElement.setAttribute('data-font-size', fontSize);
 
   // Sync toggle switch
@@ -2214,8 +2217,8 @@ function initAcessibilidade() {
 
   // Dark mode toggle
   toggle?.addEventListener('change', () => {
-    const t = toggle.checked ? 'dark' : 'light';
-    localStorage.setItem('insc-theme', t);
+    const t = toggle.checked ? 'dark' : '';
+    localStorage.setItem('sige-theme', t);
     document.documentElement.setAttribute('data-theme', t);
   });
 
@@ -2223,7 +2226,7 @@ function initAcessibilidade() {
   document.querySelectorAll('.acessibilidade-font .btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const size = btn.dataset.font;
-      localStorage.setItem('insc-font-size', size);
+      localStorage.setItem('sige-font-size', size);
       document.documentElement.setAttribute('data-font-size', size);
       document.querySelectorAll('.acessibilidade-font .btn').forEach(b => {
         b.classList.remove('active', 'btn-primary');

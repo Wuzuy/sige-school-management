@@ -10,6 +10,7 @@ const SIDEBAR_NAVIGATION = {
       icon: '🏠',
       items: [
         { label: 'Página Inicial', icon: '🏠', href: 'index.html' },
+        { label: 'Portal de Inscrição', icon: '📝', href: '../portal-inscricao/index.html' },
       ]
     },
     {

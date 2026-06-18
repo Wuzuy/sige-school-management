@@ -59,6 +59,10 @@ body {
   min-height: 100vh;
 }
 
+[data-theme="dark"] body {
+  background-image: none;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -294,11 +298,25 @@ textarea {
   background: #fff;
 }
 
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  background: #0f172a;
+  color: var(--text);
+}
+
 input:focus,
 select:focus,
 textarea:focus {
   outline: 2px solid #bfdbfe;
   border-color: #93c5fd;
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] select:focus,
+[data-theme="dark"] textarea:focus {
+  outline-color: #1e3a5f;
+  border-color: #60a5fa;
 }
 
 .actions {
@@ -326,12 +344,12 @@ textarea:focus {
 }
 
 .btn-primary {
-  background: #1a66ff;
+  background: var(--primary);
   color: #fff;
 }
 
 .btn-primary:hover {
-  background: #1643f5;
+  background: var(--primary-strong);
 }
 
 .btn-soft {
@@ -341,6 +359,15 @@ textarea:focus {
 
 .btn-soft:hover {
   background: #dbeafe;
+}
+
+[data-theme="dark"] .btn-soft {
+  background: #1e3a5f;
+  color: #93c5fd;
+}
+
+[data-theme="dark"] .btn-soft:hover {
+  background: #1e3a5f;
 }
 
 .btn-edital {
@@ -362,6 +389,10 @@ textarea:focus {
   transform: translateY(0);
 }
 
+[data-theme="dark"] .btn-edital {
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
 .btn-danger {
   background: #fee2e2;
   color: var(--danger);
@@ -371,10 +402,24 @@ textarea:focus {
   background: #fecaca;
 }
 
+[data-theme="dark"] .btn-danger {
+  background: #7f1d1d;
+}
+
+[data-theme="dark"] .btn-danger:hover {
+  background: #991b1b;
+}
+
 .btn.active {
   border: 1px solid #93c5fd;
   background: #dbeafe;
   color: #1e3a8a;
+}
+
+[data-theme="dark"] .btn.active {
+  border-color: #60a5fa;
+  background: #1e3a5f;
+  color: #93c5fd;
 }
 
 .muted {
@@ -426,6 +471,11 @@ th {
   color: #b45309;
 }
 
+[data-theme="dark"] .status {
+  background: #451a03;
+  color: #fbbf24;
+}
+
 .alert {
   border-radius: 10px;
   padding: 10px 12px;
@@ -437,9 +487,19 @@ th {
   color: #3730a3;
 }
 
+[data-theme="dark"] .alert-info {
+  background: #1e1b4b;
+  color: #a5b4fc;
+}
+
 .alert-ok {
   background: #ecfdf5;
   color: #166534;
+}
+
+[data-theme="dark"] .alert-ok {
+  background: #022c22;
+  color: #6ee7b7;
 }
 
 .hidden {
@@ -460,7 +520,7 @@ th {
 .auth-switch button {
   flex: 1;
   border: 1px solid var(--border);
-  background: #f8fafc;
+  background: var(--surface);
   padding: 10px;
   border-radius: 10px;
   font-weight: 600;
@@ -468,9 +528,9 @@ th {
 }
 
 .auth-switch button.active {
-  border-color: #93c5fd;
-  background: #eff6ff;
-  color: #1d4ed8;
+  border-color: var(--primary);
+  background: var(--surface-soft);
+  color: var(--primary-strong);
 }
 
 /* ============================================ */
@@ -593,19 +653,9 @@ th {
 /* =============================================
    FONT SIZE SCALING
    ============================================= */
-[data-font-size="sm"] { --font-size-base: 14px; }
-[data-font-size="md"] { --font-size-base: 16px; }
-[data-font-size="lg"] { --font-size-base: 18px; }
-
-html[data-font-size] body {
-  font-size: var(--font-size-base);
-}
-
-html[data-font-size] .hero h1 { font-size: calc(1.6rem * var(--font-size-base) / 16); }
-html[data-font-size] .card h2 { font-size: calc(1.2rem * var(--font-size-base) / 16); }
-html[data-font-size] th,
-html[data-font-size] td { font-size: calc(0.92rem * var(--font-size-base) / 16); }
-html[data-font-size] .insc-nav-link { font-size: calc(0.875rem * var(--font-size-base) / 16); }
+html[data-font-size="sm"] { font-size: 14px; }
+html[data-font-size="md"] { font-size: 16px; }
+html[data-font-size="lg"] { font-size: 18px; }
 
 /* =============================================
    ACESSIBILIDADE POPUP
@@ -759,4 +809,5 @@ html[data-font-size] .insc-nav-link { font-size: calc(0.875rem * var(--font-size
 
 [data-theme="dark"] .acessibilidade-popup { border-color: #334155; }
 [data-theme="dark"] .acessibilidade-slider { background: #475569; }
+[data-theme="dark"] .acessibilidade-slider::before { background: #e2e8f0; }
 [data-theme="dark"] .acessibilidade-switch input:checked + .acessibilidade-slider { background: #60a5fa; }
