@@ -1269,80 +1269,6 @@ async function initMatriculaPage() {
   }
 }
 
-async function initPortalAlunoPage() {
-  const auth = requireAuth();
-  if (!auth) return;
-  setupProtectedPage(auth);
-
-  const form = document.querySelector('#form-perfil');
-
-  try {
-    const usuario = await request('/usuarios/me', { headers: authHeaders(false) });
-
-    document.querySelector('#aluno-nome').textContent = usuario.nomeCompleto;
-    document.querySelector('#aluno-email').textContent = usuario.email;
-    document.querySelector('#aluno-cpf').textContent = usuario.cpf || '-';
-    document.querySelector('#aluno-data-nascimento').textContent = formatDate(usuario.dataNascimento);
-    document.querySelector('#aluno-telefone').textContent = usuario.telefone || '-';
-
-    document.querySelector('#perfil-nome').value = usuario.nomeCompleto || '';
-    document.querySelector('#telefone').value = usuario.telefone || '';
-    document.querySelector('#perfil-data-nascimento').value = toDateInputValue(usuario.dataNascimento);
-  } catch (error) {
-    showError(`Erro ao carregar seus dados: ${error.message}`);
-  }
-
-  try {
-    const matriculas = await request('/aluno/matriculas', { headers: authHeaders(false) });
-    if (matriculas && matriculas.length > 0) {
-      const m = matriculas[0];
-      document.querySelector('#aluno-matricula').textContent = m.numero_matricula || `MAT-${String(m.id).padStart(6, '0')}`;
-      document.querySelector('#aluno-serie').textContent = m.id_turma?.nome || m.id_curso?.nome_curso || '-';
-      document.querySelector('#aluno-turno').textContent = m.id_turma?.turno || m.id_curso?.turno || '-';
-      const statusMap = { 'ATIVO': 'Ativo', 'TRANCADO': 'Trancado', 'CONCLUIDO': 'Concluido', 'CANCELADO': 'Cancelado' };
-      document.querySelector('#aluno-status').textContent = statusMap[m.status] || m.status;
-    }
-  } catch (e) {
-    // Silencioso - informacao academica nao essencial
-  }
-
-  form?.addEventListener('submit', async (event) => {
-    event.preventDefault();
-
-    const payload = {
-      nomeCompleto: document.querySelector('#perfil-nome').value.trim(),
-      telefone: document.querySelector('#telefone').value.trim(),
-      dataNascimento: document.querySelector('#perfil-data-nascimento').value || null,
-    };
-
-    try {
-      const updated = await request('/usuarios/me', {
-        method: 'PUT',
-        headers: authHeaders(),
-        body: JSON.stringify(payload),
-      });
-
-      const current = getAuth();
-      setAuth({
-        ...current,
-        usuario: {
-          ...current.usuario,
-          nomeCompleto: updated.nomeCompleto,
-          telefone: updated.telefone,
-          dataNascimento: updated.dataNascimento,
-        },
-      });
-
-      document.querySelector('#aluno-nome').textContent = updated.nomeCompleto;
-      document.querySelector('#aluno-data-nascimento').textContent = formatDate(updated.dataNascimento);
-      updateUserNameLabels();
-      showSuccess('Dados atualizados com sucesso.');
-    } catch (error) {
-      showError(`Não foi possível atualizar: ${error.message}`);
-    }
-  });
-}
-
 function setupSecretariaModuleTabs() {
   const buttons = Array.from(document.querySelectorAll('[data-module-target]'));
   const panels = Array.from(document.querySelectorAll('.module-panel'));
@@ -2499,7 +2425,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (page === 'inscricao') initInscricaoPage();
   if (page === 'status') initStatusPage();
   if (page === 'matricula') initMatriculaPage();
-  if (page === 'portal-aluno') initPortalAlunoPage();
   if (page === 'portal-secretaria') initPortalSecretariaPage();
   if (page === 'historico') initHistoricoPage();
   if (page === 'documentos') initDocumentosPage();

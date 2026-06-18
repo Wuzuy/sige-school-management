@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SIGE - Minha Conta</title>
+  <title>SIGE - Meu Perfil</title>
   <link rel="stylesheet" href="assets/css/app.css" />
   <link rel="icon" href="assets/images/sige.png" type="image/png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
@@ -69,10 +69,11 @@
       padding-bottom: 20px;
       border-bottom: 1px solid var(--border);
       margin-bottom: 20px;
+      position: relative;
     }
     .profilePicture {
-      width: 100px;
-      height: 100px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
       overflow: hidden;
       margin: 0 auto 12px;
@@ -80,11 +81,37 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: opacity 0.2s;
+    }
+    .profilePicture:hover {
+      opacity: 0.8;
     }
     .profilePicture img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+    .profilePicture .placeholder {
+      font-size: 2.5rem;
+      color: var(--muted);
+    }
+    .profilePicture .camera-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 4px;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .profilePicture:hover .camera-overlay {
+      opacity: 1;
     }
     .profileInfoCard h2 {
       margin: 0 0 16px;
@@ -131,6 +158,8 @@
       gap: 8px;
       justify-content: flex-end;
     }
+    @media (max-width: 480px) {
+    }
   </style>
 </head>
 <body data-page="conta">
@@ -152,7 +181,18 @@
   </aside>
   <section class="hero interface">
     <div class="gridConta">
+      <!-- COLUNA ESQUERDA: Perfil + Dados Pessoais -->
       <div class="contaDadosSensiveis">
+        <div class="profileCard">
+          <figure class="profilePicture" id="profile-picture" title="Clique para alterar foto">
+            <img id="profile-img" src="assets/images/sige.png" alt="Foto de Perfil">
+            <div class="camera-overlay">📷 Alterar foto</div>
+          </figure>
+          <h3 id="conta-nome-display">Carregando...</h3>
+          <p class="muted" id="conta-role-display">-</p>
+          <input type="file" id="profile-upload" accept="image/*" style="display:none">
+        </div>
+
         <h2>Dados Pessoais</h2>
         <div class="dataField">
           <div class="dataInfo">
@@ -167,6 +207,13 @@
           </div>
           <button class="btn-edit" data-field="dataNascimento" title="Editar">Editar</button>
         </div>
+        <div class="dataField">
+          <div class="dataInfo">
+            <label>Telefone</label>
+            <p class="dataContent" id="conta-telefone">Carregando...</p>
+          </div>
+          <button class="btn-edit" data-field="telefone" title="Editar">Editar</button>
+        </div>
         <div class="dividerSenha"></div>
         <div class="dataField">
           <div class="dataInfo">
@@ -176,12 +223,9 @@
           <button class="btn-edit btn-password" title="Alterar Senha">Alterar</button>
         </div>
       </div>
+
+      <!-- COLUNA DIREITA: Informações Gerais + Acadêmicas -->
       <div class="contaPerfil">
-        <div class="profileCard">
-          <figure class="profilePicture">
-            <img src="assets/images/sige.png" alt="Foto de Perfil">
-          </figure>
-        </div>
         <div class="profileInfoCard">
           <h2>Informações Gerais</h2>
           <div class="infoRow">
@@ -196,15 +240,33 @@
             <label>Cargo</label>
             <p id="conta-role">Carregando...</p>
           </div>
+        </div>
+
+        <div class="profileInfoCard" style="margin-top: 20px;">
+          <h2>Informações Acadêmicas</h2>
           <div class="infoRow">
-            <label>Telefone</label>
-            <p id="conta-telefone">Carregando...</p>
+            <label>Matrícula</label>
+            <p id="conta-matricula">-</p>
+          </div>
+          <div class="infoRow">
+            <label>Curso / Série</label>
+            <p id="conta-serie">-</p>
+          </div>
+          <div class="infoRow">
+            <label>Turno</label>
+            <p id="conta-turno">-</p>
+          </div>
+          <div class="infoRow">
+            <label>Status</label>
+            <p id="conta-status">-</p>
           </div>
         </div>
       </div>
+
     </div>
   </section>
   <div id="edit-modal-container"></div>
+
   <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
   <script src="assets/js/api-config.js"></script>
   <script src="assets/js/scripts.js"></script>
@@ -216,22 +278,72 @@
       setupProtectedPage(auth);
       setupMobileMenu();
 
+      const STORAGE_PHOTO = 'sige-profile-photo';
+
+      // Profile picture upload
+      document.getElementById('profile-picture').addEventListener('click', () => {
+        document.getElementById('profile-upload').click();
+      });
+      document.getElementById('profile-upload').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const dataUrl = ev.target.result;
+          localStorage.setItem(STORAGE_PHOTO, dataUrl);
+          document.getElementById('profile-img').src = dataUrl;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      // Carregar foto salva
+      const savedPhoto = localStorage.getItem(STORAGE_PHOTO);
+      if (savedPhoto) {
+        document.getElementById('profile-img').src = savedPhoto;
+      }
+
       async function loadProfile() {
         try {
           const data = await request('/usuarios/me');
           document.getElementById('conta-nome').textContent = data.nomeCompleto || '-';
+          document.getElementById('conta-nome-display').textContent = data.nomeCompleto || '-';
           document.getElementById('conta-email').textContent = data.email || '-';
           document.getElementById('conta-cpf').textContent = data.cpf || '-';
           document.getElementById('conta-telefone').textContent = data.telefone || '-';
           document.getElementById('conta-nascimento').textContent = data.dataNascimento || '-';
           const roleLabels = { ROLE_USER: 'Usuário', ROLE_STUDENT: 'Aluno', ROLE_ADMIN: 'Administrador', ROLE_TEACHER: 'Professor' };
-          document.getElementById('conta-role').textContent = roleLabels[data.role] || data.role || '-';
+          const label = roleLabels[data.role] || data.role || '-';
+          document.getElementById('conta-role').textContent = label;
+          document.getElementById('conta-role-display').textContent = label;
         } catch (e) {
-          showError('Erro ao carregar perfil');
+          // Fallback para dados do auth local
+          const u = auth?.usuario;
+          if (u) {
+            document.getElementById('conta-nome').textContent = u.nomeCompleto || '-';
+            document.getElementById('conta-nome-display').textContent = u.nomeCompleto || '-';
+            document.getElementById('conta-email').textContent = u.email || '-';
+          }
+        }
+      }
+
+      async function loadAcademicInfo() {
+        try {
+          const matriculas = await request('/aluno/matriculas', { headers: authHeaders(false) });
+          if (matriculas && matriculas.length > 0) {
+            const m = matriculas[0];
+            document.getElementById('conta-matricula').textContent = m.numero_matricula || `MAT-${String(m.id).padStart(6, '0')}`;
+            document.getElementById('conta-serie').textContent = m.id_turma?.nome || m.id_curso?.nome_curso || '-';
+            document.getElementById('conta-turno').textContent = m.id_turma?.turno || m.id_curso?.turno || '-';
+            const statusMap = { 'ATIVO': 'Ativo', 'TRANCADO': 'Trancado', 'CONCLUIDO': 'Concluído', 'CANCELADO': 'Cancelado' };
+            document.getElementById('conta-status').textContent = statusMap[m.status] || m.status || '-';
+          }
+        } catch (e) {
+          // Silencioso
         }
       }
 
       loadProfile();
+      loadAcademicInfo();
 
       // Alterar senha
       document.querySelector('.btn-password')?.addEventListener('click', () => {
@@ -270,6 +382,7 @@
         });
       });
 
+      // Editar campos inline
       document.querySelectorAll('[data-field]').forEach(btn => {
         btn.addEventListener('click', () => {
           const field = btn.dataset.field;

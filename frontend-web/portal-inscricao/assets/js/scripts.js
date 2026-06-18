@@ -686,6 +686,25 @@ function setupTopNav(auth) {
   });
 }
 
+function createFakeToken(email = 'visitante@local') {
+  const payload = btoa(JSON.stringify({ email, iat: Math.floor(Date.now() / 1000) }));
+  return `fake.${payload}.${Math.floor(Math.random() * 1000000)}`;
+}
+
+function createFakeAuth({ email = 'visitante@local', nomeCompleto = 'Visitante', role = 'ROLE_USER' } = {}) {
+  return {
+    token: createFakeToken(email),
+    usuario: { id: -1, email, nomeCompleto, role },
+  };
+}
+
+function loginAsVisitor() {
+  const auth = createFakeAuth();
+  setAuth(auth);
+  showInfo('Entrando como visitante — você pode visualizar os cursos disponíveis.');
+  window.location.href = 'index.html';
+}
+
 function requireAuth(requiredRole) {
   const auth = getAuth();
   if (!auth?.token || !auth?.usuario) {
@@ -825,6 +844,8 @@ function initLoginPage() {
     }
   });
 
+  document.getElementById('btn-visitante')?.addEventListener('click', loginAsVisitor);
+
   registerForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
 
@@ -887,7 +908,13 @@ async function initHomePage() {
   if (!auth) return;
   setupProtectedPage(auth);
 
+  const isVisitor = auth?.usuario?.id === -1;
   const body = document.querySelector('#courses-body');
+  const visitorBanner = document.getElementById('visitor-banner');
+
+  if (isVisitor && visitorBanner) {
+    visitorBanner.classList.remove('hidden');
+  }
 
   try {
     const [cursos, inscricoes] = await Promise.all([
@@ -919,7 +946,9 @@ async function initHomePage() {
         <td>
           ${jaInscrito 
             ? '<span class="status" style="background: #d1fae5; color: #065f46;">Já inscrito</span>' 
-            : `<button class="btn btn-primary" data-inscrever="${curso.id}">Inscrever-se</button>`
+            : isVisitor
+              ? '<button class="btn btn-soft" onclick="location.href=\'login.html\'">Faça login</button>'
+              : `<button class="btn btn-primary" data-inscrever="${curso.id}">Inscrever-se</button>`
           }
         </td>
       `;
@@ -946,6 +975,11 @@ async function initHomePage() {
 async function initInscricaoPage() {
   const auth = requireAuth();
   if (!auth) return;
+  if (auth?.usuario?.id === -1) {
+    showError('Crie uma conta ou faça login para se inscrever em um curso.');
+    window.location.href = 'login.html';
+    return;
+  }
   setupProtectedPage(auth);
 
   const form = document.querySelector('#form-inscricao');
