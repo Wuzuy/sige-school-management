@@ -1,78 +1,161 @@
 ﻿# SIGE
 
-**Sistema de Gerenciamento de Inscrições e Processo Seletivo Online**
+**Sistema de Inscrição e Gestão Escolar** — Plataforma completa de gestão educacional com portais web, app mobile e backend REST.
 
 [![Node.js](https://img.shields.io/badge/Node.js-22-green?logo=node.js)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express-5.x-gray?logo=express)](https://expressjs.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-green?logo=supabase)](https://supabase.com/)
+[![React Native](https://img.shields.io/badge/React_Native-Expo_SDK_54-blue?logo=react)](https://expo.dev/)
 [![Vercel](https://img.shields.io/badge/Vercel-Frontend-black?logo=vercel)](https://vercel.com/)
 [![Render](https://img.shields.io/badge/Render-Backend-blue?logo=render)](https://render.com/)
 
 ---
 
-## Sobre o Projeto
+## Arquitetura
 
-O **SIGE** é uma plataforma completa para gerenciamento de inscrições e processo seletivo online do SENAI. O sistema permite que alunos se inscrevam em cursos de forma totalmente digital, enquanto a equipe administrativa gerencia todo o processo desde a análise de documentos até a emissão de carteirinhas virtuais.
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     Frontend Web (Vercel)                    │
+│  ┌─────────────────┐  ┌──────────────┐  ┌───────────────┐  │
+│  │ Portal Inscrição │  │ Portal Escolar│  │Portal Secretaria│ │
+│  │  (8 páginas)     │  │ (14 páginas)  │  │ (SPA, 15 mod.) │ │
+│  └────────┬────────┘  └──────┬───────┘  └───────┬─────────┘ │
+└───────────┼──────────────────┼──────────────────┼────────────┘
+            │                  │                  │
+            └──────────────────┼──────────────────┘
+                               │ HTTPS
+                    ┌──────────▼──────────┐
+                    │  Backend (Render)    │
+                    │  Express + JWT + RBAC │
+                    └──────────┬──────────┘
+                               │
+                    ┌──────────▼──────────┐
+                    │  Supabase (Postgres) │
+                    │  20+ tabelas         │
+                    └─────────────────────┘
 
-### Problema Resolvido
-- Superlotacao nas unidades para inscricoes presenciais
-- Processos manuais demorados para a secretaria
-- Falta de transparencia no acompanhamento de status
-
-### Solucao
-- Inscricoes 100% online, disponiveis 24/7
-- Acompanhamento em tempo real do status
-- Portal administrativo completo para a secretaria
-- Relatorios e estatisticas automaticas
-
----
-
-## Funcionalidades Principais
-
-### Alunos
-- Cadastro e Login seguro com JWT
-- Visualizacao de cursos disponiveis
-- Inscricao online com formulario completo
-- Acompanhamento de status com timeline visual
-- Portal do Aluno com dados pessoais, historico, documentos e frequencia
-- Edicao de perfil
-
-### Secretaria (Administradores)
-- Portal administrativo completo
-- CRUD de Unidades, Cursos, Usuarios e Editais
-- Gerenciamento completo de inscricoes (analise, aprovacao, prova, matricula)
-- Relatorios e estatisticas
-- Filtros avancados
+┌─────────────────────────────────────────────────────────────┐
+│                Mobile App (Expo / React Native)              │
+│                    (alunos — 12 telas)                       │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-## Tecnologias Utilizadas
+## Portais
+
+### Portal de Inscrição (`/portal-inscricao/`)
+Público — candidatos visualizam cursos, inscrevem-se e acompanham status.
+
+| Login | Cursos |
+|-------|--------|
+| ![Login](docs/printscreens/portal-inscricao-login.png) | ![Cursos](docs/printscreens/portal-inscricao-cursos.png) |
+| **Inscrição** | **Matrícula** |
+| ![Inscrição](docs/printscreens/portal-inscricao-inscricao.png) | ![Matrícula](docs/printscreens/portal-inscricao-matricula.png) |
+| **Status** | **Créditos** |
+| ![Status](docs/printscreens/portal-inscricao-status.png) | ![Créditos](docs/printscreens/portal-inscricao-credits.png) |
+
+### Portal Escolar (`/portal-escolar/`)
+Alunos matriculados — notas, frequência, horários, documentos, reclamações.
+
+| Dashboard | Perfil |
+|-----------|--------|
+| ![Dashboard](docs/printscreens/portal-escolar-dashboard.png) | ![Perfil](docs/printscreens/portal-escolar-perfil.png) |
+| **Histórico** | **Estrutura Curricular** |
+| ![Histórico](docs/printscreens/portal-escolar-historico.png) | ![Estrutura](docs/printscreens/portal-escolar-estrutura-curricular.png) |
+| **Frequência** | **Calendário** |
+| ![Frequência](docs/printscreens/portal-escolar-frequencia.png) | ![Calendário](docs/printscreens/portal-escolar-calendario.png) |
+| **Horários** | **Agenda** |
+| ![Horários](docs/printscreens/portal-escolar-horarios.png) | ![Agenda](docs/printscreens/portal-escolar-agenda.png) |
+| **Atendimento** | **Documentos** |
+| ![Atendimento](docs/printscreens/portal-escolar-atendimento.png) | ![Documentos](docs/printscreens/portal-escolar-documentos.png) |
+| **Reclamações** | **Ouvidoria** |
+| ![Reclamações](docs/printscreens/portal-escolar-reclamacoes.png) | ![Ouvidoria](docs/printscreens/portal-escolar-ouvidoria.png) |
+
+### Portal da Secretaria (`/portal-secretaria/`)
+SPA administrativa com modos **Inscrições** e **Alunos**.
+
+#### Modo Inscrições
+
+| Dashboard | Inscrições |
+|-----------|------------|
+| ![Dashboard](docs/printscreens/portal-secretaria-dashboard-inscricoes.png) | ![Inscrições](docs/printscreens/portal-secretaria-inscricoes.png) |
+| **Cursos** | **Unidades** |
+| ![Cursos](docs/printscreens/portal-secretaria-cursos.png) | ![Unidades](docs/printscreens/portal-secretaria-unidades.png) |
+| **Editais** | **Turmas** |
+| ![Editais](docs/printscreens/portal-secretaria-editais.png) | ![Turmas](docs/printscreens/portal-secretaria-turmas.png) |
+| **Cargos/Permissões** | **Relatórios** |
+| ![Cargos](docs/printscreens/portal-secretaria-cargos.png) | ![Relatórios](docs/printscreens/portal-secretaria-relatorios-inscricoes.png) |
+
+#### Modo Alunos
+
+| Dashboard | Alunos |
+|-----------|--------|
+| ![Dashboard](docs/printscreens/portal-secretaria-dashboard-alunos.png) | ![Alunos](docs/printscreens/portal-secretaria-alunos.png) |
+| **Usuários** | **Reclamações** |
+| ![Usuários](docs/printscreens/portal-secretaria-usuarios.png) | ![Reclamações](docs/printscreens/portal-secretaria-reclamacoes.png) |
+| **Relatórios** | |
+| ![Relatórios](docs/printscreens/portal-secretaria-relatorios-alunos.png) | |
+
+#### Sistema
+
+| Auditoria | Configurações |
+|-----------|---------------|
+| ![Auditoria](docs/printscreens/portal-secretaria-auditoria.png) | ![Configurações](docs/printscreens/portal-secretaria-configuracoes.png) |
+
+---
+
+## Mobile App (`/mobile-app/`)
+
+React Native (Expo SDK 54) com Expo Router v6 — 12 telas para alunos.
+
+| Tela | Descrição |
+|------|-----------|
+| Login | Autenticação JWT com AsyncStorage |
+| Home | Dados do aluno, curso, unidade + QR Code |
+| QR Code | Geração dinâmica + câmera para validação de acesso |
+| Notas | Notas por disciplina com modal de detalhes |
+| Frequência | Presença por disciplina com percentual |
+| Horários | Grade semanal |
+| Documentos | Lista de documentos com status |
+| Reclamações | Lista + formulário de nova reclamação |
+| Calendário | Eventos filtrados por tipo (FERIADO, PROVA, EVENTO) |
+| Agenda | Agendamento com tipo, data e horário |
+| Histórico | Disciplinas concluídas |
+| Suporte | FAQ expansível + contato |
+| Conta | Perfil + logout |
+
+---
+
+## Tecnologias
 
 ### Backend
-| Tecnologia | Descricao |
+| Tecnologia | Descrição |
 |------------|-----------|
 | **Node.js** 22 | Runtime |
 | **Express** 5.x | Framework HTTP |
-| **Supabase** | Banco de dados PostgreSQL + API |
-| **JWT** (jsonwebtoken) | Autenticacao |
+| **Supabase** | PostgreSQL + API |
+| **JWT** (jsonwebtoken) | Autenticação |
 | **bcryptjs** | Criptografia de senhas |
 | **cors** | Controle de acesso CORS |
 
-### Frontend
-| Tecnologia | Descricao |
+### Frontend Web
+| Tecnologia | Descrição |
 |------------|-----------|
-| **HTML5** | Estrutura das paginas |
-| **CSS3** | Estilizacao responsiva |
-| **JavaScript (Vanilla)** ES6+ | Logica da aplicacao |
-| **Notyf** 3.x | Notificacoes toast |
-| **Fetch API** | Comunicacao com backend |
+| **HTML5** | Estrutura das páginas |
+| **CSS3** | Estilização responsiva |
+| **JavaScript (Vanilla)** ES6+ | Lógica da aplicação |
+| **Notyf** 3.x | Notificações toast |
+| **Chart.js** 4.4.7 | Gráficos (Secretaria) |
+| **Fetch API** | Comunicação com backend |
 
-### Infraestrutura
-| Servico | Uso |
-|---------|-----|
-| **Vercel** | Hospedagem do frontend |
-| **Render** | Hospedagem do backend |
-| **Supabase** | Banco de dados PostgreSQL |
+### Mobile
+| Tecnologia | Descrição |
+|------------|-----------|
+| **React Native** (Expo SDK 54) | Framework mobile |
+| **Expo Router** v6 | Roteamento file-based |
+| **TypeScript** | Tipagem |
+| **AsyncStorage** | Armazenamento local |
 
 ---
 
@@ -80,219 +163,225 @@ O **SIGE** é uma plataforma completa para gerenciamento de inscrições e proce
 
 ```
 sige/
-├── backend/                          # API REST (Node.js + Express)
-│   ├── routes/                       # Rotas da API
-│   ├── middleware/                   # Middleware de autenticacao
-│   ├── server.js                     # Ponto de entrada
+├── backend/                              # API REST (Node.js + Express)
+│   ├── routes/                           # 10 arquivos de rota
+│   │   ├── usuarios.js                   # Login, CRUD de usuários
+│   │   ├── cursos.js                     # CRUD de cursos
+│   │   ├── unidades.js                   # CRUD de unidades
+│   │   ├── editais.js                    # CRUD de editais
+│   │   ├── turmas.js                     # CRUD de turmas
+│   │   ├── inscricoes.js                # Inscrições + matrícula
+│   │   ├── alunos.js                     # Admin: visão de alunos
+│   │   ├── aluno.js                      # Student self-service
+│   │   ├── cargos.js                     # RBAC (cargos + permissões)
+│   │   └── auth-codigo.js               # Validação QR code
+│   ├── middleware/auth.js                # requireAuth, requireRole, requirePermissao
+│   ├── config/supabase.js                # Cliente Supabase
+│   ├── server.js                         # Entry point
 │   └── package.json
 │
-├── frontend-web/                     # Interface Web
-│   ├── portal-escolar/               # Portal do Aluno e Secretaria
-│   │   ├── index.html                # Dashboard
-│   │   ├── portal-aluno.html         # Perfil do aluno
-│   │   ├── portal-secretaria.html    # Portal administrativo
-│   │   ├── historico-escolar.html    # Historico academico
-│   │   ├── meus-documentos.html      # Documentos
-│   │   ├── consulta-freq.html        # Frequencia
-│   │   ├── agenda-escolar.html       # Agenda
-│   │   ├── calendario-escolar.html   # Calendario
-│   │   ├── assets/js/scripts.js      # Logica JS
-│   │   └── assets/css/app.css        # Estilos
+├── mobile-app/                           # React Native (Expo)
+│   ├── app/                              # Telas (file-based routing)
+│   │   ├── (tabs)/                       # Abas principais
+│   │   ├── (stack)/                      # Telas modais/detalhes
+│   │   ├── api.ts                        # Wrapper da API
+│   │   └── auth.tsx                      # AuthContext
+│   ├── app.json
+│   ├── eas.json
+│   └── package.json
+│
+├── frontend-web/                         # Interface Web
+│   ├── portal-inscricao/                 # 8 páginas (público)
+│   │   ├── login.html, index.html, inscricao.html
+│   │   ├── matricula.html, status.html
+│   │   ├── forgot-password.html, reset-password.html
+│   │   ├── credits.html
+│   │   └── assets/js/scripts.js          # Lógica compartilhada
 │   │
-│   ├── portal-inscricao/             # Portal de Inscricao
-│   │   ├── login.html                # Login e cadastro
-│   │   ├── index.html                # Cursos disponiveis
-│   │   ├── inscricao.html            # Formulario de inscricao
-│   │   ├── status.html               # Acompanhamento de status
-│   │   ├── matricula.html            # Finalizacao de matricula
-│   │   └── assets/js/scripts.js
+│   ├── portal-escolar/                   # 14 páginas (alunos)
+│   │   ├── index.html                    # Dashboard
+│   │   ├── conta.html                    # Perfil
+│   │   ├── historico-escolar.html        # Histórico
+│   │   ├── estrutura-curricular.html     # Grade curricular
+│   │   ├── consulta-freq.html            # Frequência
+│   │   ├── calendario-escolar.html       # Calendário
+│   │   ├── quadro-horarios.html          # Horários
+│   │   ├── agenda-escolar.html           # Agenda
+│   │   ├── atendimento-agendado.html     # Atendimentos
+│   │   ├── meus-documentos.html          # Documentos
+│   │   ├── reclamacoes.html              # Reclamações
+│   │   ├── ouvidoria.html                # Nova reclamação
+│   │   ├── detalhes-reclamacao.html      # Detalhe reclamação
+│   │   ├── forgot-password.html
+│   │   ├── credits.html
+│   │   ├── teste-api.html
+│   │   └── assets/
+│   │       ├── js/scripts.js             # Lógica compartilhada (2.6k linhas)
+│   │       ├── js/sidebar-nav.js          # Navegação sidebar
+│   │       ├── js/api-config.js           # Configuração de API
+│   │       ├── css/app.css               # Estilos globais
+│   │       └── css/sidebar.css           # Estilos sidebar
 │   │
-│   └── portal-secretaria/            # (direciona para portal-escolar)
+│   ├── portal-secretaria/                # SPA administrativa
+│   │   ├── portal-secretaria.html        # 1 arquivo, todos os módulos
+│   │   └── arquivos/
+│   │       ├── portal-secretaria.js      # Lógica (~27K linhas)
+│   │       └── portal-secretaria.css     # Estilos (~1.5K linhas)
+│   │
+│   └── assets/ (compartilhado)
 │
-├── mobile-app/                       # App React Native (em desenvolvimento)
+├── database/                             # Scripts SQL
+│   ├── schema-completo.sql               # DROP + CREATE + SEED (20 tabelas)
+│   └── supabase-cargos-permissoes.sql    # Migração RBAC
 │
-├── mock-server/                      # Servidor mock para testes
+├── docs/                                 # Documentação
+│   ├── readme.md                         # Documentação completa
+│   ├── printscreens/                     # Screenshots (34 telas)
+│   ├── diagrama-classes.excalidraw       # Diagrama ER
+│   └── postman/                          # Coleção Postman
 │
-├── scripts/                          # Scripts utilitarios (.bat/.ps1)
-│
-├── database/                         # Scripts SQL (Supabase)
-│   └── supabase-aluno-tables.sql
-│
-├── docs/                             # Documentacao
-│
-├── vercel.json                       # Configuracao Vercel
 └── README.md
 ```
 
 ---
 
-## Instalacao e Execucao
-
-### Pre-requisitos
-- Node.js 22+
-- NPM
-- Navegador moderno
-
-### 1. Clonar o repositorio
-```bash
-git clone https://github.com/Wuzuy/sige.git
-cd sige
-```
-
-### 2. Configurar o Backend
-```bash
-cd backend
-npm install
-```
-
-Crie um arquivo `.env` na pasta `backend/`:
-```env
-SUPABASE_URL=https://seu-projeto.supabase.co
-SUPABASE_KEY=SUA_CHAVE_ANON
-JWT_SECRET=secreta_sige_123
-PORT=8080
-```
-
-### 3. Executar o Backend
-```bash
-cd backend
-npm run dev
-```
-O servidor inicia em `http://localhost:8080`.
-
-### 4. Executar o Frontend
-
-**Opcao A: Live Server (VS Code)**
-1. Instale a extensao "Live Server"
-2. Clique com direito em `frontend-web/portal-escolar/index.html`
-3. Selecione "Open with Live Server"
-
-**Opcao B: Python**
-```bash
-cd frontend-web
-python -m http.server 5500
-```
-
-**Opcao C: Node.js**
-```bash
-cd frontend-web
-npx http-server -p 5500
-```
-
-### 5. Dados de Teste
-O Supabase ja possui dados iniciais. Se precisar recriar, execute o script SQL em `database/supabase-aluno-tables.sql` no SQL Editor do Supabase.
-
-### Credenciais de Teste
+## Credenciais de Teste
 
 | Email | Senha | Role |
 |-------|-------|------|
-| `admin@senai.com` | `admin123` | ADMIN |
-| `joao@email.com` | `123456` | USER |
+| `admin@sige.edu.br` | `Sige123@` | Admin Master |
+| `amanda.azevedo.aluno115@sige.edu.br` | `Sige123@` | Aluno |
 
 ---
 
 ## Endpoints da API
 
-**Base URL:** `http://localhost:8080/api`
+**Base URL:** `https://sige-1gqx.onrender.com/api`
 
-| Metodo | Endpoint | Descricao | Auth |
-|--------|----------|-----------|------|
-| POST | `/usuarios/login` | Login | - |
-| POST | `/usuarios` | Cadastro | - |
-| POST | `/usuarios/admin` | Criar admin | ADMIN |
-| GET | `/usuarios/me` | Dados do usuario | token |
-| PUT | `/usuarios/me` | Atualizar perfil | token |
-| GET | `/usuarios` | Listar usuarios | ADMIN |
-| GET | `/usuarios/{id}` | Buscar usuario | token |
-| PUT | `/usuarios/{id}` | Atualizar usuario | ADMIN |
-| DELETE | `/usuarios/{id}` | Excluir usuario | ADMIN |
-| GET | `/usuarios/count` | Contagem | - |
-| GET | `/unidades` | Listar unidades | token |
-| POST | `/unidades` | Criar unidade | ADMIN |
-| PUT | `/unidades/{id}` | Atualizar unidade | ADMIN |
-| DELETE | `/unidades/{id}` | Excluir unidade | ADMIN |
-| GET | `/cursos` | Listar cursos | token |
-| GET | `/cursos/ativos` | Cursos ativos | - |
-| POST | `/cursos` | Criar curso | ADMIN |
-| PUT | `/cursos/{id}` | Atualizar curso | ADMIN |
-| DELETE | `/cursos/{id}` | Excluir curso | ADMIN |
-| GET | `/editais` | Listar editais | - |
-| POST | `/editais` | Criar edital | ADMIN |
-| PUT | `/editais/{id}` | Atualizar edital | ADMIN |
-| DELETE | `/editais/{id}` | Excluir edital | ADMIN |
-| GET | `/inscricoes` | Listar inscricoes | ADMIN |
-| POST | `/inscricoes` | Criar inscricao | token |
-| PUT | `/inscricoes/{id}` | Atualizar inscricao | ADMIN |
-| GET | `/aluno/matriculas` | Matriculas do aluno | token |
-| GET | `/aluno/historico` | Historico academico | token |
-| GET | `/aluno/documentos` | Documentos | token |
-| GET | `/aluno/frequencia` | Frequencia | token |
-| GET | `/aluno/agenda` | Agenda | token |
-| GET | `/aluno/calendario` | Calendario | token |
-| GET | `/aluno/horarios` | Quadro de horarios | token |
+### Autenticação
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| POST | `/usuarios/login` | Login (email + senha) |
+| POST | `/usuarios` | Cadastro |
+| POST | `/usuarios/recuperar-senha` | Recuperação de senha |
+| POST | `/usuarios/redefinir-senha` | Redefinição de senha |
 
-**Roles:** `ADMIN` = acesso total, `USER` = acesso ao portal do aluno
+### Usuários (Admin)
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/usuarios` | Listar todos |
+| GET | `/usuarios/:id` | Buscar por ID |
+| POST | `/usuarios/admin` | Criar admin |
+| PUT | `/usuarios/:id` | Atualizar |
+| DELETE | `/usuarios/:id` | Excluir |
+
+### Cursos / Unidades / Editais / Turmas
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/cursos` | Listar cursos |
+| GET | `/cursos/ativos` | Cursos ativos (público) |
+| POST/PUT/DELETE | `/cursos/:id` | CRUD curso |
+| GET/POST/PUT/DELETE | `/unidades/:id` | CRUD unidade |
+| GET/POST/PUT/DELETE | `/editais/:id` | CRUD edital |
+| GET/POST/PUT/DELETE | `/turmas/:id` | CRUD turma |
+
+### Inscrições
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/inscricoes` | Listar (admin) |
+| POST | `/inscricoes` | Criar inscrição |
+| PUT | `/inscricoes/:id` | Atualizar |
+| PUT | `/inscricoes/:id/aprovar` | Aprovar/reprovar |
+| POST | `/inscricoes/:id/matricula` | Aceitar matrícula |
+| GET | `/inscricoes/minhas` | Minhas inscrições |
+
+### Aluno (self-service)
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/aluno/notas` | Notas |
+| GET | `/aluno/frequencias` | Frequência |
+| GET | `/aluno/horarios` | Horários |
+| GET | `/aluno/documentos` | Documentos |
+| GET | `/aluno/reclamacoes` | Reclamações |
+| POST | `/aluno/reclamacoes` | Nova reclamação |
+| GET | `/aluno/agenda` | Agenda |
+| GET | `/aluno/historico` | Histórico escolar |
+| GET | `/aluno/atendimentos` | Atendimentos |
+| GET | `/aluno/matriculas` | Matrículas |
+
+### Admin (Alunos)
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/alunos` | Listar alunos |
+| GET | `/alunos/:id` | Detalhes do aluno |
+| PUT | `/alunos/:id` | Editar aluno |
+
+### RBAC (Cargos/Permissões)
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET/POST | `/cargos` | Listar/criar cargos |
+| GET/PUT/DELETE | `/cargos/:id` | CRUD cargo |
+| GET | `/cargos/permissoes/all` | Catálogo de permissões |
+| POST | `/cargos/permissoes` | Vincular permissão |
+| GET | `/cargos/:id/permissoes` | Permissões do cargo |
+| DELETE | `/cargos/permissoes/:id` | Remover permissão |
+
+### QR Code / Acesso
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| POST | `/auth/codigo` | Validar QR code (gate) |
 
 ---
 
-## Documentacao
+## Instalação Local
 
-A documentacao completa esta disponivel em `docs/`:
+```bash
+# Backend
+cd backend
+npm install
+# Configure .env com SUPABASE_URL, SUPABASE_KEY, PORT=8080
+npm start
 
-| Documento | Descricao |
-|-----------|-----------|
-| `guia-aluno.md` | Manual completo para alunos |
-| `guia-secretaria.md` | Manual para administradores |
-| `backend-api-reference.md` | Referencia completa da API |
-| `deploy-vercel-render.md` | Guia de deploy |
-| `frontend-documentacao-tecnica.md` | Documentacao tecnica do frontend |
+# Frontend
+cd frontend-web
+npx http-server -p 3000
+# Acesse http://localhost:3000
 
----
+# Mobile
+cd mobile-app
+npm install
+npx expo start
+```
 
-## Seguranca
-
-- Autenticacao via JWT com token de 24h
-- Senhas hasheadas com bcryptjs
-- Controle de acesso por role (ADMIN/USER)
-- Sanitizacao de inputs no frontend
-- CORS configurado no backend
+Para usar o backend de produção localmente:
+```js
+localStorage.setItem('API_BASE_URL', 'https://sige-1gqx.onrender.com/api');
+```
 
 ---
 
 ## Deploy
 
-### Frontend (Vercel)
-O frontend esta em `https://sige-iota.vercel.app`. O deploy e automatico via GitHub.
-
-### Backend (Render)
-O backend Node.js/Express e hospedado no Render com as variaveis de ambiente:
-- `SUPABASE_URL`, `SUPABASE_KEY`, `JWT_SECRET`, `PORT`
-
-Veja `docs/deploy-vercel-render.md` para instrucoes detalhadas.
+- **Frontend:** Vercel (deploy automático via GitHub)
+- **Backend:** Render (Express, porta 8080)
+- **Mobile:** Expo (EAS Build)
+- **Database:** Supabase
 
 ---
 
 ## Equipe
 
-Projeto desenvolvido para o curso Tecnico de Desenvolvimento de Sistemas na Firjan SENAI Duque de Caxias.
+Projeto desenvolvido para o curso Técnico de Desenvolvimento de Sistemas na Firjan SENAI Duque de Caxias.
 
-- Turma: TEC00412025.1046
-- Orientadora: Ana Carla
-- Desenvolvedores:
+- **Turma:** TEC00412025.1046
+- **Orientadora:** Ana Carla
+- **Desenvolvedores:**
   - Artur de Paula Santos
-  - Joao Felipe da Costa Moreira
-  - Joao Miguel Goncalves Coelho
+  - João Felipe da Costa Moreira
+  - João Miguel Gonçalves Coelho
   - Lucas Matheus Lima Sandin
   - Yago Mamud Amorim
 
 ---
 
-## Licenca
-
-Projeto academico desenvolvido para o SENAI.
-
----
-
-**Versao:** 1.0.0
-**Status:** Producao
-**Ultima Atualizacao:** Junho 2026
+**Versão:** 2.0.0 · **Status:** Produção · **Última Atualização:** Junho 2026

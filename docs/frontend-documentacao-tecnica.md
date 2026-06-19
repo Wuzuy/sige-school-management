@@ -1,247 +1,232 @@
-﻿# Frontend - Documentacao Tecnica
+# Documentação Técnica — Frontend Web
 
-**Sistema SIGE - Interface Web**
+## Visão Geral
 
----
-
-## Visao Geral
-
-### Tecnologias Utilizadas
-
-| Tecnologia | Uso |
-|------------|-----|
-| **HTML5** | Estrutura semantica das paginas |
-| **CSS3** | Estilizacao responsiva |
-| **JavaScript (Vanilla)** ES6+ | Logica da aplicacao |
-| **Notyf** 3.x | Notificacoes toast |
-| **Fetch API** | Comunicacao com backend REST |
-| **localStorage** | Armazenamento de token JWT |
-
-### Caracteristicas
-- 3 portais independentes: Escolar, Secretaria e Inscricao
-- 100% responsivo (desktop, tablet, mobile)
-- Autenticacao JWT com controle de acesso por role
-- Notificacoes toast com feedback visual
-- Configuracao automatica da URL da API
+Três portais web em **Vanilla JavaScript** (sem frameworks), servidos como HTML estático no Vercel. Compartilham uma base de código comum via `scripts.js` e `api-config.js`.
 
 ---
 
-## Estrutura de Arquivos
+## Arquitetura
 
 ```
 frontend-web/
-├── portal-escolar/                 # Portal do Aluno e Secretaria
-│   ├── assets/
-│   │   ├── css/app.css             # Estilos principais
-│   │   ├── js/
-│   │   │   ├── api-config.js       # Configuracao da API
-│   │   │   ├── scripts.js          # Logica compartilhada
-│   │   │   └── sidebar-nav.js      # Navegacao sidebar
-│   │   ├── images/                 # Imagens e icones
-│   │   └── fonts/                  # Fontes customizadas
-│   ├── index.html                  # Dashboard principal
-│   ├── portal-aluno.html           # Perfil do aluno
-│   ├── portal-secretaria.html      # Portal administrativo
-│   ├── historico-escolar.html      # Historico academico
-│   ├── meus-documentos.html        # Documentos
-│   ├── consulta-freq.html          # Frequencia
-│   ├── agenda-escolar.html         # Agenda
-│   ├── calendario-escolar.html     # Calendario
-│   └── login.html                  # Login do aluno
+├── assets/                        # Compartilhado entre portais
+│   └── (imagens, etc.)
 │
-├── portal-inscricao/               # Portal de Inscricao
-│   ├── assets/
-│   │   ├── css/app.css
-│   │   ├── js/
-│   │   │   ├── api-config.js
-│   │   │   └── scripts.js
-│   │   ├── images/
-│   │   └── fonts/
-│   ├── index.html                  # Cursos disponiveis
-│   ├── login.html                  # Login e cadastro
-│   ├── inscricao.html              # Formulario de inscricao
-│   ├── status.html                 # Acompanhamento de status
-│   ├── matricula.html              # Finalizacao de matricula
-│   ├── forgot-password.html        # Recuperacao de senha
-│   ├── reset-password.html         # Redefinicao de senha
-│   └── credits.html                # Creditos
+├── portal-inscricao/              # Público
+│   ├── assets/js/scripts.js       # Cópia local da lógica
+│   └── assets/js/api-config.js    # Configura API
 │
-└── portal-secretaria/
-    └── portal-secretaria.html      # (redireciona para portal-escolar/)
+├── portal-escolar/                # Alunos
+│   ├── assets/js/
+│   │   ├── scripts.js             # Lógica principal (~2600 linhas)
+│   │   ├── sidebar-nav.js         # Navegação por sidebar
+│   │   ├── api-config.js          # Configura URL da API
+│   │   └── api-test.js           # Ferramenta de teste
+│   └── assets/css/
+│       ├── app.css                # Estilos globais
+│       └── sidebar.css            # Estilos da sidebar
+│
+└── portal-secretaria/             # Admin (SPA)
+    ├── portal-secretaria.html     # Todos os módulos em 1 HTML
+    └── arquivos/
+        ├── portal-secretaria.js   # Lógica (~27K linhas)
+        └── portal-secretaria.css  # Estilos (~1.5K linhas)
 ```
 
 ---
 
-## Paginas HTML
+## API Config (`api-config.js`)
 
-### portal-escolar/index.html - Dashboard Principal
-**Proposito:** Pagina inicial do aluno apos login, com acesso rapido as funcionalidades.
+Detecta ambiente automaticamente:
+- Localhost → usa `http://localhost:8080/api`
+- Vercel → usa `https://sige-1gqx.onrender.com/api`
 
-**Funcionalidades:**
-- Tabela de cursos ativos com opcao de inscricao
-- Atalhos para historico, documentos, frequencia, agenda
-- Indicador de status da API
-
-### portal-escolar/login.html - Login do Aluno
-**Proposito:** Autenticacao de usuarios.
-
-**Estrutura:**
-- Formulario de login (email + senha)
-- Toggle para cadastro de novo usuario
-- Lista de editais publicados
-- Botao de acesso como visitante
-
-### portal-escolar/portal-aluno.html - Perfil do Aluno
-**Proposito:** Exibir e editar dados pessoais do aluno.
-
-**Secoes:**
-- Dados pessoais (nome, email, CPF, data de nascimento, telefone)
-- Informacoes academicas (matricula, serie, turno, status)
-- Formulario de edicao de dados (toggle)
-
-### portal-escolar/portal-secretaria.html - Portal Administrativo
-**Proposito:** Interface completa para gerenciamento pela secretaria.
-
-**Modulos:**
-- Unidades (CRUD)
-- Cursos (CRUD + filtros)
-- Usuarios (CRUD)
-- Editais (CRUD)
-- Inscricoes (gerenciamento completo + filtros)
-- Relatorios (estatisticas)
-
-### portal-escolar/historico-escolar.html - Historico
-**Proposito:** Exibir disciplinas cursadas, notas e aprovacao.
-
-### portal-escolar/meus-documentos.html - Documentos
-**Proposito:** Listar documentos enviados e seus status.
-
-### portal-escolar/consulta-freq.html - Frequencia
-**Proposito:** Exibir frequencia por disciplina.
-
-### portal-escolar/agenda-escolar.html - Agenda
-**Proposito:** Eventos escolares e atividades programadas.
-
-### portal-escolar/calendario-escolar.html - Calendario
-**Proposito:** Datas do ano letivo e periodos de aula.
-
-### portal-inscricao/login.html - Login Publico
-**Proposito:** Cadastro e login para novos alunos.
-
-### portal-inscricao/index.html - Cursos Disponiveis
-**Proposito:** Exibir cursos ativos com opcao de inscricao.
-
-### portal-inscricao/inscricao.html - Formulario de Inscricao
-**Proposito:** Inscricao em curso com validacao de dados.
-
-### portal-inscricao/status.html - Acompanhamento
-**Proposito:** Visualizar status das inscricoes com timeline.
-
-### portal-inscricao/matricula.html - Matricula
-**Proposito:** Aceite de matricula com termos e confirmacao.
-
----
-
-## JavaScript - scripts.js
-
-### Estrutura
-
-| Secao | Descricao |
-|-------|-----------|
-| Configuracao da API | Deteccao de ambiente, modal de configuracao |
-| Notificacoes (Notyf) | Inicializacao, funcoes showSuccess/Error/Warning/Info |
-| Seguranca | Sanitizacao de HTML, validacao de email/CPF/senha |
-| Autenticacao | getAuth, setAuth, clearAuth, requireAuth |
-| Requisicoes HTTP | Funcao `request()` centralizada com tratamento de erros |
-| Navegacao | setupMobileMenu, setupTopNav |
-| Paginas | initLoginPage, initHomePage, initInscricaoPage, initStatusPage |
-| Portal Aluno | initPortalAlunoPage, initHistoricoPage, initDocumentosPage |
-| Secretaria | initPortalSecretariaPage com modulos e filtros |
-| Utilitarios | formatDate, normalizeText, renderEditais |
-
-### Funcao request() - Central
-```javascript
-async function request(path, options = {}) {
-  const response = await fetch(`${API_BASE}${path}`, options);
-  if (!response.ok) {
-    const raw = await response.text();
-    throw new Error(raw || 'Falha na requisicao');
-  }
-  if (response.status === 204) return null;
-  return response.json();
-}
-```
-
-### Notificacoes (Notyf)
-```javascript
-// Tipos disponiveis
-showSuccess('Mensagem');   // Verde
-showError('Mensagem');     // Vermelho
-showWarning('Mensagem');   // Amarelo
-showInfo('Mensagem');      // Azul
-```
-
-### Autenticacao
-```javascript
-function getAuth() { /* retorna { token, usuario } do localStorage */ }
-function requireAuth(requiredRole) { /* redireciona se nao autenticado */ }
-function setupProtectedPage(auth) { /* configura navegacao e logout */ }
+Pode ser sobrescrito via:
+```js
+localStorage.setItem('API_BASE_URL', 'https://sige-1gqx.onrender.com/api');
 ```
 
 ---
 
-## Configuracao da API
+## Autenticação
 
-A URL da API e detectada automaticamente na ordem:
-1. **localStorage** - Configurado manualmente pelo usuario via modal
-2. **window.API_BASE_URL** - Definido globalmente
-3. **Fallback** - `http://localhost:8080/api`
+### Fluxo
 
-O sistema tem um indicador de status da API no canto superior direito.
+1. Usuário faz login → backend retorna `{ token, usuario }`
+2. Salvo em `localStorage['auth']` como JSON
+3. Toda requisição via `request()` inclui `Authorization: Bearer <token>`
+4. `getAuth()` recupera e valida o auth do localStorage
+5. `requireAuth(role)` redireciona se não autenticado/role incorreta
+6. 401 → limpa auth e redireciona para login
 
----
+### Funções
 
-## Fluxos de Usuario
+| Função | Descrição |
+|--------|-----------|
+| `getAuth()` | Lê e valida auth do localStorage |
+| `setAuth(auth)` | Salva auth no localStorage |
+| `clearAuth()` | Remove auth |
+| `requireAuth(role?)` | Protege página; redireciona se necessário |
+| `request(path, options)` | Fetch com JWT automático e tratamento de 401 |
+| `authHeaders(isJson)` | Retorna headers com Bearer token |
+| `loginAsVisitor()` | Cria auth fake para navegação visitante |
 
-### Fluxo do Aluno (Inscricao)
-```
-Login/Cadastro → Ver Cursos → Selecionar Curso → Preencher Inscricao
-                    ↓
-            Acompanhar Status → Aceitar Matricula (se aprovado)
-```
+### Tokens
 
-### Fluxo do Aluno (Portal)
-```
-Dashboard → Perfil → Historico/Documentos/Frequencia
-                  ↓
-          Agenda/Calendario
-```
-
-### Fluxo da Secretaria
-```
-Portal Admin → Unidades/Cursos/Usuarios/Editais/Inscricoes → Relatorios
-```
+Token JWT de 3 partes (header.payload.signature). `isValidToken()` valida se tem 3 partes separadas por ponto.
 
 ---
 
-## Seguranca
+## Portal Inscrição
 
-- Autenticacao JWT com token armazenado no localStorage
-- Validacao de input no cliente (email, CPF, senha forte)
-- Sanitizacao de HTML para prevenir XSS
-- Controle de acesso por role (ADMIN/USER)
-- Protecao de paginas com redirecionamento automatico
+8 páginas HTML públicas. Navegação por navbar no topo.
+
+| Página | Rota | Descrição |
+|--------|------|-----------|
+| Login | `login.html` | Login/Cadastro + editais |
+| Cursos | `index.html` | Lista de cursos disponíveis |
+| Inscrição | `inscricao.html?cursoId=N` | Formulário de inscrição |
+| Matrícula | `matricula.html?inscricaoId=N` | Aceite de termos |
+| Status | `status.html` | Acompanhamento de inscrições |
+| Recuperar Senha | `forgot-password.html` | Email para reset |
+| Redefinir Senha | `reset-password.html?token=X` | Nova senha |
+| Créditos | `credits.html` | Informações do sistema |
 
 ---
 
-## Responsividade
+## Portal Escolar
 
-- Desktop (1024px+) - Layout completo com sidebar fixa
-- Tablet (768px - 1023px) - Interface adaptada
-- Mobile (ate 767px) - Menu hamburger, sidebar colapsivel, layout vertical
+14 páginas com sidebar lateral.
+
+### Sidebar (`sidebar-nav.js`)
+
+Seções definidas com `data-section`:
+- `navegacao` — sempre visível
+- `academico` — role `student`
+- `calendario-agenda` — role `student`
+- `comunicacao` — sempre visível
+- `documentacao` — role `student`
+- `conta` — sempre visível
+
+Ativa seção baseada no `role` do usuário logado.
+
+### Páginas
+
+| Página | Rota | Requer Auth |
+|--------|------|-------------|
+| Dashboard | `index.html` | Student |
+| Perfil | `conta.html` | Student |
+| Histórico | `historico-escolar.html` | Student |
+| Estrutura Curricular | `estrutura-curricular.html` | Student |
+| Frequência | `consulta-freq.html` | Student |
+| Calendário | `calendario-escolar.html` | Student |
+| Horários | `quadro-horarios.html` | Student |
+| Agenda | `agenda-escolar.html` | Student |
+| Atendimento | `atendimento-agendado.html` | Student |
+| Documentos | `meus-documentos.html` | Student |
+| Reclamações | `reclamacoes.html` | Student |
+| Detalhes Reclamação | `detalhes-reclamacao.html?id=N` | Student |
+| Ouvidoria | `ouvidoria.html` | Student |
+| Teste API | `teste-api.html` | Developer |
 
 ---
 
-**Versao da Documentacao:** 2.0
-**Ultima Atualizacao:** Junho 2026
-**Sistema:** SIGE v1.0.0
+## Portal Secretaria (SPA)
+
+Single Page Application — todos os módulos em `portal-secretaria.html`.
+
+### Modos
+
+- **Inscrições**: Dashboard, Inscrições, Cursos, Unidades, Editais, Turmas, Relatórios, Cargos
+- **Alunos**: Dashboard, Alunos, Usuários, Reclamações, Relatórios
+- **Sistema**: Auditoria, Configurações
+
+### Mecanismo
+
+- Sidebar com `<a>` links com atributo `data-module-target`
+- `data-sec-mode` para alternar entre Inscrições/Alunos
+- Hash state persistido via `saveState()` / `restoreState()` na URL (`#mode=X&module=Y`)
+- Módulos são `<section>` com classe `module-panel`
+- Um módulo visível por vez (classe `active`)
+- Polling a cada 30s no módulo visível
+
+### Dashboard
+
+- KPIs: cards com valores numéricos
+- Gráficos: Chart.js (linha, doughnut, barra, funil)
+- Filtros: período, status, curso, busca textual
+- Export: CSV (com BOM para Excel) e PDF (print)
+
+### CRUDs
+
+Padrão unificado:
+1. Formulário de criação no topo da página
+2. Tabela com dados existentes abaixo
+3. Botões Editar (abre modal) e Excluir (com confirmação)
+4. Modal de edição genérico reutilizado entre módulos
+
+### Auditoria
+
+- Log de ações em `localStorage['audit_log']` (máx 500 entradas)
+- Filtros por tipo e texto
+- Exportação CSV
+
+### Configurações
+
+- Dark mode: toggle salvo em `localStorage['darkMode']`
+- Tamanho da fonte: P/M/G salvo em `localStorage['fontSize']`
+
+### Estado
+
+- `saveState()` serializa modo + módulo atual para URL hash
+- `restoreState()` lê hash e restaura estado
+- Pula se `file://` protocol (CORS restrictions)
+
+---
+
+## Componentes Compartilhados
+
+### Notificações (Notyf)
+
+```js
+let notyf; // declarado em scripts.js (escopo léxico, não window)
+notyf.open({ type: 'success', message: '...' });
+```
+
+### Modais
+
+```html
+<div class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">...</div>
+    <div class="modal-body">...</div>
+    <div class="modal-footer">...</div>
+  </div>
+</div>
+```
+
+### Confirmação
+
+`confirmAction(message, callback)` — modal customizado (não `confirm()` nativo).
+
+### Data Helpers
+
+- `formatDate(value)` → `dd/mm/aaaa`
+- `normalizeText(value)` → lowercase sem acentos
+- `sanitizeHTML(value)` → escapa HTML
+
+---
+
+## APIs Utilizadas
+
+### CDN
+
+```html
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+<!-- Notyf -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+```

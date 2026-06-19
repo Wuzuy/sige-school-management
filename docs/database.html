@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banco de Dados — SIGE Docs</title>
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-logo">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+    SIGE Docs
+  </div>
+  <div class="header-actions">
+    <button class="theme-toggle" aria-label="Alternar modo escuro">&#127769;</button>
+  </div>
+</header>
+
+<div class="wrapper">
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li class="nav-section">Introdução</li>
+      <li><a href="index.html"><span class="nav-icon">&#127968;</span> Início</a></li>
+      <li class="nav-section">Portais Web</li>
+      <li><a href="portal-inscricao.html"><span class="nav-icon">&#128196;</span> Portal de Inscrição</a></li>
+      <li><a href="portal-escolar.html"><span class="nav-icon">&#127891;</span> Portal Escolar</a></li>
+      <li><a href="portal-secretaria.html"><span class="nav-icon">&#128188;</span> Portal da Secretaria</a></li>
+      <li class="nav-section">Mobile</li>
+      <li><a href="mobile.html"><span class="nav-icon">&#128241;</span> Aplicativo Mobile</a></li>
+      <li class="nav-section">Backend</li>
+      <li><a href="backend.html"><span class="nav-icon">&#9881;&#65039;</span> Backend API</a></li>
+      <li><a href="database.html"><span class="nav-icon">&#128451;</span> Banco de Dados</a></li>
+      <li class="nav-section">Deploy</li>
+      <li><a href="deploy.html"><span class="nav-icon">&#128640;</span> Guia de Deploy</a></li>
+    </ul>
+  </aside>
+
+  <div class="sidebar-overlay"></div>
+
+  <main class="main-content">
+    <nav class="breadcrumbs">
+      <a href="index.html">Início</a>
+      <span class="sep">/</span>
+      <span>Banco de Dados</span>
+    </nav>
+
+    <div class="page-header">
+      <h1>Banco de Dados</h1>
+      <p>PostgreSQL no Supabase com 20+ tabelas, relacionamentos e seed data.</p>
+    </div>
+
+    <section>
+      <h2>Visão Geral</h2>
+      <p>O banco de dados do SIGE utiliza PostgreSQL rodando no Supabase. O schema completo está em <code>database/schema-completo.sql</code>. Abaixo estão listadas todas as tabelas e seus relacionamentos principais.</p>
+    </section>
+
+    <section>
+      <h2>Lista de Tabelas</h2>
+      <table>
+        <thead>
+          <tr><th>#</th><th>Tabela</th><th>Descrição</th><th>FKs Principais</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td><code>usuarios</code></td><td>Usuários do sistema (login, autenticação)</td><td><code>id_cargo</code> &rarr; cargos</td></tr>
+          <tr><td>2</td><td><code>alunos</code></td><td>Alunos matriculados</td><td><code>id_usuario</code> &rarr; usuarios, <code>id_curso</code> &rarr; cursos, <code>id_turma</code> &rarr; turmas</td></tr>
+          <tr><td>3</td><td><code>unidades</code></td><td>Unidades escolares</td><td>—</td></tr>
+          <tr><td>4</td><td><code>cursos</code></td><td>Cursos oferecidos</td><td><code>id_unidade</code> &rarr; unidades</td></tr>
+          <tr><td>5</td><td><code>turmas</code></td><td>Turmas de cada curso</td><td><code>id_curso</code> &rarr; cursos</td></tr>
+          <tr><td>6</td><td><code>disciplinas</code></td><td>Disciplinas dos cursos</td><td><code>id_curso</code> &rarr; cursos</td></tr>
+          <tr><td>7</td><td><code>inscricoes</code></td><td>Inscrições em processos seletivos</td><td><code>id_usuario</code> &rarr; usuarios, <code>id_curso</code> &rarr; cursos</td></tr>
+          <tr><td>8</td><td><code>matriculas</code></td><td>Matrículas ativas</td><td><code>id_inscricao</code> &rarr; inscricoes, <code>id_aluno</code> &rarr; alunos</td></tr>
+          <tr><td>9</td><td><code>documentos</code></td><td>Documentos dos alunos</td><td><code>id_aluno</code> &rarr; alunos</td></tr>
+          <tr><td>10</td><td><code>reclamacoes</code></td><td>Reclamações e ouvidoria</td><td><code>id_aluno</code> &rarr; alunos</td></tr>
+          <tr><td>11</td><td><code>cargos</code></td><td>Cargos do RBAC</td><td>—</td></tr>
+          <tr><td>12</td><td><code>permissoes</code></td><td>Catálogo de permissões</td><td>—</td></tr>
+          <tr><td>13</td><td><code>cargos_permissoes</code></td><td>Vínculo cargo-permissão</td><td><code>id_cargo</code> &rarr; cargos, <code>id_permissao</code> &rarr; permissoes</td></tr>
+          <tr><td>14</td><td><code>editais</code></td><td>Editais publicados</td><td>—</td></tr>
+          <tr><td>15</td><td><code>eventos</code></td><td>Eventos do calendário escolar</td><td><code>id_unidade</code> &rarr; unidades</td></tr>
+          <tr><td>16</td><td><code>atendimentos</code></td><td>Atendimentos agendados</td><td><code>id_aluno</code> &rarr; alunos</td></tr>
+          <tr><td>17</td><td><code>agenda</code></td><td>Compromissos da agenda</td><td><code>id_aluno</code> &rarr; alunos</td></tr>
+          <tr><td>18</td><td><code>horarios</code></td><td>Grade horária semanal</td><td><code>id_turma</code> &rarr; turmas, <code>id_disciplina</code> &rarr; disciplinas</td></tr>
+          <tr><td>19</td><td><code>notas</code></td><td>Notas dos alunos por disciplina</td><td><code>id_matricula</code> &rarr; matriculas, <code>id_disciplina</code> &rarr; disciplinas</td></tr>
+          <tr><td>20</td><td><code>frequencias</code></td><td>Registro de frequência</td><td><code>id_matricula</code> &rarr; matriculas, <code>id_disciplina</code> &rarr; disciplinas</td></tr>
+          <tr><td>21</td><td><code>historico_escolar</code></td><td>Histórico de disciplinas concluídas</td><td><code>id_aluno</code> &rarr; alunos, <code>id_disciplina</code> &rarr; disciplinas</td></tr>
+          <tr><td>22</td><td><code>auditoria</code></td><td>Log de ações administrativas</td><td><code>id_usuario</code> &rarr; usuarios</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Principais Relacionamentos</h2>
+      <pre><code>usuarios (1) ----> (N) alunos
+cursos   (1) ----> (N) turmas
+cursos   (1) ----> (N) disciplinas
+cursos   (1) ----> (N) inscricoes
+unidades (1) ----> (N) cursos
+turmas   (1) ----> (N) alunos
+alunos   (1) ----> (N) matriculas
+alunos   (1) ----> (N) documentos
+alunos   (1) ----> (N) reclamacoes
+alunos   (1) ----> (N) atendimentos
+alunos   (1) ----> (N) historico_escolar
+cargos   (N) ----> (N) permissoes  (via cargos_permissoes)</code></pre>
+    </section>
+
+    <section>
+      <h2>RBAC — Cargos e Permissões</h2>
+      <p>O sistema utiliza um modelo RBAC (Role-Based Access Control) com três tabelas:</p>
+      <ul>
+        <li><code>cargos</code> — define os papéis (Admin Master, Secretaria, Professor, etc.)</li>
+        <li><code>permissoes</code> — catálogo de permissões disponíveis (ex: <code>cursos.criar</code>, <code>alunos.visualizar</code>)</li>
+        <li><code>cargos_permissoes</code> — tabela pivô que vincula permissões a cargos</li>
+      </ul>
+      <p>O middleware <code>requirePermissao(codigo)</code> consulta essa tabela para verificar se o usuário logado (via <code>id_cargo</code>) possui a permissão necessária.</p>
+    </section>
+
+    <section>
+      <h2>Seed Data</h2>
+      <table>
+        <thead>
+          <tr><th>Item</th><th>Quantidade</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Admin Master</td><td>1</td></tr>
+          <tr><td>Unidades</td><td>5</td></tr>
+          <tr><td>Cursos</td><td>10</td></tr>
+          <tr><td>Turmas</td><td>20</td></tr>
+          <tr><td>Staff (usuários administrativos)</td><td>30</td></tr>
+          <tr><td>Alunos</td><td>200</td></tr>
+          <tr><td>Inscrições</td><td>200</td></tr>
+          <tr><td>Matrículas</td><td>80</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Credenciais Padrão</h2>
+      <div class="alert alert-warning">
+        <strong>Atenção:</strong> Estas são credenciais de desenvolvimento/seed. Alterar em produção.
+      </div>
+      <table>
+        <thead>
+          <tr><th>Papel</th><th>Email</th><th>Senha</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Admin Master</td><td><code>admin@sige.edu.br</code></td><td><code>Sige123@</code></td></tr>
+          <tr><td>Usuário comum</td><td><code>usuario@exemplo.com</code></td><td><code>Sige123@</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer class="site-footer">
+      <p>SIGE — Sistema de Inscrição e Gestão Escolar &copy; 2025</p>
+    </footer>
+  </main>
+</div>
+
+<script src="menu.js"></script>
+</body>
+</html>

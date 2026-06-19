@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aplicativo Mobile — SIGE Docs</title>
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-logo">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+    SIGE Docs
+  </div>
+  <div class="header-actions">
+    <button class="theme-toggle" aria-label="Alternar modo escuro">&#127769;</button>
+  </div>
+</header>
+
+<div class="wrapper">
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li class="nav-section">Introdução</li>
+      <li><a href="index.html"><span class="nav-icon">&#127968;</span> Início</a></li>
+      <li class="nav-section">Portais Web</li>
+      <li><a href="portal-inscricao.html"><span class="nav-icon">&#128196;</span> Portal de Inscrição</a></li>
+      <li><a href="portal-escolar.html"><span class="nav-icon">&#127891;</span> Portal Escolar</a></li>
+      <li><a href="portal-secretaria.html"><span class="nav-icon">&#128188;</span> Portal da Secretaria</a></li>
+      <li class="nav-section">Mobile</li>
+      <li><a href="mobile.html"><span class="nav-icon">&#128241;</span> Aplicativo Mobile</a></li>
+      <li class="nav-section">Backend</li>
+      <li><a href="backend.html"><span class="nav-icon">&#9881;&#65039;</span> Backend API</a></li>
+      <li><a href="database.html"><span class="nav-icon">&#128451;</span> Banco de Dados</a></li>
+      <li class="nav-section">Deploy</li>
+      <li><a href="deploy.html"><span class="nav-icon">&#128640;</span> Guia de Deploy</a></li>
+    </ul>
+  </aside>
+
+  <div class="sidebar-overlay"></div>
+
+  <main class="main-content">
+    <nav class="breadcrumbs">
+      <a href="index.html">Início</a>
+      <span class="sep">/</span>
+      <span>Aplicativo Mobile</span>
+    </nav>
+
+    <div class="page-header">
+      <h1>Aplicativo Mobile</h1>
+      <p>React Native (Expo SDK 54) com TypeScript e Expo Router v6 — file-based routing.</p>
+    </div>
+
+    <section>
+      <h2>Stack</h2>
+      <table>
+        <thead>
+          <tr><th>Tecnologia</th><th>Versão</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>React Native</td><td>Expo SDK 54</td></tr>
+          <tr><td>TypeScript</td><td>5.x</td></tr>
+          <tr><td>Expo Router</td><td>v6</td></tr>
+          <tr><td>AsyncStorage</td><td>Armazenamento local</td></tr>
+          <tr><td>Expo Camera</td><td>QR Code scanning</td></tr>
+          <tr><td>Expo Clipboard</td><td>Cópia de QR Code</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Estrutura de Diretórios</h2>
+      <pre><code>mobile-app/
+&#x251C;&#x2500;&#x2500; app/                             # File-based routing
+&#x2502;   &#x251C;&#x2500;&#x2500; _layout.tsx                  # Root layout (AuthProvider)
+&#x2502;   &#x251C;&#x2500;&#x2500; index.tsx                    # Redireciona para login
+&#x2502;   &#x251C;&#x2500;&#x2500; login.tsx                    # Tela de login
+&#x2502;   &#x251C;&#x2500;&#x2500; (tabs)/                      # Abas principais
+&#x2502;   &#x2502;   &#x251C;&#x2500;&#x2500; _layout.tsx              # Layout das tabs
+&#x2502;   &#x2502;   &#x251C;&#x2500;&#x2500; home.tsx                 # Home / Dashboard
+&#x2502;   &#x2502;   &#x251C;&#x2500;&#x2500; qrcode.tsx              # QR Code + c&#xE2;mera
+&#x2502;   &#x2502;   &#x251C;&#x2500;&#x2500; notas.tsx               # Notas
+&#x2502;   &#x2502;   &#x251C;&#x2500;&#x2500; frequencia.tsx          # Frequ&#xEA;ncia
+&#x2502;   &#x2502;   &#x251C;&#x2500;&#x2500; horarios.tsx            # Hor&#xE1;rios
+&#x2502;   &#x2502;   &#x251C;&#x2500;&#x2500; documentos.tsx          # Documentos
+&#x2502;   &#x2502;   &#x251C;&#x2500;&#x2500; reclamacoes.tsx         # Reclama&#xE7;&#xF5;es
+&#x2502;   &#x2502;   &#x251C;&#x2500;&#x2500; calendario.tsx          # Calend&#xE1;rio
+&#x2502;   &#x2502;   &#x251C;&#x2500;&#x2500; agenda.tsx              # Agenda
+&#x2502;   &#x2502;   &#x251C;&#x2500;&#x2500; historico.tsx           # Hist&#xF3;rico
+&#x2502;   &#x2502;   &#x2514;&#x2500;&#x2500; suporte.tsx             # Suporte
+&#x2502;   &#x2514;&#x2500;&#x2500; (stack)/                    # Telas modais
+&#x2502;       &#x251C;&#x2500;&#x2500; _layout.tsx             # Stack navigator
+&#x2502;       &#x251C;&#x2500;&#x2500; conta.tsx               # Conta / Perfil
+&#x2502;       &#x2514;&#x2500;&#x2500; documento-detalhe.tsx   # Detalhe do documento
+&#x251C;&#x2500;&#x2500; app/api.ts                      # API service wrapper
+&#x251C;&#x2500;&#x2500; app/auth.tsx                    # AuthContext (React Context)
+&#x251C;&#x2500;&#x2500; app.json                        # Expo config
+&#x251C;&#x2500;&#x2500; eas.json                        # EAS Build config
+&#x251C;&#x2500;&#x2500; tsconfig.json
+&#x251C;&#x2500;&#x2500; babel.config.js
+&#x2514;&#x2500;&#x2500; package.json</code></pre>
+    </section>
+
+    <section>
+      <h2>Telas</h2>
+      <table>
+        <thead>
+          <tr><th>Tela</th><th>Arquivo</th><th>Descrição</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Login</td><td><code>login.tsx</code></td><td>Formulário email + senha, chama <code>POST /api/usuarios/login</code>, armazena token no AsyncStorage</td></tr>
+          <tr><td>Home</td><td><code>home.tsx</code></td><td>Exibe nome do aluno, curso, unidade, matrícula e QR Code gerado dinamicamente</td></tr>
+          <tr><td>QR Code</td><td><code>qrcode.tsx</code></td><td>Geração de QR Code com dados do aluno, câmera para scan e validação via <code>/auth/codigo</code></td></tr>
+          <tr><td>Notas</td><td><code>notas.tsx</code></td><td>Lista de disciplinas com nota, frequência e status. Modal de detalhes por disciplina</td></tr>
+          <tr><td>Frequência</td><td><code>frequencia.tsx</code></td><td>Porcentagem de presença por disciplina com total de aulas, presenças e faltas</td></tr>
+          <tr><td>Horários</td><td><code>horarios.tsx</code></td><td>Grade semanal com disciplina, horário e professor</td></tr>
+          <tr><td>Documentos</td><td><code>documentos.tsx</code></td><td>Lista de documentos com status (emitido, pendente). Detalhe via stack navigation</td></tr>
+          <tr><td>Reclamações</td><td><code>reclamacoes.tsx</code></td><td>Lista de reclamações com protocolo e status. Formulário para nova reclamação</td></tr>
+          <tr><td>Calendário</td><td><code>calendario.tsx</code></td><td>Eventos escolares com filtro por tipo (FERIADO, PROVA, EVENTO)</td></tr>
+          <tr><td>Agenda</td><td><code>agenda.tsx</code></td><td>Agendamento de compromissos com tipo, data e horário</td></tr>
+          <tr><td>Histórico</td><td><code>historico.tsx</code></td><td>Disciplinas concluídas com nota final, status e semestre</td></tr>
+          <tr><td>Suporte</td><td><code>suporte.tsx</code></td><td>FAQ com itens expansíveis e informações de contato</td></tr>
+          <tr><td>Conta</td><td><code>conta.tsx</code></td><td>Dados do perfil e botão de logout</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>API Service</h2>
+      <p>O wrapper de API em <code>app/api.ts</code> gerencia as requisições com token JWT automático:</p>
+      <pre><code>const API_BASE = 'https://sige-1gqx.onrender.com/api';
+
+async function apiRequest(path: string, options?: RequestInit) {
+  const token = await AsyncStorage.getItem('token');
+  const headers: Record&lt;string, string&gt; = {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(options?.headers as Record&lt;string, string&gt; || {}),
+  };
+  const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>AuthContext</h2>
+      <p>O <code>AuthContext</code> em <code>app/auth.tsx</code> gerencia o estado global de autenticação via React Context:</p>
+      <ul>
+        <li><code>signIn(email, senha)</code> — realiza login e salva token no AsyncStorage</li>
+        <li><code>signOut()</code> — limpa token e dados do usuário</li>
+        <li><code>user</code> — dados do usuário logado</li>
+        <li><code>isAuthenticated</code> — booleano indicando se há sessão ativa</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>QR Code e Câmera</h2>
+      <p>A tela de QR Code oferece duas funcionalidades principais:</p>
+      <ul>
+        <li><strong>Geração:</strong> Cria um QR Code dinamicamente a partir do ID do aluno usando a biblioteca QRCode.js</li>
+        <li><strong>Leitura:</strong> Utiliza a câmera do dispositivo (Expo Camera) para escanear QR Codes e validar acesso via endpoint <code>POST /api/auth/codigo</code></li>
+      </ul>
+      <p>As permissões de câmera são solicitadas em tempo de execução com <code>Camera.requestCameraPermissionsAsync()</code>.</p>
+    </section>
+
+    <section>
+      <h2>Configuração</h2>
+      <pre><code># Instalar depend&#xEA;ncias
+cd mobile-app
+npm install
+
+# Desenvolvimento
+npx expo start
+
+# Build Android
+eas build --platform android
+
+# Build iOS
+eas build --platform ios</code></pre>
+    </section>
+
+    <footer class="site-footer">
+      <p>SIGE — Sistema de Inscrição e Gestão Escolar &copy; 2025</p>
+    </footer>
+  </main>
+</div>
+
+<script src="menu.js"></script>
+</body>
+</html>

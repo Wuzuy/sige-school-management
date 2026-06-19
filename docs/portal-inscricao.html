@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal de Inscrição — SIGE Docs</title>
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-logo">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+    SIGE Docs
+  </div>
+  <div class="header-actions">
+    <button class="theme-toggle" aria-label="Alternar modo escuro">&#127769;</button>
+  </div>
+</header>
+
+<div class="wrapper">
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li class="nav-section">Introdução</li>
+      <li><a href="index.html"><span class="nav-icon">&#127968;</span> Início</a></li>
+      <li class="nav-section">Portais Web</li>
+      <li><a href="portal-inscricao.html"><span class="nav-icon">&#128196;</span> Portal de Inscrição</a></li>
+      <li><a href="portal-escolar.html"><span class="nav-icon">&#127891;</span> Portal Escolar</a></li>
+      <li><a href="portal-secretaria.html"><span class="nav-icon">&#128188;</span> Portal da Secretaria</a></li>
+      <li class="nav-section">Mobile</li>
+      <li><a href="mobile.html"><span class="nav-icon">&#128241;</span> Aplicativo Mobile</a></li>
+      <li class="nav-section">Backend</li>
+      <li><a href="backend.html"><span class="nav-icon">&#9881;&#65039;</span> Backend API</a></li>
+      <li><a href="database.html"><span class="nav-icon">&#128451;</span> Banco de Dados</a></li>
+      <li class="nav-section">Deploy</li>
+      <li><a href="deploy.html"><span class="nav-icon">&#128640;</span> Guia de Deploy</a></li>
+    </ul>
+  </aside>
+
+  <div class="sidebar-overlay"></div>
+
+  <main class="main-content">
+    <nav class="breadcrumbs">
+      <a href="index.html">Início</a>
+      <span class="sep">/</span>
+      <span>Portal de Inscrição</span>
+    </nav>
+
+    <div class="page-header">
+      <h1>Portal de Inscrição</h1>
+      <p>Portal público para candidatos — visualização de cursos, inscrição e acompanhamento de status.</p>
+    </div>
+
+    <section>
+      <h2>Visão Geral</h2>
+      <p>O Portal de Inscrição é a interface pública do SIGE, acessível a qualquer candidato sem necessidade de autenticação prévia. Permite visualizar cursos disponíveis, realizar inscrição em processos seletivos, acompanhar o status das inscrições e efetuar matrícula quando aprovado.</p>
+      <p>O portal conta com 8 páginas HTML, navegação por navbar no topo e suporte a visitantes.</p>
+    </section>
+
+    <section>
+      <h2>Screenshots</h2>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <a href="printscreens/portal-inscricao-login.png" target="_blank">
+            <img src="printscreens/portal-inscricao-login.png" alt="Tela de Login" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Login</strong>
+            Autenticação unificada com formulário de login/cadastro, editais publicados e opção "Entrar como Visitante".
+          </div>
+        </div>
+        <div class="screenshot-item">
+          <a href="printscreens/portal-inscricao-cursos.png" target="_blank">
+            <img src="printscreens/portal-inscricao-cursos.png" alt="Tela de Cursos" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Cursos</strong>
+            Lista de cursos disponíveis com filtros por unidade, turno e status.
+          </div>
+        </div>
+        <div class="screenshot-item">
+          <a href="printscreens/portal-inscricao-inscricao.png" target="_blank">
+            <img src="printscreens/portal-inscricao-inscricao.png" alt="Tela de Inscrição" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Inscrição</strong>
+            Formulário de inscrição em curso específico com dados pessoais e escolaridade.
+          </div>
+        </div>
+        <div class="screenshot-item">
+          <a href="printscreens/portal-inscricao-matricula.png" target="_blank">
+            <img src="printscreens/portal-inscricao-matricula.png" alt="Tela de Matrícula" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Matrícula</strong>
+            Aceite de contrato e termos após aprovação da inscrição.
+          </div>
+        </div>
+        <div class="screenshot-item">
+          <a href="printscreens/portal-inscricao-status.png" target="_blank">
+            <img src="printscreens/portal-inscricao-status.png" alt="Tela de Status" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Status</strong>
+            Acompanhamento de todas as inscrições do usuário com timeline de eventos.
+          </div>
+        </div>
+        <div class="screenshot-item">
+          <a href="printscreens/portal-inscricao-forgot-password.png" target="_blank">
+            <img src="printscreens/portal-inscricao-forgot-password.png" alt="Tela de Recuperar Senha" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Recuperar Senha</strong>
+            Formulário de e-mail para redefinição de senha.
+          </div>
+        </div>
+        <div class="screenshot-item">
+          <a href="printscreens/portal-inscricao-credits.png" target="_blank">
+            <img src="printscreens/portal-inscricao-credits.png" alt="Tela de Créditos" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Créditos</strong>
+            Informações da stack tecnológica e créditos do sistema.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Páginas</h2>
+      <table>
+        <thead>
+          <tr><th>Página</th><th>Arquivo</th><th>Descrição</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Login</td><td><code>login.html</code></td><td>Autenticação unificada com login/cadastro, editais publicados e entrada como visitante</td></tr>
+          <tr><td>Cursos</td><td><code>index.html</code></td><td>Lista de cursos disponíveis com filtros por unidade, turno e status</td></tr>
+          <tr><td>Inscrição</td><td><code>inscricao.html?cursoId=N</code></td><td>Formulário de inscrição em curso específico com dados pessoais e escolaridade</td></tr>
+          <tr><td>Matrícula</td><td><code>matricula.html?inscricaoId=N</code></td><td>Aceite de contrato e termos após aprovação da inscrição</td></tr>
+          <tr><td>Status</td><td><code>status.html</code></td><td>Acompanhamento de todas as inscrições do usuário com timeline de eventos</td></tr>
+          <tr><td>Recuperar Senha</td><td><code>forgot-password.html</code></td><td>Formulário de e-mail para redefinição de senha</td></tr>
+          <tr><td>Redefinir Senha</td><td><code>reset-password.html?token=X</code></td><td>Nova senha com token de recuperação</td></tr>
+          <tr><td>Créditos</td><td><code>credits.html</code></td><td>Informações da stack tecnológica e créditos do sistema</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Autenticação</h2>
+      <p>O login retorna um token JWT armazenado em <code>localStorage['auth']</code>. Toda requisição inclui o header <code>Authorization: Bearer &lt;token&gt;</code>. Visitantes podem navegar sem autenticação usando a opção "Entrar como Visitante".</p>
+    </section>
+
+    <footer class="site-footer">
+      <p>SIGE — Sistema de Inscrição e Gestão Escolar &copy; 2025</p>
+    </footer>
+  </main>
+</div>
+
+<script src="menu.js"></script>
+</body>
+</html>

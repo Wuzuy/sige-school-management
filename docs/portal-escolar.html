@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Escolar — SIGE Docs</title>
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-logo">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+    SIGE Docs
+  </div>
+  <div class="header-actions">
+    <button class="theme-toggle" aria-label="Alternar modo escuro">&#127769;</button>
+  </div>
+</header>
+
+<div class="wrapper">
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li class="nav-section">Introdução</li>
+      <li><a href="index.html"><span class="nav-icon">&#127968;</span> Início</a></li>
+      <li class="nav-section">Portais Web</li>
+      <li><a href="portal-inscricao.html"><span class="nav-icon">&#128196;</span> Portal de Inscrição</a></li>
+      <li><a href="portal-escolar.html"><span class="nav-icon">&#127891;</span> Portal Escolar</a></li>
+      <li><a href="portal-secretaria.html"><span class="nav-icon">&#128188;</span> Portal da Secretaria</a></li>
+      <li class="nav-section">Mobile</li>
+      <li><a href="mobile.html"><span class="nav-icon">&#128241;</span> Aplicativo Mobile</a></li>
+      <li class="nav-section">Backend</li>
+      <li><a href="backend.html"><span class="nav-icon">&#9881;&#65039;</span> Backend API</a></li>
+      <li><a href="database.html"><span class="nav-icon">&#128451;</span> Banco de Dados</a></li>
+      <li class="nav-section">Deploy</li>
+      <li><a href="deploy.html"><span class="nav-icon">&#128640;</span> Guia de Deploy</a></li>
+    </ul>
+  </aside>
+
+  <div class="sidebar-overlay"></div>
+
+  <main class="main-content">
+    <nav class="breadcrumbs">
+      <a href="index.html">Início</a>
+      <span class="sep">/</span>
+      <span>Portal Escolar</span>
+    </nav>
+
+    <div class="page-header">
+      <h1>Portal Escolar</h1>
+      <p>Portal para alunos matriculados — acompanhamento acadêmico completo com 14 páginas e sidebar lateral.</p>
+    </div>
+
+    <section>
+      <h2>Visão Geral</h2>
+      <p>O Portal Escolar é destinado a alunos já matriculados. Oferece acesso a notas, frequência, horários, documentos, calendário, agenda, histórico escolar, reclamações, ouvidoria, atendimento e estrutura curricular. Possui sidebar com navegação por seções baseadas no papel do usuário.</p>
+    </section>
+
+    <section>
+      <h2>Screenshots</h2>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <a href="printscreens/portal-escolar-dashboard.png" target="_blank">
+            <img src="printscreens/portal-escolar-dashboard.png" alt="Dashboard" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Dashboard</strong>
+            Home com cards de acesso rápido para Agenda, Calendário, Perfil e Histórico.
+          </div>
+        </div>
+        <div class="screenshot-item">
+          <a href="printscreens/portal-escolar-perfil.png" target="_blank">
+            <img src="printscreens/portal-escolar-perfil.png" alt="Perfil" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Meu Perfil</strong>
+            Foto, dados pessoais, informações acadêmicas e edição de senha.
+          </div>
+        </div>
+        <div class="screenshot-item">
+          <a href="printscreens/portal-escolar-historico.png" target="_blank">
+            <img src="printscreens/portal-escolar-historico.png" alt="Histórico" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Histórico Escolar</strong>
+            Disciplinas concluídas com notas finais e status.
+          </div>
+        </div>
+        <div class="screenshot-item">
+          <a href="printscreens/portal-escolar-estrutura-curricular.png" target="_blank">
+            <img src="printscreens/portal-escolar-estrutura-curricular.png" alt="Estrutura Curricular" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Estrutura Curricular</strong>
+            Grade curricular por semestre com progresso do aluno.
+          </div>
+        </div>
+        <div class="screenshot-item">
+          <a href="printscreens/portal-escolar-frequencia.png" target="_blank">
+            <img src="printscreens/portal-escolar-frequencia.png" alt="Frequência" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Frequência</strong>
+            Percentual de presença por disciplina com total de aulas, presenças e faltas.
+          </div>
+        </div>
+        <div class="screenshot-item">
+          <a href="printscreens/portal-escolar-calendario.png" target="_blank">
+            <img src="printscreens/portal-escolar-calendario.png" alt="Calendário" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Calendário Escolar</strong>
+            Eventos escolares como feriados, provas e eventos.
+          </div>
+        </div>
+        <div class="screenshot-item">
+          <a href="printscreens/portal-escolar-horarios.png" target="_blank">
+            <img src="printscreens/portal-escolar-horarios.png" alt="Horários" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Horários</strong>
+            Grade semanal com disciplinas, horários e professores.
+          </div>
+        </div>
+        <div class="screenshot-item">
+          <a href="printscreens/portal-escolar-agenda.png" target="_blank">
+            <img src="printscreens/portal-escolar-agenda.png" alt="Agenda" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Agenda</strong>
+            Compromissos agendados com tipo, data e horário.
+          </div>
+        </div>
+        <div class="screenshot-item">
+          <a href="printscreens/portal-escolar-atendimento.png" target="_blank">
+            <img src="printscreens/portal-escolar-atendimento.png" alt="Atendimento" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Atendimento</strong>
+            Agendamento e acompanhamento de atendimentos.
+          </div>
+        </div>
+        <div class="screenshot-item">
+          <a href="printscreens/portal-escolar-documentos.png" target="_blank">
+            <img src="printscreens/portal-escolar-documentos.png" alt="Documentos" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Documentos</strong>
+            Documentos disponíveis para download com status de emissão.
+          </div>
+        </div>
+        <div class="screenshot-item">
+          <a href="printscreens/portal-escolar-reclamacoes.png" target="_blank">
+            <img src="printscreens/portal-escolar-reclamacoes.png" alt="Reclamações" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Reclamações</strong>
+            Lista de reclamações com protocolo, status e detalhes.
+          </div>
+        </div>
+        <div class="screenshot-item">
+          <a href="printscreens/portal-escolar-ouvidoria.png" target="_blank">
+            <img src="printscreens/portal-escolar-ouvidoria.png" alt="Ouvidoria" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Ouvidoria</strong>
+            Formulário de nova reclamação com categoria, assunto, descrição e prioridade.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Páginas</h2>
+      <table>
+        <thead>
+          <tr><th>Página</th><th>Arquivo</th><th>Requer Auth</th><th>Descrição</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Dashboard</td><td><code>index.html</code></td><td><span class="badge badge-blue">Student</span></td><td>Home com cards de acesso rápido</td></tr>
+          <tr><td>Perfil</td><td><code>conta.html</code></td><td><span class="badge badge-blue">Student</span></td><td>Dados pessoais, foto e edição de senha</td></tr>
+          <tr><td>Histórico</td><td><code>historico-escolar.html</code></td><td><span class="badge badge-blue">Student</span></td><td>Disciplinas concluídas com notas finais</td></tr>
+          <tr><td>Estrutura Curricular</td><td><code>estrutura-curricular.html</code></td><td><span class="badge badge-blue">Student</span></td><td>Grade curricular por semestre com progresso</td></tr>
+          <tr><td>Frequência</td><td><code>consulta-freq.html</code></td><td><span class="badge badge-blue">Student</span></td><td>Percentual de presença por disciplina</td></tr>
+          <tr><td>Calendário</td><td><code>calendario-escolar.html</code></td><td><span class="badge badge-blue">Student</span></td><td>Eventos escolares (feriados, provas, eventos)</td></tr>
+          <tr><td>Horários</td><td><code>quadro-horarios.html</code></td><td><span class="badge badge-blue">Student</span></td><td>Grade semanal com disciplinas e professores</td></tr>
+          <tr><td>Agenda</td><td><code>agenda-escolar.html</code></td><td><span class="badge badge-blue">Student</span></td><td>Compromissos agendados</td></tr>
+          <tr><td>Atendimento</td><td><code>atendimento-agendado.html</code></td><td><span class="badge badge-blue">Student</span></td><td>Agendamento e acompanhamento</td></tr>
+          <tr><td>Documentos</td><td><code>meus-documentos.html</code></td><td><span class="badge badge-blue">Student</span></td><td>Documentos com status e download</td></tr>
+          <tr><td>Reclamações</td><td><code>reclamacoes.html</code></td><td><span class="badge badge-blue">Student</span></td><td>Lista de reclamações com protocolo</td></tr>
+          <tr><td>Detalhes Reclamação</td><td><code>detalhes-reclamacao.html?id=N</code></td><td><span class="badge badge-blue">Student</span></td><td>Detalhes de reclamação específica</td></tr>
+          <tr><td>Ouvidoria</td><td><code>ouvidoria.html</code></td><td><span class="badge badge-blue">Student</span></td><td>Formulário de nova reclamação</td></tr>
+          <tr><td>Teste API</td><td><code>teste-api.html</code></td><td><span class="badge badge-yellow">Developer</span></td><td>Ferramenta de teste da API</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Sidebar</h2>
+      <p>A sidebar é gerada pelo <code>sidebar-nav.js</code> com seções definidas pelo atributo <code>data-section</code>:</p>
+      <ul>
+        <li><strong>navegação</strong> — sempre visível</li>
+        <li><strong>academico</strong> — role <code>student</code></li>
+        <li><strong>calendario-agenda</strong> — role <code>student</code></li>
+        <li><strong>comunicacao</strong> — sempre visível</li>
+        <li><strong>documentacao</strong> — role <code>student</code></li>
+        <li><strong>conta</strong> — sempre visível</li>
+      </ul>
+      <p>A seção ativa é determinada pelo <code>role</code> do usuário logado.</p>
+    </section>
+
+    <footer class="site-footer">
+      <p>SIGE — Sistema de Inscrição e Gestão Escolar &copy; 2025</p>
+    </footer>
+  </main>
+</div>
+
+<script src="menu.js"></script>
+</body>
+</html>

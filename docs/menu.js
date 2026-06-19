@@ -1,110 +1,139 @@
-// Menu hambúrguer para documentação SEJA SENAI
-(function() {
+(function () {
   'use strict';
 
-  // Espera o DOM carregar
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  function initHamburger() {
+    var hamburger = document.querySelector('.hamburger');
+    var sidebar = document.querySelector('.sidebar');
+    var overlay = document.querySelector('.sidebar-overlay');
 
-  function init() {
-    setupMobileMenu();
-  }
+    if (!hamburger || !sidebar) return;
 
-  function setupMobileMenu() {
-    const menuToggle = document.querySelector('.menu-toggle');
-    const menu = document.querySelector('.menu');
-    const overlay = document.querySelector('.menu-overlay');
-
-    if (!menuToggle || !menu) {
-      console.error('Menu elements not found!', { menuToggle, menu });
-      return;
+    function closeSidebar() {
+      sidebar.classList.remove('open');
+      if (overlay) overlay.classList.remove('active');
     }
 
-    console.log('Menu setup - elementos encontrados');
+    function openSidebar() {
+      sidebar.classList.add('open');
+      if (overlay) overlay.classList.add('active');
+    }
 
-    // Função para fechar o menu
-    const closeMenu = () => {
-      menu.classList.remove('open');
-      if (overlay) overlay.classList.remove('visible');
-      menuToggle.setAttribute('aria-expanded', 'false');
-      menuToggle.innerHTML = '☰';
-      document.body.style.overflow = '';
-    };
-
-    // Função para abrir/fechar menu
-    const toggleMenu = () => {
-      const isOpen = menu.classList.toggle('open');
-      if (overlay) overlay.classList.toggle('visible', isOpen);
-      menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-      menuToggle.innerHTML = isOpen ? '✕' : '☰';
-      document.body.style.overflow = isOpen ? 'hidden' : '';
-      console.log('Menu toggled:', isOpen ? 'ABERTO' : 'FECHADO');
-    };
-
-    // iOS Safari fix - prevenir comportamento padrão
-    const handleToggle = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-      console.log('Botão clicado/tocado - tipo:', e.type);
-      toggleMenu();
-      return false;
-    };
-    
-    // Múltiplos event listeners para iOS Safari
-    menuToggle.addEventListener('click', handleToggle, { passive: false });
-    menuToggle.addEventListener('touchend', handleToggle, { passive: false });
-    
-    // iOS Safari - prevenir zoom ao dar double tap
-    let lastTouchEnd = 0;
-    menuToggle.addEventListener('touchstart', (e) => {
-      const now = Date.now();
-      if (now - lastTouchEnd <= 300) {
-        e.preventDefault();
+    hamburger.addEventListener('click', function () {
+      if (sidebar.classList.contains('open')) {
+        closeSidebar();
+      } else {
+        openSidebar();
       }
-      lastTouchEnd = now;
-    }, { passive: false });
-
-    // Click/Touch nos links do menu (fecha o menu)
-    menu.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', (e) => {
-        setTimeout(closeMenu, 100);
-      });
-      link.addEventListener('touchend', (e) => {
-        setTimeout(closeMenu, 100);
-      }, { passive: true });
     });
 
-    // Click/Touch no overlay (fecha o menu)
     if (overlay) {
-      const handleOverlayClick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        closeMenu();
-      };
-      overlay.addEventListener('click', handleOverlayClick);
-      overlay.addEventListener('touchend', handleOverlayClick, { passive: false });
+      overlay.addEventListener('click', closeSidebar);
     }
 
-    // Fechar ao pressionar ESC
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && menu.classList.contains('open')) {
-        closeMenu();
-      }
-    });
-
-    // Fechar menu ao redimensionar para desktop
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        if (window.innerWidth > 640 && menu.classList.contains('open')) {
-          closeMenu();
-        }
-      }, 250);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeSidebar();
     });
   }
+
+  function initActivePage() {
+    var currentPath = window.location.pathname.split('/').pop() || 'index.html';
+    var links = document.querySelectorAll('.sidebar-nav a');
+    links.forEach(function (a) {
+      var href = a.getAttribute('href');
+      if (href === currentPath) {
+        a.classList.add('active');
+      }
+    });
+  }
+
+  function initSmoothScroll() {
+    document.addEventListener('click', function (e) {
+      var target = e.target;
+      while (target && target.tagName !== 'A') target = target.parentNode;
+      if (!target) return;
+      var href = target.getAttribute('href');
+      if (href && href.startsWith('#') && href.length > 1) {
+        var el = document.getElementById(href.substring(1));
+        if (el) {
+          e.preventDefault();
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    });
+  }
+
+  function initDarkMode() {
+    var toggle = document.querySelector('.theme-toggle');
+    var stored = localStorage.getItem('sige-docs-theme');
+    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        if (toggle) toggle.textContent = '\u2600\uFE0F';
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        if (toggle) toggle.textContent = '\uD83C\uDF19';
+      }
+    }
+
+    var initialTheme = stored || (prefersDark ? 'dark' : 'light');
+    applyTheme(initialTheme);
+
+    if (toggle) {
+      toggle.addEventListener('click', function () {
+        var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        var newTheme = isDark ? 'light' : 'dark';
+        localStorage.setItem('sige-docs-theme', newTheme);
+        applyTheme(newTheme);
+      });
+    }
+  }
+
+  function initCopyButtons() {
+    var pres = document.querySelectorAll('pre');
+    pres.forEach(function (pre) {
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copiar';
+      pre.style.position = 'relative';
+      pre.appendChild(btn);
+
+      btn.addEventListener('click', function () {
+        var code = pre.querySelector('code');
+        var text = code ? code.textContent : pre.textContent;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function () {
+            btn.textContent = 'Copiado!';
+            btn.classList.add('copied');
+            setTimeout(function () {
+              btn.textContent = 'Copiar';
+              btn.classList.remove('copied');
+            }, 2000);
+          });
+        } else {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          btn.textContent = 'Copiado!';
+          btn.classList.add('copied');
+          setTimeout(function () {
+            btn.textContent = 'Copiar';
+            btn.classList.remove('copied');
+          }, 2000);
+        }
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    initHamburger();
+    initActivePage();
+    initSmoothScroll();
+    initDarkMode();
+    initCopyButtons();
+  });
 })();

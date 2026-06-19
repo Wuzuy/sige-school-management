@@ -1,322 +1,182 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="description" content="Documentação técnica completa do Sistema SIGE - Guia para desenvolvedores e clientes" />
-  <title>Documentação SIGE - Sistema de Processo Seletivo Online</title>
-  <link rel="stylesheet" href="site.css" />
-  <script defer src="menu.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIGE — Documentação do Sistema</title>
+  <link rel="stylesheet" href="site.css">
 </head>
 <body>
-  <div class="menu-overlay"></div>
-  <button class="menu-toggle" aria-label="Menu" aria-expanded="false">☰</button>
-  <header class="top">
-    <h1>📚 Documentação SIGE</h1>
-    <p>Sistema completo de gestão de processo seletivo online | Guia técnico para desenvolvedores e clientes</p>
-  </header>
 
-  <main class="layout">
-    <nav class="menu">
-      <a href="index.html" class="active">🏠 Início</a>
-      <a href="quick-start.html">🚀 Guia Rápido</a>
-      <a href="guia-uso-aluno.html">👨‍🎓 Guia do Aluno</a>
-      <a href="guia-uso-secretaria.html">🏢 Guia da Secretaria</a>
-      <a href="proposta-comercial.html">💼 Proposta Comercial</a>
-      <a href="hospedagem-opcoes.html">🌩️ Hospedagem</a>
-      <a href="scripts.html">⚡ Scripts Executores</a>
-      <a href="backend.html">⚙️ Backend API</a>
-      <a href="frontend.html">🎨 Frontend</a>
-      <a href="security.html">🔒 Segurança</a>
-      <a href="init.html">🛠️ Configuração</a>
-      <a href="troubleshooting.html">🔧 Troubleshooting</a>
-      <a href="snippets.html">📝 Snippets</a>
-      <a href="developer-docs.html">📚 Docs Completa</a>
-    </nav>
+<header class="site-header">
+  <div class="header-logo">
+    <svg viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+    SIGE Docs
+  </div>
+  <div class="header-actions">
+    <button class="theme-toggle" aria-label="Alternar modo escuro">&#127769;</button>
+  </div>
+</header>
 
-    <section class="content">
-      <!-- HERO SECTION -->
-      <div style="text-align: center; padding: 32px 0; border-bottom: 2px solid var(--border-color);">
-        <h2 style="margin: 0 0 16px; font-size: 2.5rem; border: none;">Sistema SIGE</h2>
-        <p style="font-size: 1.2rem; color: var(--text-muted); margin: 0 0 24px;">
-          Plataforma completa para gerenciamento de inscrições em cursos profissionalizantes
-        </p>
-        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-          <a href="quick-start.html" class="btn btn-primary">🚀 Começar Agora</a>
-          <a href="scripts.html" class="btn btn-secondary">⚡ Scripts Executores</a>
-          <a href="developer-docs.html" class="btn btn-secondary">📚 Documentação Completa</a>
+<div class="wrapper">
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li class="nav-section">Introdução</li>
+      <li><a href="index.html"><span class="nav-icon">&#127968;</span> Início</a></li>
+      <li class="nav-section">Portais Web</li>
+      <li><a href="portal-inscricao.html"><span class="nav-icon">&#128196;</span> Portal de Inscrição</a></li>
+      <li><a href="portal-escolar.html"><span class="nav-icon">&#127891;</span> Portal Escolar</a></li>
+      <li><a href="portal-secretaria.html"><span class="nav-icon">&#128188;</span> Portal da Secretaria</a></li>
+      <li class="nav-section">Mobile</li>
+      <li><a href="mobile.html"><span class="nav-icon">&#128241;</span> Aplicativo Mobile</a></li>
+      <li class="nav-section">Backend</li>
+      <li><a href="backend.html"><span class="nav-icon">&#9881;&#65039;</span> Backend API</a></li>
+      <li><a href="database.html"><span class="nav-icon">&#128451;</span> Banco de Dados</a></li>
+      <li class="nav-section">Deploy</li>
+      <li><a href="deploy.html"><span class="nav-icon">&#128640;</span> Guia de Deploy</a></li>
+    </ul>
+  </aside>
+
+  <div class="sidebar-overlay"></div>
+
+  <main class="main-content full">
+    <section class="hero">
+      <div class="hero-icon">&#127891;</div>
+      <h1>SIGE — Sistema de Inscrição e Gestão Escolar</h1>
+      <p>Plataforma completa de gestão educacional com três portais web, aplicativo mobile e backend REST.</p>
+    </section>
+
+    <section>
+      <h2>Arquitetura do Sistema</h2>
+      <div class="arch-diagram">
+<pre>
+&#x250C;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2510;
+&#x2502;                     Frontend Web (Vercel)                    &#x2502;
+&#x2502;  &#x250C;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2510;  &#x250C;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2510;  &#x250C;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2510;  &#x2502;
+&#x2502;  &#x2502; Portal Inscri&#xE7;&#xE3;o &#x2502;  &#x2502; Portal Escolar&#x2502;  &#x2502;Portal Secretaria&#x2502;  &#x2502;
+&#x2502;  &#x2502;  (8 p&#xE1;ginas)    &#x2502;  &#x2502; (14 p&#xE1;ginas)  &#x2502;  &#x2502; (SPA, 15 mod.)&#x2502;  &#x2502;
+&#x2502;  &#x2514;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2518;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2519;  &#x2514;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2518;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2519;  &#x2514;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2518;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2519;  &#x2502;
+&#x2502;  &#x2514;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2534;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2519;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2534;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2519;
+&#x2502;                      &#x2502;                  &#x2502;                    &#x2502;                 &#x2502;
+&#x2502;                      &#x2514;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2518;
+&#x2502;                                                                  &#x2502; HTTPS
+&#x2502;                                                       &#x250C;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2534;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2510;
+&#x2502;                                                       &#x2502;  Backend (Render)    &#x2502;
+&#x2502;                                                       &#x2502;  Express + JWT + RBAC &#x2502;
+&#x2502;                                                       &#x2514;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2534;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2510;
+&#x2502;                                                       &#x2502;  Supabase (Postgres) &#x2502;
+&#x2502;                                                       &#x2502;  20+ tabelas         &#x2502;
+&#x2502;                                                       &#x2514;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2518;
+&#x2514;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2518;
+&#x250C;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2510;
+&#x2502;                Mobile App (Expo / React Native)              &#x2502;
+&#x2502;                    (alunos — 12 telas)                       &#x2502;
+&#x2514;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2518;
+</pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>Stack Tecnológica</h2>
+      <table>
+        <thead>
+          <tr><th>Camada</th><th>Tecnologia</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Frontend Web</td><td>HTML5, CSS3, Vanilla JavaScript</td></tr>
+          <tr><td>Mobile</td><td>React Native (Expo SDK 54), TypeScript, Expo Router v6</td></tr>
+          <tr><td>Backend</td><td>Node.js 22, Express 5, JWT (bcryptjs)</td></tr>
+          <tr><td>Database</td><td>PostgreSQL (Supabase)</td></tr>
+          <tr><td>Deploy</td><td>Frontend: Vercel &middot; Backend: Render &middot; DB: Supabase</td></tr>
+          <tr><td>Bibliotecas</td><td>Chart.js 4.4.7, Notyf 3, QRCode.js</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Documentação</h2>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">&#128196;</div>
+          <h3><a href="portal-inscricao.html">Portal de Inscrição</a></h3>
+          <p>Portal público para candidatos visualizarem cursos, realizarem inscrição e acompanharem status.</p>
         </div>
-      </div>
-
-      <!-- VISÃO GERAL -->
-      <h2>🎯 Visão Geral do Sistema</h2>
-      <p>O <strong>SIGE</strong> é um sistema completo que automatiza o processo seletivo de cursos profissionalizantes, desde a inscrição até a matrícula online, com portais dedicados para alunos e secretaria.</p>
-
-      <!-- CARDS DE FUNCIONALIDADES -->
-      <div class="cards">
-        <article class="card card-primary">
-          <h3>👨‍🎓 Portal do Aluno</h3>
-          <p>Interface intuitiva para visualização de cursos, inscrição online, acompanhamento de status com timeline visual e matrícula digital com aceite de contrato.</p>
-          <div style="margin-top: 12px;">
-            <span class="badge badge-success">✓ Inscrição Online</span>
-            <span class="badge badge-success">✓ Timeline Visual</span>
-            <span class="badge badge-success">✓ Matrícula Digital</span>
-          </div>
-        </article>
-
-        <article class="card card-success">
-          <h3>🏢 Portal Administrativo</h3>
-          <p>Sistema CRUD completo para gestão de cursos, unidades, usuários e  editais. Dashboard com estatísticas e controle de etapas do processo seletivo.</p>
-          <div style="margin-top: 12px;">
-            <span class="badge badge-primary">✓ CRUD Completo</span>
-            <span class="badge badge-primary">✓ Dashboard</span>
-            <span class="badge badge-primary">✓ Relatórios</span>
-          </div>
-        </article>
-
-        <article class="card card-warning">
-          <h3>🔐 Segurança Avançada</h3>
-          <p>Múltiplas camadas de proteção: autenticação JWT robusta, rate limiting, senhas fortes, proteção contra brute force e HTTP security headers.</p>
-          <div style="margin-top: 12px;">
-            <span class="badge badge-danger">✓ JWT</span>
-            <span class="badge badge-danger">✓ Rate Limiting</span>
-            <span class="badge badge-danger">✓ Brute Force Protection</span>
-          </div>
-        </article>
-
-        <article class="card card-danger">
-          <h3>📱 100% Responsivo</h3>
-          <p>Interface adaptada para desktop, tablet e mobile. Menu hamburger, gestos touch e otimizado para todos os tamanhos de tela.</p>
-          <div style="margin-top: 12px;">
-            <span class="badge badge-purple">✓ Desktop</span>
-            <span class="badge badge-purple">✓ Tablet</span>
-            <span class="badge badge-purple">✓ Mobile</span>
-          </div>
-        </article>
-      </div>
-
-      <!-- INÍCIO RÁPIDO -->
-      <h2>🚀 Início Rápido (3 Minutos)</h2>
-      
-      <div class="success-box">
-        <h3>✨ Método Mais Fácil: Use o Script Automático!</h3>
-        <p>Criamos scripts que fazem <strong>TUDO automaticamente</strong> - backend, frontend e dados de teste:</p>
-        <pre><code>.\iniciar-tudo.bat</code></pre>
-        <p style="margin: 12px 0 0;">✅ Este comando inicia backend + frontend + popula dados | ⏱️ Pronto em 1-2 minutos</p>
-        <a href="scripts.html" class="btn btn-primary" style="margin-top: 16px;">📖 Ver Guia Completo de Scripts</a>
-      </div>
-
-      <h3>📋 Pré-requisitos</h3>
-      <ul>
-        <li><strong>Node.js 22+</strong> - Necessário para o backend Express</li>
-        <li><strong>Conta Supabase</strong> - Banco PostgreSQL gerenciado</li>
-        <li><strong>Python 3.x</strong> ou <strong>Node.js</strong> - Para servidor HTTP do frontend</li>
-        <li><strong>Navegador moderno</strong> - Chrome, Firefox, Edge, Safari</li>
-      </ul>
-
-      <h3>⚡ Passo a Passo Manual</h3>
-      
-      <h4>1. Instalar dependências do Backend</h4>
-      <pre><code>cd backend
-npm install</code></pre>
-
-      <h4>2. Configurar variáveis de ambiente</h4>
-      <p>Crie <code>backend/.env</code>:</p>
-      <pre><code>SUPABASE_URL=https://seu-projeto.supabase.co
-SUPABASE_KEY=SUA_CHAVE_ANON
-JWT_SECRET=secreta_sige_123
-PORT=8080</code></pre>
-
-      <h4>3. Iniciar Backend</h4>
-      <pre><code>cd backend
-npm run dev</code></pre>
-      <p>Servidor rodando em <code>http://localhost:8080</code></p>
-
-      <h4>4. Iniciar Frontend</h4>
-      <pre><code># Com Python
-cd frontend-web
-python -m http.server 5500
-
-# OU com Node.js
-npx http-server frontend-web -p 5500</code></pre>
-
-      <h4>5. Popular com Dados de Teste (Opcional)</h4>
-      <p>Execute o script SQL <code>database/supabase-aluno-tables.sql</code> no SQL Editor do Supabase.</p>
-
-      <h4>6. Acessar Sistema</h4>
-      <ul>
-        <li><strong>Frontend:</strong> <a href="http://localhost:5500/portal-escolar" target="_blank">http://localhost:5500/portal-escolar</a></li>
-        <li><strong>Backend API:</strong> <a href="http://localhost:8080/api" target="_blank">http://localhost:8080/api</a></li>
-      </ul>
-
-      <div class="info-box">
-        <h4>🔑 Credenciais de Teste</h4>
-        <ul style="margin-bottom: 0;">
-          <li><strong>Administrador:</strong> admin@senai.com / admin123</li>
-          <li><strong>Usuário Comum:</strong> joao@email.com / 123456</li>
-        </ul>
-      </div>
-
-      <!-- TECNOLOGIAS -->
-      <h2>🔧 Stack Tecnológico</h2>
-      
-      <div class="cards">
-        <article class="card">
-          <h3>Backend</h3>
-          <div style="margin-top: 12px;">
-            <span class="badge badge-primary">Node.js 22</span>
-            <span class="badge badge-primary">Express 5</span>
-            <span class="badge badge-primary">Supabase Client</span>
-            <span class="badge badge-primary">JWT (jsonwebtoken)</span>
-            <span class="badge badge-primary">bcrypt</span>
-            <span class="badge badge-primary">CORS</span>
-          </div>
-        </article>
-
-        <article class="card">
-          <h3>Frontend</h3>
-          <div style="margin-top: 12px;">
-            <span class="badge badge-success">HTML5</span>
-            <span class="badge badge-success">CSS3</span>
-            <span class="badge badge-success">JavaScript ES6+</span>
-            <span class="badge badge-success">LocalStorage</span>
-            <span class="badge badge-success">Responsive Design</span>
-            <span class="badge badge-success">Mobile-First</span>
-          </div>
-        </article>
-
-        <article class="card">
-          <h3>Banco de Dados</h3>
-          <div style="margin-top: 12px;">
-            <span class="badge badge-warning">Supabase (PostgreSQL)</span>
-            <span class="badge badge-warning">SQL Editor</span>
-          </div>
-        </article>
-
-        <article class="card">
-          <h3>DevOps</h3>
-          <div style="margin-top: 12px;">
-            <span class="badge badge-purple">Vercel (Frontend)</span>
-            <span class="badge badge-purple">Render (Backend)</span>
-            <span class="badge badge-purple">Git</span>
-            <span class="badge badge-purple">npm</span>
-          </div>
-        </article>
-      </div>
-
-      <!-- ESTRUTURA DO PROJETO -->
-      <h2>📁 Estrutura do Projeto</h2>
-      <pre><code>sige/
-├── backend/                      # API REST Express (Node.js)
-│   ├── routes/                  # Rotas da API
-│   ├── middleware/              # Middlewares (auth, etc.)
-│   ├── server.js                # Servidor Express
-│   ├── package.json             # Dependências Node.js
-│   └── .env                     # Variáveis de ambiente
-│
-├── frontend-web/                # Interface Web
-│   ├── portal-escolar/          # Portal escolar
-│   ├── portal-inscricao/        # Portal de inscrição
-│   ├── index.html               # Página inicial
-│   ├── login.html               # Login
-│   ├── inscricao.html           # Formulário de inscrição
-│   ├── portal-aluno.html        # Portal do aluno
-│   ├── portal-secretaria.html   # Portal administrativo
-│   ├── scripts.js               # Lógica JavaScript
-│   └── app.css                  # Estilos
-│
-├── database/                    # Scripts SQL
-│   └── supabase-aluno-tables.sql
-│
-├── docs/                        # Documentação (você está aqui!)
-│   ├── index.html               # Esta página
-│   ├── quick-start.html         # Guia rápido
-│   ├── scripts.html             # Scripts executores
-│   ├── backend.html             # Docs do backend
-│   ├── frontend.html            # Docs do frontend
-│   ├── security.html            # Segurança
-│   └── developer-docs.html      # Documentação completa
-│
-├── popular-dados-teste.ps1      # Script para popular banco
-├── iniciar-tudo.bat             # Script completo
-├── iniciar-backend.bat          # Inicia backend
-├── iniciar-frontend.bat         # Inicia frontend
-├── inserir-dados.bat            # Popula banco
-├── parar-sistema.bat            # Para tudo
-├── verificar-status.bat         # Verifica status
-├── GUIA-SCRIPTS.md              # Guia completo dos scripts
-└── README.md                    # Documentação principal</code></pre>
-
-      <!-- PRÓXIMOS PASSOS -->
-      <h2>📖 Navegação na Documentação</h2>
-      
-      <div class="cards">
-        <article class="card card-primary">
-          <h3>🚀 Começar Desenvolvimento</h3>
-          <p><strong><a href="quick-start.html">Guia Rápido</a></strong> - Setup inicial passo a passo</p>
-          <p><strong><a href="scripts.html">Scripts Executores</a></strong> - Automação completa</p>
-          <p><strong><a href="init.html">Configuração</a></strong> - Supabase, variáveis de ambiente</p>
-        </article>
-
-        <article class="card card-success">
-          <h3>💻 Desenvolvimento</h3>
-          <p><strong><a href="backend.html">Backend API</a></strong> - Controllers e endpoints</p>
-          <p><strong><a href="frontend.html">Frontend</a></strong> - Páginas e fluxos</p>
-          <p><strong><a href="snippets.html">Snippets</a></strong> - Exemplos de código</p>
-        </article>
-
-        <article class="card card-warning">
-          <h3>🔒 Segurança e Deploy</h3>
-          <p><strong><a href="security.html">Segurança</a></strong> - JWT, rate limiting, validações</p>
-          <p><strong><a href="developer-docs.html">Docs Completa</a></strong> - Arquitetura e custos</p>
-        </article>
-
-        <article class="card card-danger">
-          <h3>🔧 Suporte</h3>
-          <p><strong><a href="troubleshooting.html">Troubleshooting</a></strong> - Soluções de problemas</p>
-          <p><strong><a href="developer-documentation.md">Markdown</a></strong> - Docs em texto</p>
-        </article>
-      </div>
-
-      <!-- INFO DO PROJETO -->
-      <h2>👥 Sobre o Projeto</h2>
-      <div class="info-box">
-        <h3>Projeto Acadêmico - SENAI Duque de Caxias</h3>
-        <ul>
-          <li><strong>Curso:</strong> Técnico de Desenvolvimento de Sistemas</li>
-          <li><strong>Turma:</strong> TEC00412025.1046</li>
-          <li><strong>Orientadora:</strong> Ana Carla</li>
-          <li><strong>Desenvolvedores:</strong> Artur de Paula Santos, João Felipe da Costa Moreira, João Miguel Gonçalves Coelho, Lucas Matheus Lima Sandin, Yago Mamud Amorim</li>
-        </ul>
-        <p style="margin: 16px 0 0;"><strong>Versão:</strong> 1.0.0 | <strong>Status:</strong> ✅ Em Produção | <strong>Última Atualização:</strong> Março 2026</p>
-      </div>
-
-      <!-- RECURSOS ADICIONAIS -->
-      <h2>📦 Recursos Adicionais</h2>
-      <ul>
-        <li><strong>Coleções Postman:</strong> <code>docs/postman/postman/collections</code></li>
-        <li><strong>Scripts SQL:</strong> <code>database/</code></li>
-        <li><strong>Aplicativo Mobile:</strong> <code>mobile-app/</code> (em desenvolvimento)</li>
-        <li><strong>Relatório de Testes:</strong> <code>TEST-REPORT.md</code></li>
-        <li><strong>Guia de Scripts:</strong> <code>GUIA-SCRIPTS.md</code></li>
-        <li><strong>Resumo de Scripts:</strong> <code>RESUMO-SCRIPTS.md</code></li>
-      </ul>
-
-      <!-- CALL TO ACTION FINAL -->
-      <div class="success-box" style="text-align: center; margin-top: 32px;">
-        <h3>✨ Pronto para Começar?</h3>
-        <p>Escolha sua jornada:</p>
-        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 16px;">
-          <a href="quick-start.html" class="btn btn-primary">🚀 Guia Rápido</a>
-          <a href="scripts.html" class="btn btn-primary">⚡ Scripts Automáticos</a>
-          <a href="developer-docs.html" class="btn btn-secondary">📚 Documentação Completa</a>
+        <div class="card">
+          <div class="card-icon">&#127891;</div>
+          <h3><a href="portal-escolar.html">Portal Escolar</a></h3>
+          <p>Portal para alunos matriculados com acompanhamento acadêmico completo.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">&#128188;</div>
+          <h3><a href="portal-secretaria.html">Portal da Secretaria</a></h3>
+          <p>SPA administrativa com dois modos: Inscrições e Alunos, mais módulos de sistema.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">&#128241;</div>
+          <h3><a href="mobile.html">Aplicativo Mobile</a></h3>
+          <p>App React Native (Expo) para alunos com 12 telas de funcionalidades.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">&#9881;&#65039;</div>
+          <h3><a href="backend.html">Backend API</a></h3>
+          <p>API REST em Express com autenticação JWT, RBAC e 10 arquivos de rota.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">&#128451;</div>
+          <h3><a href="database.html">Banco de Dados</a></h3>
+          <p>PostgreSQL no Supabase com 20+ tabelas, relacionamentos e seed data.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">&#128640;</div>
+          <h3><a href="deploy.html">Guia de Deploy</a></h3>
+          <p>Instruções para deploy do frontend, backend e mobile em produção.</p>
         </div>
       </div>
     </section>
-  </main>
 
-  <script src="menu.js"></script>
+    <section>
+      <h2>Papéis (RBAC)</h2>
+      <table>
+        <thead>
+          <tr><th>Role</th><th>Acesso</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>ROLE_ADMIN</code> (Admin Master)</td><td>Total — todos os módulos da Secretaria</td></tr>
+          <tr><td><code>ROLE_STUDENT</code></td><td>Portal Escolar + Mobile</td></tr>
+          <tr><td><code>ROLE_USER</code></td><td>Portal Inscrição (cursos, inscrição)</td></tr>
+          <tr><td>Admin / Secretaria / Professor</td><td>Permissões granulares via Cargos</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Desenvolvimento Local</h2>
+      <pre><code># Backend
+cd backend
+npm install
+cp .env.example .env  # configurar SUPABASE_URL e SUPABASE_KEY
+npm start
+
+# Mobile
+cd mobile-app
+npm install
+npx expo start
+
+# Frontend (servidor HTTP simples)
+cd frontend-web
+npx http-server -p 3000</code></pre>
+      <div class="alert alert-info">
+        Para testar localmente com o backend Render, configure no navegador:
+        <code>localStorage.setItem('API_BASE_URL', 'https://sige-1gqx.onrender.com/api');</code>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <p>SIGE — Sistema de Inscrição e Gestão Escolar &copy; 2025</p>
+    </footer>
+  </main>
+</div>
+
+<script src="menu.js"></script>
 </body>
 </html>

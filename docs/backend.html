@@ -1,68 +1,291 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <title>Documentação Backend</title>
-  <link rel="stylesheet" href="site.css" />
-  <script defer src="menu.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Backend API — SIGE Docs</title>
+  <link rel="stylesheet" href="site.css">
 </head>
 <body>
-  <div class="menu-overlay"></div>
-  <button class="menu-toggle" aria-label="Menu" aria-expanded="false">☰</button>
-  <header class="top">
-    <h1>Backend</h1>
-    <p>Controllers, segurança e endpoints da API REST.</p>
-  </header>
 
-  <main class="layout">
-    <nav class="menu">
-      <a href="index.html">🏠 Início</a>
-      <a href="quick-start.html">🚀 Guia Rápido</a>
-      <a href="guia-uso-aluno.html">👨‍🎓 Guia do Aluno</a>
-      <a href="guia-uso-secretaria.html">🏢 Guia da Secretaria</a>
-      <a href="proposta-comercial.html">💼 Proposta Comercial</a>
-      <a href="hospedagem-opcoes.html">🌩️ Hospedagem</a>
-      <a href="scripts.html">⚡ Scripts Executores</a>
-      <a href="backend.html" class="active">⚙️ Backend API</a>
-      <a href="frontend.html">🎨 Frontend</a>
-      <a href="security.html">🔒 Segurança</a>
-      <a href="init.html">🛠️ Configuração</a>
-      <a href="troubleshooting.html">🔧 Troubleshooting</a>
-      <a href="snippets.html">📝 Snippets</a>
-      <a href="developer-docs.html">📚 Docs Completa</a>
+<header class="site-header">
+  <div class="header-logo">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+    SIGE Docs
+  </div>
+  <div class="header-actions">
+    <button class="theme-toggle" aria-label="Alternar modo escuro">&#127769;</button>
+  </div>
+</header>
+
+<div class="wrapper">
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li class="nav-section">Introdução</li>
+      <li><a href="index.html"><span class="nav-icon">&#127968;</span> Início</a></li>
+      <li class="nav-section">Portais Web</li>
+      <li><a href="portal-inscricao.html"><span class="nav-icon">&#128196;</span> Portal de Inscrição</a></li>
+      <li><a href="portal-escolar.html"><span class="nav-icon">&#127891;</span> Portal Escolar</a></li>
+      <li><a href="portal-secretaria.html"><span class="nav-icon">&#128188;</span> Portal da Secretaria</a></li>
+      <li class="nav-section">Mobile</li>
+      <li><a href="mobile.html"><span class="nav-icon">&#128241;</span> Aplicativo Mobile</a></li>
+      <li class="nav-section">Backend</li>
+      <li><a href="backend.html"><span class="nav-icon">&#9881;&#65039;</span> Backend API</a></li>
+      <li><a href="database.html"><span class="nav-icon">&#128451;</span> Banco de Dados</a></li>
+      <li class="nav-section">Deploy</li>
+      <li><a href="deploy.html"><span class="nav-icon">&#128640;</span> Guia de Deploy</a></li>
+    </ul>
+  </aside>
+
+  <div class="sidebar-overlay"></div>
+
+  <main class="main-content">
+    <nav class="breadcrumbs">
+      <a href="index.html">Início</a>
+      <span class="sep">/</span>
+      <span>Backend API</span>
     </nav>
-    <section class="content">
-      <h2>Camadas</h2>
-      <ul>
-        <li><strong>Routes:</strong> definições de rotas Express (<code>/api/usuarios</code>, <code>/api/cursos</code>, etc.).</li>
-        <li><strong>Middleware:</strong> autenticação JWT, validação, CORS.</li>
-        <li><strong>Controller:</strong> funções manipuladoras das requisições REST.</li>
-        <li><strong>Database:</strong> consultas Supabase (PostgreSQL) para persistência.</li>
-      </ul>
 
-      <h2>Endpoints de destaque</h2>
-      <div class="table-wrapper">
-      <table class="table">
+    <div class="page-header">
+      <h1>Backend API</h1>
+      <p>API REST em Express com autenticação JWT, RBAC e 10 arquivos de rota.</p>
+      <p><strong>Base URL:</strong> <code>https://sige-1gqx.onrender.com/api</code> &nbsp;|&nbsp; <strong>Porta local:</strong> <code>http://localhost:8080/api</code></p>
+    </div>
+
+    <section>
+      <h2>Autenticação</h2>
+
+      <h3>Login</h3>
+      <p><span class="method method-post">POST</span> <code>/usuarios/login</code></p>
+      <pre><code>// Request
+{ "email": "admin@sige.edu.br", "senha": "Sige123@" }
+
+// Response
+{
+  "token": "eyJhbGciOiJIUzI1NiIs...",
+  "usuario": {
+    "id": 1,
+    "nomeCompleto": "Ana Beatriz Oliveira",
+    "email": "admin@sige.edu.br",
+    "cpf": "00416865349",
+    "telefone": "(11) 90001-0001",
+    "dataNascimento": "1971-01-15",
+    "role": "ROLE_ADMIN",
+    "id_cargo": 1
+  }
+}</code></pre>
+
+      <h3>Cadastro</h3>
+      <p><span class="method method-post">POST</span> <code>/usuarios</code></p>
+      <pre><code>{ "nomeCompleto": "Nome", "email": "email@provedor.com", "senha": "Sige123@" }</code></pre>
+
+      <h3>Recuperar Senha</h3>
+      <p><span class="method method-post">POST</span> <code>/usuarios/recuperar-senha</code></p>
+      <pre><code>{ "email": "email@provedor.com" }</code></pre>
+
+      <h3>Redefinir Senha</h3>
+      <p><span class="method method-post">POST</span> <code>/usuarios/redefinir-senha</code></p>
+      <pre><code>{ "token": "...", "senha": "NovaSenha@123" }</code></pre>
+    </section>
+
+    <section>
+      <h2>Middleware</h2>
+      <table>
+        <thead>
+          <tr><th>Middleware</th><th>Descrição</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>requireAuth</code></td><td>Verifica JWT no header <code>Authorization: Bearer &lt;token&gt;</code></td></tr>
+          <tr><td><code>requireRole(role)</code></td><td>Verifica se usuário tem role específica (ex: <code>ROLE_ADMIN</code>)</td></tr>
+          <tr><td><code>requireAdminMaster</code></td><td>Apenas Admin Master (id_cargo === 1)</td></tr>
+          <tr><td><code>requirePermissao(codigo)</code></td><td>Verifica permissão granular via RBAC</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Fluxo de Autorização</h4>
+      <pre><code>Requisi&#xE7;&#xE3;o
+  &#x2192; requireAuth (valida JWT)
+    &#x2192; requireRole (opcional, valida role)
+      &#x2192; requirePermissao (opcional, valida permiss&#xE3;o granular)
+        &#x2192; Controller</code></pre>
+    </section>
+
+    <section>
+      <h2>RBAC — Cargos e Permissões</h2>
+      <table>
         <thead>
           <tr><th>Método</th><th>Rota</th><th>Descrição</th></tr>
         </thead>
         <tbody>
-          <tr><td>POST</td><td>/api/usuarios/login</td><td>Login e retorno de token + usuário</td></tr>
-          <tr><td>GET</td><td>/api/usuarios/me</td><td>Dados do usuário autenticado</td></tr>
-          <tr><td>PUT</td><td>/api/usuarios/me</td><td>Atualiza dados não únicos do aluno</td></tr>
-          <tr><td>POST/PUT/DELETE</td><td>/api/editais</td><td>CRUD de editais (admin)</td></tr>
-          <tr><td>PUT</td><td>/api/unidades/{id}</td><td>Edição de unidade (admin)</td></tr>
-          <tr><td>PUT</td><td>/api/cursos/{id}</td><td>Edição de curso (admin)</td></tr>
-          <tr><td>PUT</td><td>/api/usuarios/{id}</td><td>Edição de usuário (admin)</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/cargos</code></td><td>Listar todos os cargos</td></tr>
+          <tr><td><span class="method method-post">POST</span></td><td><code>/cargos</code></td><td>Criar cargo</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/cargos/:id</code></td><td>Detalhes do cargo</td></tr>
+          <tr><td><span class="method method-put">PUT</span></td><td><code>/cargos/:id</code></td><td>Atualizar cargo</td></tr>
+          <tr><td><span class="method method-delete">DELETE</span></td><td><code>/cargos/:id</code></td><td>Excluir cargo (exceto Admin Master)</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/cargos/permissoes/all</code></td><td>Catálogo completo de permissões</td></tr>
+          <tr><td><span class="method method-post">POST</span></td><td><code>/cargos/permissoes</code></td><td>Vincular permissão a cargo</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/cargos/:id/permissoes</code></td><td>Permissões de um cargo</td></tr>
+          <tr><td><span class="method method-delete">DELETE</span></td><td><code>/cargos/permissoes/:id</code></td><td>Remover vínculo permissão-cargo</td></tr>
         </tbody>
       </table>
-      </div>
     </section>
-  </main>
 
-  <script src="menu.js"></script>
+    <section>
+      <h2>Endpoints por Categoria</h2>
+
+      <h3>Cursos</h3>
+      <table>
+        <thead><tr><th>Método</th><th>Rota</th><th>Descrição</th></tr></thead>
+        <tbody>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/cursos</code></td><td>Listar todos</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/cursos/ativos</code></td><td>Apenas ativos (público)</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/cursos/:id</code></td><td>Buscar por ID</td></tr>
+          <tr><td><span class="method method-post">POST</span></td><td><code>/cursos</code></td><td>Criar</td></tr>
+          <tr><td><span class="method method-put">PUT</span></td><td><code>/cursos/:id</code></td><td>Atualizar</td></tr>
+          <tr><td><span class="method method-delete">DELETE</span></td><td><code>/cursos/:id</code></td><td>Excluir</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Unidades</h3>
+      <table>
+        <thead><tr><th>Método</th><th>Rota</th><th>Descrição</th></tr></thead>
+        <tbody>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/unidades</code></td><td>Listar</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/unidades/:id</code></td><td>Buscar</td></tr>
+          <tr><td><span class="method method-post">POST</span></td><td><code>/unidades</code></td><td>Criar</td></tr>
+          <tr><td><span class="method method-put">PUT</span></td><td><code>/unidades/:id</code></td><td>Atualizar</td></tr>
+          <tr><td><span class="method method-delete">DELETE</span></td><td><code>/unidades/:id</code></td><td>Excluir</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Editais</h3>
+      <table>
+        <thead><tr><th>Método</th><th>Rota</th><th>Descrição</th></tr></thead>
+        <tbody>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/editais</code></td><td>Listar</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/editais/:id</code></td><td>Buscar</td></tr>
+          <tr><td><span class="method method-post">POST</span></td><td><code>/editais</code></td><td>Criar</td></tr>
+          <tr><td><span class="method method-put">PUT</span></td><td><code>/editais/:id</code></td><td>Atualizar</td></tr>
+          <tr><td><span class="method method-delete">DELETE</span></td><td><code>/editais/:id</code></td><td>Excluir</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Turmas</h3>
+      <table>
+        <thead><tr><th>Método</th><th>Rota</th><th>Descrição</th></tr></thead>
+        <tbody>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/turmas</code></td><td>Listar</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/turmas/:id</code></td><td>Buscar</td></tr>
+          <tr><td><span class="method method-post">POST</span></td><td><code>/turmas</code></td><td>Criar</td></tr>
+          <tr><td><span class="method method-put">PUT</span></td><td><code>/turmas/:id</code></td><td>Atualizar</td></tr>
+          <tr><td><span class="method method-delete">DELETE</span></td><td><code>/turmas/:id</code></td><td>Excluir</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Inscrições</h3>
+      <table>
+        <thead><tr><th>Método</th><th>Rota</th><th>Descrição</th></tr></thead>
+        <tbody>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/inscricoes</code></td><td>Listar (admin)</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/inscricoes/:id</code></td><td>Buscar</td></tr>
+          <tr><td><span class="method method-post">POST</span></td><td><code>/inscricoes</code></td><td>Criar inscrição</td></tr>
+          <tr><td><span class="method method-put">PUT</span></td><td><code>/inscricoes/:id</code></td><td>Atualizar</td></tr>
+          <tr><td><span class="method method-put">PUT</span></td><td><code>/inscricoes/:id/aprovar</code></td><td>Aprovar/reprovar</td></tr>
+          <tr><td><span class="method method-post">POST</span></td><td><code>/inscricoes/:id/matricula</code></td><td>Aceitar matrícula</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/inscricoes/minhas</code></td><td>Inscrições do usuário logado</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Aluno (Self-Service)</h3>
+      <table>
+        <thead><tr><th>Método</th><th>Rota</th><th>Descrição</th></tr></thead>
+        <tbody>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/aluno/notas</code></td><td>Notas por disciplina</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/aluno/frequencias</code></td><td>Frequência por disciplina</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/aluno/horarios</code></td><td>Grade horária</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/aluno/documentos</code></td><td>Documentos do aluno</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/aluno/reclamacoes</code></td><td>Reclamações</td></tr>
+          <tr><td><span class="method method-post">POST</span></td><td><code>/aluno/reclamacoes</code></td><td>Criar reclamação</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/aluno/agenda</code></td><td>Agenda escolar</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/aluno/historico</code></td><td>Histórico escolar</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/aluno/atendimentos</code></td><td>Atendimentos agendados</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/aluno/matriculas</code></td><td>Matrículas ativas</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/aluno/curriculo</code></td><td>Estrutura curricular</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Admin — Alunos</h3>
+      <table>
+        <thead><tr><th>Método</th><th>Rota</th><th>Descrição</th></tr></thead>
+        <tbody>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/alunos</code></td><td>Listar alunos</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/alunos/:id</code></td><td>Detalhes (inclui docs, reclamações)</td></tr>
+          <tr><td><span class="method method-put">PUT</span></td><td><code>/alunos/:id</code></td><td>Editar dados</td></tr>
+          <tr><td><span class="method method-post">POST</span></td><td><code>/alunos/:id/reset-password</code></td><td>Resetar senha</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Admin — Usuários</h3>
+      <table>
+        <thead><tr><th>Método</th><th>Rota</th><th>Descrição</th></tr></thead>
+        <tbody>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/usuarios</code></td><td>Listar</td></tr>
+          <tr><td><span class="method method-get">GET</span></td><td><code>/usuarios/:id</code></td><td>Buscar</td></tr>
+          <tr><td><span class="method method-post">POST</span></td><td><code>/usuarios/admin</code></td><td>Criar admin</td></tr>
+          <tr><td><span class="method method-put">PUT</span></td><td><code>/usuarios/:id</code></td><td>Atualizar</td></tr>
+          <tr><td><span class="method method-delete">DELETE</span></td><td><code>/usuarios/:id</code></td><td>Excluir</td></tr>
+        </tbody>
+      </table>
+
+      <h3>QR Code / Acesso (Mobile)</h3>
+      <p><span class="method method-post">POST</span> <code>/auth/codigo</code></p>
+      <pre><code>// Request
+{ "codigo": "uuid-do-aluno" }
+
+// Response
+{
+  "valido": true,
+  "aluno": { "id": 145, "nome": "Amanda Azevedo Monteiro" }
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>Estrutura de Pastas</h2>
+      <pre><code>backend/
+&#x251C;&#x2500;&#x2500; routes/
+&#x2502;   &#x251C;&#x2500;&#x2500; usuarios.js            # GET/POST/PUT/DELETE /api/usuarios/*
+&#x2502;   &#x251C;&#x2500;&#x2500; cursos.js              # GET/POST/PUT/DELETE /api/cursos/*
+&#x2502;   &#x251C;&#x2500;&#x2500; unidades.js            # GET/POST/PUT/DELETE /api/unidades/*
+&#x2502;   &#x251C;&#x2500;&#x2500; editais.js             # GET/POST/PUT/DELETE /api/editais/*
+&#x2502;   &#x251C;&#x2500;&#x2500; turmas.js              # GET/POST/PUT/DELETE /api/turmas/*
+&#x2502;   &#x251C;&#x2500;&#x2500; inscricoes.js         # Inscri&#xE7;&#xF5;es + matr&#xED;cula
+&#x2502;   &#x251C;&#x2500;&#x2500; alunos.js              # Admin: vis&#xE3;o de alunos
+&#x2502;   &#x251C;&#x2500;&#x2500; aluno.js               # Self-service do aluno
+&#x2502;   &#x251C;&#x2500;&#x2500; cargos.js              # RBAC
+&#x2502;   &#x2514;&#x2500;&#x2500; auth-codigo.js        # Valida&#xE7;&#xE3;o QR code
+&#x251C;&#x2500;&#x2500; middleware/
+&#x2502;   &#x2514;&#x2500;&#x2500; auth.js                # requireAuth, requireRole, requirePermissao
+&#x251C;&#x2500;&#x2500; config/
+&#x2502;   &#x2514;&#x2500;&#x2500; supabase.js            # Cliente Supabase
+&#x251C;&#x2500;&#x2500; server.js                  # Entry point
+&#x251C;&#x2500;&#x2500; package.json
+&#x2514;&#x2500;&#x2500; .env                       # SUPABASE_URL, SUPABASE_KEY, PORT</code></pre>
+    </section>
+
+    <section>
+      <h2>Configuração</h2>
+      <p>Variáveis de ambiente:</p>
+      <pre><code>PORT=8080
+SUPABASE_URL=https://seu-projeto.supabase.co
+SUPABASE_KEY=sua-chave-anon</code></pre>
+    </section>
+
+    <footer class="site-footer">
+      <p>SIGE — Sistema de Inscrição e Gestão Escolar &copy; 2025</p>
+    </footer>
+  </main>
+</div>
+
+<script src="menu.js"></script>
 </body>
 </html>
