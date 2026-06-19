@@ -9,12 +9,11 @@
   --border: #d7dee8;
   --danger: #b91c1c;
   --shadow: 0 0px 24px rgba(15, 23, 42, 0.12);
-  --header-bg: #dce8f5;
-  --header-border: #b8cde0;
-  --nav-active-bg: #dbeafe;
-  --nav-active-color: #1e40af;
+  --header-bg: linear-gradient(90deg, #0a3b7a 0%, #1a4d9e 100%);
+  --header-border: #0a2d5e;
+  --nav-active-bg: rgba(255,255,255,0.15);
+  --nav-active-color: #ffffff;
   --radius: 0.625rem;
-  --font-size-base: 16px;
 }
 
 /* --- DARK MODE --- */
@@ -69,7 +68,7 @@ a {
 }
 
 /* =============================================
-   HEADER — clean white bar, links always visible
+   HEADER — dark gradient bar, nav links light
    ============================================= */
 .insc-header {
   position: sticky;
@@ -108,13 +107,9 @@ a {
 
 .insc-brand span {
   font-weight: 700;
-  color: #1e40af;
+  color: #ffffff;
   font-size: 1.05rem;
   white-space: nowrap;
-}
-
-[data-theme="dark"] .insc-brand span {
-  color: #93c5fd;
 }
 
 .insc-nav {
@@ -132,7 +127,7 @@ a {
   border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--muted);
+  color: rgba(255,255,255,0.85);
   text-decoration: none;
   transition: all 0.15s ease;
   white-space: nowrap;
@@ -144,8 +139,8 @@ a {
 }
 
 .insc-nav-link:hover {
-  background: var(--bg);
-  color: var(--text);
+  background: rgba(255,255,255,0.12);
+  color: #ffffff;
 }
 
 .insc-nav-link.active,
@@ -157,8 +152,8 @@ a {
 
 #btn-acessibilidade {
   font-size: 1.15rem;
-  color: #1e40af;
-  background: rgba(30, 64, 175, 0.08);
+  color: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.1);
   border-radius: 50%;
   width: 34px;
   height: 34px;
@@ -170,31 +165,17 @@ a {
 }
 
 #btn-acessibilidade:hover {
-  background: rgba(30, 64, 175, 0.16);
+  background: rgba(255,255,255,0.2);
   transform: scale(1.1);
-}
-
-[data-theme="dark"] #btn-acessibilidade {
-  color: #93c5fd;
-  background: rgba(147, 197, 253, 0.1);
-}
-
-[data-theme="dark"] #btn-acessibilidade:hover {
-  background: rgba(147, 197, 253, 0.2);
 }
 
 .insc-nav-logout {
   margin-left: 6px;
-  color: var(--danger);
+  color: #fca5a5;
 }
 
 .insc-nav-logout:hover {
-  background: #fee2e2 !important;
-  color: #991b1b !important;
-}
-
-[data-theme="dark"] .insc-nav-logout:hover {
-  background: #7f1d1d !important;
+  background: rgba(220, 38, 38, 0.2) !important;
   color: #fca5a5 !important;
 }
 

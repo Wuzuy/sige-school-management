@@ -16,6 +16,7 @@ const SIDEBAR_NAVIGATION = {
     {
       title: 'Académico',
       icon: '📚',
+      roles: ['student'],
       items: [
         { label: 'Consulta de Frequência', icon: '✓', href: 'consulta-freq.html' },
         { label: 'Histórico Escolar', icon: '📊', href: 'historico-escolar.html' },
@@ -26,6 +27,7 @@ const SIDEBAR_NAVIGATION = {
     {
       title: 'Calendário e Agenda',
       icon: '📅',
+      roles: ['student'],
       items: [
         { label: 'Agenda Escolar', icon: '📆', href: 'agenda-escolar.html' },
       ]
@@ -42,6 +44,7 @@ const SIDEBAR_NAVIGATION = {
     {
       title: 'Documentação',
       icon: '📄',
+      roles: ['student'],
       items: [
         { label: 'Meus Documentos', icon: '📑', href: 'meus-documentos.html' },
       ]
@@ -66,6 +69,10 @@ function buildSidebar() {
     return;
   }
 
+  // Obtém role do usuário logado
+  const auth = (() => { try { return JSON.parse(localStorage.getItem('auth')); } catch { return null; } })();
+  const role = auth?.usuario?.role || '';
+
   // Limpa o conteúdo existente (apenas a navegação)
   const navContent = sidebar.querySelector('nav') || sidebar;
   
@@ -79,8 +86,13 @@ function buildSidebar() {
   const nav = sidebar.querySelector('nav');
   nav.innerHTML = '';
 
-  // Adiciona cada seção de navegação
+  // Adiciona cada seção de navegação, filtrando por role
   SIDEBAR_NAVIGATION.sections.forEach((section) => {
+    // Se a seção tem roles definidas, só mostra se o usuário tiver uma delas
+    if (section.roles && !section.roles.includes(role.toLowerCase().replace('role_', ''))) {
+      return;
+    }
+
     const sectionEl = document.createElement('div');
     sectionEl.className = 'nav-section';
 

@@ -38,7 +38,7 @@ router.post('/login', async (req, res) => {
   const senhaValida = await bcrypt.compare(senha, data.senha);
   if (!senhaValida) return res.status(401).json({ error: 'Senha incorreta.' });
 
-  const token = jwt.sign({ id: data.id, role: data.role }, JWT_SECRET, { expiresIn: '1d' });
+  const token = jwt.sign({ id: data.id, role: data.role, id_cargo: data.id_cargo }, JWT_SECRET, { expiresIn: '1d' });
 
   // Mapeamento para o formato esperado pelo frontend
   const usuario = {
@@ -48,7 +48,8 @@ router.post('/login', async (req, res) => {
     cpf: data.cpf,
     telefone: data.telefone,
     dataNascimento: data.data_nascimento,
-    role: data.role
+    role: data.role,
+    id_cargo: data.id_cargo
   };
 
   res.json({ token, usuario });
@@ -71,7 +72,8 @@ router.get('/me', requireAuth, async (req, res) => {
     cpf: data.cpf,
     telefone: data.telefone,
     dataNascimento: data.data_nascimento,
-    role: data.role
+    role: data.role,
+    id_cargo: data.id_cargo
   });
 });
 
@@ -129,7 +131,8 @@ router.get('/', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
     cpf: u.cpf,
     telefone: u.telefone,
     dataNascimento: u.data_nascimento,
-    role: u.role
+    role: u.role,
+    id_cargo: u.id_cargo
   }));
 
   res.json(usuarios);
@@ -154,13 +157,14 @@ router.get('/:id', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
     cpf: data.cpf,
     telefone: data.telefone,
     dataNascimento: data.data_nascimento,
-    role: data.role
+    role: data.role,
+    id_cargo: data.id_cargo
   });
 });
 
 // === ADMIN: Atualizar usuario ===
 router.put('/:id', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
-  const { nomeCompleto, email, cpf, telefone, dataNascimento, role } = req.body;
+  const { nomeCompleto, email, cpf, telefone, dataNascimento, role, id_cargo } = req.body;
   const updateData = {};
   if (nomeCompleto !== undefined) updateData.nome_completo = nomeCompleto;
   if (email !== undefined) updateData.email = email;
@@ -168,6 +172,7 @@ router.put('/:id', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
   if (telefone !== undefined) updateData.telefone = telefone;
   if (dataNascimento !== undefined) updateData.data_nascimento = dataNascimento;
   if (role !== undefined) updateData.role = role;
+  if (id_cargo !== undefined) updateData.id_cargo = id_cargo;
 
   const { data, error } = await supabase.from('usuarios').update(updateData).eq('id', req.params.id).select().single();
   if (error) return res.status(400).json({ error: error.message });
@@ -179,7 +184,8 @@ router.put('/:id', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
     cpf: data.cpf,
     telefone: data.telefone,
     dataNascimento: data.data_nascimento,
-    role: data.role
+    role: data.role,
+    id_cargo: data.id_cargo
   });
 });
 
@@ -192,7 +198,7 @@ router.delete('/:id', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) =
 
 // === ADMIN: Criar usuario com role ===
 router.post('/admin', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
-  const { nomeCompleto, email, senha, cpf, telefone, dataNascimento, role } = req.body;
+  const { nomeCompleto, email, senha, cpf, telefone, dataNascimento, role, id_cargo } = req.body;
 
   const salt = await bcrypt.genSalt(10);
   const senhaHash = await bcrypt.hash(senha, salt);
@@ -206,7 +212,8 @@ router.post('/admin', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) =
       cpf: cpf || null,
       telefone: telefone || null,
       data_nascimento: dataNascimento || null,
-      role: role || 'ROLE_USER'
+      role: role || 'ROLE_USER',
+      id_cargo: id_cargo || null
     }])
     .select()
     .single();
@@ -220,7 +227,8 @@ router.post('/admin', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) =
     cpf: data.cpf,
     telefone: data.telefone,
     dataNascimento: data.data_nascimento,
-    role: data.role
+    role: data.role,
+    id_cargo: data.id_cargo
   });
 });
 

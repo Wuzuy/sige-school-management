@@ -25,6 +25,10 @@ app.use('/api/editais', editaisRoutes);
 app.use('/api/aluno', alunoRoutes);
 app.use('/api/alunos', alunosRoutes);
 app.use('/api/auth', authCodigoRoutes);
+const cargosRoutes = require('./routes/cargos');
+app.use('/api/cargos', cargosRoutes);
+const turmasRoutes = require('./routes/turmas');
+app.use('/api/turmas', turmasRoutes);
 
 const PORT = process.env.PORT || 8080;
 
