@@ -538,7 +538,7 @@ function setupLogoutButtons() {
   document.querySelectorAll('[data-logout]').forEach((button) => {
     button.addEventListener('click', () => {
       clearAuth();
-      window.location.href = 'login.html';
+      window.location.href = getLoginPageUrl();
     });
   });
 }
@@ -626,10 +626,16 @@ function setupTopNav(auth) {
   }
 }
 
+function getLoginPageUrl() {
+  const path = window.location.pathname;
+  if (path.includes('/portal-inscricao/')) return 'login.html';
+  return '../portal-inscricao/login.html';
+}
+
 function requireAuth(requiredRole) {
   const auth = getAuth();
   if (!auth?.token || !auth?.usuario) {
-    window.location.href = 'login.html';
+    window.location.href = getLoginPageUrl();
     return null;
   }
 
@@ -639,10 +645,19 @@ function requireAuth(requiredRole) {
     return null;
   }
 
-  // ROLE_USER so pode acessar portal de inscricao
-  if (role === 'ROLE_USER') {
-    window.location.href = '../portal-inscricao/index.html';
-    return null;
+  if (!requiredRole) {
+    if (role === 'ROLE_USER') {
+      window.location.href = '../portal-inscricao/index.html';
+      return null;
+    }
+    if (role === 'ROLE_TEACHER') {
+      window.location.href = '../portal-professor/portal-professor.html';
+      return null;
+    }
+    if (role === 'ROLE_ADMIN') {
+      window.location.href = '../portal-secretaria/portal-secretaria.html';
+      return null;
+    }
   }
 
   setupTopNav(auth);
@@ -671,7 +686,7 @@ async function request(path, options = {}) {
     const raw = await response.text();
     if (response.status === 401) {
       clearAuth();
-      window.location.href = 'login.html';
+      window.location.href = getLoginPageUrl();
     }
     throw new Error(raw || 'Falha na requisição');
   }

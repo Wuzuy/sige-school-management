@@ -654,11 +654,17 @@ function updateUserNameLabels() {
   });
 }
 
+function getLoginPageUrl() {
+  const path = window.location.pathname;
+  if (path.includes('/portal-inscricao/')) return 'login.html';
+  return '../portal-inscricao/login.html';
+}
+
 function setupLogoutButtons() {
   document.querySelectorAll('[data-logout]').forEach((button) => {
     button.addEventListener('click', () => {
       clearAuth();
-      window.location.href = 'login.html';
+      window.location.href = getLoginPageUrl();
     });
   });
 }
@@ -668,8 +674,10 @@ function setupMobileMenu() {
 }
 
 function setupTopNav(auth) {
-  const isAdmin = auth?.usuario?.role === 'ROLE_ADMIN';
-  const isStudent = auth?.usuario?.role === 'ROLE_STUDENT';
+  const role = auth?.usuario?.role;
+  const isAdmin = role === 'ROLE_ADMIN';
+  const isStudent = role === 'ROLE_STUDENT';
+  const isTeacher = role === 'ROLE_TEACHER';
 
   document.querySelectorAll('[data-admin-only]').forEach((element) => {
     element.classList.toggle('visible', isAdmin);
@@ -677,6 +685,10 @@ function setupTopNav(auth) {
 
   document.querySelectorAll('[data-student-only]').forEach((element) => {
     element.classList.toggle('visible', isStudent);
+  });
+
+  document.querySelectorAll('[data-teacher-only]').forEach((element) => {
+    element.classList.toggle('visible', isTeacher || isAdmin);
   });
 
   const currentFile = getCurrentFileName();
@@ -708,7 +720,7 @@ function loginAsVisitor() {
 function requireAuth(requiredRole) {
   const auth = getAuth();
   if (!auth?.token || !auth?.usuario) {
-    window.location.href = 'login.html';
+    window.location.href = getLoginPageUrl();
     return null;
   }
 
@@ -749,7 +761,7 @@ async function request(path, options = {}) {
     const raw = await response.text();
     if (response.status === 401) {
       clearAuth();
-      window.location.href = 'login.html';
+      window.location.href = getLoginPageUrl();
     }
     throw new Error(raw || 'Falha na requisição');
   }
@@ -834,6 +846,8 @@ function initLoginPage() {
       setAuth({ token, usuario });
       if (usuario.role === 'ROLE_ADMIN') {
         window.location.href = '../portal-secretaria/portal-secretaria.html';
+      } else if (usuario.role === 'ROLE_TEACHER') {
+        window.location.href = '../portal-professor/portal-professor.html';
       } else if (usuario.role === 'ROLE_STUDENT') {
         window.location.href = '../portal-escolar/index.html';
       } else {

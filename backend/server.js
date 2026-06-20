@@ -33,6 +33,8 @@ const auditoriaRoutes = require('./routes/auditoria');
 app.use('/api/auditoria', auditoriaRoutes);
 const reclamacoesRoutes = require('./routes/reclamacoes');
 app.use('/api/reclamacoes', reclamacoesRoutes);
+const professorRoutes = require('./routes/professor');
+app.use('/api/professor', professorRoutes);
 
 const PORT = process.env.PORT || 8080;
 

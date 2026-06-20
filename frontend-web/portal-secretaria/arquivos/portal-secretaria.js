@@ -26,7 +26,7 @@ function restoreState() {
   if (!params.module) return false;
   let mode = params.mode;
   if (!mode) {
-    const alunosMods = ['modulo-dashboard-alunos','modulo-alunos','modulo-usuarios','modulo-reclamacoes','modulo-relatorios-alunos','modulo-aluno-detalhes'];
+    const alunosMods = ['modulo-dashboard-alunos','modulo-alunos','modulo-reclamacoes','modulo-relatorios-alunos','modulo-aluno-detalhes'];
     mode = alunosMods.includes(params.module) ? 'alunos' : 'inscricoes';
   }
   if (mode) {
@@ -68,6 +68,16 @@ function showSuccess(msg) {
 }
 
 // --- Badge helper ---
+function roleLabel(role) {
+  const map = {
+    'ROLE_ADMIN': 'Administrador',
+    'ROLE_TEACHER': 'Professor',
+    'ROLE_STUDENT': 'Aluno',
+    'ROLE_USER': 'Candidato'
+  };
+  return map[role] || role || '-';
+}
+
 function badge(status) {
   const map = {
     'APROVADA': 'badge-success', 'APROVADO': 'badge-success',
@@ -82,12 +92,72 @@ function badge(status) {
     'CONCLUIDA': 'badge-success',
     'CONCLUIDO': 'badge-success',
     'TRANCADO': 'badge-danger',
+    'Administrador': 'badge-danger',
+    'Professor': 'badge-info',
+    'Aluno': 'badge-success',
+    'Candidato': 'badge-neutral',
     'true': 'badge-success',
     'false': 'badge-danger',
   };
   return `<span class="badge ${map[status] || 'badge-neutral'}">${status || '-'}</span>`;
 }
 
+// --- Table sorting (client-side) ---
+function setupTableSort() {
+  document.querySelectorAll('.table-wrapper table').forEach(table => {
+    const headers = table.querySelectorAll('thead th');
+    const tbody = table.querySelector('tbody');
+    if (!tbody) return;
+    headers.forEach(th => {
+      const label = (th.textContent || '').trim().toLowerCase();
+      if (label === 'ações' || label === 'ação') return;
+      th.style.cursor = 'pointer';
+      th.title = 'Clique para ordenar';
+      th._origText = th.textContent;
+      th.addEventListener('click', () => {
+        const cur = th.dataset.dir || '';
+        let newDir;
+        if (!cur) newDir = 'asc';
+        else if (cur === 'asc') newDir = 'desc';
+        else newDir = '';
+        headers.forEach(h => {
+          h.dataset.dir = '';
+          h.title = 'Clique para ordenar';
+          const arr = h.querySelector('.sort-arrow');
+          if (arr) arr.remove();
+        });
+        if (newDir) {
+          th.dataset.dir = newDir;
+          th.title = newDir === 'asc' ? 'Ordem crescente' : 'Ordem decrescente';
+          const arr = document.createElement('span');
+          arr.className = 'sort-arrow';
+          arr.style.marginLeft = '4px';
+          arr.style.fontSize = '0.7em';
+          arr.textContent = newDir === 'asc' ? '\u25B2' : '\u25BC';
+          th.appendChild(arr);
+          const rows = Array.from(tbody.querySelectorAll('tr'));
+          const colIdx = Array.from(th.parentNode.children).indexOf(th);
+          const orig = Array.from(rows);
+          rows.sort((a, b) => {
+            const va = (a.children[colIdx]?.textContent || '').trim().toLowerCase();
+            const vb = (b.children[colIdx]?.textContent || '').trim().toLowerCase();
+            const na = parseFloat(va), nb = parseFloat(vb);
+            const cmp = !isNaN(na) && !isNaN(nb) ? na - nb : va.localeCompare(vb, 'pt-BR');
+            return newDir === 'asc' ? cmp : -cmp;
+          });
+          rows.forEach(r => tbody.appendChild(r));
+        } else {
+          // restore original order
+          const rows = Array.from(tbody.querySelectorAll('tr'));
+          const sorted = Array.from(rows).sort((a,b) => +a.dataset.rowIdx - +b.dataset.rowIdx);
+          sorted.forEach(r => tbody.appendChild(r));
+        }
+      });
+      // Store original row order
+      Array.from(tbody.querySelectorAll('tr')).forEach((r, i) => r.dataset.rowIdx = i);
+    });
+  });
+}
 // --- Skeleton control ---
 function showSkeleton(id) {
   document.getElementById(id + '-skeleton')?.classList.remove('hidden');
@@ -1152,11 +1222,11 @@ document.getElementById('form-admin-user')?.addEventListener('submit', async (e)
   e.preventDefault();
   const id = document.getElementById('admin-user-id').value;
   const payload = {
-    nome_completo: document.getElementById('admin-user-nome').value,
+    nomeCompleto: document.getElementById('admin-user-nome').value,
     email: document.getElementById('admin-user-email').value,
     cpf: document.getElementById('admin-user-cpf').value,
     telefone: document.getElementById('admin-user-telefone').value,
-    data_nascimento: document.getElementById('admin-user-data-nascimento').value || null,
+    dataNascimento: document.getElementById('admin-user-data-nascimento').value || null,
     role: document.getElementById('admin-user-role').value,
   };
   try {
@@ -1249,15 +1319,15 @@ async function loadUsuarios(filters = {}) {
     const data = await request('/usuarios');
     state.usuarios = data;
     let f = [...data];
-    if (filters.texto) { const t = filters.texto.toLowerCase(); f = f.filter(u => u.nome_completo?.toLowerCase().includes(t) || u.email?.toLowerCase().includes(t)); }
+    if (filters.texto) { const t = filters.texto.toLowerCase(); f = f.filter(u => (u.nomeCompleto || u.nome_completo || '').toLowerCase().includes(t) || (u.email || '').toLowerCase().includes(t)); }
     if (filters.role && filters.role !== 'TODOS') { f = f.filter(u => u.role === filters.role); }
     const tbody = document.getElementById('lista-usuarios');
     if (f.length === 0) { showEmpty('usuarios', 'Nenhum usuario encontrado.'); return; }
     showTable('usuarios');
     tbody.innerHTML = f.map(u => `<tr>
-      <td><strong>${u.nome_completo || '-'}</strong></td>
+      <td><strong>${u.nomeCompleto || u.nome_completo || '-'}</strong></td>
       <td>${u.email || '-'}</td>
-      <td>${badge(u.role)}</td>
+      <td>${badge(roleLabel(u.role))}</td>
       <td>
         <button class="btn btn-soft btn-sm" data-usuario-edit="${u.id}">Editar</button>
         <button class="btn btn-danger btn-sm" data-usuario-del="${u.id}">Excluir</button>
@@ -1683,16 +1753,16 @@ document.addEventListener('click', async (e) => {
     const id = editUsuario.dataset.usuarioEdit;
     const item = state.usuarios.find(u => String(u.id) === id);
     if (item) {
-      const roleOpts = ['ROLE_ADMIN','ROLE_TEACHER','ROLE_STUDENT','ROLE_USER'].map(r => `<option value="${r}" ${item.role===r?'selected':''}>${r.replace('ROLE_','')}</option>`).join('');
+      const roleOpts = ['ROLE_ADMIN','ROLE_TEACHER','ROLE_STUDENT','ROLE_USER'].map(r => `<option value="${r}" ${item.role===r?'selected':''}>${roleLabel(r)}</option>`).join('');
       openEditModal('&#9998; Editar Usuário', `
-        <div class="field"><label>Nome Completo</label><input type="text" id="euu-nome" value="${item.nome_completo||''}" required /></div>
+        <div class="field"><label>Nome Completo</label><input type="text" id="euu-nome" value="${item.nomeCompleto||item.nome_completo||''}" required /></div>
         <div class="field"><label>E-mail</label><input type="email" id="euu-email" value="${item.email||''}" required /></div>
         <div class="two-col"><div class="field"><label>CPF</label><input type="text" id="euu-cpf" value="${item.cpf||''}" /></div>
         <div class="field"><label>Telefone</label><input type="text" id="euu-tel" value="${item.telefone||''}" /></div></div>
         <div class="field"><label>Data Nascimento</label><input type="date" id="euu-data" value="${item.data_nascimento||''}" /></div>
         <div class="field"><label>Role</label><select id="euu-role">${roleOpts}</select></div>`, id, async (id) => {
         await request(`/usuarios/${id}`, {method:'PUT',body:JSON.stringify({
-          nome_completo: document.getElementById('euu-nome').value,
+          nomeCompleto: document.getElementById('euu-nome').value,
           email: document.getElementById('euu-email').value,
           cpf: document.getElementById('euu-cpf').value,
           telefone: document.getElementById('euu-tel').value,
@@ -1743,23 +1813,36 @@ document.addEventListener('click', async (e) => {
 });
 
 // ======================================
-// FILTER LISTENERS (generic)
+// FILTER LISTENERS — explicit bindings
 // ======================================
-['cursos', 'unidades', 'usuarios', 'editais', 'alunos'].forEach(prefix => {
-  document.querySelectorAll(`#filtro-${prefix}-texto, #filtro-${prefix}-status, #filtro-${prefix}-estado, #filtro-${prefix}-curso, #filtro-${prefix}-unidade, #filtro-${prefix}-role, #filtro-${prefix}-status-matricula`).forEach(el => {
-    if (!el) return;
-    el.addEventListener('input', () => {
-      const fn = { cursos: loadCursos, unidades: loadUnidades, usuarios: loadUsuarios, editais: loadEditais, alunos: loadAlunos }[prefix];
-      if (fn) {
-        const filtros = {};
-        document.querySelectorAll(`#filtro-${prefix}-texto, #filtro-${prefix}-status, #filtro-${prefix}-estado, #filtro-${prefix}-curso, #filtro-${prefix}-unidade, #filtro-${prefix}-role, #filtro-${prefix}-status-matricula`).forEach(f => {
-          if (f.id) filtros[f.id.replace(`filtro-${prefix}-`, '')] = f.value;
-        });
-        fn(filtros);
-      }
+function bindFilter(inputId, loadFn, filterMap) {
+  const el = document.getElementById(inputId);
+  if (!el) return;
+  const evt = el.tagName === 'SELECT' ? 'change' : 'input';
+  el.addEventListener(evt, () => {
+    const filtros = {};
+    Object.keys(filterMap).forEach(key => {
+      const e = document.getElementById(filterMap[key]);
+      if (e) filtros[key] = e.value;
     });
+    loadFn(filtros);
   });
-});
+}
+
+function initFilters() {
+  bindFilter('filtro-cursos-texto', loadCursos, { texto: 'filtro-cursos-texto', status: 'filtro-cursos-status', unidade: 'filtro-cursos-unidade' });
+  bindFilter('filtro-cursos-status', loadCursos, { texto: 'filtro-cursos-texto', status: 'filtro-cursos-status', unidade: 'filtro-cursos-unidade' });
+  bindFilter('filtro-cursos-unidade', loadCursos, { texto: 'filtro-cursos-texto', status: 'filtro-cursos-status', unidade: 'filtro-cursos-unidade' });
+  bindFilter('filtro-unidades-texto', loadUnidades, { texto: 'filtro-unidades-texto', estado: 'filtro-unidades-estado' });
+  bindFilter('filtro-unidades-estado', loadUnidades, { texto: 'filtro-unidades-texto', estado: 'filtro-unidades-estado' });
+  bindFilter('filtro-usuarios-texto', loadUsuarios, { texto: 'filtro-usuarios-texto', role: 'filtro-usuarios-role' });
+  bindFilter('filtro-usuarios-role', loadUsuarios, { texto: 'filtro-usuarios-texto', role: 'filtro-usuarios-role' });
+  bindFilter('filtro-editais-texto', loadEditais, { texto: 'filtro-editais-texto', status: 'filtro-editais-status' });
+  bindFilter('filtro-editais-status', loadEditais, { texto: 'filtro-editais-texto', status: 'filtro-editais-status' });
+  bindFilter('filtro-alunos-texto', loadAlunos, { texto: 'filtro-alunos-texto', curso: 'filtro-alunos-curso', statusMat: 'filtro-alunos-status-matricula' });
+  bindFilter('filtro-alunos-curso', loadAlunos, { texto: 'filtro-alunos-texto', curso: 'filtro-alunos-curso', statusMat: 'filtro-alunos-status-matricula' });
+  bindFilter('filtro-alunos-status-matricula', loadAlunos, { texto: 'filtro-alunos-texto', curso: 'filtro-alunos-curso', statusMat: 'filtro-alunos-status-matricula' });
+}
 
 // ======================================
 // ADD EMPTY/SKELETON NODES (for tables that don't have them)
@@ -1795,7 +1878,7 @@ function populateSidebarUser() {
 
   const u = auth.usuario;
   const initials = (u.nomeCompleto || '?').split(' ').map(s => s[0]).join('').slice(0, 2).toUpperCase();
-  const roleLabel = u.role === 'ROLE_ADMIN' ? 'Admin' : u.role === 'ROLE_TEACHER' ? 'Professor' : 'Usuário';
+  const roleText = roleLabel(u.role);
 
   const avatar = document.getElementById('sec-user-avatar');
   const name = document.getElementById('sec-user-name');
@@ -1804,7 +1887,7 @@ function populateSidebarUser() {
   if (avatar) avatar.textContent = initials;
   if (name) name.textContent = u.nomeCompleto || 'Usuário';
   if (email) email.textContent = u.email || '';
-  if (role) role.textContent = roleLabel;
+  if (role) role.textContent = roleText;
 }
 
 // Mobile sidebar toggle
@@ -2626,6 +2709,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   populateSidebarUser();
   initSettings();
+  setupTableSort();
+  initFilters();
 
   // Preload all data in background
   loadDashboard();
