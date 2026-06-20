@@ -630,6 +630,7 @@ pre:hover .copy-btn { opacity: 1; }
 /* Content grouping for PDF - keeps h3 + content together */
 .keep-together { page-break-inside: avoid; break-inside: avoid; }
 .screenshot-item { page-break-inside: avoid; }
+.step + .step { page-break-before: always; }
 
 
 
