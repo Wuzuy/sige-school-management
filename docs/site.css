@@ -251,7 +251,7 @@ tr:nth-child(even) td { background: var(--bg); }
   width: 100%;
 }
 
-.main-content.full { margin-left: 0; max-width: 1100px; margin-left: auto; margin-right: auto; }
+.main-content.full { margin-left: var(--sidebar-width); max-width: 1100px; }
 
 /* Breadcrumbs */
 .breadcrumbs {
@@ -490,9 +490,68 @@ pre:hover .copy-btn { opacity: 1; }
   .card { break-inside: avoid; }
 }
 
-/* Responsive */
-@media (max-width: 900px) {
-  .screenshot-grid { grid-template-columns: 1fr; }
+/* ===== RESPONSIVO ===== */
+
+/* Hamburger sempre visivel em mobile */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  line-height: 1;
+  margin-right: 0.5rem;
+}
+
+/* Tabelas responsivas: wrap em container com scroll */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1.5rem;
+}
+
+.table-responsive table {
+  margin-bottom: 0;
+  min-width: 500px;
+}
+
+/* Screenshots: sem largura fixa em mobile */
+.screenshot-item img {
+  max-width: 100%;
+  width: 100%;
+}
+
+/* Navegação nas páginas de manual */
+.manual-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.manual-nav a {
+  padding: 0.75rem 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  flex: 1;
+  text-align: center;
+  min-width: 140px;
+}
+
+.manual-nav a:hover {
+  background: var(--primary);
+  color: #fff;
+  text-decoration: none;
+  border-color: var(--primary);
 }
 
 @media (max-width: 768px) {
@@ -500,6 +559,7 @@ pre:hover .copy-btn { opacity: 1; }
 
   .sidebar {
     transform: translateX(-100%);
+    width: min(85vw, 300px);
   }
 
   .sidebar.open {
@@ -510,27 +570,75 @@ pre:hover .copy-btn { opacity: 1; }
     display: block;
   }
 
-  .main-content {
+  .main-content, .main-content.full {
     margin-left: 0;
     padding: 1.25rem;
   }
 
-  .hero { padding: 2rem 1rem; }
-  .hero h1 { font-size: 1.6rem; }
+  .hero {
+    padding: 1.75rem 1rem;
+    border-radius: var(--radius-md);
+  }
+  .hero h1 { font-size: 1.5rem; }
+  .hero p { font-size: 1rem; }
 
-  .card-grid { grid-template-columns: 1fr; }
+  .card-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 
-  .feature-list { grid-template-columns: 1fr; }
+  .screenshot-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .screenshot-item img {
+    max-width: 100%;
+  }
+
+  .feature-list {
+    grid-template-columns: 1fr;
+  }
 
   table { font-size: 0.8rem; }
   th, td { padding: 0.4rem 0.5rem; }
 
   h1 { font-size: 1.5rem; }
   h2 { font-size: 1.25rem; }
+  h3 { font-size: 1.1rem; }
+
+  .wrapper { flex-direction: column; }
+
+  .arch-diagram pre { font-size: 0.65rem; }
+
+  .manual-nav { flex-direction: column; }
+  .manual-nav a { min-width: auto; }
 }
 
 @media (max-width: 480px) {
-  .main-content { padding: 1rem; }
-  .hero h1 { font-size: 1.35rem; }
-  .hero p { font-size: 0.95rem; }
+  .main-content { padding: 0.75rem; }
+  .hero { padding: 1.25rem 0.75rem; }
+  .hero h1 { font-size: 1.25rem; }
+  .hero p { font-size: 0.9rem; }
+  .hero-icon { font-size: 2rem; }
+  h1 { font-size: 1.3rem; }
+  h2 { font-size: 1.15rem; }
+  pre { font-size: 0.75rem; padding: 0.75rem; }
+  .site-header { padding: 0 0.75rem; }
+  .header-logo { font-size: 1rem; }
+}
+
+/* Melhorias de usabilidade em touch */
+@media (hover: none) and (pointer: coarse) {
+  .sidebar-nav a { padding: 0.75rem 1rem; }
+  .sidebar-nav a .nav-icon { width: 22px; font-size: 1.15rem; }
+  .copy-btn { opacity: 0.5; }
+  pre:hover .copy-btn { opacity: 0.5; }
+  pre:active .copy-btn, .copy-btn:active { opacity: 1; }
+}
+
+/* Ajuste para telas muito largas */
+@media (min-width: 1400px) {
+  .main-content { max-width: 1100px; }
+  .main-content.full { max-width: 1200px; }
 }

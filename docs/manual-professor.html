@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual do Professor — SIGE Docs</title>
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-logo">
+    <button class="hamburger" aria-label="Abrir menu">&#9776;</button>
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+    SIGE Docs
+  </div>
+  <div class="header-actions">
+    <button class="theme-toggle" aria-label="Alternar modo escuro">&#127769;</button>
+  </div>
+</header>
+
+<div class="wrapper">
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li class="nav-section">Introdução</li>
+      <li><a href="index.html"><span class="nav-icon">&#127968;</span> Início</a></li>
+      <li class="nav-section">Portais Web</li>
+      <li><a href="portal-inscricao.html"><span class="nav-icon">&#128196;</span> Portal de Inscrição</a></li>
+      <li><a href="portal-escolar.html"><span class="nav-icon">&#127891;</span> Portal Escolar</a></li>
+      <li><a href="portal-secretaria.html"><span class="nav-icon">&#128188;</span> Portal da Secretaria</a></li>
+      <li class="nav-section">Mobile</li>
+      <li><a href="mobile.html"><span class="nav-icon">&#128241;</span> Aplicativo Mobile</a></li>
+      <li class="nav-section">Backend</li>
+      <li><a href="backend.html"><span class="nav-icon">&#9881;&#65039;</span> Backend API</a></li>
+      <li><a href="database.html"><span class="nav-icon">&#128451;</span> Banco de Dados</a></li>
+      <li class="nav-section">Deploy</li>
+      <li><a href="deploy.html"><span class="nav-icon">&#128640;</span> Guia de Deploy</a></li>
+      <li class="nav-section">Manuais</li>
+      <li><a href="manual-candidato.html"><span class="nav-icon">&#128193;</span> Manual do Candidato</a></li>
+      <li><a href="manual-aluno.html"><span class="nav-icon">&#127891;</span> Manual do Aluno</a></li>
+      <li><a href="manual-professor.html"><span class="nav-icon">&#128218;</span> Manual do Professor</a></li>
+      <li><a href="manual-secretaria.html"><span class="nav-icon">&#128188;</span> Manual da Secretaria</a></li>
+    </ul>
+  </aside>
+
+  <div class="sidebar-overlay"></div>
+
+  <main class="main-content">
+    <nav class="breadcrumbs">
+      <a href="index.html">Início</a>
+      <span class="sep">/</span>
+      <span>Manual do Professor</span>
+    </nav>
+
+    <div class="page-header">
+      <h1>Manual do Professor</h1>
+      <p>Guia de uso do sistema SIGE para professores — consulta de dados acadêmicos, acompanhamento de alunos e integração com a Secretaria.</p>
+    </div>
+
+    <section>
+      <h2>1. Introdução</h2>
+      <p>O SIGE (Sistema de Inscrição e Gestão Escolar) oferece suporte a contas de professores por meio do papel <code>ROLE_TEACHER</code> no backend. Embora não exista atualmente um portal exclusivo para docentes, os professores podem acessar o <strong>Portal Escolar</strong> utilizando credenciais com perfil de professor para visualizar dados dos alunos e acompanhar o desempenho acadêmico.</p>
+      <p>O sistema conta com infraestrutura de backend preparada para atribuir permissões granulares a professores, permitindo que a Secretaria configure quais funcionalidades cada docente pode acessar.</p>
+    </section>
+
+    <section>
+      <h2>2. Acessando o Sistema</h2>
+      <p>O acesso dos professores é feito de forma unificada através do <strong>Portal de Inscrição</strong>, na página de login. Basta inserir o e-mail e a senha cadastrados para acessar o ambiente do Portal Escolar.</p>
+      <div class="alert alert-info">
+        No futuro, está previsto um portal dedicado ao professor com funcionalidades específicas para o dia a dia docente.
+      </div>
+      <p>Passos para acessar:</p>
+      <ol>
+        <li>Acesse o <strong>Portal de Inscrição</strong></li>
+        <li>Clique em <strong>Entrar</strong> (ou <em>Login</em>)</li>
+        <li>Informe seu e-mail institucional e senha</li>
+        <li>Após autenticação, você será redirecionado ao <strong>Portal Escolar</strong> com as permissões do perfil professor</li>
+      </ol>
+      <div class="alert alert-warning">
+        Caso não possua credenciais de acesso, entre em contato com a Secretaria da instituição para solicitar a criação da sua conta.
+      </div>
+    </section>
+
+    <section>
+      <h2>3. Visão Geral</h2>
+      <p>Com o perfil de professor no SIGE, você pode realizar as seguintes atividades:</p>
+      <ul>
+        <li><strong>Visualizar dados dos alunos</strong> — informações cadastrais, foto e dados acadêmicos</li>
+        <li><strong>Acompanhar frequência e notas</strong> — consultar o histórico de presenças e o desempenho em cada disciplina</li>
+        <li><strong>Visualizar horários de aulas</strong> — grade semanal com disciplinas, turmas e horários</li>
+        <li><strong>Responder reclamações</strong> — interagir com os alunos por meio do módulo de reclamações, mediado pela Secretaria</li>
+      </ul>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <a href="printscreens/portal-escolar-dashboard.png" target="_blank">
+            <img src="printscreens/portal-escolar-dashboard.png" alt="Dashboard do Portal Escolar" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Dashboard</strong>
+            Visão inicial com cards de acesso rápido às principais funcionalidades.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>4. Funcionalidades Disponíveis</h2>
+
+      <h3>4.1 Consultar Alunos por Turma</h3>
+      <p>O professor pode visualizar a lista de alunos matriculados em cada turma, acessando os dados cadastrais e acadêmicos de forma rápida e organizada.</p>
+
+      <h3>4.2 Acessar Histórico Escolar dos Alunos</h3>
+      <p>É possível consultar o histórico escolar completo dos alunos, incluindo disciplinas cursadas, notas finais e status de aprovação.</p>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <a href="printscreens/portal-escolar-historico.png" target="_blank">
+            <img src="printscreens/portal-escolar-historico.png" alt="Histórico Escolar" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Histórico Escolar</strong>
+            Disciplinas concluídas com notas finais e status de aprovação.
+          </div>
+        </div>
+      </div>
+
+      <h3>4.3 Acompanhar Frequência</h3>
+      <p>A ferramenta de frequência permite visualizar o percentual de presença dos alunos por disciplina, com detalhamento de total de aulas, presenças e faltas.</p>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <a href="printscreens/portal-escolar-frequencia.png" target="_blank">
+            <img src="printscreens/portal-escolar-frequencia.png" alt="Frequência" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Frequência</strong>
+            Percentual de presença por disciplina com total de aulas, presenças e faltas.
+          </div>
+        </div>
+      </div>
+
+      <h3>4.4 Visualizar Grade de Horários</h3>
+      <p>A grade de horários apresenta a distribuição semanal das aulas, com informações sobre disciplinas, turmas e horários de cada dia.</p>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <a href="printscreens/portal-escolar-horarios.png" target="_blank">
+            <img src="printscreens/portal-escolar-horarios.png" alt="Grade de Horários" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Grade de Horários</strong>
+            Distribuição semanal das aulas com disciplinas, turmas e horários.
+          </div>
+        </div>
+      </div>
+
+      <h3>4.5 Responder Reclamações</h3>
+      <p>O módulo de reclamações permite que os alunos registrem solicitações e que os professores possam respondê-las. A Secretaria atua como intermediária, garantindo que as demandas sejam direcionadas corretamente.</p>
+
+      <h3>4.6 Registrar Notas e Frequência (Futuro)</h3>
+      <p>Está prevista para versões futuras a funcionalidade de <strong>registro direto de notas e frequência</strong> pelo professor no sistema, eliminando a necessidade de repasse manual para a Secretaria.</p>
+      <div class="alert alert-success">
+        Essa funcionalidade está em desenvolvimento e será disponibilizada em breve.
+      </div>
+    </section>
+
+    <section>
+      <h2>5. Apoio da Secretaria</h2>
+      <p>Atualmente, tarefas administrativas como <strong>registro de notas</strong>, <strong>lançamento de frequência</strong> e <strong>emissão de documentos</strong> são realizadas pela <strong>Secretaria</strong> da instituição. O professor deve encaminhar os registros e solicitações administrativas diretamente ao setor responsável.</p>
+      <p>A Secretaria também é responsável por:</p>
+      <ul>
+        <li>Criar e gerenciar contas de professores</li>
+        <li>Configurar permissões de acesso no sistema</li>
+        <li>Vincular professores às turmas e disciplinas</li>
+        <li>Processar reclamações e direcioná-las aos docentes</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>6. Fluxo de Trabalho</h2>
+      <p>O dia a dia do professor no SIGE segue o fluxo abaixo:</p>
+      <ol>
+        <li><strong>Login</strong> — acesse o Portal de Inscrição com suas credenciais</li>
+        <li><strong>Dashboard</strong> — visualize os cards de acesso rápido na tela inicial</li>
+        <li><strong>Consultas acadêmicas</strong> — acesse o histórico, frequência e horários dos alunos</li>
+        <li><strong>Reclamações</strong> — verifique se há novas reclamações ou solicitações dos alunos</li>
+        <li><strong>Encaminhamentos</strong> — repasse à Secretaria os registros de notas e frequência para lançamento oficial</li>
+        <li><strong>Encerramento</strong> — realize logout ao final do período de uso</li>
+      </ol>
+      <p>Este fluxo garante que o professor tenha acesso às informações necessárias para o acompanhamento pedagógico, enquanto as tarefas administrativas permanecem centralizadas na Secretaria.</p>
+    </section>
+
+    <footer class="site-footer">
+      <p>SIGE — Sistema de Inscrição e Gestão Escolar &copy; 2025</p>
+    </footer>
+  </main>
+</div>
+
+<script src="menu.js"></script>
+</body>
+</html>

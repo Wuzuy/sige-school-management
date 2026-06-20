@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual do Candidato — SIGE Docs</title>
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-logo">
+    <button class="hamburger" aria-label="Abrir menu">&#9776;</button>
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+    SIGE Docs
+  </div>
+  <div class="header-actions">
+    <button class="theme-toggle" aria-label="Alternar modo escuro">&#127769;</button>
+  </div>
+</header>
+
+<div class="wrapper">
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li class="nav-section">Introdução</li>
+      <li><a href="index.html"><span class="nav-icon">&#127968;</span> Início</a></li>
+      <li class="nav-section">Portais Web</li>
+      <li><a href="portal-inscricao.html"><span class="nav-icon">&#128196;</span> Portal de Inscrição</a></li>
+      <li><a href="portal-escolar.html"><span class="nav-icon">&#127891;</span> Portal Escolar</a></li>
+      <li><a href="portal-secretaria.html"><span class="nav-icon">&#128188;</span> Portal da Secretaria</a></li>
+      <li class="nav-section">Mobile</li>
+      <li><a href="mobile.html"><span class="nav-icon">&#128241;</span> Aplicativo Mobile</a></li>
+      <li class="nav-section">Backend</li>
+      <li><a href="backend.html"><span class="nav-icon">&#9881;&#65039;</span> Backend API</a></li>
+      <li><a href="database.html"><span class="nav-icon">&#128451;</span> Banco de Dados</a></li>
+      <li class="nav-section">Deploy</li>
+      <li><a href="deploy.html"><span class="nav-icon">&#128640;</span> Guia de Deploy</a></li>
+      <li class="nav-section">Manuais</li>
+      <li><a href="manual-candidato.html" class="active"><span class="nav-icon">&#128218;</span> Manual do Candidato</a></li>
+      <li><a href="manual-aluno.html"><span class="nav-icon">&#127891;</span> Manual do Aluno</a></li>
+      <li><a href="manual-professor.html"><span class="nav-icon">&#128218;</span> Manual do Professor</a></li>
+      <li><a href="manual-secretaria.html"><span class="nav-icon">&#128188;</span> Manual da Secretaria</a></li>
+    </ul>
+  </aside>
+
+  <div class="sidebar-overlay"></div>
+
+  <main class="main-content">
+    <nav class="breadcrumbs">
+      <a href="index.html">Início</a>
+      <span class="sep">/</span>
+      <span>Manual do Candidato</span>
+    </nav>
+
+    <div class="page-header">
+      <h1>Manual do Candidato</h1>
+      <p>Guia passo a passo para utilizar o Portal de Inscrição do SIGE — desde o cadastro até a matrícula.</p>
+    </div>
+
+    <section>
+      <h2>1. Acessando o Sistema</h2>
+      <p>Acesse o Portal de Inscrição através do seu navegador. Na página inicial, você encontrará a tela de login com as opções de criar uma nova conta ou entrar com um login existente.</p>
+      <ol>
+        <li><strong>Cadastro:</strong> Clique em "Criar conta" e preencha seus dados pessoais (nome completo, CPF, e-mail, senha).</li>
+        <li><strong>Login:</strong> Após criar a conta, informe seu e-mail e senha para acessar o sistema.</li>
+        <li><strong>Visitante:</strong> Caso queira apenas visualizar os cursos, utilize a opção "Entrar como Visitante".</li>
+      </ol>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <a href="printscreens/portal-inscricao-login.png" target="_blank">
+            <img src="printscreens/portal-inscricao-login.png" alt="Tela de Login" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Login / Cadastro</strong>
+            Tela inicial com formulário de autenticação e editais publicados.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>2. Visualizando Cursos</h2>
+      <p>Após autenticado, você será direcionado à página de cursos. Nela é possível visualizar todos os cursos disponíveis para inscrição.</p>
+      <ul>
+        <li>Utilize os filtros por <strong>unidade</strong>, <strong>turno</strong> e <strong>status</strong> para refinar a busca.</li>
+        <li>Clique em um curso para ver os detalhes: descrição, carga horária, vagas disponíveis e requisitos.</li>
+        <li>Para se inscrever, clique no botão "Inscrever-se" no card do curso desejado.</li>
+      </ul>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <a href="printscreens/portal-inscricao-cursos.png" target="_blank">
+            <img src="printscreens/portal-inscricao-cursos.png" alt="Lista de Cursos" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Cursos Disponíveis</strong>
+            Lista de cursos com filtros e botão de inscrição.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>3. Realizando Inscrição</h2>
+      <p>Ao clicar em "Inscrever-se", você será levado ao formulário de inscrição. Preencha todos os campos obrigatórios com atenção.</p>
+      <ol>
+        <li><strong>Dados Pessoais:</strong> Confirme seu nome, CPF, data de nascimento e contato.</li>
+        <li><strong>Escolaridade:</strong> Informe seu nível de escolaridade, instituição de ensino e ano de conclusão.</li>
+        <li><strong>Documentos:</strong> Anexe os documentos solicitados (RG, histórico escolar, comprovante de residência).</li>
+        <li><strong>Preferência de Turno:</strong> Selecione o turno desejado (matutino, vespertino ou noturno).</li>
+        <li><strong>Confirmação:</strong> Revise os dados informados e clique em "Confirmar Inscrição".</li>
+      </ol>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <a href="printscreens/portal-inscricao-inscricao.png" target="_blank">
+            <img src="printscreens/portal-inscricao-inscricao.png" alt="Formulário de Inscrição" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Formulário de Inscrição</strong>
+            Preenchimento dos dados pessoais e escolaridade para inscrição no curso.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>4. Acompanhando Status</h2>
+      <p>Após realizar a inscrição, você pode acompanhar o andamento do processo seletivo na página de status.</p>
+      <ul>
+        <li>Acesse a opção "Meu Status" no menu principal.</li>
+        <li>A timeline exibe cada etapa do processo: inscrição recebida, documentos em análise, aprovado/reprovado.</li>
+        <li>Você receberá notificações visuais sempre que houver atualização no status.</li>
+      </ul>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <a href="printscreens/portal-inscricao-status.png" target="_blank">
+            <img src="printscreens/portal-inscricao-status.png" alt="Acompanhamento de Status" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Acompanhamento de Status</strong>
+            Timeline com todas as etapas do processo seletivo.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>5. Aceitando Matrícula</h2>
+      <p>Se sua inscrição for aprovada, você poderá efetuar a matrícula diretamente pelo sistema.</p>
+      <ol>
+        <li>Acesse a página de status e localize a inscrição com status "Aprovado".</li>
+        <li>Clique no botão "Efetuar Matrícula".</li>
+        <li>Leia atentamente o contrato e os termos de matrícula.</li>
+        <li>Marque a caixa de aceite dos termos e clique em "Confirmar Matrícula".</li>
+        <li>Após a confirmação, você receberá um comprovante de matrícula para impressão.</li>
+      </ol>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <a href="printscreens/portal-inscricao-matricula.png" target="_blank">
+            <img src="printscreens/portal-inscricao-matricula.png" alt="Aceite de Matrícula" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Aceite de Matrícula</strong>
+            Contrato e termos para confirmação da matrícula.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>6. Recuperando Senha</h2>
+      <p>Caso você esqueça sua senha, o sistema oferece um processo simples de recuperação.</p>
+      <ol>
+        <li>Na tela de login, clique em "Esqueceu sua senha?".</li>
+        <li>Informe o e-mail cadastrado na sua conta.</li>
+        <li>Você receberá um e-mail com um link para redefinição de senha.</li>
+        <li>Clique no link recebido e defina uma nova senha.</li>
+        <li>Após redefinir, utilize a nova senha para acessar o sistema normalmente.</li>
+      </ol>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <a href="printscreens/portal-inscricao-forgot-password.png" target="_blank">
+            <img src="printscreens/portal-inscricao-forgot-password.png" alt="Recuperar Senha" loading="lazy">
+          </a>
+          <div class="caption">
+            <strong>Recuperar Senha</strong>
+            Formulário para solicitar redefinição de senha via e-mail.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <p>SIGE — Sistema de Inscrição e Gestão Escolar &copy; 2025</p>
+    </footer>
+  </main>
+</div>
+
+<script src="menu.js"></script>
+</body>
+</html>

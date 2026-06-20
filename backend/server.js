@@ -29,6 +29,10 @@ const cargosRoutes = require('./routes/cargos');
 app.use('/api/cargos', cargosRoutes);
 const turmasRoutes = require('./routes/turmas');
 app.use('/api/turmas', turmasRoutes);
+const auditoriaRoutes = require('./routes/auditoria');
+app.use('/api/auditoria', auditoriaRoutes);
+const reclamacoesRoutes = require('./routes/reclamacoes');
+app.use('/api/reclamacoes', reclamacoesRoutes);
 
 const PORT = process.env.PORT || 8080;
 

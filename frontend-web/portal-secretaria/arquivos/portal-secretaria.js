@@ -1879,6 +1879,15 @@ function initSettings() {
 // ======================================
 function addAuditLog(tipo, acao, detalhes) {
   try {
+    // Try to POST to API
+    if (typeof request === 'function') {
+      request('/auditoria', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tipo, acao, detalhes: detalhes || '' })
+      }).catch(() => {}); // silent fallback
+    }
+    // Also keep localStorage fallback
     const auth = (typeof getAuth === 'function') ? getAuth() : null;
     const usuario = auth?.usuario?.nomeCompleto || auth?.usuario?.email || 'Sistema';
     const log = JSON.parse(localStorage.getItem('sige-audit') || '[]');
@@ -1889,7 +1898,6 @@ function addAuditLog(tipo, acao, detalhes) {
       acao,
       detalhes: detalhes || '',
     });
-    // Keep last 500 entries
     if (log.length > 500) log.length = 500;
     localStorage.setItem('sige-audit', JSON.stringify(log));
   } catch {}
@@ -2473,17 +2481,16 @@ document.getElementById('form-responder-reclamacao')?.addEventListener('submit',
 // ======================================
 async function loadReclamacoesStandalone(filters = {}) {
   try {
-    const alunos = await request('/alunos');
-    let reclamacoes = [];
-    alunos.forEach(a => {
-      (a.reclamacoes || []).forEach(r => {
-        reclamacoes.push({ ...r, alunoNome: a.nome_completo, alunoId: a.id });
-      });
-    });
-    const t = (filters.texto || '').toLowerCase();
-    if (t) reclamacoes = reclamacoes.filter(r => (r.assunto || '').toLowerCase().includes(t) || (r.alunoNome || '').toLowerCase().includes(t));
-    if (filters.status && filters.status !== 'TODOS') reclamacoes = reclamacoes.filter(r => r.status === filters.status);
-    reclamacoes.sort((a, b) => new Date(b.data_abertura || 0) - new Date(a.data_abertura || 0));
+    const params = new URLSearchParams();
+    if (filters.texto) params.set('texto', filters.texto);
+    if (filters.status && filters.status !== 'TODOS') params.set('status', filters.status);
+    params.set('limit', '500');
+    const res = await request('/reclamacoes?' + params.toString());
+    const reclamacoes = (res.data || []).map(r => ({
+      ...r,
+      alunoNome: r.id_usuario?.nome_completo || r.id_usuario?.email || '-',
+      alunoId: r.id_usuario?.id || r.id_usuario
+    }));
 
     const tbody = document.getElementById('lista-reclamacoes');
     const empty = document.getElementById('reclamacoes-empty');
@@ -2523,25 +2530,51 @@ document.addEventListener('click', (e) => {
 // ======================================
 // AUDITORIA MODULE
 // ======================================
-function loadAuditoria(filters = {}) {
-  const logs = JSON.parse(localStorage.getItem('sige-audit') || '[]');
-  let f = [...logs];
-  const t = (filters.texto || '').toLowerCase();
-  if (t) f = f.filter(l => (l.usuario || '').toLowerCase().includes(t) || (l.acao || '').toLowerCase().includes(t) || (l.detalhes || '').toLowerCase().includes(t));
-  if (filters.tipo && filters.tipo !== 'TODOS') f = f.filter(l => l.tipo === filters.tipo);
+async function loadAuditoria(filters = {}) {
+  try {
+    const params = new URLSearchParams();
+    if (filters.texto) params.set('texto', filters.texto);
+    if (filters.tipo && filters.tipo !== 'TODOS') params.set('tipo', filters.tipo);
+    params.set('limit', '500');
+    const res = await request('/auditoria?' + params.toString());
+    const logs = res.data || [];
+    const total = res.total || 0;
 
-  const tbody = document.getElementById('lista-auditoria');
-  const empty = document.getElementById('auditoria-empty');
-  if (!f.length) { if (tbody) tbody.innerHTML = ''; if (empty) empty.classList.remove('hidden'); return; }
-  if (empty) empty.classList.add('hidden');
-  if (tbody) {
-    tbody.innerHTML = f.map(l => `<tr>
-      <td style="font-size:0.75rem;color:var(--sec-muted);white-space:nowrap;">${new Date(l.timestamp).toLocaleString('pt-BR')}</td>
-      <td><strong>${l.usuario}</strong></td>
-      <td>${l.acao}</td>
-      <td><span class="audit-badge ${(l.tipo || '').toLowerCase()}">${l.tipo || '-'}</span></td>
-      <td style="font-size:0.78rem;color:var(--sec-muted);max-width:250px;overflow:hidden;text-overflow:ellipsis;">${l.detalhes || '-'}</td>
-    </tr>`).join('');
+    const tbody = document.getElementById('lista-auditoria');
+    const empty = document.getElementById('auditoria-empty');
+    if (!logs.length) { if (tbody) tbody.innerHTML = ''; if (empty) empty.classList.remove('hidden'); return; }
+    if (empty) empty.classList.add('hidden');
+    if (tbody) {
+      tbody.innerHTML = logs.map(l => `<tr>
+        <td style="font-size:0.75rem;color:var(--sec-muted);white-space:nowrap;">${new Date(l.timestamp).toLocaleString('pt-BR')}</td>
+        <td><strong>${l.usuario}</strong></td>
+        <td>${l.acao}</td>
+        <td><span class="audit-badge ${(l.tipo || '').toLowerCase()}">${l.tipo || '-'}</span></td>
+        <td style="font-size:0.78rem;color:var(--sec-muted);max-width:250px;overflow:hidden;text-overflow:ellipsis;">${l.detalhes || '-'}</td>
+      </tr>`).join('');
+    }
+    const info = document.getElementById('auditoria-info');
+    if (info) info.textContent = total > 500 ? `Exibindo ${logs.length} de ${total} registros` : `${total} registro(s)`;
+  } catch {
+    // Fallback: load from localStorage
+    const logs = JSON.parse(localStorage.getItem('sige-audit') || '[]');
+    let f = [...logs];
+    const t = (filters.texto || '').toLowerCase();
+    if (t) f = f.filter(l => (l.usuario || '').toLowerCase().includes(t) || (l.acao || '').toLowerCase().includes(t) || (l.detalhes || '').toLowerCase().includes(t));
+    if (filters.tipo && filters.tipo !== 'TODOS') f = f.filter(l => l.tipo === filters.tipo);
+    const tbody = document.getElementById('lista-auditoria');
+    const empty = document.getElementById('auditoria-empty');
+    if (!f.length) { if (tbody) tbody.innerHTML = ''; if (empty) empty.classList.remove('hidden'); return; }
+    if (empty) empty.classList.add('hidden');
+    if (tbody) {
+      tbody.innerHTML = f.map(l => `<tr>
+        <td style="font-size:0.75rem;color:var(--sec-muted);white-space:nowrap;">${new Date(l.timestamp).toLocaleString('pt-BR')}</td>
+        <td><strong>${l.usuario}</strong></td>
+        <td>${l.acao}</td>
+        <td><span class="audit-badge ${(l.tipo || '').toLowerCase()}">${l.tipo || '-'}</span></td>
+        <td style="font-size:0.78rem;color:var(--sec-muted);max-width:250px;overflow:hidden;text-overflow:ellipsis;">${l.detalhes || '-'}</td>
+      </tr>`).join('');
+    }
   }
 }
 
@@ -2556,19 +2589,34 @@ document.querySelectorAll('#filtro-auditoria-texto, #filtro-auditoria-tipo').for
 });
 
 // Export auditoria CSV
-document.getElementById('btn-exportar-auditoria-csv')?.addEventListener('click', () => {
-  const logs = JSON.parse(localStorage.getItem('sige-audit') || '[]');
-  if (!logs.length) { notyf.error('Nenhum registro para exportar.'); return; }
-  const rows = [['Data/Hora', 'Usuário', 'Ação', 'Tipo', 'Detalhes']];
-  logs.forEach(l => rows.push([new Date(l.timestamp).toLocaleString('pt-BR'), l.usuario, l.acao, l.tipo || '', l.detalhes || '']));
-  const csv = rows.map(r => r.map(c => `"${String(c ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
-  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = `auditoria_${new Date().toISOString().slice(0, 10)}.csv`;
-  link.click();
-  URL.revokeObjectURL(link.href);
-  notyf.success('CSV exportado!');
+document.getElementById('btn-exportar-auditoria-csv')?.addEventListener('click', async () => {
+  try {
+    const res = await request('/auditoria?limit=5000');
+    const logs = res.data || [];
+    if (!logs.length) { notyf.error('Nenhum registro para exportar.'); return; }
+    const rows = [['Data/Hora', 'Usuário', 'Ação', 'Tipo', 'Detalhes']];
+    logs.forEach(l => rows.push([new Date(l.timestamp).toLocaleString('pt-BR'), l.usuario, l.acao, l.tipo || '', l.detalhes || '']));
+    const csv = rows.map(r => r.map(c => `"${String(c ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `auditoria_${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+    notyf.success('CSV exportado!');
+  } catch {
+    // Fallback to localStorage
+    const logs = JSON.parse(localStorage.getItem('sige-audit') || '[]');
+    if (!logs.length) { notyf.error('Nenhum registro para exportar.'); return; }
+    const rows = [['Data/Hora', 'Usuário', 'Ação', 'Tipo', 'Detalhes']];
+    logs.forEach(l => rows.push([new Date(l.timestamp).toLocaleString('pt-BR'), l.usuario, l.acao, l.tipo || '', l.detalhes || '']));
+    const csv = rows.map(r => r.map(c => `"${String(c ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `auditoria_${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+  }
 });
 document.addEventListener('DOMContentLoaded', () => {
   // Ensure authentication

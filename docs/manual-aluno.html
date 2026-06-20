@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIGE — Manual do Aluno</title>
+  <link rel="stylesheet" href="site.css">
+  <style>
+    .step { margin-bottom: 2.5rem; }
+    .step h2 { margin-top: 0; }
+    .step-number { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: var(--primary); color: #fff; border-radius: 50%; font-size: 0.9rem; font-weight: 700; margin-right: 0.5rem; vertical-align: middle; }
+    .step h2 .step-number { vertical-align: middle; }
+    .screenshot-item { margin-bottom: 1.5rem; }
+    .mobile-badge { display: inline-block; background: #22c55e; color: #fff; font-size: 0.7rem; font-weight: 700; padding: 0.15em 0.5em; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.04em; vertical-align: middle; margin-left: 0.5rem; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-logo">
+    <button class="hamburger" aria-label="Abrir menu">&#9776;</button>
+    <svg viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+    SIGE Docs
+  </div>
+  <div class="header-actions">
+    <button class="theme-toggle" aria-label="Alternar modo escuro">&#127769;</button>
+  </div>
+</header>
+
+<div class="wrapper">
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li class="nav-section">Introdução</li>
+      <li><a href="index.html"><span class="nav-icon">&#127968;</span> Início</a></li>
+      <li class="nav-section">Portais Web</li>
+      <li><a href="portal-inscricao.html"><span class="nav-icon">&#128196;</span> Portal de Inscrição</a></li>
+      <li><a href="portal-escolar.html"><span class="nav-icon">&#127891;</span> Portal Escolar</a></li>
+      <li><a href="portal-secretaria.html"><span class="nav-icon">&#128188;</span> Portal da Secretaria</a></li>
+      <li class="nav-section">Mobile</li>
+      <li><a href="mobile.html"><span class="nav-icon">&#128241;</span> Aplicativo Mobile</a></li>
+      <li class="nav-section">Manuais</li>
+      <li><a href="manual-candidato.html"><span class="nav-icon">&#128218;</span> Manual do Candidato</a></li>
+      <li><a href="manual-aluno.html" class="active"><span class="nav-icon">&#127891;</span> Manual do Aluno</a></li>
+      <li><a href="manual-professor.html"><span class="nav-icon">&#128218;</span> Manual do Professor</a></li>
+      <li><a href="manual-secretaria.html"><span class="nav-icon">&#128188;</span> Manual da Secretaria</a></li>
+      <li class="nav-section">Backend</li>
+      <li><a href="backend.html"><span class="nav-icon">&#9881;&#65039;</span> Backend API</a></li>
+      <li><a href="database.html"><span class="nav-icon">&#128451;</span> Banco de Dados</a></li>
+      <li class="nav-section">Deploy</li>
+      <li><a href="deploy.html"><span class="nav-icon">&#128640;</span> Guia de Deploy</a></li>
+    </ul>
+  </aside>
+
+  <div class="sidebar-overlay"></div>
+
+  <main class="main-content full">
+    <nav class="breadcrumbs">
+      <a href="index.html">Início</a>
+      <span class="sep">/</span>
+      <span>Manual do Aluno</span>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-icon">&#127891;</div>
+      <h1>Manual do Aluno</h1>
+      <p>Guia completo para utilizar o SIGE Portal Escolar e o Aplicativo Mobile &mdash; voltado para alunos matriculados.</p>
+    </section>
+
+    <section class="step">
+      <h2><span class="step-number">1</span> Acessando o Portal Escolar</h2>
+      <p>Para acessar o Portal Escolar, abra seu navegador e vá até a página de login do SIGE. Utilize seu <strong>CPF</strong> (ou número de matrícula) e a <strong>senha</strong> fornecida pela secretaria no ato da matrícula.</p>
+      <p>Caso ainda não possua cadastro, você será redirecionado ao <a href="portal-inscricao.html">Portal de Inscrição</a> para realizar sua inscrição inicial.</p>
+      <div class="alert alert-info">
+        <strong>Dica:</strong> Mantenha seus dados de acesso em local seguro. A secretaria nunca solicita sua senha por e-mail ou telefone.
+      </div>
+    </section>
+
+    <section class="step">
+      <h2><span class="step-number">2</span> Dashboard</h2>
+      <p>Após o login, você verá o <strong>Dashboard</strong> com um resumo das suas informações acadêmicas: cards com a quantidade de disciplinas cursadas, média geral, próximos eventos e avisos importantes.</p>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <img src="printscreens/portal-escolar-dashboard.png" alt="Dashboard do Portal Escolar">
+          <div class="caption"><strong>Dashboard</strong> Visão geral com cards de resumo acadêmico.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="step">
+      <h2><span class="step-number">3</span> Meu Perfil</h2>
+      <p>No menu <strong>Meu Perfil</strong> você pode editar seus dados pessoais (e-mail, telefone, endereço), alterar sua foto e trocar sua senha.</p>
+      <ul>
+        <li><strong>Editar dados:</strong> Altere informações como telefone e endereço.</li>
+        <li><strong>Upload de foto:</strong> Envie uma foto recente (formatos JPG ou PNG).</li>
+        <li><strong>Alterar senha:</strong> Informe a senha atual e a nova senha desejada.</li>
+      </ul>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <img src="printscreens/portal-escolar-perfil.png" alt="Meu Perfil">
+          <div class="caption"><strong>Meu Perfil</strong> Edição de dados pessoais e foto.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="step">
+      <h2><span class="step-number">4</span> Consultando Notas e Frequência</h2>
+      <p>O Portal Escolar oferece três formas de acompanhar seu desempenho acadêmico:</p>
+
+      <h3>Histórico Escolar</h3>
+      <p>Exibe todas as disciplinas já cursadas com as notas finais, situação (aprovado/reprovado) e período letivo.</p>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <img src="printscreens/portal-escolar-historico.png" alt="Histórico Escolar">
+          <div class="caption"><strong>Histórico Escolar</strong> Disciplinas concluídas com notas finais.</div>
+        </div>
+      </div>
+
+      <h3>Estrutura Curricular</h3>
+      <p>Visualize a matriz curricular do seu curso organizada por semestre, com o progresso de cada disciplina e os pré-requisitos.</p>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <img src="printscreens/portal-escolar-estrutura-curricular.png" alt="Estrutura Curricular">
+          <div class="caption"><strong>Estrutura Curricular</strong> Matriz do curso por semestre.</div>
+        </div>
+      </div>
+
+      <h3>Frequência</h3>
+      <p>Acompanhe a frequência por disciplina, com o percentual de presenças e faltas registradas ao longo do semestre.</p>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <img src="printscreens/portal-escolar-frequencia.png" alt="Frequência">
+          <div class="caption"><strong>Frequência</strong> Percentual de presenças por disciplina.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="step">
+      <h2><span class="step-number">5</span> Quadro de Horários</h2>
+      <p>O <strong>Quadro de Horários</strong> exibe sua grade semanal com as disciplinas, horários, salas e professores. Use essa tela para se organizar ao longo do semestre.</p>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <img src="printscreens/portal-escolar-horarios.png" alt="Quadro de Horários">
+          <div class="caption"><strong>Quadro de Horários</strong> Grade semanal com disciplinas e horários.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="step">
+      <h2><span class="step-number">6</span> Calendário e Agenda</h2>
+
+      <h3>Calendário Escolar</h3>
+      <p>Consulte as datas importantes do ano letivo: início e fim de semestre, feriados, recessos e períodos de matrícula.</p>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <img src="printscreens/portal-escolar-calendario.png" alt="Calendário Escolar">
+          <div class="caption"><strong>Calendário Escolar</strong> Eventos e feriados do ano letivo.</div>
+        </div>
+      </div>
+
+      <h3>Agenda Escolar</h3>
+      <p>A <strong>Agenda Escolar</strong> lista os próximos eventos acadêmicos, provas, entregas de trabalhos e atividades agendadas.</p>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <img src="printscreens/portal-escolar-agenda.png" alt="Agenda Escolar">
+          <div class="caption"><strong>Agenda Escolar</strong> Próximos eventos e atividades.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="step">
+      <h2><span class="step-number">7</span> Atendimento Agendado</h2>
+      <p>Solicite agendamentos de atendimento com a secretaria, coordenação ou professores. Escolha o setor, o profissional e o horário disponível.</p>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <img src="printscreens/portal-escolar-atendimento.png" alt="Atendimento Agendado">
+          <div class="caption"><strong>Atendimento Agendado</strong> Solicitação de horário com setores da instituição.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="step">
+      <h2><span class="step-number">8</span> Documentos</h2>
+      <p>Na seção <strong>Documentos</strong> você pode visualizar e baixar documentos escolares como declarações de matrícula, históricos, boletos e certificados.</p>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <img src="printscreens/portal-escolar-documentos.png" alt="Documentos">
+          <div class="caption"><strong>Documentos</strong> Visualização e download de documentos acadêmicos.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="step">
+      <h2><span class="step-number">9</span> Reclamações e Ouvidoria</h2>
+
+      <h3>Lista de Reclamações</h3>
+      <p>Acompanhe o status das suas reclamações já registradas. Cada solicitação exibe o número de protocolo, data, descrição e situação (aberta, em andamento, resolvida).</p>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <img src="printscreens/portal-escolar-reclamacoes.png" alt="Lista de Reclamações">
+          <div class="caption"><strong>Reclamações</strong> Acompanhamento de solicitações registradas.</div>
+        </div>
+      </div>
+
+      <h3>Nova Reclamação</h3>
+      <p>Registre uma nova reclamação ou sugestão através do formulário de ouvidoria. Informe o assunto, a descrição detalhada e anexe arquivos se necessário.</p>
+      <div class="screenshot-grid">
+        <div class="screenshot-item">
+          <img src="printscreens/portal-escolar-ouvidoria.png" alt="Nova Reclamação">
+          <div class="caption"><strong>Ouvidoria</strong> Formulário para registro de reclamações e sugestões.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="step">
+      <h2><span class="step-number">10</span> Aplicativo Mobile</h2>
+      <p>O SIGE também está disponível como <strong>aplicativo mobile</strong> para alunos, desenvolvido em React Native (Expo). Com ele você pode:</p>
+      <ul class="feature-list">
+        <li>Visualizar notas e frequência</li>
+        <li>Consultar o quadro de horários</li>
+        <li>Acessar o calendário e agenda escolar</li>
+        <li>Editar o perfil e alterar a foto</li>
+        <li>Agendar atendimentos</li>
+        <li>Emitir declarações e documentos</li>
+        <li>Acompanhar reclamações</li>
+        <li>Receber notificações push</li>
+      </ul>
+      <p>O aplicativo está disponível para dispositivos Android e iOS. Consulte a secretaria para obter o link de download ou acesse a seção <a href="mobile.html">Aplicativo Mobile</a> na documentação.</p>
+      <div class="alert alert-success">
+        <strong>Dica:</strong> Mantenha o aplicativo sempre atualizado para usufruir das últimas funcionalidades e correções.
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <p>SIGE — Sistema de Inscrição e Gestão Escolar &copy; 2025</p>
+    </footer>
+  </main>
+</div>
+
+<script src="menu.js"></script>
+</body>
+</html>
