@@ -469,27 +469,6 @@ pre:hover .copy-btn { opacity: 1; }
 }
 
 /* Print styles */
-@media print {
-  .site-header,
-  .sidebar,
-  .hamburger,
-  .theme-toggle,
-  .breadcrumbs,
-  .copy-btn,
-  .site-footer { display: none !important; }
-
-  .main-content { margin: 0 !important; padding: 1rem !important; max-width: 100% !important; }
-  .wrapper { display: block; }
-  .hero { background: none !important; color: #000; border: 1px solid #ccc; }
-  .hero h1 { color: #000; }
-  .hero p { color: #333; }
-  a { color: #000 !important; }
-  pre { page-break-inside: avoid; }
-  h2 { page-break-after: avoid; }
-  .screenshot-item { page-break-inside: avoid; }
-  .card { break-inside: avoid; }
-}
-
 /* ===== RESPONSIVO ===== */
 
 /* Hamburger sempre visivel em mobile */
@@ -636,6 +615,59 @@ pre:hover .copy-btn { opacity: 1; }
   pre:hover .copy-btn { opacity: 0.5; }
   pre:active .copy-btn, .copy-btn:active { opacity: 1; }
 }
+
+/* ===== BOTAO EXPORTAR PDF ===== */
+.btn-print {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: var(--primary); color: #fff; border: none;
+  padding: 0.6rem 1.2rem; border-radius: var(--radius-sm);
+  font-size: 0.85rem; font-weight: 600; cursor: pointer;
+  transition: background 0.2s; margin-top: 0.75rem;
+}
+.btn-print:hover { background: var(--primary-light); }
+.btn-print svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+/* Content grouping for PDF - keeps h3 + content together */
+.keep-together { page-break-inside: avoid; break-inside: avoid; }
+.screenshot-item { page-break-inside: avoid; }
+
+
+
+/* ===== PRINT / PDF ===== */
+@media print {
+  @page { margin: 1.5cm; size: A4; }
+  body { background: #fff; color: #000; font-size: 11pt; line-height: 1.5; }
+  .site-header,
+  .sidebar,
+  .hamburger,
+  .theme-toggle,
+  .breadcrumbs,
+  .copy-btn,
+  .site-footer,
+  .btn-print,
+  .sidebar-overlay { display: none !important; }
+
+  .wrapper { display: block !important; min-height: auto; }
+  .main-content { margin: 0 !important; padding: 0 !important; max-width: 100% !important; width: 100%; }
+  .main-content.full { margin: 0 !important; max-width: 100% !important; }
+  .hero, .page-header { background: none !important; color: #000; border: 1px solid #ccc; padding: 0.75rem; }
+  .hero h1, .page-header h1 { color: #000; font-size: 18pt; }
+  .hero p, .page-header p { color: #333; }
+  a { color: #000 !important; text-decoration: underline; }
+  pre { page-break-inside: avoid; font-size: 8pt; padding: 0.5rem; }
+  h2 { font-size: 14pt; page-break-after: avoid; }
+  h3 { font-size: 12pt; page-break-after: avoid; }
+  .keep-together { page-break-inside: avoid; }
+  .screenshot-item { page-break-inside: avoid; margin-bottom: 0.75rem; }
+  .screenshot-grid { display: block; }
+  .screenshot-item img { max-width: 100% !important; max-height: 16cm; height: auto; object-fit: contain; }
+  .card { break-inside: avoid; }
+  .alert { border: 1px solid #ccc; background: #f9f9f9 !important; }
+  .step-number { background: #333 !important; }
+  p { orphans: 3; widows: 3; }
+}
+
+/* ===== BOTAO EXPORTAR PDF FIM ===== */
 
 /* Ajuste para telas muito largas */
 @media (min-width: 1400px) {

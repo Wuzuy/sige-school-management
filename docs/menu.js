@@ -129,11 +129,38 @@
     });
   }
 
+  function groupH3Content() {
+    var sections = document.querySelectorAll('.step');
+    sections.forEach(function (section) {
+      var children = [];
+      var el = section.firstElementChild;
+      while (el) { children.push(el); el = el.nextElementSibling; }
+      var i = 0;
+      while (i < children.length) {
+        if (children[i].tagName === 'H3') {
+          var group = document.createElement('div');
+          group.className = 'keep-together';
+          section.insertBefore(group, children[i]);
+          var j = i;
+          while (j < children.length) {
+            if (j > i && children[j].tagName === 'H3') break;
+            group.appendChild(children[j]);
+            j++;
+          }
+          i = j;
+        } else {
+          i++;
+        }
+      }
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     initHamburger();
     initActivePage();
     initSmoothScroll();
     initDarkMode();
     initCopyButtons();
+    groupH3Content();
   });
 })();
