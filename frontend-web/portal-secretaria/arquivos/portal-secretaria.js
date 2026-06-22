@@ -94,12 +94,6 @@ function showSuccess(msg) {
   try { notyf.success(msg); } catch { alert(msg); }
 }
 
-// --- Global auth & permission helpers ---
-let __auth = null;
-function hasPerm(codigo) {
-  return !!(__auth?.permissoes && __auth.permissoes.includes(codigo));
-}
-
 // --- Permission-based UI visibility ---
 function filterSidebarByPerms() {
   const permModuleMap = {
