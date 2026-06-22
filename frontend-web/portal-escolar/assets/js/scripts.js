@@ -586,10 +586,12 @@ function setupMobileMenu() {
 }
 
 function setupTopNav(auth) {
+  const permissoes = auth?.permissoes || [];
   const isAdmin = auth?.usuario?.role === 'ROLE_ADMIN';
+  const hasPortalSecretaria = permissoes.includes('portal.secretaria') || isAdmin;
 
   document.querySelectorAll('[data-admin-only]').forEach((element) => {
-    element.classList.toggle('visible', isAdmin);
+    element.classList.toggle('visible', hasPortalSecretaria);
   });
 
   const currentFile = getCurrentFileName();

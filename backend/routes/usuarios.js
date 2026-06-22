@@ -3,20 +3,27 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const supabase = require('../config/supabase');
-const { requireAuth, requireRole, getUserPermissoes } = require('../middleware/auth');
+const { requireAuth, requirePermissao, getUserPermissoes } = require('../middleware/auth');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secreta_sige_123';
 
-// Registo de novo utilizador
+// Registo de novo utilizador (cargo padrão: Candidato)
 router.post('/', async (req, res) => {
   const { nomeCompleto, email, senha } = req.body;
-  
+
   const salt = await bcrypt.genSalt(10);
   const senhaHash = await bcrypt.hash(senha, salt);
 
+  // Busca o cargo Candidato (default para novos registos)
+  const { data: cargoCandidato } = await supabase
+    .from('cargos')
+    .select('id')
+    .eq('nome', 'Candidato')
+    .single();
+
   const { data, error } = await supabase
     .from('usuarios')
-    .insert([{ nome_completo: nomeCompleto, email, senha: senhaHash }])
+    .insert([{ nome_completo: nomeCompleto, email, senha: senhaHash, id_cargo: cargoCandidato?.id || null }])
     .select();
 
   if (error) return res.status(400).json({ error: error.message });
@@ -121,7 +128,7 @@ router.put('/me', requireAuth, async (req, res) => {
 });
 
 // === ADMIN: Listar todos os usuarios ===
-router.get('/', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
+router.get('/', requireAuth, requirePermissao('usuario.visualizar'), async (req, res) => {
   const { data, error } = await supabase.from('usuarios').select('*').order('id', { ascending: true });
   if (error) return res.status(500).json({ error: error.message });
 
@@ -147,7 +154,7 @@ router.get('/count', async (req, res) => {
 });
 
 // === ADMIN: Obter usuario especifico ===
-router.get('/:id', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
+router.get('/:id', requireAuth, requirePermissao('usuario.visualizar'), async (req, res) => {
   const { data, error } = await supabase.from('usuarios').select('*').eq('id', req.params.id).single();
   if (error) return res.status(404).json({ error: 'Usuario nao encontrado' });
 
@@ -164,7 +171,7 @@ router.get('/:id', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
 });
 
 // === ADMIN: Atualizar usuario ===
-router.put('/:id', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
+router.put('/:id', requireAuth, requirePermissao('usuario.editar'), async (req, res) => {
   const { nomeCompleto, email, cpf, telefone, dataNascimento, role, id_cargo } = req.body;
   const updateData = {};
   if (nomeCompleto !== undefined) updateData.nome_completo = nomeCompleto;
@@ -191,15 +198,26 @@ router.put('/:id', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
 });
 
 // === ADMIN: Excluir usuario ===
-router.delete('/:id', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
+router.delete('/:id', requireAuth, requirePermissao('usuario.excluir'), async (req, res) => {
   const { error } = await supabase.from('usuarios').delete().eq('id', req.params.id);
   if (error) return res.status(400).json({ error: error.message });
   res.status(204).send();
 });
 
 // === ADMIN: Criar usuario com role ===
-router.post('/admin', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
-  const { nomeCompleto, email, senha, cpf, telefone, dataNascimento, role, id_cargo } = req.body;
+router.post('/admin', requireAuth, requirePermissao('usuario.criar'), async (req, res) => {
+  const { nomeCompleto, email, senha, cpf, telefone, dataNascimento, role, id_cargo: reqIdCargo } = req.body;
+
+  // Se nao especificou cargo, usa Candidato como padrao
+  let cargoId = reqIdCargo;
+  if (!cargoId) {
+    const { data: cargoCandidato } = await supabase
+      .from('cargos')
+      .select('id')
+      .eq('nome', 'Candidato')
+      .single();
+    cargoId = cargoCandidato?.id || null;
+  }
 
   const salt = await bcrypt.genSalt(10);
   const senhaHash = await bcrypt.hash(senha, salt);
@@ -214,7 +232,7 @@ router.post('/admin', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) =
       telefone: telefone || null,
       data_nascimento: dataNascimento || null,
       role: role || 'ROLE_USER',
-      id_cargo: id_cargo || null
+      id_cargo: cargoId
     }])
     .select()
     .single();

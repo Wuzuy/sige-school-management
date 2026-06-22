@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const supabase = require('../config/supabase');
-const { requireAuth, requireRole } = require('../middleware/auth');
+const { requireAuth, requirePermissao } = require('../middleware/auth');
 
 // POST /api/auditoria/init - Create auditoria table (one-time setup)
-router.post('/init', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
+router.post('/init', requireAuth, requirePermissao('auditoria.visualizar'), async (req, res) => {
   try {
     // Use raw SQL via supabase.rpc (will be executed server-side)
     const { error } = await supabase.rpc('exec_sql', {
@@ -21,7 +21,7 @@ router.post('/init', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) =>
 });
 
 // GET /api/auditoria - List auditoria entries with pagination and filters
-router.get('/', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
+router.get('/', requireAuth, requirePermissao('auditoria.visualizar'), async (req, res) => {
   try {
     const { texto, tipo, offset = 0, limit = 100 } = req.query;
     let query = supabase.from('auditoria').select('*', { count: 'exact' }).order('timestamp', { ascending: false });
@@ -41,7 +41,7 @@ router.get('/', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
 });
 
 // POST /api/auditoria - Create a new auditoria entry
-router.post('/', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
+router.post('/', requireAuth, requirePermissao('auditoria.visualizar'), async (req, res) => {
   try {
     const { tipo, acao, detalhes } = req.body;
     const usuario = req.user?.nomeCompleto || req.user?.email || 'Sistema';

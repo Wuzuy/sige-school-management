@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const supabase = require('../config/supabase');
-const { requireAuth, requireRole } = require('../middleware/auth');
+const { requireAuth, requirePermissao } = require('../middleware/auth');
 
 // GET /api/reclamacoes - List all reclamacoes with aluno info (admin)
-router.get('/', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
+router.get('/', requireAuth, requirePermissao('reclamacao.visualizar'), async (req, res) => {
   try {
     const { texto, status, offset = 0, limit = 100 } = req.query;
     let query = supabase
@@ -27,7 +27,7 @@ router.get('/', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
 });
 
 // PUT /api/reclamacoes/:id - Responder/atualizar status de reclamacao (admin)
-router.put('/:id', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
+router.put('/:id', requireAuth, requirePermissao('reclamacao.responder'), async (req, res) => {
   try {
     const { resposta, status } = req.body;
     const updates = {};

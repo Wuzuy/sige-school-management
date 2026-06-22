@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const supabase = require('../config/supabase');
-const { requireAuth, requireRole } = require('../middleware/auth');
+const { requireAuth, requirePermissao } = require('../middleware/auth');
 
 // Retorna todos os cursos (admin) ou apenas ativos (publico)
 router.get('/', async (req, res) => {
@@ -34,7 +34,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Criar curso (admin)
-router.post('/', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
+router.post('/', requireAuth, requirePermissao('curso.criar'), async (req, res) => {
   const { id_unidade, nome_curso, tipo, turno, data_inicio, duracao_meses, status } = req.body;
 
   const insertData = {
@@ -53,7 +53,7 @@ router.post('/', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
 });
 
 // Atualizar curso (admin)
-router.put('/:id', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
+router.put('/:id', requireAuth, requirePermissao('curso.editar'), async (req, res) => {
   const { id_unidade, nome_curso, tipo, turno, data_inicio, duracao_meses, status } = req.body;
 
   const updateData = {};
@@ -71,7 +71,7 @@ router.put('/:id', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
 });
 
 // Excluir curso (admin)
-router.delete('/:id', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
+router.delete('/:id', requireAuth, requirePermissao('curso.excluir'), async (req, res) => {
   const { error } = await supabase.from('cursos').delete().eq('id', req.params.id);
   if (error) return res.status(400).json({ error: error.message });
   res.status(204).send();

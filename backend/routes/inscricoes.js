@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const supabase = require('../config/supabase');
-const { requireAuth, requireRole } = require('../middleware/auth');
+const { requireAuth } = require('../middleware/auth');
 
 // Criar inscricao
 router.post('/', requireAuth, async (req, res) => {
@@ -84,17 +84,22 @@ router.put('/:id', requireAuth, async (req, res) => {
 
   // Se matricula foi aceita, promover usuario e criar registro em matriculas
   if (updates.status_matricula === 'ACEITA') {
-    // Promover ROLE_USER para ROLE_STUDENT
+    // Promover ROLE_USER para ROLE_STUDENT e atualizar cargo
     const { data: userData } = await supabase
       .from('usuarios')
-      .select('role')
+      .select('role, id_cargo')
       .eq('id', inscricao.id_usuario)
       .single();
 
     if (userData && userData.role === 'ROLE_USER') {
+      const { data: cargoAluno } = await supabase
+        .from('cargos')
+        .select('id')
+        .eq('nome', 'Aluno')
+        .single();
       await supabase
         .from('usuarios')
-        .update({ role: 'ROLE_STUDENT' })
+        .update({ role: 'ROLE_STUDENT', id_cargo: cargoAluno?.id || null })
         .eq('id', inscricao.id_usuario);
     }
 
@@ -144,14 +149,19 @@ router.put('/:id/matricula', requireAuth, async (req, res) => {
     const inscricao = data[0];
     const { data: userData } = await supabase
       .from('usuarios')
-      .select('role')
+      .select('role, id_cargo')
       .eq('id', inscricao.id_usuario)
       .single();
 
     if (userData && userData.role === 'ROLE_USER') {
+      const { data: cargoAluno } = await supabase
+        .from('cargos')
+        .select('id')
+        .eq('nome', 'Aluno')
+        .single();
       await supabase
         .from('usuarios')
-        .update({ role: 'ROLE_STUDENT' })
+        .update({ role: 'ROLE_STUDENT', id_cargo: cargoAluno?.id || null })
         .eq('id', inscricao.id_usuario);
     }
 

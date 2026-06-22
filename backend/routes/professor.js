@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const supabase = require('../config/supabase');
-const { requireAuth, requireRole } = require('../middleware/auth');
+const { requireAuth, requirePermissao } = require('../middleware/auth');
 
 const userId = (req) => req.user.id;
 
-// Allow both teachers and admins
-router.use(requireAuth, requireRole('ROLE_TEACHER', 'ROLE_ADMIN'));
+// Allow teachers and admins
+router.use(requireAuth, requirePermissao('portal.professor'));
 
 function isAdmin(req) {
   return req.user.role === 'ROLE_ADMIN';

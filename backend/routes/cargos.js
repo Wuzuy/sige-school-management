@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const supabase = require('../config/supabase');
-const { requireAuth, requireAdminMaster, getUserPermissoes } = require('../middleware/auth');
+const { requireAuth, requirePermissao, getUserPermissoes } = require('../middleware/auth');
 
 // === LISTAR todos os cargos ===
 router.get('/', requireAuth, async (req, res) => {
@@ -44,8 +44,8 @@ router.get('/:id', requireAuth, async (req, res) => {
   res.json({ ...cargo, permissaoIds: ids, todasPermissoes: todas || [] });
 });
 
-// === CRIAR cargo (só Admin Master) ===
-router.post('/', requireAuth, requireAdminMaster, async (req, res) => {
+// === CRIAR cargo ===
+router.post('/', requireAuth, requirePermissao('cargo.gerenciar'), async (req, res) => {
   const { nome, descricao, permissaoIds } = req.body;
   if (!nome) return res.status(400).json({ error: 'Nome é obrigatório' });
 
@@ -61,7 +61,7 @@ router.post('/', requireAuth, requireAdminMaster, async (req, res) => {
 });
 
 // === ATUALIZAR cargo ===
-router.put('/:id', requireAuth, requireAdminMaster, async (req, res) => {
+router.put('/:id', requireAuth, requirePermissao('cargo.gerenciar'), async (req, res) => {
   const { nome, descricao, permissaoIds } = req.body;
 
   const { error: upErr } = await supabase.from('cargos').update({ nome, descricao }).eq('id', req.params.id);
@@ -80,7 +80,7 @@ router.put('/:id', requireAuth, requireAdminMaster, async (req, res) => {
 });
 
 // === EXCLUIR cargo ===
-router.delete('/:id', requireAuth, requireAdminMaster, async (req, res) => {
+router.delete('/:id', requireAuth, requirePermissao('cargo.gerenciar'), async (req, res) => {
   const { data: cargo } = await supabase.from('cargos').select('*').eq('id', req.params.id).single();
   if (cargo?.is_admin_master) return res.status(403).json({ error: 'Não é possível excluir o Admin Master' });
 

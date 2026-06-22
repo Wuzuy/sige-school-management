@@ -180,12 +180,14 @@ a {
 }
 
 [data-admin-only],
-[data-student-only] {
+[data-student-only],
+[data-teacher-only] {
   display: none;
 }
 
 [data-admin-only].visible,
-[data-student-only].visible {
+[data-student-only].visible,
+[data-teacher-only].visible {
   display: inline-flex;
 }
 

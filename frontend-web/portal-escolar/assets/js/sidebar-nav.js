@@ -10,7 +10,7 @@ const SIDEBAR_NAVIGATION = {
       icon: '🏠',
       items: [
         { label: 'Página Inicial', icon: '🏠', href: 'index.html' },
-        { label: 'Portal de Inscrição', icon: '📝', href: '../portal-inscricao/index.html' },
+        { label: 'Portal de Inscrição', icon: '📝', href: '../portal-inscricao/index.html', perm: 'portal.inscricao' },
       ]
     },
     {
@@ -69,9 +69,12 @@ function buildSidebar() {
     return;
   }
 
-  // Obtém role do usuário logado
+  // Obtém role e permissoes do usuário logado
   const auth = (() => { try { return JSON.parse(localStorage.getItem('auth')); } catch { return null; } })();
   const role = auth?.usuario?.role || '';
+  const permissoes = auth?.permissoes || [];
+
+  const hasPerm = (codigo) => permissoes.includes(codigo);
 
   // Limpa o conteúdo existente (apenas a navegação)
   const navContent = sidebar.querySelector('nav') || sidebar;
@@ -88,6 +91,10 @@ function buildSidebar() {
 
   // Adiciona cada seção de navegação, filtrando por role
   SIDEBAR_NAVIGATION.sections.forEach((section) => {
+    // Se a seção tem perm definida, só mostra se o usuário tiver a permissao
+    if (section.perm && !hasPerm(section.perm)) {
+      return;
+    }
     // Se a seção tem roles definidas, só mostra se o usuário tiver uma delas
     if (section.roles && !section.roles.includes(role.toLowerCase().replace('role_', ''))) {
       return;
@@ -104,6 +111,10 @@ function buildSidebar() {
 
     // Items da seção
     section.items.forEach((item) => {
+      // Se o item tem perm definida, só mostra se o usuário tiver a permissao
+      if (item.perm && !hasPerm(item.perm)) {
+        return;
+      }
       const itemEl = document.createElement('a');
       itemEl.href = item.href;
       itemEl.className = 'nav-item';

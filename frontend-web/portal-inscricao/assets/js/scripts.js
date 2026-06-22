@@ -675,12 +675,15 @@ function setupMobileMenu() {
 
 function setupTopNav(auth) {
   const role = auth?.usuario?.role;
+  const permissoes = auth?.permissoes || [];
   const isAdmin = role === 'ROLE_ADMIN';
   const isStudent = role === 'ROLE_STUDENT';
   const isTeacher = role === 'ROLE_TEACHER';
+  const hasPortalSecretaria = permissoes.includes('portal.secretaria') || isAdmin;
+  const hasPortalProfessor = permissoes.includes('portal.professor') || isTeacher || isAdmin;
 
   document.querySelectorAll('[data-admin-only]').forEach((element) => {
-    element.classList.toggle('visible', isAdmin);
+    element.classList.toggle('visible', hasPortalSecretaria);
   });
 
   document.querySelectorAll('[data-student-only]').forEach((element) => {
@@ -688,7 +691,7 @@ function setupTopNav(auth) {
   });
 
   document.querySelectorAll('[data-teacher-only]').forEach((element) => {
-    element.classList.toggle('visible', isTeacher || isAdmin);
+    element.classList.toggle('visible', hasPortalProfessor);
   });
 
   const currentFile = getCurrentFileName();

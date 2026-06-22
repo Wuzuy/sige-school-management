@@ -41,11 +41,23 @@ async function getUserPermissoes(userId) {
     }
   }
 
-  // Se nao tem cargo, usa role antiga como fallback
+  // Se nao tem cargo, usa role antiga como fallback (legado)
   if (!user.id_cargo) {
+    // ROLE_ADMIN legacy tem acesso total
     if (user.role === 'ROLE_ADMIN') {
       const { data: all } = await supabase.from('permissoes').select('codigo');
       return (all || []).map(p => p.codigo);
+    }
+    // Demais roles legacy: apenas acesso ao portal correspondente
+    const rolePermMap = {
+      'ROLE_TEACHER': ['portal.professor'],
+      'ROLE_STUDENT': ['portal.escolar', 'portal.inscricao'],
+      'ROLE_USER':    ['portal.inscricao']
+    };
+    const codes = rolePermMap[user.role];
+    if (codes) {
+      const { data: perms } = await supabase.from('permissoes').select('codigo').in('codigo', codes);
+      return (perms || []).map(p => p.codigo);
     }
     return [];
   }

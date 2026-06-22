@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const supabase = require('../config/supabase');
-const { requireAuth, requireRole } = require('../middleware/auth');
+const { requireAuth, requirePermissao } = require('../middleware/auth');
 
 router.get('/', requireAuth, async (req, res) => {
   const { data, error } = await supabase
@@ -22,7 +22,7 @@ router.get('/:id', requireAuth, async (req, res) => {
   res.json(data);
 });
 
-router.post('/', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
+router.post('/', requireAuth, requirePermissao('turma.criar'), async (req, res) => {
   const { nome, id_curso, ano, turno, vagas, status } = req.body;
   const { data, error } = await supabase.from('turmas').insert([{
     nome, id_curso, ano, turno, vagas, status: status || 'ATIVO', ativo: true
@@ -31,7 +31,7 @@ router.post('/', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
   res.status(201).json(data);
 });
 
-router.put('/:id', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
+router.put('/:id', requireAuth, requirePermissao('turma.editar'), async (req, res) => {
   const { nome, id_curso, ano, turno, vagas, status } = req.body;
   const updateData = {};
   if (nome !== undefined) updateData.nome = nome;
@@ -45,7 +45,7 @@ router.put('/:id', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
   res.json(data);
 });
 
-router.delete('/:id', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
+router.delete('/:id', requireAuth, requirePermissao('turma.excluir'), async (req, res) => {
   const { error } = await supabase.from('turmas').delete().eq('id', req.params.id);
   if (error) return res.status(400).json({ error: error.message });
   res.status(204).send();

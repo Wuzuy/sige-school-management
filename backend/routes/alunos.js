@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const supabase = require('../config/supabase');
-const { requireAuth, requireRole } = require('../middleware/auth');
+const { requireAuth, requirePermissao } = require('../middleware/auth');
 
 // GET /api/alunos - Listar todos os alunos (ROLE_STUDENT) com matriculas
-router.get('/', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
+router.get('/', requireAuth, requirePermissao('aluno.visualizar'), async (req, res) => {
   const { data, error } = await supabase
     .from('usuarios')
     .select(`
@@ -23,7 +23,7 @@ router.get('/', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
 });
 
 // GET /api/alunos/:id - Detalhes de um aluno (inclui historico, documentos, reclamacoes, atendimentos)
-router.get('/:id', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
+router.get('/:id', requireAuth, requirePermissao('aluno.visualizar'), async (req, res) => {
   const { data: usuario, error: errUser } = await supabase
     .from('usuarios')
     .select('*')
@@ -68,7 +68,7 @@ router.get('/:id', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
 });
 
 // PUT /api/alunos/:id/matricula - Atualizar status/turma de matricula
-router.put('/:id/matricula', requireAuth, requireRole('ROLE_ADMIN'), async (req, res) => {
+router.put('/:id/matricula', requireAuth, requirePermissao('aluno.editar'), async (req, res) => {
   const { status, id_turma } = req.body;
   const updates = {};
   if (status !== undefined) updates.status = status;

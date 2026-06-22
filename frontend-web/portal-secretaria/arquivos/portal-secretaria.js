@@ -67,7 +67,8 @@ function restoreState() {
       showInscricaoDetail(params.inscricaoId);
     } else {
       const link = document.querySelector(`.sec-sidebar-item[data-module-target="${params.module}"]`);
-      if (link) link.click();
+      // So navega se o modulo nao foi oculto por permissoes
+      if (link && link.style.display !== 'none') link.click();
     }
     saveState();
   }, 100);
@@ -91,6 +92,83 @@ function showError(msg, err) {
 }
 function showSuccess(msg) {
   try { notyf.success(msg); } catch { alert(msg); }
+}
+
+// --- Global auth & permission helpers ---
+let __auth = null;
+function hasPerm(codigo) {
+  return !!(__auth?.permissoes && __auth.permissoes.includes(codigo));
+}
+
+// --- Permission-based UI visibility ---
+function filterSidebarByPerms() {
+  const permModuleMap = {
+    'modulo-inscricoes':     'inscricao.visualizar',
+    'modulo-cursos':         'curso.visualizar',
+    'modulo-turmas':         'turma.visualizar',
+    'modulo-unidades':       'unidade.visualizar',
+    'modulo-usuarios':       'usuario.visualizar',
+    'modulo-editais':        'edital.visualizar',
+    'modulo-dashboard-alunos': 'aluno.visualizar',
+    'modulo-alunos':         'aluno.visualizar',
+    'modulo-reclamacoes':    'reclamacao.visualizar',
+    'modulo-relatorios':     'relatorio.visualizar',
+    'modulo-relatorios-alunos': 'relatorio.visualizar',
+    'modulo-auditoria':      'auditoria.visualizar',
+    'modulo-cargos':         'cargo.gerenciar',
+  };
+  Object.keys(permModuleMap).forEach(moduleId => {
+    const link = document.querySelector(`.sec-sidebar-item[data-module-target="${moduleId}"]`);
+    if (link) link.style.display = hasPerm(permModuleMap[moduleId]) ? '' : 'none';
+  });
+  // Oculta aba "Alunos" se nenhum modulo do grupo estiver visivel
+  const alunosLinks = document.querySelectorAll('[data-sec-mode-link="alunos"]');
+  const anyAlunoVisible = Array.from(alunosLinks).some(l => l.style.display !== 'none');
+  const alunosTab = document.querySelector('.sec-mode-btn[data-sec-mode="alunos"]');
+  if (alunosTab) alunosTab.style.display = anyAlunoVisible ? '' : 'none';
+}
+
+function filterCreateFormsByPerms() {
+  const formPermMap = {
+    'form-curso': 'curso.criar',
+    'form-unidade': 'unidade.criar',
+    'form-admin-user': 'usuario.criar',
+    'form-edital': 'edital.criar',
+    'form-turma': 'turma.criar',
+    'form-cargo': 'cargo.gerenciar',
+  };
+  Object.keys(formPermMap).forEach(formId => {
+    const form = document.getElementById(formId);
+    if (form) {
+      const card = form.closest('.card');
+      if (card) card.style.display = hasPerm(formPermMap[formId]) ? '' : 'none';
+    }
+  });
+  // Export buttons
+  const exportBtnIds = ['btn-exportar-csv-rel', 'btn-exportar-pdf-rel', 'btn-exportar-csv-alunos', 'btn-exportar-pdf-alunos', 'btn-exportar-auditoria-csv'];
+  exportBtnIds.forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) btn.style.display = hasPerm('relatorio.exportar') ? '' : 'none';
+  });
+}
+
+function filterEditDeleteButtonsByPerms(module, rows) {
+  // Retorna funcao que filtra edit/delete com base em permissoes
+  const permEdit = module + '.editar';
+  const permDel = module + '.excluir';
+  return rows.map(r => {
+    const editBtn = hasPerm(permEdit) ? `<button class="btn btn-soft btn-sm" data-${module}-edit="${r.id}">Editar</button>` : '';
+    const delBtn = hasPerm(permDel) ? `<button class="btn btn-danger btn-sm" data-${module}-del="${r.id}">Excluir</button>` : '';
+    return { ...r, editBtn, delBtn };
+  });
+}
+
+// --- Global auth & permission helpers ---
+let __auth = null;
+function hasPerm(codigo) {
+  // Se nao tem permissoes (login antigo), libera tudo (fallback)
+  if (!__auth?.permissoes || !__auth.permissoes.length) return true;
+  return __auth.permissoes.includes(codigo);
 }
 
 // --- Badge helper ---
@@ -264,6 +342,8 @@ document.addEventListener('keydown', (e) => {
 document.querySelectorAll('[data-module-target]').forEach(btn => {
   btn.addEventListener('click', (e) => {
     e.preventDefault();
+    // Ignora cliques em itens ocultos por permissoes
+    if (btn.style.display === 'none') return;
     document.querySelectorAll('.sec-sidebar-item').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     document.querySelectorAll('.module-panel').forEach(p => p.classList.add('hidden'));
@@ -276,7 +356,7 @@ document.querySelectorAll('[data-module-target]').forEach(btn => {
         case 'modulo-inscricoes': loadInscricoes(getFiltros()); break;
         case 'modulo-cursos': loadCursos(); break;
         case 'modulo-unidades': loadUnidades(); break;
-        case 'modulo-usuarios': loadUsuarios(); break;
+        case 'modulo-usuarios': loadUsuarios(); populateCargoDropdowns(); break;
         case 'modulo-editais': loadEditais(); break;
         case 'modulo-turmas': loadTurmas(); break;
         case 'modulo-cargos': loadCargos(); loadPermissoesCheckboxes(); break;
@@ -302,9 +382,20 @@ document.querySelectorAll('[data-sec-mode]').forEach(btn => {
     document.querySelectorAll('[data-sec-group]').forEach(g => {
       g.classList.toggle('hidden', g.dataset.secGroup !== mode);
     });
-    // Activate first module of the group
-    const firstLink = document.querySelector(`[data-sec-mode-link="${mode}"]`);
-    if (firstLink) firstLink.click();
+    // Activate first VISIBLE module of the group (skip hidden-by-permission links)
+    const links = document.querySelectorAll(`[data-sec-mode-link="${mode}"]`);
+    let navigated = false;
+    links.forEach(l => {
+      if (!navigated && l.style.display !== 'none') {
+        l.click();
+        navigated = true;
+      }
+    });
+    // If no visible link found, navigate to Dashboard as fallback
+    if (!navigated) {
+      const dashLink = document.querySelector('[data-module-target="modulo-dashboard"]');
+      if (dashLink && dashLink.style.display !== 'none') dashLink.click();
+    }
     saveState();
   });
 });
@@ -1093,6 +1184,7 @@ async function showInscricaoDetail(id) {
     document.getElementById('inscricao-id-edicao').value = inscricao.id;
     document.getElementById('inscricao-status-aprovacao').value = inscricao.status_aprovacao || 'EM_ANALISE';
     document.getElementById('inscricao-status-matricula').value = inscricao.status_matricula || '';
+    document.getElementById('form-gerenciar-inscricao').style.display = hasPerm('inscricao.editar') ? '' : 'none';
     window.__currentInscricaoId = id;
     document.getElementById('modulo-inscricoes').classList.add('hidden');
     document.getElementById('modulo-inscricoes-detalhes').classList.remove('hidden');
@@ -1191,8 +1283,8 @@ async function loadCursos(filters = {}) {
       <td>${c.turno || '-'}</td>
       <td>${badge(c.status)}</td>
       <td>
-        <button class="btn btn-soft btn-sm" data-curso-edit="${c.id}">Editar</button>
-        <button class="btn btn-danger btn-sm" data-curso-del="${c.id}">Excluir</button>
+        ${hasPerm('curso.editar') ? `<button class="btn btn-soft btn-sm" data-curso-edit="${c.id}">Editar</button>` : ''}
+        ${hasPerm('curso.excluir') ? `<button class="btn btn-danger btn-sm" data-curso-del="${c.id}">Excluir</button>` : ''}
       </td>
     </tr>`).join('');
   } catch { showEmpty('cursos', 'Erro ao carregar cursos.'); }
@@ -1254,13 +1346,17 @@ document.getElementById('form-unidade')?.addEventListener('submit', async (e) =>
 document.getElementById('form-admin-user')?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const id = document.getElementById('admin-user-id').value;
+  const cargoId = parseInt(document.getElementById('admin-user-cargo').value);
+  const cargoNome = (state.cargos || []).find(c => c.id === cargoId)?.nome || '';
+  const roleMap = { 'Admin Master': 'ROLE_ADMIN', 'Administrador': 'ROLE_ADMIN', 'Secretaria': 'ROLE_ADMIN', 'Professor': 'ROLE_TEACHER', 'Aluno': 'ROLE_STUDENT', 'Candidato': 'ROLE_USER' };
   const payload = {
     nomeCompleto: document.getElementById('admin-user-nome').value,
     email: document.getElementById('admin-user-email').value,
     cpf: document.getElementById('admin-user-cpf').value,
     telefone: document.getElementById('admin-user-telefone').value,
     dataNascimento: document.getElementById('admin-user-data-nascimento').value || null,
-    role: document.getElementById('admin-user-role').value,
+    role: roleMap[cargoNome] || 'ROLE_USER',
+    id_cargo: cargoId || null,
   };
   try {
     if (id) {
@@ -1339,12 +1435,14 @@ async function loadUnidades(filters = {}) {
       <td>${u.cnpj || '-'}</td>
       <td>${u.cidade || '-'}/${u.estado || '-'}</td>
       <td>
-        <button class="btn btn-soft btn-sm" data-unidade-edit="${u.id}">Editar</button>
-        <button class="btn btn-danger btn-sm" data-unidade-del="${u.id}">Excluir</button>
+        ${hasPerm('unidade.editar') ? `<button class="btn btn-soft btn-sm" data-unidade-edit="${u.id}">Editar</button>` : ''}
+        ${hasPerm('unidade.excluir') ? `<button class="btn btn-danger btn-sm" data-unidade-del="${u.id}">Excluir</button>` : ''}
       </td>
     </tr>`).join('');
   } catch { showEmpty('unidades', 'Erro ao carregar unidades.'); }
 }
+
+function cargoName(id) { const c = (state.cargos || []).find(c => c.id === id); return c ? c.nome : '-'; }
 
 async function loadUsuarios(filters = {}) {
   showSkeleton('usuarios');
@@ -1353,19 +1451,23 @@ async function loadUsuarios(filters = {}) {
     state.usuarios = data;
     let f = [...data];
     if (filters.texto) { const t = filters.texto.toLowerCase(); f = f.filter(u => (u.nomeCompleto || u.nome_completo || '').toLowerCase().includes(t) || (u.email || '').toLowerCase().includes(t)); }
-    if (filters.role && filters.role !== 'TODOS') { f = f.filter(u => u.role === filters.role); }
+    if (filters.cargo && filters.cargo !== 'TODOS') { f = f.filter(u => u.id_cargo === parseInt(filters.cargo)); }
     const tbody = document.getElementById('lista-usuarios');
     if (f.length === 0) { showEmpty('usuarios', 'Nenhum usuario encontrado.'); return; }
     showTable('usuarios');
-    tbody.innerHTML = f.map(u => `<tr>
+    const cargos = state.cargos || [];
+    tbody.innerHTML = f.map(u => {
+      const c = cargos.find(c => c.id === u.id_cargo);
+      const nomeCargo = c ? c.nome : roleLabel(u.role);
+      return `<tr>
       <td><strong>${u.nomeCompleto || u.nome_completo || '-'}</strong></td>
       <td>${u.email || '-'}</td>
-      <td>${badge(roleLabel(u.role))}</td>
+      <td>${badge(nomeCargo)}</td>
       <td>
-        <button class="btn btn-soft btn-sm" data-usuario-edit="${u.id}">Editar</button>
-        <button class="btn btn-danger btn-sm" data-usuario-del="${u.id}">Excluir</button>
+        ${hasPerm('usuario.editar') ? `<button class="btn btn-soft btn-sm" data-usuario-edit="${u.id}">Editar</button>` : ''}
+        ${hasPerm('usuario.excluir') ? `<button class="btn btn-danger btn-sm" data-usuario-del="${u.id}">Excluir</button>` : ''}
       </td>
-    </tr>`).join('');
+    </tr>`}).join('');
   } catch { showEmpty('usuarios', 'Erro ao carregar usuarios.'); }
 }
 
@@ -1385,8 +1487,8 @@ async function loadEditais(filters = {}) {
       <td><a href="${e.url || '#'}" target="_blank" style="color:var(--sec-accent)">Abrir</a></td>
       <td>${badge(e.ativo ? 'ATIVO' : 'INATIVO')}</td>
       <td>
-        <button class="btn btn-soft btn-sm" data-edital-edit="${e.id}">Editar</button>
-        <button class="btn btn-danger btn-sm" data-edital-del="${e.id}">Excluir</button>
+        ${hasPerm('edital.editar') ? `<button class="btn btn-soft btn-sm" data-edital-edit="${e.id}">Editar</button>` : ''}
+        ${hasPerm('edital.excluir') ? `<button class="btn btn-danger btn-sm" data-edital-del="${e.id}">Excluir</button>` : ''}
       </td>
     </tr>`).join('');
   } catch { showEmpty('editais', 'Erro ao carregar editais.'); }
@@ -1786,21 +1888,25 @@ document.addEventListener('click', async (e) => {
     const id = editUsuario.dataset.usuarioEdit;
     const item = state.usuarios.find(u => String(u.id) === id);
     if (item) {
-      const roleOpts = ['ROLE_ADMIN','ROLE_TEACHER','ROLE_STUDENT','ROLE_USER'].map(r => `<option value="${r}" ${item.role===r?'selected':''}>${roleLabel(r)}</option>`).join('');
+      const cargoOpts = (state.cargos || []).map(c => `<option value="${c.id}" ${item.id_cargo===c.id?'selected':''}>${c.nome}</option>`).join('');
       openEditModal('&#9998; Editar Usuário', `
         <div class="field"><label>Nome Completo</label><input type="text" id="euu-nome" value="${item.nomeCompleto||item.nome_completo||''}" required /></div>
         <div class="field"><label>E-mail</label><input type="email" id="euu-email" value="${item.email||''}" required /></div>
         <div class="two-col"><div class="field"><label>CPF</label><input type="text" id="euu-cpf" value="${item.cpf||''}" /></div>
         <div class="field"><label>Telefone</label><input type="text" id="euu-tel" value="${item.telefone||''}" /></div></div>
         <div class="field"><label>Data Nascimento</label><input type="date" id="euu-data" value="${item.data_nascimento||''}" /></div>
-        <div class="field"><label>Role</label><select id="euu-role">${roleOpts}</select></div>`, id, async (id) => {
+        <div class="field"><label>Cargo</label><select id="euu-cargo">${cargoOpts}</select></div>`, id, async (id) => {
+        const euuCargoId = parseInt(document.getElementById('euu-cargo').value);
+        const euuCargoNome = (state.cargos || []).find(c => c.id === euuCargoId)?.nome || '';
+        const roleMap = { 'Admin Master': 'ROLE_ADMIN', 'Administrador': 'ROLE_ADMIN', 'Secretaria': 'ROLE_ADMIN', 'Professor': 'ROLE_TEACHER', 'Aluno': 'ROLE_STUDENT', 'Candidato': 'ROLE_USER' };
         await request(`/usuarios/${id}`, {method:'PUT',body:JSON.stringify({
           nomeCompleto: document.getElementById('euu-nome').value,
           email: document.getElementById('euu-email').value,
           cpf: document.getElementById('euu-cpf').value,
           telefone: document.getElementById('euu-tel').value,
           dataNascimento: document.getElementById('euu-data').value || null,
-          role: document.getElementById('euu-role').value
+          role: roleMap[euuCargoNome] || 'ROLE_USER',
+          id_cargo: euuCargoId
         })});
         notyf.success('Usuário atualizado!');
         await loadUsuarios();
@@ -1868,8 +1974,8 @@ function initFilters() {
   bindFilter('filtro-cursos-unidade', loadCursos, { texto: 'filtro-cursos-texto', status: 'filtro-cursos-status', unidade: 'filtro-cursos-unidade' });
   bindFilter('filtro-unidades-texto', loadUnidades, { texto: 'filtro-unidades-texto', estado: 'filtro-unidades-estado' });
   bindFilter('filtro-unidades-estado', loadUnidades, { texto: 'filtro-unidades-texto', estado: 'filtro-unidades-estado' });
-  bindFilter('filtro-usuarios-texto', loadUsuarios, { texto: 'filtro-usuarios-texto', role: 'filtro-usuarios-role' });
-  bindFilter('filtro-usuarios-role', loadUsuarios, { texto: 'filtro-usuarios-texto', role: 'filtro-usuarios-role' });
+  bindFilter('filtro-usuarios-texto', loadUsuarios, { texto: 'filtro-usuarios-texto', cargo: 'filtro-usuarios-cargo' });
+  bindFilter('filtro-usuarios-cargo', loadUsuarios, { texto: 'filtro-usuarios-texto', cargo: 'filtro-usuarios-cargo' });
   bindFilter('filtro-editais-texto', loadEditais, { texto: 'filtro-editais-texto', status: 'filtro-editais-status' });
   bindFilter('filtro-editais-status', loadEditais, { texto: 'filtro-editais-texto', status: 'filtro-editais-status' });
   bindFilter('filtro-alunos-texto', loadAlunos, { texto: 'filtro-alunos-texto', curso: 'filtro-alunos-curso', statusMat: 'filtro-alunos-status-matricula' });
@@ -2047,8 +2153,8 @@ async function loadTurmas(filters = {}) {
         <td>${t.ano || '-'}</td>
         <td>${badge(t.status)}</td>
         <td>
-          <button class="btn btn-soft btn-sm" data-turma-edit="${t.id}">Editar</button>
-          <button class="btn btn-danger btn-sm" data-turma-del="${t.id}">Excluir</button>
+          ${hasPerm('turma.editar') ? `<button class="btn btn-soft btn-sm" data-turma-edit="${t.id}">Editar</button>` : ''}
+          ${hasPerm('turma.excluir') ? `<button class="btn btn-danger btn-sm" data-turma-del="${t.id}">Excluir</button>` : ''}
         </td>
       </tr>`).join('');
     }
@@ -2141,10 +2247,23 @@ document.addEventListener('click', async (e) => {
 // CARGOS / PERMISSOES CRUD
 // ======================================
 
+function populateCargoDropdowns() {
+  const opts = (state.cargos || []).map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+  const sel = document.getElementById('admin-user-cargo');
+  if (sel) sel.innerHTML = opts;
+  const filtro = document.getElementById('filtro-usuarios-cargo');
+  if (filtro) {
+    const cur = filtro.value;
+    filtro.innerHTML = '<option value="TODOS">Todos</option>' + opts;
+    if (cur !== 'TODOS') filtro.value = cur;
+  }
+}
+
 async function loadCargos(filters = {}) {
   try {
     const data = await request('/cargos');
     state.cargos = data;
+    populateCargoDropdowns();
     let f = [...data];
     if (filters.texto) { const t = filters.texto.toLowerCase(); f = f.filter(c => (c.nome || '').toLowerCase().includes(t) || (c.descricao || '').toLowerCase().includes(t)); }
 
@@ -2154,7 +2273,7 @@ async function loadCargos(filters = {}) {
       tbody.innerHTML = f.map(c => `<tr>
         <td><strong>${c.nome}</strong>${c.is_admin_master ? ' <span class="badge badge-warning">Admin Master</span>' : ''}</td>
         <td>${c.descricao || '-'}</td>
-        <td>${c.is_admin_master ? '-' : `<button class="btn btn-soft btn-sm" data-cargo-edit="${c.id}">Editar</button> <button class="btn btn-danger btn-sm" data-cargo-del="${c.id}">Excluir</button>`}</td>
+        <td>${c.is_admin_master || !hasPerm('cargo.gerenciar') ? '-' : `<button class="btn btn-soft btn-sm" data-cargo-edit="${c.id}">Editar</button> <button class="btn btn-danger btn-sm" data-cargo-del="${c.id}">Excluir</button>`}</td>
       </tr>`).join('');
     }
   } catch { if (document.getElementById('lista-cargos')) document.getElementById('lista-cargos').innerHTML = '<tr><td colspan="3" style="text-align:center;color:#999">Erro ao carregar cargos</td></tr>'; }
@@ -2622,7 +2741,7 @@ async function loadReclamacoesStandalone(filters = {}) {
         <td>${r.data_abertura ? new Date(r.data_abertura).toLocaleDateString('pt-BR') : '-'}</td>
         <td>${badge(r.status)}</td>
         <td>
-          <button class="btn btn-soft btn-sm" data-reclamacao-responder='${JSON.stringify({ id: r.id, assunto: r.assunto, descricao: r.descricao || r.mensagem || '' }).replace(/'/g, "&#39;")}' style="font-size:0.7rem;">Responder</button>
+          ${hasPerm('reclamacao.responder') ? `<button class="btn btn-soft btn-sm" data-reclamacao-responder='${JSON.stringify({ id: r.id, assunto: r.assunto, descricao: r.descricao || r.mensagem || '' }).replace(/'/g, "&#39;")}' style="font-size:0.7rem;">Responder</button>` : ''}
           <button class="btn btn-soft btn-sm" data-reclamacao-view-aluno="${r.alunoId}" style="font-size:0.7rem;">Ver Aluno</button>
         </td>
       </tr>`).join('');
@@ -2740,9 +2859,11 @@ document.getElementById('btn-exportar-auditoria-csv')?.addEventListener('click',
 document.addEventListener('DOMContentLoaded', () => {
   // Ensure authentication
   if (typeof requireAuth === 'function') {
-    const auth = requireAuth('ROLE_ADMIN');
-    if (!auth) return;
+    __auth = requireAuth('ROLE_ADMIN');
+    if (!__auth) return;
   }
+  filterSidebarByPerms();
+  filterCreateFormsByPerms();
   populateSidebarUser();
   initSettings();
   setupTableSort();
@@ -2753,6 +2874,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadInscricoes(getFiltros());
   loadCursos();
   loadUnidades();
+  loadCargos();
   loadUsuarios();
   loadEditais();
   loadAlunos();
