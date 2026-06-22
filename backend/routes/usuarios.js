@@ -129,7 +129,11 @@ router.put('/me', requireAuth, async (req, res) => {
 
 // === ADMIN: Listar todos os usuarios ===
 router.get('/', requireAuth, requirePermissao('usuario.visualizar'), async (req, res) => {
-  const { data, error } = await supabase.from('usuarios').select('*').order('id', { ascending: true });
+  let query = supabase.from('usuarios').select('*').order('id', { ascending: true });
+  if (req.query.cargo) {
+    query = query.eq('id_cargo', parseInt(req.query.cargo));
+  }
+  const { data, error } = await query;
   if (error) return res.status(500).json({ error: error.message });
 
   const usuarios = data.map(u => ({

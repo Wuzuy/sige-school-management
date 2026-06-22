@@ -804,20 +804,6 @@ body[data-page="portal-professor"] {
   box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
 }
 
-.freq-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-}
-
-.freq-toggle input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  accent-color: var(--sec-accent);
-  cursor: pointer;
-}
-
 .freq-justificativa {
   width: 100%;
   padding: 6px 8px;
@@ -970,6 +956,152 @@ body[data-page="portal-professor"] {
 .config-font-selector .btn.active {
   border-color: var(--sec-accent);
   box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+}
+
+/* =============================================
+   DASHBOARD STATS ROW
+   ============================================= */
+.dashboard-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: var(--sec-card);
+  border: 1px solid var(--sec-border);
+  border-radius: var(--sec-radius);
+  padding: 14px 16px;
+  text-align: center;
+  border-top: 3px solid var(--sec-success);
+  box-shadow: var(--sec-shadow);
+}
+
+.stat-card h3 {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--sec-muted);
+  margin: 0 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stat-value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--sec-text);
+  line-height: 1.1;
+}
+
+.stat-card-danger { border-top-color: var(--sec-danger); }
+.stat-card-warning { border-top-color: var(--sec-warning); }
+.stat-card-info { border-top-color: #3b82f6; }
+
+[data-theme="dark"] .stat-card { background: #1e293b; }
+
+/* =============================================
+   FREQUENCY STATS BAR
+   ============================================= */
+.freq-stats-bar {
+  display: flex;
+  gap: 20px;
+  padding: 10px 16px;
+  background: var(--sec-bg);
+  border: 1px solid var(--sec-border);
+  border-radius: var(--sec-radius);
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.freq-stat-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--sec-text);
+}
+
+.freq-stat-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* =============================================
+   FREQUENCY TOGGLE STYLES
+   ============================================= */
+.freq-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+  border: 1px solid var(--sec-border);
+}
+
+.freq-presente {
+  background: #d1fae5;
+  border-color: #6ee7b7;
+}
+
+.freq-ausente {
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+[data-theme="dark"] .freq-presente { background: #064e3b; border-color: #059669; }
+[data-theme="dark"] .freq-ausente { background: #7f1d1d; border-color: #ef4444; }
+
+.freq-toggle input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.freq-toggle-text {
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.freq-presente .freq-toggle-text { color: #065f46; }
+.freq-ausente .freq-toggle-text { color: #991b1b; }
+[data-theme="dark"] .freq-presente .freq-toggle-text { color: #6ee7b7; }
+[data-theme="dark"] .freq-ausente .freq-toggle-text { color: #fca5a5; }
+
+/* =============================================
+   DATE NAVIGATION
+   ============================================= */
+.date-nav-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.date-nav-wrapper input[type="date"] {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid var(--sec-border);
+  border-radius: var(--sec-radius-sm);
+  font-size: 0.85rem;
+  background: var(--sec-card);
+  color: var(--sec-text);
+  font-family: inherit;
+}
+
+.date-nav-wrapper button {
+  white-space: nowrap;
+}
+
+/* =============================================
+   BOTÃO CONCLUIR DISCIPLINA
+   ============================================= */
+.btn-concluir-disc {
+  white-space: nowrap;
 }
 
 [data-theme="dark"] .config-row { background: #0f172a; }

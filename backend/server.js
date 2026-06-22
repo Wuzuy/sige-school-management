@@ -35,6 +35,8 @@ const reclamacoesRoutes = require('./routes/reclamacoes');
 app.use('/api/reclamacoes', reclamacoesRoutes);
 const professorRoutes = require('./routes/professor');
 app.use('/api/professor', professorRoutes);
+const disciplinasRoutes = require('./routes/disciplinas');
+app.use('/api/disciplinas', disciplinasRoutes);
 
 const PORT = process.env.PORT || 8080;
 

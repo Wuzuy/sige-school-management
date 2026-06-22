@@ -100,6 +100,7 @@ function filterSidebarByPerms() {
     'modulo-inscricoes':     'inscricao.visualizar',
     'modulo-cursos':         'curso.visualizar',
     'modulo-turmas':         'turma.visualizar',
+    'modulo-disciplinas':    'disciplina.visualizar',
     'modulo-unidades':       'unidade.visualizar',
     'modulo-usuarios':       'usuario.visualizar',
     'modulo-editais':        'edital.visualizar',
@@ -110,6 +111,8 @@ function filterSidebarByPerms() {
     'modulo-relatorios-alunos': 'relatorio.visualizar',
     'modulo-auditoria':      'auditoria.visualizar',
     'modulo-cargos':         'cargo.gerenciar',
+    'modulo-dashboard-professor': 'disciplina.visualizar',
+    'modulo-professores':    'usuario.visualizar',
   };
   Object.keys(permModuleMap).forEach(moduleId => {
     const link = document.querySelector(`.sec-sidebar-item[data-module-target="${moduleId}"]`);
@@ -120,6 +123,16 @@ function filterSidebarByPerms() {
   const anyAlunoVisible = Array.from(alunosLinks).some(l => l.style.display !== 'none');
   const alunosTab = document.querySelector('.sec-mode-btn[data-sec-mode="alunos"]');
   if (alunosTab) alunosTab.style.display = anyAlunoVisible ? '' : 'none';
+  // Oculta aba "Professor" se nenhum modulo do grupo estiver visivel
+  const profLinks = document.querySelectorAll('[data-sec-mode-link="professor"]');
+  const anyProfVisible = Array.from(profLinks).some(l => l.style.display !== 'none');
+  const profTab = document.querySelector('.sec-mode-btn[data-sec-mode="professor"]');
+  if (profTab) profTab.style.display = anyProfVisible ? '' : 'none';
+  // Oculta aba "Turmas" se nenhum modulo do grupo estiver visivel
+  const turmasLinks = document.querySelectorAll('[data-sec-mode-link="turmas"]');
+  const anyTurmasVisible = Array.from(turmasLinks).some(l => l.style.display !== 'none');
+  const turmasTab = document.querySelector('.sec-mode-btn[data-sec-mode="turmas"]');
+  if (turmasTab) turmasTab.style.display = anyTurmasVisible ? '' : 'none';
 }
 
 function filterCreateFormsByPerms() {
@@ -129,6 +142,8 @@ function filterCreateFormsByPerms() {
     'form-admin-user': 'usuario.criar',
     'form-edital': 'edital.criar',
     'form-turma': 'turma.criar',
+    'form-disciplina': 'disciplina.criar',
+    'form-atribuir-disciplina': 'disciplina.criar',
     'form-cargo': 'cargo.gerenciar',
   };
   Object.keys(formPermMap).forEach(formId => {
@@ -353,12 +368,15 @@ document.querySelectorAll('[data-module-target]').forEach(btn => {
         case 'modulo-usuarios': loadUsuarios(); populateCargoDropdowns(); break;
         case 'modulo-editais': loadEditais(); break;
         case 'modulo-turmas': loadTurmas(); break;
+        case 'modulo-disciplinas': loadDisciplinas(); loadAtribuicoes(); break;
         case 'modulo-cargos': loadCargos(); loadPermissoesCheckboxes(); break;
         case 'modulo-relatorios': loadRelatorio(getRelFiltros()); break;
         case 'modulo-alunos': loadAlunos(); break;
         case 'modulo-relatorios-alunos': loadRelatorioAlunos(); break;
         case 'modulo-reclamacoes': loadReclamacoesStandalone(); break;
         case 'modulo-auditoria': loadAuditoria(); break;
+        case 'modulo-dashboard-professor': loadDashboardProfessor(); break;
+        case 'modulo-professores': loadProfessores(); break;
       }
     }
     saveState();
@@ -413,6 +431,9 @@ const state = {
   usuarios: [],
   editais: [],
   alunos: [],
+  disciplinas: [],
+  atribuicoes: [],
+  turmas: [],
 };
 
 // --- Chart instances (destroy before re-creating) ---
@@ -2896,4 +2917,206 @@ document.addEventListener('DOMContentLoaded', () => {
     loadAuditoria();
     startPolling();
   }, 500);
+});
+
+// ==============================================
+// DISCIPLINAS MODULE
+// ==============================================
+async function loadDisciplinas() {
+  try {
+    const data = await request('/disciplinas');
+    state.disciplinas = data;
+    const tbody = document.getElementById('lista-disciplinas');
+    tbody.innerHTML = filterEditDeleteButtonsByPerms('disciplina', data).map(d => `
+      <tr>
+        <td><strong>${d.nome || '-'}</strong></td>
+        <td>${d.codigo || '-'}</td>
+        <td>${d.carga_horaria || 0}h</td>
+        <td>${d.id_curso?.nome_curso || '-'}</td>
+        <td>${d.editBtn} ${d.delBtn}</td>
+      </tr>`).join('');
+    const selCurso = document.getElementById('disciplina-curso');
+    if (state.cursos && selCurso) {
+      selCurso.innerHTML = '<option value="">Nenhum</option>' + state.cursos.map(c => `<option value="${c.id}">${c.nome_curso}</option>`).join('');
+    }
+    populateDisciplinaDropdowns();
+  } catch (e) { notyf.error('Erro ao carregar disciplinas: ' + (e.message || '')); }
+}
+
+async function loadAtribuicoes() {
+  try {
+    const data = await request('/disciplinas/atribuicoes');
+    state.atribuicoes = data;
+    const tbody = document.getElementById('lista-atribuicoes');
+    const permDel = hasPerm('disciplina.excluir');
+    tbody.innerHTML = data.map(a => `
+      <tr>
+        <td>${a.id_disciplina?.nome || '-'}</td>
+        <td>${a.id_turma?.nome || '-'}</td>
+        <td>${a.id_professor?.nome_completo || '-'}</td>
+        <td>${permDel ? `<button class="btn btn-danger btn-sm" data-atribuicao-del="${a.id}">Excluir</button>` : ''}</td>
+      </tr>`).join('');
+  } catch (e) { notyf.error('Erro ao carregar atribuicoes: ' + (e.message || '')); }
+}
+
+async function populateDisciplinaDropdowns() {
+  const selDisciplina = document.getElementById('atribuir-disciplina');
+  const selTurma = document.getElementById('atribuir-turma');
+  const selProfessor = document.getElementById('atribuir-professor');
+  if (selDisciplina && state.disciplinas) {
+    selDisciplina.innerHTML = '<option value="">Selecione...</option>' + state.disciplinas.map(d => `<option value="${d.id}">${d.nome}</option>`).join('');
+  }
+  if (selTurma && state.turmas) {
+    selTurma.innerHTML = '<option value="">Selecione...</option>' + state.turmas.filter(t => t.status === 'ATIVO').map(t => `<option value="${t.id}">${t.nome}</option>`).join('');
+  }
+  if (selProfessor) {
+    try {
+      const users = await request('/usuarios?cargo=4');
+      selProfessor.innerHTML = '<option value="">Nenhum</option>' + users.map(u => `<option value="${u.id}">${u.nomeCompleto || u.nome_completo}</option>`).join('');
+    } catch { selProfessor.innerHTML = '<option value="">Nenhum</option>'; }
+  }
+}
+
+document.getElementById('form-disciplina')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const id = document.getElementById('disciplina-id')?.value;
+  const body = {
+    nome: document.getElementById('disciplina-nome').value,
+    codigo: document.getElementById('disciplina-codigo').value || null,
+    carga_horaria: parseInt(document.getElementById('disciplina-carga').value) || 0,
+    id_curso: parseInt(document.getElementById('disciplina-curso').value) || null,
+    semestre: parseInt(document.getElementById('disciplina-semestre').value) || 1
+  };
+  try {
+    if (id) {
+      await request('/disciplinas/' + id, { method: 'PUT', body: JSON.stringify(body) });
+      notyf.success('Disciplina atualizada');
+    } else {
+      await request('/disciplinas', { method: 'POST', body: JSON.stringify(body) });
+      notyf.success('Disciplina criada');
+    }
+    document.getElementById('form-disciplina').reset();
+    document.getElementById('disciplina-id').value = '';
+    await loadDisciplinas();
+  } catch (e) { notyf.error('Erro: ' + (e.message || '')); }
+});
+
+document.getElementById('cancelar-disciplina')?.addEventListener('click', () => {
+  document.getElementById('form-disciplina').reset();
+  document.getElementById('disciplina-id').value = '';
+});
+
+document.getElementById('form-atribuir-disciplina')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const disciplinaId = document.getElementById('atribuir-disciplina').value;
+  const turmaId = document.getElementById('atribuir-turma').value;
+  const professorId = document.getElementById('atribuir-professor').value;
+  if (!disciplinaId || !turmaId) { notyf.error('Selecione disciplina e turma'); return; }
+  try {
+    await request('/disciplinas/' + disciplinaId + '/atribuir', {
+      method: 'POST',
+      body: JSON.stringify({ id_turma: parseInt(turmaId), id_professor: professorId ? parseInt(professorId) : null })
+    });
+    notyf.success('Disciplina atribuida a turma');
+    await loadAtribuicoes();
+  } catch (e) { notyf.error('Erro: ' + (e.message || '')); }
+});
+
+document.addEventListener('click', async (e) => {
+  const delBtn = e.target.closest('[data-disciplina-del]');
+  if (delBtn) {
+    const id = delBtn.dataset.disciplinaDel;
+    if (!await confirmAction('Excluir esta disciplina?')) return;
+    try {
+      await request('/disciplinas/' + id, { method: 'DELETE' });
+      notyf.success('Disciplina excluida');
+      await loadDisciplinas();
+    } catch (e) { notyf.error('Erro: ' + (e.message || '')); }
+  }
+  const editBtn = e.target.closest('[data-disciplina-edit]');
+  if (editBtn) {
+    const id = editBtn.dataset.disciplinaEdit;
+    const d = state.disciplinas.find(x => x.id == id);
+    if (!d) return;
+    document.getElementById('disciplina-id').value = d.id;
+    document.getElementById('disciplina-nome').value = d.nome || '';
+    document.getElementById('disciplina-codigo').value = d.codigo || '';
+    document.getElementById('disciplina-carga').value = d.carga_horaria || 0;
+    document.getElementById('disciplina-curso').value = d.id_curso?.id || '';
+    document.getElementById('disciplina-semestre').value = d.semestre || 1;
+    document.getElementById('modulo-disciplinas').scrollIntoView({ behavior: 'smooth' });
+  }
+  const delAtribBtn = e.target.closest('[data-atribuicao-del]');
+  if (delAtribBtn) {
+    const id = delAtribBtn.dataset.atribuicaoDel;
+    if (!await confirmAction('Remover esta atribuicao?')) return;
+    try {
+      await request('/disciplinas/atribuicoes/' + id, { method: 'DELETE' });
+      notyf.success('Atribuicao removida');
+      await loadAtribuicoes();
+    } catch (e) { notyf.error('Erro: ' + (e.message || '')); }
+  }
+});
+
+// ==============================================
+// PROFESSOR MODULE
+// ==============================================
+async function loadDashboardProfessor() {
+  try {
+    const professores = await request('/usuarios?cargo=4');
+    const atribuicoes = await request('/disciplinas/atribuicoes');
+    document.getElementById('kpi-total-professores').textContent = professores.length;
+    const profComTurmas = new Set(atribuicoes.filter(a => a.id_professor).map(a => a.id_professor.id));
+    document.getElementById('kpi-professores-com-turmas').textContent = profComTurmas.size;
+    document.getElementById('kpi-professores-sem-turmas').textContent = professores.length - profComTurmas.size;
+  } catch (e) { notyf.error('Erro: ' + (e.message || '')); }
+}
+
+async function loadProfessores() {
+  try {
+    const professores = await request('/usuarios?cargo=4');
+    const atribuicoes = await request('/disciplinas/atribuicoes');
+    if (!state.disciplinas || !state.disciplinas.length) await loadDisciplinas();
+    // Populate dropdowns
+    const selProf = document.getElementById('prof-tab-professor');
+    const selTurma = document.getElementById('prof-tab-turma');
+    const selDisc = document.getElementById('prof-tab-disciplina');
+    if (selProf) selProf.innerHTML = professores.map(p => `<option value="${p.id}">${p.nomeCompleto}</option>`).join('');
+    if (selTurma && state.turmas) selTurma.innerHTML = state.turmas.filter(t => t.status === 'ATIVO').map(t => `<option value="${t.id}">${t.nome}</option>`).join('');
+    if (selDisc && state.disciplinas) selDisc.innerHTML = state.disciplinas.map(d => `<option value="${d.id}">${d.nome}</option>`).join('');
+
+    const texto = (document.getElementById('filtro-professor-texto')?.value || '').toLowerCase();
+    const tbody = document.getElementById('lista-professores');
+    tbody.innerHTML = professores
+      .filter(p => !texto || p.nomeCompleto.toLowerCase().includes(texto) || (p.email || '').toLowerCase().includes(texto))
+      .map(p => {
+        const profAtrib = atribuicoes.filter(a => a.id_professor?.id === p.id);
+        const turmas = [...new Set(profAtrib.map(a => a.id_turma?.nome).filter(Boolean))].join(', ');
+        const disciplinas = profAtrib.map(a => a.id_disciplina?.nome).filter(Boolean).join(', ');
+        return `<tr>
+          <td><strong>${p.nomeCompleto}</strong></td>
+          <td>${p.email || '-'}</td>
+          <td>${turmas || '-'}</td>
+          <td>${disciplinas || '-'}</td>
+        </tr>`;
+      }).join('');
+  } catch (e) { notyf.error('Erro: ' + (e.message || '')); }
+}
+
+document.getElementById('filtro-professor-texto')?.addEventListener('input', () => loadProfessores());
+
+document.getElementById('form-atribuir-professor-tab')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const profId = document.getElementById('prof-tab-professor').value;
+  const turmaId = document.getElementById('prof-tab-turma').value;
+  const discId = document.getElementById('prof-tab-disciplina').value;
+  if (!profId || !turmaId || !discId) { notyf.error('Preencha todos os campos'); return; }
+  try {
+    await request('/disciplinas/' + discId + '/atribuir', {
+      method: 'POST',
+      body: JSON.stringify({ id_turma: parseInt(turmaId), id_professor: parseInt(profId) })
+    });
+    notyf.success('Professor atribuido a turma');
+    await loadProfessores();
+  } catch (e) { notyf.error('Erro: ' + (e.message || '')); }
 });

@@ -104,6 +104,25 @@
         </div>
       </div>
 
+      <div class="dashboard-stats-row">
+        <div class="stat-card">
+          <h3>&#9989; Aprovados</h3>
+          <span class="stat-value" id="stat-aprovados">0</span>
+        </div>
+        <div class="stat-card stat-card-danger">
+          <h3>&#10060; Reprovados</h3>
+          <span class="stat-value" id="stat-reprovados">0</span>
+        </div>
+        <div class="stat-card stat-card-warning">
+          <h3>&#128200; Recuperação</h3>
+          <span class="stat-value" id="stat-recuperacao">0</span>
+        </div>
+        <div class="stat-card stat-card-info">
+          <h3>&#128197; Cursando</h3>
+          <span class="stat-value" id="stat-cursando">0</span>
+        </div>
+      </div>
+
       <div class="charts-row">
         <div class="chart-card-wide">
           <h2>&#128218; Minhas Turmas</h2>
@@ -112,8 +131,8 @@
           </div>
         </div>
         <div class="chart-card-narrow">
-          <h2>&#128200; Distribuição de Alunos</h2>
-          <div class="chart-container"><canvas id="chart-turmas-alunos"></canvas></div>
+          <h2>&#128200; Desempenho dos Alunos</h2>
+          <div class="chart-container"><canvas id="chart-desempenho"></canvas></div>
         </div>
       </div>
     </section>
@@ -156,7 +175,7 @@
       </div>
     </section>
 
-    <!-- LANÇAR FREQUÊNCIA -->
+    <!-- FREQUÊNCIA -->
     <section id="modulo-frequencia" class="module-panel hidden">
       <div class="sec-grid">
         <article class="card" style="grid-column: 1 / -1;">
@@ -164,20 +183,33 @@
           <div class="filtros-row">
             <div class="field"><label for="freq-turma">Turma</label><select id="freq-turma"><option value="">Selecione...</option></select></div>
             <div class="field"><label for="freq-disciplina">Disciplina</label><select id="freq-disciplina"><option value="">Selecione...</option></select></div>
-            <div class="field"><label for="freq-data">Data da Aula</label><input type="date" id="freq-data" /></div>
+            <div class="field"><label for="freq-data">Data da Aula</label>
+              <div class="date-nav-wrapper">
+                <button class="btn btn-sm btn-soft" id="freq-date-prev" title="Dia anterior">&#9664;</button>
+                <input type="date" id="freq-data" />
+                <button class="btn btn-sm btn-soft" id="freq-date-next" title="Próximo dia">&#9654;</button>
+                <button class="btn btn-sm btn-soft" id="freq-date-today" title="Hoje">&#128197; Hoje</button>
+              </div>
+            </div>
             <div class="field" style="display:flex;align-items:flex-end;"><button class="btn btn-primary btn-sm" id="btn-carregar-frequencia">&#128269; Carregar Alunos</button></div>
           </div>
 
           <div id="freq-table-wrapper" class="table-wrapper hidden">
-            <table><thead><tr><th>Aluno</th><th>Presença</th><th>Justificativa</th></tr></thead><tbody id="lista-frequencia"></tbody></table>
+            <table><thead><tr><th>Aluno</th><th>Presença</th><th>Justificativa</th><th>Histórico</th></tr></thead><tbody id="lista-frequencia"></tbody></table>
           </div>
           <div id="freq-empty" class="empty-state hidden"><div class="empty-icon">&#128203;</div><h3>Selecione turma, disciplina e data</h3></div>
           <div id="freq-carregando" class="empty-state hidden"><div class="empty-icon">&#9203;</div><h3>Carregando...</h3></div>
 
+          <div id="freq-stats-bar" class="freq-stats-bar hidden">
+            <span class="freq-stat-item"><span class="freq-stat-dot" style="background:var(--sec-success)"></span> Presentes: <strong id="freq-stats-presentes">0</strong></span>
+            <span class="freq-stat-item"><span class="freq-stat-dot" style="background:var(--sec-danger)"></span> Ausentes: <strong id="freq-stats-ausentes">0</strong></span>
+            <span class="freq-stat-item"><span class="freq-stat-dot" style="background:var(--sec-accent)"></span> Total: <strong id="freq-stats-total">0</strong></span>
+          </div>
+
           <div class="actions" id="freq-actions" style="display:none;">
             <button class="btn btn-primary" id="btn-salvar-frequencia">&#128190; Salvar Frequência</button>
-            <button class="btn btn-soft" id="btn-marcar-todos">&#9989; Marcar Todos Presentes</button>
-            <button class="btn btn-soft" id="btn-marcar-faltas">&#10060; Marcar Todos Ausentes</button>
+            <button class="btn btn-soft" id="btn-marcar-todos">&#9989; Todos Presentes</button>
+            <button class="btn btn-soft" id="btn-marcar-faltas">&#10060; Todos Ausentes</button>
           </div>
         </article>
       </div>
@@ -190,9 +222,10 @@
           <h2>&#128218; Minhas Disciplinas</h2>
           <div class="filtros-row">
             <div class="field" style="flex:1;"><label for="filtro-disc-texto">Buscar</label><input type="text" id="filtro-disc-texto" placeholder="Nome da disciplina..." /></div>
+            <div class="field"><label for="filtro-disc-turma">Turma</label><select id="filtro-disc-turma"><option value="">Todas</option></select></div>
           </div>
           <div class="table-wrapper">
-            <table><thead><tr><th>Disciplina</th><th>Código</th><th>Carga Horária</th><th>Semestre</th></tr></thead><tbody id="lista-disciplinas"></tbody></table>
+            <table><thead><tr><th>Disciplina</th><th>Código</th><th>Carga Horária</th><th>Semestre</th><th>Turma</th><th>Status</th><th>Ações</th></tr></thead><tbody id="lista-disciplinas"></tbody></table>
           </div>
           <div id="disciplinas-empty" class="empty-state hidden"><div class="empty-icon">&#128218;</div><h3>Nenhuma disciplina encontrada</h3></div>
         </article>
@@ -233,6 +266,27 @@
     </section>
 
   </main>
+</div>
+
+<!-- FREQ HISTORY MODAL -->
+<div class="modal-overlay hidden" id="modal-freq-history">
+  <div class="modal-content" style="max-width:500px;">
+    <div class="modal-header">
+      <h2>&#128203; Histórico de Frequência</h2>
+      <button class="modal-close" id="freq-history-close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>Aluno: <strong id="freq-history-aluno">-</strong></p>
+      <p>Disciplina: <strong id="freq-history-disciplina">-</strong></p>
+      <div class="table-wrapper">
+        <table><thead><tr><th>Data</th><th>Presença</th><th>Justificativa</th></tr></thead><tbody id="freq-history-body"></tbody></table>
+      </div>
+      <div id="freq-history-stats" class="freq-stats-bar" style="margin-top:12px;"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-soft" id="freq-history-close-btn">Fechar</button>
+    </div>
+  </div>
 </div>
 
 <!-- CONFIRM MODAL -->
