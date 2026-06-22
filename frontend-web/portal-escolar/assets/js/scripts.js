@@ -640,12 +640,33 @@ function requireAuth(requiredRole) {
   }
 
   const role = auth.usuario.role;
+  const permissoes = auth.permissoes || [];
+
+  // Portal-Secretaria check
+  if (requiredRole === 'ROLE_ADMIN') {
+    if (permissoes.includes('portal.secretaria') || role === 'ROLE_ADMIN') {
+      setupProtectedPage(auth);
+      return auth;
+    }
+    window.location.href = getLoginPageUrl();
+    return null;
+  }
+
   if (requiredRole && role !== requiredRole) {
     window.location.href = 'index.html';
     return null;
   }
 
   if (!requiredRole) {
+    // Portal-Escolar: check portal.escolar permission
+    if (permissoes.includes('portal.escolar')) {
+      setupTopNav(auth);
+      return auth;
+    }
+    if (role === 'ROLE_STUDENT') {
+      setupTopNav(auth);
+      return auth;
+    }
     if (role === 'ROLE_USER') {
       window.location.href = '../portal-inscricao/index.html';
       return null;
@@ -771,10 +792,13 @@ function initLoginPage() {
 
       if (!token || !usuario) throw new Error('Resposta de login inválida.');
 
-      setAuth({ token, usuario });
-      if (usuario.role === 'ROLE_ADMIN') {
+      const permissoes = data.permissoes || [];
+      setAuth({ token, usuario, permissoes });
+      if (permissoes.includes('portal.secretaria')) {
         window.location.href = '../portal-secretaria/portal-secretaria.html';
-      } else if (usuario.role === 'ROLE_USER') {
+      } else if (permissoes.includes('portal.professor')) {
+        window.location.href = '../portal-professor/portal-professor.html';
+      } else if (permissoes.includes('portal.inscricao')) {
         window.location.href = '../portal-inscricao/index.html';
       } else {
         window.location.href = 'index.html';

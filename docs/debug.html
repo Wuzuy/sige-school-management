@@ -1,0 +1,375 @@
+<!DOCTYPE html><html lang="pt-BR" data-font-size="md"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIGE - Portal do Professor</title>
+  <link rel="stylesheet" href="../portal-escolar/assets/css/app.css">
+  <link rel="stylesheet" href="arquivos/portal-professor.css">
+  <link rel="icon" href="../portal-escolar/assets/images/sige.png" type="image/png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body data-page="portal-professor">
+
+<div class="sec-layout">
+  <!-- ========== SIDEBAR ========== -->
+  <aside class="sec-sidebar" id="sec-sidebar">
+    <div class="sec-sidebar-brand">
+      <img src="../portal-escolar/assets/images/sige.png" alt="SIGE">
+      <span>SIGE</span>
+    </div>
+
+    <div class="sec-sidebar-user" id="sec-user-info">
+      <div class="sec-sidebar-user-avatar" id="sec-user-avatar">RL</div>
+      <div class="sec-sidebar-user-text">
+        <div class="sec-sidebar-user-name" id="sec-user-name">Rafael Lima</div>
+        <div class="sec-sidebar-user-email" id="sec-user-email">rafael.lima@sige.edu.br</div>
+        <span class="sec-sidebar-badge" id="sec-user-role">Professor</span>
+      </div>
+    </div>
+
+    <nav class="sec-sidebar-nav">
+      <div class="sec-sidebar-section">
+        <div class="sec-sidebar-section-title">Módulos</div>
+        <a class="sec-sidebar-item active" data-module-target="modulo-dashboard" href="#">
+          <span class="sec-sidebar-icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a class="sec-sidebar-item" data-module-target="modulo-turmas" href="#">
+          <span class="sec-sidebar-icon">📚</span>
+          <span>Minhas Turmas</span>
+        </a>
+        <a class="sec-sidebar-item" data-module-target="modulo-notas" href="#">
+          <span class="sec-sidebar-icon">📝</span>
+          <span>Lançar Notas</span>
+        </a>
+        <a class="sec-sidebar-item" data-module-target="modulo-frequencia" href="#">
+          <span class="sec-sidebar-icon">📋</span>
+          <span>Lançar Frequência</span>
+        </a>
+        <a class="sec-sidebar-item" data-module-target="modulo-disciplinas" href="#">
+          <span class="sec-sidebar-icon">📚</span>
+          <span>Disciplinas</span>
+        </a>
+      </div>
+
+      <div class="sec-sidebar-section">
+        <div class="sec-sidebar-section-title">Sistema</div>
+        <a class="sec-sidebar-item" data-module-target="modulo-configuracoes" href="#">
+          <span class="sec-sidebar-icon">⚙</span>
+          <span>Configurações</span>
+        </a>
+      </div>
+    </nav>
+
+    <button class="sec-sidebar-toggle" id="sec-sidebar-toggle" type="button" aria-label="Abrir menu">
+      <span>☰</span>
+    </button>
+
+    <div class="sec-sidebar-footer">
+      <a href="../portal-inscricao/index.html" class="sec-sidebar-link">→ Portal Inscrição</a>
+      <a href="../portal-secretaria/portal-secretaria.html" class="sec-sidebar-link" id="link-secretaria" style="display: none;">→ Portal da Secretaria</a>
+      <button class="sec-sidebar-logout" data-logout="" type="button">🚪 Sair</button>
+    </div>
+  </aside>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main class="sec-content">
+
+    <!-- Hero -->
+    <section class="sec-hero">
+      <h1>Portal do Professor</h1>
+      <p>Painel de gerenciamento de turmas, notas e frequência</p>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="modulo-dashboard" class="module-panel">
+      <div class="kpi-grid">
+        <div class="kpi-card" style="--kpi-color: var(--sec-accent);">
+          <div class="kpi-header"><span class="kpi-icon">📚</span><span class="kpi-label">Minhas Turmas</span></div>
+          <div class="kpi-body"><span class="kpi-value" id="kpi-turmas">3</span><span class="kpi-delta">Turmas ativas</span></div>
+        </div>
+        <div class="kpi-card" style="--kpi-color: var(--sec-success);">
+          <div class="kpi-header"><span class="kpi-icon">🎓</span><span class="kpi-label">Total de Alunos</span></div>
+          <div class="kpi-body"><span class="kpi-value" id="kpi-alunos">24</span><span class="kpi-delta">Matriculados</span></div>
+        </div>
+        <div class="kpi-card" style="--kpi-color: var(--sec-warning);">
+          <div class="kpi-header"><span class="kpi-icon">📝</span><span class="kpi-label">Disciplinas</span></div>
+          <div class="kpi-body"><span class="kpi-value" id="kpi-disciplinas">4</span><span class="kpi-delta">Que leciona</span></div>
+        </div>
+        <div class="kpi-card" style="--kpi-color: var(--sec-primary);">
+          <div class="kpi-header"><span class="kpi-icon">📋</span><span class="kpi-label">Aulas Dadas</span></div>
+          <div class="kpi-body"><span class="kpi-value" id="kpi-aulas">8</span><span class="kpi-delta">Registros de frequência</span></div>
+        </div>
+      </div>
+
+      <div class="charts-row">
+        <div class="chart-card-wide">
+          <h2>📚 Minhas Turmas</h2>
+          <div id="dash-turmas-lista" class="dash-turmas-lista">
+        <div class="dash-turma-item">
+          <div>
+            <div class="dash-turma-nome">INF-M1</div>
+            <div class="dash-turma-curso">Informática</div>
+          </div>
+          <div class="dash-turma-info">
+            <div>8 alunos</div>
+            <div>Matutino / 2026</div>
+          </div>
+        </div>
+      
+        <div class="dash-turma-item">
+          <div>
+            <div class="dash-turma-nome">INF-M2</div>
+            <div class="dash-turma-curso">Informática</div>
+          </div>
+          <div class="dash-turma-info">
+            <div>8 alunos</div>
+            <div>Matutino / 2026</div>
+          </div>
+        </div>
+      
+        <div class="dash-turma-item">
+          <div>
+            <div class="dash-turma-nome">ADM-V1</div>
+            <div class="dash-turma-curso">Administração</div>
+          </div>
+          <div class="dash-turma-info">
+            <div>8 alunos</div>
+            <div>Vespertino / 2026</div>
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="chart-card-narrow">
+          <h2>📈 Distribuição de Alunos</h2>
+          <div class="chart-container"><canvas id="chart-turmas-alunos" width="322" height="200" style="display: block; box-sizing: border-box; height: 200px; width: 322px;"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MINHAS TURMAS -->
+    <section id="modulo-turmas" class="module-panel hidden">
+      <div class="sec-grid">
+        <article class="card" style="grid-column: 1 / -1;">
+          <h2>📚 Minhas Turmas</h2>
+          <div class="filtros-row">
+            <div class="field" style="flex:1;"><label for="filtro-turma-texto">Buscar</label><input type="text" id="filtro-turma-texto" placeholder="Nome da turma..."></div>
+            <div class="field"><label for="filtro-turma-status">Status</label><select id="filtro-turma-status"><option value="TODOS">Todas</option><option value="ATIVO">Ativo</option><option value="INATIVO">Inativo</option></select></div>
+            <div class="field" style="display:flex;align-items:flex-end;"><button class="btn btn-primary btn-sm" id="btn-filtrar-turmas">🔍 Filtrar</button></div>
+          </div>
+          <div class="table-wrapper">
+            <table><thead><tr><th>Turma</th><th>Curso</th><th>Turno</th><th>Vagas</th><th>Ano</th><th>Status</th><th>Ações</th></tr></thead><tbody id="lista-turmas">
+    <tr>
+      <td><strong>INF-M1</strong></td>
+      <td>Informática</td>
+      <td>Matutino</td>
+      <td>40</td>
+      <td>2026</td>
+      <td><span class="badge badge-success">ATIVO</span></td>
+      <td>
+        <div class="action-btns">
+          <button class="action-btn view" title="Ver Alunos" data-ver-turma="1">👁</button>
+        </div>
+      </td>
+    </tr>
+  
+    <tr>
+      <td><strong>INF-M2</strong></td>
+      <td>Informática</td>
+      <td>Matutino</td>
+      <td>35</td>
+      <td>2026</td>
+      <td><span class="badge badge-success">ATIVO</span></td>
+      <td>
+        <div class="action-btns">
+          <button class="action-btn view" title="Ver Alunos" data-ver-turma="2">👁</button>
+        </div>
+      </td>
+    </tr>
+  
+    <tr>
+      <td><strong>ADM-V1</strong></td>
+      <td>Administração</td>
+      <td>Vespertino</td>
+      <td>30</td>
+      <td>2026</td>
+      <td><span class="badge badge-success">ATIVO</span></td>
+      <td>
+        <div class="action-btns">
+          <button class="action-btn view" title="Ver Alunos" data-ver-turma="3">👁</button>
+        </div>
+      </td>
+    </tr>
+  </tbody></table>
+          </div>
+          <div id="turmas-empty" class="empty-state hidden"><div class="empty-icon">📚</div><h3>Nenhuma turma encontrada</h3></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- LANÇAR NOTAS -->
+    <section id="modulo-notas" class="module-panel hidden">
+      <div class="sec-grid">
+        <article class="card" style="grid-column: 1 / -1;">
+          <h2>📝 Lançar Notas</h2>
+          <div class="filtros-row">
+            <div class="field"><label for="notas-turma">Turma</label><select id="notas-turma"><option value="">Selecione...</option><option value="1">INF-M1 - Informática</option><option value="2">INF-M2 - Informática</option><option value="3">ADM-V1 - Administração</option></select></div>
+            <div class="field"><label for="notas-disciplina">Disciplina</label><select id="notas-disciplina"><option value="">Selecione...</option></select></div>
+            <div class="field" style="display:flex;align-items:flex-end;"><button class="btn btn-primary btn-sm" id="btn-carregar-notas">🔍 Carregar Alunos</button></div>
+          </div>
+
+          <div id="notas-table-wrapper" class="table-wrapper hidden">
+            <table><thead><tr><th>Aluno</th><th>Nota Final</th><th>Frequência %</th><th>Status</th><th>Ações</th></tr></thead><tbody id="lista-notas"></tbody></table>
+          </div>
+          <div id="notas-empty" class="empty-state hidden"><div class="empty-icon">📝</div><h3>Selecione uma turma e disciplina para lançar notas</h3></div>
+          <div id="notas-carregando" class="empty-state hidden"><div class="empty-icon">⏳</div><h3>Carregando...</h3></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- LANÇAR FREQUÊNCIA -->
+    <section id="modulo-frequencia" class="module-panel hidden">
+      <div class="sec-grid">
+        <article class="card" style="grid-column: 1 / -1;">
+          <h2>📋 Lançar Frequência</h2>
+          <div class="filtros-row">
+            <div class="field"><label for="freq-turma">Turma</label><select id="freq-turma"><option value="">Selecione...</option><option value="1">INF-M1 - Informática</option><option value="2">INF-M2 - Informática</option><option value="3">ADM-V1 - Administração</option></select></div>
+            <div class="field"><label for="freq-disciplina">Disciplina</label><select id="freq-disciplina"><option value="">Selecione...</option></select></div>
+            <div class="field"><label for="freq-data">Data da Aula</label><input type="date" id="freq-data"></div>
+            <div class="field" style="display:flex;align-items:flex-end;"><button class="btn btn-primary btn-sm" id="btn-carregar-frequencia">🔍 Carregar Alunos</button></div>
+          </div>
+
+          <div id="freq-table-wrapper" class="table-wrapper hidden">
+            <table><thead><tr><th>Aluno</th><th>Presença</th><th>Justificativa</th></tr></thead><tbody id="lista-frequencia"></tbody></table>
+          </div>
+          <div id="freq-empty" class="empty-state hidden"><div class="empty-icon">📋</div><h3>Selecione turma, disciplina e data</h3></div>
+          <div id="freq-carregando" class="empty-state hidden"><div class="empty-icon">⏳</div><h3>Carregando...</h3></div>
+
+          <div class="actions" id="freq-actions" style="display:none;">
+            <button class="btn btn-primary" id="btn-salvar-frequencia">💾 Salvar Frequência</button>
+            <button class="btn btn-soft" id="btn-marcar-todos">✅ Marcar Todos Presentes</button>
+            <button class="btn btn-soft" id="btn-marcar-faltas">❌ Marcar Todos Ausentes</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- DISCIPLINAS -->
+    <section id="modulo-disciplinas" class="module-panel hidden">
+      <div class="sec-grid">
+        <article class="card" style="grid-column: 1 / -1;">
+          <h2>📚 Minhas Disciplinas</h2>
+          <div class="filtros-row">
+            <div class="field" style="flex:1;"><label for="filtro-disc-texto">Buscar</label><input type="text" id="filtro-disc-texto" placeholder="Nome da disciplina..."></div>
+          </div>
+          <div class="table-wrapper">
+            <table><thead><tr><th>Disciplina</th><th>Código</th><th>Carga Horária</th><th>Semestre</th></tr></thead><tbody id="lista-disciplinas">
+      <tr>
+        <td><strong>Programação I</strong></td>
+        <td>PROG1</td>
+        <td>80h</td>
+        <td>1º</td>
+      </tr>
+    
+      <tr>
+        <td><strong>Banco de Dados</strong></td>
+        <td>BD1</td>
+        <td>60h</td>
+        <td>1º</td>
+      </tr>
+    
+      <tr>
+        <td><strong>Redes de Computadores</strong></td>
+        <td>REDES</td>
+        <td>60h</td>
+        <td>2º</td>
+      </tr>
+    
+      <tr>
+        <td><strong>Gestão Empresarial</strong></td>
+        <td>GESTAO</td>
+        <td>40h</td>
+        <td>2º</td>
+      </tr>
+    </tbody></table>
+          </div>
+          <div id="disciplinas-empty" class="empty-state hidden"><div class="empty-icon">📚</div><h3>Nenhuma disciplina encontrada</h3></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- CONFIGURACOES -->
+    <section id="modulo-configuracoes" class="module-panel hidden">
+      <div class="sec-grid">
+        <article class="card" style="grid-column: 1 / -1;">
+          <h2>⚙ Configurações de Acessibilidade</h2>
+          <p class="muted" style="margin-bottom: 20px;">Personalize a aparência do sistema.</p>
+          <div class="config-group">
+            <div class="config-row">
+              <div class="config-info">
+                <h3>🌙 Modo Escuro</h3>
+                <p>Alterna entre tema claro e escuro.</p>
+              </div>
+              <label class="config-switch">
+                <input type="checkbox" id="toggle-dark-mode">
+                <span class="config-slider"></span>
+              </label>
+            </div>
+            <div class="config-row">
+              <div class="config-info">
+                <h3>📏 Tamanho da Fonte</h3>
+                <p>Ajusta o tamanho do texto.</p>
+              </div>
+              <div class="config-font-selector">
+                <button class="btn btn-sm" data-font="sm">P</button>
+                <button class="btn btn-sm btn-primary active" data-font="md">P</button>
+                <button class="btn btn-sm" data-font="lg">P</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay hidden" id="modal-confirm">
+  <div class="modal-content" style="max-width:400px;">
+    <div class="modal-header">
+      <h2>⚠ Confirmar</h2>
+      <button class="modal-close" id="confirm-close">×</button>
+    </div>
+    <div class="modal-body">
+      <p id="confirm-message">Tem certeza?</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-soft" id="confirm-cancel">Cancelar</button>
+      <button class="btn btn-primary" id="confirm-ok">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+<script src="../portal-escolar/assets/js/api-config.js"></script>
+<script src="../portal-escolar/assets/js/scripts.js"></script><div class="acessibilidade-overlay" id="acessibilidadeOverlay"></div><div class="acessibilidade-popup" id="acessibilidadePopup">
+    <button class="close-btn" id="fecharAcessibilidade">×</button>
+    <h3>⚙️ Acessibilidade</h3>
+    <div class="acessibilidade-item">
+      <label>Modo Escuro</label>
+      <button id="toggleDarkModeBtn">☀️</button>
+    </div>
+    <div class="acessibilidade-item">
+      <label>Tamanho da Fonte</label>
+      <div class="font-size-controls">
+        <button data-font-size-action="decrease" title="Diminuir fonte">A-</button>
+        <span class="current-size" id="currentFontSize">M</span>
+        <button data-font-size-action="increase" title="Aumentar fonte">A+</button>
+      </div>
+    </div>
+  </div>
+<script src="arquivos/portal-professor.js"></script>
+
+
+</body></html>

@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const supabase = require('../config/supabase');
-const { requireAuth, requireRole } = require('../middleware/auth');
+const { requireAuth, requireRole, getUserPermissoes } = require('../middleware/auth');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secreta_sige_123';
 
@@ -38,7 +38,8 @@ router.post('/login', async (req, res) => {
   const senhaValida = await bcrypt.compare(senha, data.senha);
   if (!senhaValida) return res.status(401).json({ error: 'Senha incorreta.' });
 
-  const token = jwt.sign({ id: data.id, role: data.role, id_cargo: data.id_cargo }, JWT_SECRET, { expiresIn: '1d' });
+  const permissoes = await getUserPermissoes(data.id);
+  const token = jwt.sign({ id: data.id, role: data.role, id_cargo: data.id_cargo, permissoes }, JWT_SECRET, { expiresIn: '1d' });
 
   // Mapeamento para o formato esperado pelo frontend
   const usuario = {
@@ -52,7 +53,7 @@ router.post('/login', async (req, res) => {
     id_cargo: data.id_cargo
   };
 
-  res.json({ token, usuario });
+  res.json({ token, usuario, permissoes });
 });
 
 // Obter dados do utilizador autenticado

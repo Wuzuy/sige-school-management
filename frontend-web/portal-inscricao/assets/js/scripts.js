@@ -725,14 +725,17 @@ function requireAuth(requiredRole) {
   }
 
   const role = auth.usuario.role;
+  const permissoes = auth.permissoes || [];
+
   if (requiredRole && role !== requiredRole) {
     window.location.href = 'index.html';
     return null;
   }
 
-  // ROLE_STUDENT pode acessar tanto inscricao quanto portal do aluno
-  if (role === 'ROLE_STUDENT' && window.location.pathname.includes('portal-inscricao')) {
-    // Permitido - pode acessar inscricao tambem
+  // Se tem permissoes, checa portal.inscricao; senao (legado), permite todos
+  if (permissoes.length && !permissoes.includes('portal.inscricao') && role !== 'ROLE_STUDENT' && role !== 'ROLE_USER') {
+    window.location.href = 'index.html';
+    return null;
   }
 
   setupTopNav(auth);
@@ -843,12 +846,13 @@ function initLoginPage() {
 
       if (!token || !usuario) throw new Error('Resposta de login inválida.');
 
-      setAuth({ token, usuario });
-      if (usuario.role === 'ROLE_ADMIN') {
+      const permissoes = data.permissoes || [];
+      setAuth({ token, usuario, permissoes });
+      if (permissoes.includes('portal.secretaria')) {
         window.location.href = '../portal-secretaria/portal-secretaria.html';
-      } else if (usuario.role === 'ROLE_TEACHER') {
+      } else if (permissoes.includes('portal.professor')) {
         window.location.href = '../portal-professor/portal-professor.html';
-      } else if (usuario.role === 'ROLE_STUDENT') {
+      } else if (permissoes.includes('portal.escolar')) {
         window.location.href = '../portal-escolar/index.html';
       } else {
         window.location.href = 'index.html';

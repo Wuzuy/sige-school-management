@@ -42,11 +42,12 @@ function requireTeacherAuth() {
     window.location.href = getLoginPageUrl();
     return null;
   }
-  if (auth.usuario.role !== 'ROLE_TEACHER' && auth.usuario.role !== 'ROLE_ADMIN') {
-    window.location.href = '../portal-escolar/index.html';
-    return null;
+  const permissoes = auth.permissoes || [];
+  if (permissoes.includes('portal.professor') || auth.usuario.role === 'ROLE_TEACHER' || auth.usuario.role === 'ROLE_ADMIN') {
+    return auth;
   }
-  return auth;
+  window.location.href = '../portal-escolar/index.html';
+  return null;
 }
 
 // --- Sidebar User ---

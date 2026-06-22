@@ -5,25 +5,52 @@
 // This override runs before DOMContentLoaded fires.
 window.initPortalSecretariaPage = async function() {};
 
-// --- URL hash state persistence ---
+// --- Session state persistence (localStorage) ---
+const STATE_KEY = 'sige-secretaria-state';
+
 function saveState() {
-  // file:// protocol does not allow replaceState
-  if (window.location.protocol === 'file:') return;
   const visiblePanel = document.querySelector('.module-panel:not(.hidden)');
   const moduleId = visiblePanel ? visiblePanel.id : 'modulo-dashboard';
   const modeBtn = document.querySelector('.sec-mode-btn.active');
   const mode = modeBtn ? modeBtn.dataset.secMode : 'inscricoes';
-  const parts = ['mode=' + mode, 'module=' + moduleId];
-  if (moduleId === 'modulo-aluno-detalhes' && window.__currentAlunoId) parts.push('alunoId=' + window.__currentAlunoId);
-  if (moduleId === 'modulo-inscricoes-detalhes' && window.__currentInscricaoId) parts.push('inscricaoId=' + window.__currentInscricaoId);
-  try { history.replaceState(null, '', '#' + parts.join('&')); } catch {}
+  const state = { mode, module: moduleId };
+  if (moduleId === 'modulo-aluno-detalhes' && window.__currentAlunoId) state.alunoId = window.__currentAlunoId;
+  if (moduleId === 'modulo-inscricoes-detalhes' && window.__currentInscricaoId) state.inscricaoId = window.__currentInscricaoId;
+  try {
+    localStorage.setItem(STATE_KEY, JSON.stringify(state));
+    // Also update URL hash for cross-tab navigation where possible
+    if (window.location.protocol !== 'file:') {
+      const parts = ['mode=' + mode, 'module=' + moduleId];
+      if (state.alunoId) parts.push('alunoId=' + state.alunoId);
+      if (state.inscricaoId) parts.push('inscricaoId=' + state.inscricaoId);
+      history.replaceState(null, '', '#' + parts.join('&'));
+    }
+  } catch {}
 }
 
 function restoreState() {
+  // Try URL hash first (for bookmark/share support)
+  let params = null;
   const h = location.hash.replace(/^#/, '');
-  if (!h) return false;
-  const params = Object.fromEntries(h.split('&').map(p => { const [k, ...v] = p.split('='); return [k, v.join('=')]; }));
-  if (!params.module) return false;
+  if (h) {
+    params = Object.fromEntries(h.split('&').map(p => { const [k, ...v] = p.split('='); return [k, v.join('=')]; }));
+  }
+  // Fall back to localStorage
+  if (!params || !params.module) {
+    try {
+      const saved = localStorage.getItem(STATE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.module) {
+          params = { mode: parsed.mode, module: parsed.module };
+          if (parsed.alunoId) params.alunoId = parsed.alunoId;
+          if (parsed.inscricaoId) params.inscricaoId = parsed.inscricaoId;
+        }
+      }
+    } catch {}
+  }
+  if (!params || !params.module) return false;
+
   let mode = params.mode;
   if (!mode) {
     const alunosMods = ['modulo-dashboard-alunos','modulo-alunos','modulo-reclamacoes','modulo-relatorios-alunos','modulo-aluno-detalhes'];
@@ -44,7 +71,6 @@ function restoreState() {
     }
     saveState();
   }, 100);
-  // Still preload dashboard data so KPI filters populate
   return true;
 }
 
@@ -108,12 +134,18 @@ function setupTableSort() {
     const headers = table.querySelectorAll('thead th');
     const tbody = table.querySelector('tbody');
     if (!tbody) return;
+
+    // Observe tbody for row changes to keep rowIdx up to date
+    const obs = new MutationObserver(() => {
+      Array.from(tbody.querySelectorAll('tr')).forEach((r, i) => r.dataset.rowIdx = i);
+    });
+    obs.observe(tbody, { childList: true, subtree: false });
+
     headers.forEach(th => {
       const label = (th.textContent || '').trim().toLowerCase();
       if (label === 'ações' || label === 'ação') return;
       th.style.cursor = 'pointer';
       th.title = 'Clique para ordenar';
-      th._origText = th.textContent;
       th.addEventListener('click', () => {
         const cur = th.dataset.dir || '';
         let newDir;
@@ -135,9 +167,9 @@ function setupTableSort() {
           arr.style.fontSize = '0.7em';
           arr.textContent = newDir === 'asc' ? '\u25B2' : '\u25BC';
           th.appendChild(arr);
+          obs.disconnect();
           const rows = Array.from(tbody.querySelectorAll('tr'));
           const colIdx = Array.from(th.parentNode.children).indexOf(th);
-          const orig = Array.from(rows);
           rows.sort((a, b) => {
             const va = (a.children[colIdx]?.textContent || '').trim().toLowerCase();
             const vb = (b.children[colIdx]?.textContent || '').trim().toLowerCase();
@@ -146,15 +178,16 @@ function setupTableSort() {
             return newDir === 'asc' ? cmp : -cmp;
           });
           rows.forEach(r => tbody.appendChild(r));
+          obs.observe(tbody, { childList: true, subtree: false });
         } else {
           // restore original order
+          obs.disconnect();
           const rows = Array.from(tbody.querySelectorAll('tr'));
           const sorted = Array.from(rows).sort((a,b) => +a.dataset.rowIdx - +b.dataset.rowIdx);
           sorted.forEach(r => tbody.appendChild(r));
+          obs.observe(tbody, { childList: true, subtree: false });
         }
       });
-      // Store original row order
-      Array.from(tbody.querySelectorAll('tr')).forEach((r, i) => r.dataset.rowIdx = i);
     });
   });
 }
@@ -246,7 +279,7 @@ document.querySelectorAll('[data-module-target]').forEach(btn => {
         case 'modulo-usuarios': loadUsuarios(); break;
         case 'modulo-editais': loadEditais(); break;
         case 'modulo-turmas': loadTurmas(); break;
-        case 'modulo-cargos': loadCargos(); break;
+        case 'modulo-cargos': loadCargos(); loadPermissoesCheckboxes(); break;
         case 'modulo-relatorios': loadRelatorio(getRelFiltros()); break;
         case 'modulo-alunos': loadAlunos(); break;
         case 'modulo-relatorios-alunos': loadRelatorioAlunos(); break;
@@ -2136,7 +2169,7 @@ async function loadPermissoesCheckboxes(selectedIds = []) {
   } catch { if (document.getElementById('cargo-permissoes-checkboxes')) document.getElementById('cargo-permissoes-checkboxes').innerHTML = '<span style="color:#999">Erro ao carregar permissões</span>'; }
 }
 
-// Renderiza permissoes com categorias + "Selecionar Todas"
+// Renderiza permissoes com categorias colapsaveis
 function renderPermissoesCategorias(permissoes, selectedIds, containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -2147,82 +2180,85 @@ function renderPermissoesCategorias(permissoes, selectedIds, containerId) {
   });
   container.innerHTML = '';
 
-  // "Selecionar Todas"
-  const allLabel = document.createElement('label');
-  allLabel.style.cssText = 'display:flex;align-items:center;gap:8px;font-weight:700;font-size:0.85rem;cursor:pointer;padding:8px 10px;background:var(--sec-accent);color:#fff;border-radius:6px;margin-bottom:8px;';
-  const allCb = document.createElement('input');
-  allCb.type = 'checkbox';
-  allCb.id = containerId + '-all';
-  const allChecked = permissoes.length > 0 && permissoes.every(p => selectedIds.includes(p.id));
-  allCb.checked = allChecked;
-  allLabel.appendChild(allCb);
-  allLabel.appendChild(document.createTextNode('Todas as Permissões'));
-  container.appendChild(allLabel);
+  const title = document.createElement('span');
+  title.className = 'cargos-permissoes-title';
+  title.textContent = 'PERMISSÕES';
+  container.appendChild(title);
 
-  // Categorias
-  Object.keys(modulos).forEach(mod => {
+  const tree = document.createElement('div');
+  tree.className = 'perm-tree';
+
+  // Categorias colapsaveis
+  Object.keys(modulos).sort().forEach(mod => {
     const perms = modulos[mod];
-    const allCatChecked = perms.every(p => selectedIds.includes(p.id));
 
-    const group = document.createElement('div');
-    group.style.cssText = 'border:1px solid var(--sec-border);border-radius:6px;padding:8px;background:var(--sec-bg);margin-bottom:6px;';
+    const modEl = document.createElement('div');
+    modEl.className = 'perm-module';
 
-    const title = document.createElement('label');
-    title.style.cssText = 'display:flex;align-items:center;gap:6px;font-weight:700;font-size:0.85rem;text-transform:capitalize;cursor:pointer;padding:4px 0;color:var(--sec-text);';
-    const catCb = document.createElement('input');
-    catCb.type = 'checkbox';
-    catCb.className = 'cat-check';
-    catCb.checked = allCatChecked;
-    title.appendChild(catCb);
-    title.appendChild(document.createTextNode(mod));
-    group.appendChild(title);
+    const header = document.createElement('div');
+    header.className = 'perm-module-header';
+    const arrow = document.createElement('span');
+    arrow.className = 'arrow open';
+    arrow.textContent = '>';
+    const modName = document.createElement('span');
+    modName.className = 'mod-name';
+    modName.textContent = mod;
+    const count = document.createElement('span');
+    count.className = 'mod-count';
+    count.textContent = perms.length;
+    header.appendChild(arrow);
+    header.appendChild(modName);
+    header.appendChild(count);
+    modEl.appendChild(header);
 
-    perms.forEach(p => {
-      const label = document.createElement('label');
-      label.style.cssText = 'display:flex;align-items:center;gap:6px;font-size:0.82rem;cursor:pointer;padding:3px 0 3px 22px;color:var(--sec-text);';
+    const body = document.createElement('div');
+    body.className = 'perm-module-body';
+
+    // Ordenar permissoes por nome
+    const sorted = [...perms].sort((a, b) => (a.nome || '').localeCompare(b.nome || ''));
+    sorted.forEach(p => {
+      const row = document.createElement('label');
+      row.className = 'perm-row';
+      const label = document.createElement('span');
+      label.className = 'perm-label';
+      label.textContent = p.nome;
+      row.appendChild(label);
       const cb = document.createElement('input');
       cb.type = 'checkbox';
       cb.value = p.id;
       cb.checked = selectedIds.includes(p.id);
       cb.dataset.codigo = p.codigo;
       cb.className = 'perm-check';
-      label.appendChild(cb);
-      label.appendChild(document.createTextNode(p.nome));
-      group.appendChild(label);
+      row.appendChild(cb);
+      body.appendChild(row);
     });
 
-    container.appendChild(group);
+    modEl.appendChild(body);
+    tree.appendChild(modEl);
 
-    // Category toggle -> sub-permissions
-    catCb.addEventListener('change', () => {
-      group.querySelectorAll('.perm-check').forEach(c => c.checked = catCb.checked);
-      updateAllCheck(container);
+    // Toggle collapse with animation
+    // Calculate and set max-height for smooth animation
+    const setMaxHeight = () => {
+      body.style.maxHeight = body.classList.contains('collapsed') ? '0px' : body.scrollHeight + 'px';
+    };
+    // Set initial max-height
+    requestAnimationFrame(() => setMaxHeight());
+    header.addEventListener('click', () => {
+      const wasCollapsed = body.classList.contains('collapsed');
+      body.classList.toggle('collapsed');
+      arrow.classList.toggle('open');
+      // After layout update, set max-height for animation
+      requestAnimationFrame(() => setMaxHeight());
     });
-  });
-
-  // Individual toggle -> update category + all
-  container.querySelectorAll('.perm-check').forEach(cb => {
-    cb.addEventListener('change', () => {
-      const group = cb.closest('[style]');
-      const catCb = group?.querySelector('.cat-check');
-      if (catCb) {
-        const allInGroup = group.querySelectorAll('.perm-check');
-        catCb.checked = allInGroup.length > 0 && Array.from(allInGroup).every(c => c.checked);
+    // Update max-height when checkboxes change (height may change)
+    body.addEventListener('change', () => {
+      if (!body.classList.contains('collapsed')) {
+        body.style.maxHeight = body.scrollHeight + 'px';
       }
-      updateAllCheck(container);
     });
   });
 
-  function updateAllCheck(cont) {
-    const all = cont.querySelectorAll('.perm-check');
-    const allCb = document.getElementById(containerId + '-all');
-    if (allCb) allCb.checked = all.length > 0 && Array.from(all).every(c => c.checked);
-  }
-
-  // "Selecionar Todas" toggle
-  allCb.addEventListener('change', () => {
-    container.querySelectorAll('.perm-check, .cat-check').forEach(c => c.checked = allCb.checked);
-  });
+  container.appendChild(tree);
 }
 
 document.getElementById('cancelar-cargo')?.addEventListener('click', () => {
@@ -2269,7 +2305,7 @@ document.addEventListener('click', async (e) => {
       openEditModal('&#9998; Editar Cargo', `
         <div class="field"><label>Nome do Cargo</label><input type="text" id="ecarg-nome" value="${data.nome||''}" required /></div>
         <div class="field"><label>Descrição</label><textarea id="ecarg-desc" rows="2">${data.descricao||''}</textarea></div>
-        <div class="field"><label>Permissões</label><div id="ecarg-permissoes" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px;margin-top:4px;"></div></div>`, id, async (id) => {
+        <div id="ecarg-permissoes"></div>`, id, async (id) => {
         const checked = document.querySelectorAll('#ecarg-permissoes .perm-check:checked');
         const permissaoIds = Array.from(checked).map(cb => parseInt(cb.value));
         await request(`/cargos/${id}`, {method:'PUT',body:JSON.stringify({
@@ -2739,6 +2775,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadDashboardAlunos();
     loadTurmas();
     loadCargos();
+    loadPermissoesCheckboxes();
     loadReclamacoesStandalone();
     loadAuditoria();
     startPolling();
