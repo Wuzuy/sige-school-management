@@ -28,15 +28,23 @@ router.post('/', requireAuth, async (req, res) => {
 
 // Listar inscricoes (com dados do curso e usuario)
 router.get('/', async (req, res) => {
-  const { data, error } = await supabase
+  const userId = req.query.user_id;
+  let query = supabase
     .from('inscricoes')
     .select(`
       *,
       id_curso (id, nome_curso, turno, data_inicio, duracao_meses),
       id_usuario (id, nome_completo, cpf, email, telefone, data_nascimento)
-    `);
-    
+    `, { count: 'exact' });
+
+  if (userId) {
+    query = query.eq('id_usuario', userId);
+  }
+
+  const { data, error, count } = await query.order('id', { ascending: false }).limit(5000);
+
   if (error) return res.status(500).json({ error: error.message });
+  res.set('X-Total-Count', count);
   res.json(data);
 });
 

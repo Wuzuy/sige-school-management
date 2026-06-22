@@ -940,7 +940,7 @@ async function initHomePage() {
   try {
     const [cursos, inscricoes] = await Promise.all([
       request('/cursos', { headers: authHeaders(false) }),
-      request('/inscricoes', { headers: authHeaders(false) })
+      request('/inscricoes?user_id=' + auth.usuario.id, { headers: authHeaders(false) })
     ]);
 
     // Filtrar apenas cursos ativos
@@ -1105,19 +1105,18 @@ async function initStatusPage() {
   const timeline = document.querySelector('#timeline-etapas');
 
   try {
-    const inscricoes = await request('/inscricoes', { headers: authHeaders(false) });
+    const inscricoes = await request('/inscricoes?user_id=' + auth.usuario.id, { headers: authHeaders(false) });
 
-    const minhas = inscricoes.filter((item) => item?.id_usuario?.id === auth.usuario.id);
-    if (minhas.length === 0) {
+    if (!inscricoes || inscricoes.length === 0) {
       statusText.textContent = 'Sem inscrições enviadas.';
       body.innerHTML = '<tr><td colspan="5">Nenhuma inscrição encontrada.</td></tr>';
       return;
     }
 
-    statusText.textContent = minhas[0].status_aprovacao;
+    statusText.textContent = inscricoes[0].status_aprovacao;
     body.innerHTML = '';
 
-    minhas.forEach((item) => {
+    inscricoes.forEach((item) => {
       const tr = document.createElement('tr');
       
       const unidadeNome = item?.id_unidade?.nome || item.id_unidade || '-';
@@ -1138,7 +1137,7 @@ async function initStatusPage() {
       body.appendChild(tr);
     });
 
-    setupStatusDetailClicks(body, minhas, detailsCard, timeline, etapasCard);
+    setupStatusDetailClicks(body, inscricoes, detailsCard, timeline, etapasCard);
   } catch (error) {
     showInfo('Não foi possível carregar o status real. Exibindo exemplo de inscrição.');
     const minhas = getMockInscricoes(auth);
@@ -2322,9 +2321,11 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 //FAZ COM QUE A PADDING DA SIDEBAR FIQUE DO TAMANHO DO HEADER
-  const headerAltura = document.getElementById('headerID').offsetHeight;
+  const headerEl = document.getElementById('headerID');
   const sidebarVar = document.getElementById('sidebar');
-  sidebarVar.style.paddingTop = headerAltura + 'px';
+  if (headerEl && sidebarVar) {
+    sidebarVar.style.paddingTop = headerEl.offsetHeight + 'px';
+  }
   
 //conclusao de card aaa
 function alternarConcluido(elemento) {
