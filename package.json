@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "pg": "^8.22.0"
+    "pg": "^8.22.0",
+    "puppeteer-core": "^25.2.0"
   }
 }
