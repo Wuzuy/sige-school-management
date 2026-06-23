@@ -150,6 +150,28 @@ Remove vínculo permissão-cargo.
 
 ---
 
+## Disciplinas
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/disciplinas` | Listar (com ?id_turma= para filtrar) |
+| GET | `/disciplinas/:id` | Buscar por ID |
+| POST | `/disciplinas` | Criar |
+| PUT | `/disciplinas/:id` | Atualizar |
+| DELETE | `/disciplinas/:id` | Excluir |
+| POST | `/disciplinas/:id/atribuir` | Atribuir disciplina a turma + professor (cria entrada em `horarios`) |
+| DELETE | `/disciplinas/:id/atribuir/:horarioId` | Remover atribuição |
+
+---
+
+## Horários (Atribuições)
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/horarios` | Listar atribuições (com ?id_turma=, ?id_professor= para filtrar) |
+
+---
+
 ## Inscrições
 
 | Método | Rota | Descrição |
@@ -179,6 +201,24 @@ Remove vínculo permissão-cargo.
 | GET | `/aluno/atendimentos` | Atendimentos agendados |
 | GET | `/aluno/matriculas` | Matrículas ativas |
 | GET | `/aluno/curriculo` | Estrutura curricular |
+
+---
+
+## Professor
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/professor/dashboard` | KPIs do dashboard (aulas dadas, total alunos, taxa presença, disciplinas) |
+| GET | `/professor/dashboard/stats` | Estatísticas de desempenho dos alunos (aprovados/reprovados/recuperação/cursando) |
+| GET | `/professor/turmas` | Turmas vinculadas ao professor |
+| GET | `/professor/turmas/:id/alunos` | Alunos de uma turma |
+| GET | `/professor/disciplinas` | Disciplinas do professor (com ?id_turma= para filtrar) |
+| PUT | `/professor/disciplina/concluir` | Marcar/desmarcar disciplina como concluída. Body: `{ "id_turma": N, "id_disciplina": N, "concluida": true/false }` |
+| GET | `/professor/notas` | Notas por turma + disciplina. Query: `?id_turma=X&id_disciplina=Y` |
+| PUT | `/professor/notas` | Salvar nota de um aluno. Body: `{ "id_matricula": N, "nota": 8.5 }` |
+| GET | `/professor/frequencia` | Frequência por turma + disciplina + data. Query: `?id_turma=X&id_disciplina=Y&data=2025-03-10` |
+| PUT | `/professor/frequencia` | Salvar frequência de um aluno. Body: `{ "id_matricula": N, "data": "2025-03-10", "presente": true }` |
+| GET | `/professor/frequencia/historico/:matriculaId` | Histórico de frequência de um aluno (últimos 30 registros) |
 
 ---
 
@@ -234,15 +274,20 @@ backend/
 │   ├── unidades.js            # GET/POST/PUT/DELETE /api/unidades/*
 │   ├── editais.js             # GET/POST/PUT/DELETE /api/editais/*
 │   ├── turmas.js              # GET/POST/PUT/DELETE /api/turmas/*
+│   ├── disciplinas.js         # GET/POST/PUT/DELETE /api/disciplinas/* + atribuições
+│   ├── horarios.js            # GET /api/horarios (atribuições)
 │   ├── inscricoes.js         # Inscrições + matrícula
 │   ├── alunos.js              # Admin: visão de alunos
 │   ├── aluno.js               # Self-service do aluno
+│   ├── professor.js           # Professor: dashboard, notas, frequência, disciplinas
 │   ├── cargos.js              # RBAC
 │   └── auth-codigo.js        # Validação QR code
 ├── middleware/
 │   └── auth.js                # requireAuth, requireRole, requirePermissao
 ├── config/
 │   └── supabase.js            # Cliente Supabase
+├── data/
+│   └── conclusoes.json        # Estado de conclusão de disciplinas (file-based storage)
 ├── server.js                  # Entry point
 ├── package.json
 └── .env                       # SUPABASE_URL, SUPABASE_KEY, PORT
