@@ -741,7 +741,7 @@ function initPlanosAula() {
   // Botão novo plano
   document.getElementById('btn-novo-plano')?.addEventListener('click', () => {
     __planoEditandoId = null;
-    document.getElementById('plano-form-title').textContent = '&#43; Novo Plano de Ensino';
+    document.getElementById('plano-form-title').innerHTML = '&#43; Novo Plano de Ensino';
     document.getElementById('plano-ensino-form').classList.remove('hidden');
     document.getElementById('plano-detalhes').classList.add('hidden');
     document.getElementById('pe-disciplina').value = '';
@@ -814,7 +814,7 @@ function initPlanosAula() {
   document.getElementById('btn-nova-aula')?.addEventListener('click', () => {
     if (!__planoSelecionadoId) { showError('Selecione um plano primeiro'); return; }
     __aulaEditandoId = null;
-    document.getElementById('aula-form-title').textContent = '&#43; Nova Aula';
+    document.getElementById('aula-form-title').innerHTML = '&#43; Nova Aula';
     document.getElementById('plano-aula-form').classList.remove('hidden');
     document.getElementById('pa-data').value = new Date().toISOString().slice(0, 10);
     document.getElementById('pa-horario-inicio').value = '';
@@ -941,7 +941,7 @@ async function carregarPlanoForm(id) {
     document.getElementById('pe-criterios').value = p.criterios_avaliacao || '';
     document.getElementById('pe-biblio-basica').value = p.bibliografia_basica || '';
     document.getElementById('pe-biblio-comp').value = p.bibliografia_complementar || '';
-    document.getElementById('plano-form-title').textContent = '<i class="fas fa-pen"></i> Editar Plano de Ensino';
+    document.getElementById('plano-form-title').innerHTML = '<i class="fas fa-pen"></i> Editar Plano de Ensino';
     document.getElementById('plano-ensino-form').classList.remove('hidden');
   } catch (e) { showError('Erro ao carregar dados: ' + e.message); }
 }
@@ -968,7 +968,7 @@ async function editarAula(id) {
     const aulas = await apiGet(`/planos-ensino/${__planoSelecionadoId}/aulas`);
     const a = aulas.find(x => x.id === id);
     if (!a) return;
-    document.getElementById('aula-form-title').textContent = '<i class="fas fa-pen"></i> Editar Aula';
+    document.getElementById('aula-form-title').innerHTML = '<i class="fas fa-pen"></i> Editar Aula';
     document.getElementById('pa-data').value = a.data;
     document.getElementById('pa-horario-inicio').value = a.horario_inicio || '';
     document.getElementById('pa-horario-fim').value = a.horario_fim || '';

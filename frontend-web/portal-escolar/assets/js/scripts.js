@@ -245,36 +245,32 @@ function initNotyf() {
         type: 'success',
         background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
         icon: {
-          className: 'notyf__icon--success',
-          tagName: 'span',
-          text: '<i class="fas fa-check"></i>'
+          className: 'notyf__icon--success fas fa-check',
+          tagName: 'i'
         }
       },
       {
         type: 'error',
         background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
         icon: {
-          className: 'notyf__icon--error',
-          tagName: 'span',
-          text: '<i class="fas fa-times"></i>'
+          className: 'notyf__icon--error fas fa-times',
+          tagName: 'i'
         }
       },
       {
         type: 'warning',
         background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
         icon: {
-          className: 'notyf__icon--warning',
-          tagName: 'span',
-          text: '<i class="fas fa-exclamation-triangle"></i>'
+          className: 'notyf__icon--warning fas fa-exclamation-triangle',
+          tagName: 'i'
         }
       },
       {
         type: 'info',
         background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
         icon: {
-          className: 'notyf__icon--info',
-          tagName: 'span',
-          text: '<i class="fas fa-info-circle"></i>'
+          className: 'notyf__icon--info fas fa-info-circle',
+          tagName: 'i'
         }
       }
     ]
@@ -606,7 +602,7 @@ function setupTopNav(auth) {
       const logoutBtn = document.createElement('button');
       logoutBtn.setAttribute('data-logout', '');
       logoutBtn.type = 'button';
-      logoutBtn.textContent = '<i class="fas fa-sign-out-alt"></i> Sair';
+      logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Sair';
       wrapper.appendChild(logoutBtn);
 
       topbar.appendChild(wrapper);
@@ -2618,7 +2614,7 @@ function alternarConcluido(elemento) {
       const html = document.documentElement;
       const isDark = html.getAttribute('data-theme') === 'dark';
       html.setAttribute('data-theme', isDark ? '' : 'dark');
-      darkBtn.textContent = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+      darkBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
       localStorage.setItem(STORAGE_THEME, isDark ? '' : 'dark');
     });
   }
@@ -2651,7 +2647,7 @@ function alternarConcluido(elemento) {
   if (savedTheme === null) savedTheme = localStorage.getItem('esc-theme');
   if (savedTheme) {
     document.documentElement.setAttribute('data-theme', savedTheme);
-    if (darkBtn) darkBtn.textContent = savedTheme === 'dark' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+    if (darkBtn) darkBtn.innerHTML = savedTheme === 'dark' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
   }
   let savedFont = localStorage.getItem(STORAGE_FONT);
   if (savedFont === null) savedFont = localStorage.getItem('esc-font-size');
