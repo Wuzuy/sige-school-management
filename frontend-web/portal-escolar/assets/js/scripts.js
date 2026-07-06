@@ -5,29 +5,29 @@ function getApiBaseUrl() {
   // 1. Prioridade: LocalStorage (configurado pelo usuário)
   const savedUrl = localStorage.getItem('API_BASE_URL');
   if (savedUrl) {
-    console.log('✅ API configurada pelo usuário:', savedUrl);
+    console.log('<i class="fas fa-check-circle"></i> API configurada pelo usuário:', savedUrl);
     return savedUrl;
   }
   
   // 2. Variável de ambiente (Vercel/Render)
   if (window.ENV?.API_BASE_URL) {
-    console.log('✅ API via ENV:', window.ENV.API_BASE_URL);
+    console.log('<i class="fas fa-check-circle"></i> API via ENV:', window.ENV.API_BASE_URL);
     return window.ENV.API_BASE_URL;
   }
   
   // 3. Window global (para desenvolvimento)
   if (window.API_BASE_URL) {
-    console.log('✅ API via window.API_BASE_URL:', window.API_BASE_URL);
+    console.log('<i class="fas fa-check-circle"></i> API via window.API_BASE_URL:', window.API_BASE_URL);
     return window.API_BASE_URL;
   }
   
   // 4. Detectar ambiente Vercel
   if (window.location.hostname.includes('vercel.app')) {
-    console.info('⚠️ Rodando no Vercel sem API configurada; usando fallback para localhost.');
+    console.info('<i class="fas fa-exclamation-triangle"></i> Rodando no Vercel sem API configurada; usando fallback para localhost.');
   }
   
   // 5. Fallback: localhost (desenvolvimento local)
-  console.log('✅ API Fallback: localhost:8080');
+  console.log('<i class="fas fa-check-circle"></i> API Fallback: localhost:8080');
   return 'http://localhost:8080/api';
 }
 
@@ -41,7 +41,7 @@ function updateApiBaseUrl(newUrl) {
     const cleanUrl = newUrl.trim().replace(/\/$/, '');
     localStorage.setItem('API_BASE_URL', cleanUrl);
     API_BASE = cleanUrl;
-    console.log('✅ API atualizada para:', cleanUrl);
+    console.log('<i class="fas fa-check-circle"></i> API atualizada para:', cleanUrl);
     
     // Esconde modal se estiver aberto
     const modal = document.getElementById('api-config-modal');
@@ -69,7 +69,7 @@ function showApiConfigModal() {
     modal.innerHTML = `
       <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px;">
         <div style="background: white; padding: 30px; border-radius: 12px; max-width: 600px; width: 100%; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-          <h2 style="margin: 0 0 15px 0; color: #667eea; font-size: 24px;">⚙️ Configurar API Backend</h2>
+          <h2 style="margin: 0 0 15px 0; color: #667eea; font-size: 24px;"><i class="fas fa-cog"></i> Configurar API Backend</h2>
           <p style="margin: 0 0 20px 0; color: #666; line-height: 1.6;">
             Para acessar o backend, você precisa configurar a URL da <strong>API Render</strong>.<br>
             Siga os passos:
@@ -83,7 +83,7 @@ function showApiConfigModal() {
                  style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box;">
           <div style="display: flex; gap: 10px;">
             <button onclick="saveAndTestApi()" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">
-              💾 Salvar e Testar
+              <i class="fas fa-save"></i> Salvar e Testar
             </button>
             <button onclick="closeApiModal()" style="padding: 12px 20px; background: #e5e7eb; color: #555; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">
               Cancelar
@@ -108,7 +108,7 @@ window.saveAndTestApi = function() {
     resultDiv.style.display = 'block';
     resultDiv.style.background = '#fee';
     resultDiv.style.color = '#c00';
-    resultDiv.innerHTML = '❌ Por favor, insira uma URL válida';
+    resultDiv.innerHTML = '<i class="fas fa-times-circle"></i> Por favor, insira uma URL válida';
     return;
   }
   
@@ -117,14 +117,14 @@ window.saveAndTestApi = function() {
     resultDiv.style.display = 'block';
     resultDiv.style.background = '#fee';
     resultDiv.style.color = '#c00';
-    resultDiv.innerHTML = '❌ URL deve começar com http:// ou https://';
+    resultDiv.innerHTML = '<i class="fas fa-times-circle"></i> URL deve começar com http:// ou https://';
     return;
   }
   
   resultDiv.style.display = 'block';
   resultDiv.style.background = '#fef9e7';
   resultDiv.style.color = '#856404';
-  resultDiv.innerHTML = '⏳ Testando conexão...';
+  resultDiv.innerHTML = '<i class="fas fa-hourglass-half"></i> Testando conexão...';
   
   // Atualiza URL
   updateApiBaseUrl(url);
@@ -153,7 +153,7 @@ function testApiConnection() {
           resultDiv.style.display = 'block';
           resultDiv.style.background = '#d4edda';
           resultDiv.style.color = '#155724';
-          resultDiv.innerHTML = '✅ Conexão bem-sucedida! API funcionando.';
+          resultDiv.innerHTML = '<i class="fas fa-check-circle"></i> Conexão bem-sucedida! API funcionando.';
           setTimeout(() => {
             closeApiModal();
           }, 2000);
@@ -168,7 +168,7 @@ function testApiConnection() {
         resultDiv.style.display = 'block';
         resultDiv.style.background = '#fee';
         resultDiv.style.color = '#c00';
-        resultDiv.innerHTML = '❌ Falha ao conectar. Verifique se o backend está rodando e a URL está correta.';
+        resultDiv.innerHTML = '<i class="fas fa-times-circle"></i> Falha ao conectar. Verifique se o backend está rodando e a URL está correta.';
       }
       console.error('Erro ao testar API:', error);
     });
@@ -182,7 +182,7 @@ function createApiStatusIndicator() {
     <div style="position: fixed; top: 10px; right: 10px; z-index: 9999; background: white; padding: 8px 12px; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 8px; font-size: 12px; cursor: pointer;" onclick="showApiConfigModal()">
       <span id="api-status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #999;"></span>
       <span id="api-status-text">API</span>
-      <span style="font-size: 10px; opacity: 0.6;">⚙️</span>
+      <span style="font-size: 10px; opacity: 0.6;"><i class="fas fa-cog"></i></span>
     </div>
   `;
   document.body.appendChild(indicator);
@@ -247,7 +247,7 @@ function initNotyf() {
         icon: {
           className: 'notyf__icon--success',
           tagName: 'span',
-          text: '✓'
+          text: '<i class="fas fa-check"></i>'
         }
       },
       {
@@ -256,7 +256,7 @@ function initNotyf() {
         icon: {
           className: 'notyf__icon--error',
           tagName: 'span',
-          text: '✕'
+          text: '<i class="fas fa-times"></i>'
         }
       },
       {
@@ -265,7 +265,7 @@ function initNotyf() {
         icon: {
           className: 'notyf__icon--warning',
           tagName: 'span',
-          text: '⚠'
+          text: '<i class="fas fa-exclamation-triangle"></i>'
         }
       },
       {
@@ -274,7 +274,7 @@ function initNotyf() {
         icon: {
           className: 'notyf__icon--info',
           tagName: 'span',
-          text: 'ℹ'
+          text: '<i class="fas fa-info-circle"></i>'
         }
       }
     ]
@@ -544,28 +544,15 @@ function setupLogoutButtons() {
 }
 
 function setupMobileMenu() {
-  const menuToggle = document.querySelector('.menu-toggle');
   const nav = document.querySelector('.nav');
   const overlay = document.querySelector('.nav-overlay');
 
-  if (!menuToggle || !nav) return;
+  if (!nav) return;
 
   const closeMenu = () => {
     nav.classList.remove('open');
     if (overlay) overlay.classList.remove('visible');
-    menuToggle.setAttribute('aria-expanded', 'false');
   };
-
-  const toggleMenu = () => {
-    const isOpen = nav.classList.toggle('open');
-    if (overlay) overlay.classList.toggle('visible', isOpen);
-    menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-  };
-
-  menuToggle.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleMenu();
-  });
 
   // Fechar ao clicar em um link
   nav.querySelectorAll('a, button').forEach((item) => {
@@ -613,13 +600,13 @@ function setupTopNav(auth) {
       acessBtn.id = 'btnAcessibilidade';
       acessBtn.title = 'Acessibilidade';
       acessBtn.setAttribute('aria-label', 'Acessibilidade');
-      acessBtn.innerHTML = '⚙️';
+      acessBtn.innerHTML = '<i class="fas fa-cog"></i>';
       wrapper.appendChild(acessBtn);
 
       const logoutBtn = document.createElement('button');
       logoutBtn.setAttribute('data-logout', '');
       logoutBtn.type = 'button';
-      logoutBtn.textContent = '🚪 Sair';
+      logoutBtn.textContent = '<i class="fas fa-sign-out-alt"></i> Sair';
       wrapper.appendChild(logoutBtn);
 
       topbar.appendChild(wrapper);
@@ -713,7 +700,7 @@ async function checkPortalAtivo(codigo) {
       overlay.id = 'portal-maintenance-overlay';
       overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;background:var(--sec-bg,#f5f6fa);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center;';
       overlay.innerHTML = `
-        <div style="font-size:4rem;margin-bottom:16px;">&#9888;</div>
+        <div style="font-size:4rem;margin-bottom:16px;"><i class="fas fa-exclamation-triangle"></i></div>
         <h2 style="margin:0 0 8px;color:var(--sec-danger,#e74c3c);">Portal Indispon&iacute;vel</h2>
         <p style="max-width:480px;color:var(--sec-text,#555);margin:0 0 16px;font-size:1rem;">${motivo}</p>
         ${reativar ? `<p style="color:var(--sec-muted,#888);font-size:0.85rem;">Previs&atilde;o de reativa&ccedil;&atilde;o: <strong>${reativar}</strong></p>` : ''}
@@ -2588,10 +2575,10 @@ function alternarConcluido(elemento) {
   popup.id = 'acessibilidadePopup';
   popup.innerHTML = `
     <button class="close-btn" id="fecharAcessibilidade">&times;</button>
-    <h3>⚙️ Acessibilidade</h3>
+    <h3><i class="fas fa-cog"></i> Acessibilidade</h3>
     <div class="acessibilidade-item">
       <label>Modo Escuro</label>
-      <button id="toggleDarkModeBtn">${document.documentElement.getAttribute('data-theme') === 'dark' ? '🌙' : '☀️'}</button>
+      <button id="toggleDarkModeBtn">${document.documentElement.getAttribute('data-theme') === 'dark' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>'}</button>
     </div>
     <div class="acessibilidade-item">
       <label>Tamanho da Fonte</label>
@@ -2628,7 +2615,7 @@ function alternarConcluido(elemento) {
       const html = document.documentElement;
       const isDark = html.getAttribute('data-theme') === 'dark';
       html.setAttribute('data-theme', isDark ? '' : 'dark');
-      darkBtn.textContent = isDark ? '☀️' : '🌙';
+      darkBtn.textContent = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
       localStorage.setItem(STORAGE_THEME, isDark ? '' : 'dark');
     });
   }
@@ -2661,7 +2648,7 @@ function alternarConcluido(elemento) {
   if (savedTheme === null) savedTheme = localStorage.getItem('esc-theme');
   if (savedTheme) {
     document.documentElement.setAttribute('data-theme', savedTheme);
-    if (darkBtn) darkBtn.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+    if (darkBtn) darkBtn.textContent = savedTheme === 'dark' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
   }
   let savedFont = localStorage.getItem(STORAGE_FONT);
   if (savedFont === null) savedFont = localStorage.getItem('esc-font-size');

@@ -575,9 +575,6 @@ header nav {
   #sidebar.asideAberto ~ .interface {
     margin-left: 280px;
   }
-  .menu-toggle {
-    display: none;
-  }
 }
 .topbar__inner {
   max-width: 1140px;
@@ -939,7 +936,6 @@ table {
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   overflow: hidden;
-  min-width: 450px;
 }
 
 .table-wrapper {
@@ -1901,6 +1897,7 @@ tbody tr:hover td {
     font-size: 15px;
   }
   .miniTopbar {
+   display: flex;
    top: 60px;
   }
 

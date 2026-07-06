@@ -37,13 +37,13 @@ async function fazerRequisicao(metodo, endpoint, dados = null, token = null) {
     const response = await fetch(`${API_BASE}${endpoint}`, config);
     const data = await response.json();
     
-    console.log(`✅ ${metodo} ${endpoint}`);
+    console.log(`<i class="fas fa-check-circle"></i> ${metodo} ${endpoint}`);
     console.log('Status:', response.status);
     console.log('Resposta:', data);
     
     return { status: response.status, data };
   } catch (error) {
-    console.error(`❌ Erro em ${metodo} ${endpoint}`);
+    console.error(`<i class="fas fa-times-circle"></i> Erro em ${metodo} ${endpoint}`);
     console.error('Erro:', error.message);
     return { error: error.message };
   }
@@ -53,7 +53,7 @@ async function fazerRequisicao(metodo, endpoint, dados = null, token = null) {
  * 1. TESTE DE REGISTRO DE NOVO USUÁRIO
  */
 async function testarRegistro() {
-  console.log('📝 TESTANDO REGISTRO DE NOVO USUÁRIO...');
+  console.log('<i class="fas fa-pen-alt"></i> TESTANDO REGISTRO DE NOVO USUÁRIO...');
   const dados = {
     nomeCompleto: 'João Silva Teste',
     email: 'joao.teste@example.com',
@@ -67,7 +67,7 @@ async function testarRegistro() {
  * 2. TESTE DE LOGIN
  */
 async function testarLogin() {
-  console.log('🔐 TESTANDO LOGIN...');
+  console.log('<i class="fas fa-lock"></i> TESTANDO LOGIN...');
   const dados = {
     email: 'joao.teste@example.com',
     senha: 'SenhaForte123@'
@@ -78,7 +78,7 @@ async function testarLogin() {
   if (resultado.data && resultado.data.token) {
     // Salva o token para usar em outras requisições
     window.testToken = resultado.data.token;
-    console.log('✅ Token salvo em window.testToken');
+    console.log('<i class="fas fa-check-circle"></i> Token salvo em window.testToken');
   }
   
   return resultado;
@@ -88,10 +88,10 @@ async function testarLogin() {
  * 3. TESTE DE OBTER DADOS DO USUÁRIO AUTENTICADO
  */
 async function testarObterUsuarioAtual() {
-  console.log('👤 TESTANDO OBTER USUÁRIO AUTENTICADO...');
+  console.log('<i class="fas fa-user"></i> TESTANDO OBTER USUÁRIO AUTENTICADO...');
   
   if (!window.testToken) {
-    console.error('❌ Token não definido. Execute testarLogin() primeiro.');
+    console.error('<i class="fas fa-times-circle"></i> Token não definido. Execute testarLogin() primeiro.');
     return;
   }
   
@@ -105,7 +105,7 @@ async function testarAtualizarPerfil() {
   console.log('✏️ TESTANDO ATUALIZAÇÃO DE PERFIL...');
   
   if (!window.testToken) {
-    console.error('❌ Token não definido. Execute testarLogin() primeiro.');
+    console.error('<i class="fas fa-times-circle"></i> Token não definido. Execute testarLogin() primeiro.');
     return;
   }
   
@@ -122,7 +122,7 @@ async function testarAtualizarPerfil() {
  * 5. TESTE DE LISTAR CURSOS
  */
 async function testarListarCursos() {
-  console.log('📚 TESTANDO LISTAGEM DE CURSOS...');
+  console.log('<i class="fas fa-book-open"></i> TESTANDO LISTAGEM DE CURSOS...');
   return await fazerRequisicao('GET', '/cursos');
 }
 
@@ -130,10 +130,10 @@ async function testarListarCursos() {
  * 6. TESTE DE LISTAR INSCRIÇÕES
  */
 async function testarListarInscricoes() {
-  console.log('📋 TESTANDO LISTAGEM DE INSCRIÇÕES...');
+  console.log('<i class="fas fa-clipboard"></i> TESTANDO LISTAGEM DE INSCRIÇÕES...');
   
   if (!window.testToken) {
-    console.error('❌ Token não definido. Execute testarLogin() primeiro.');
+    console.error('<i class="fas fa-times-circle"></i> Token não definido. Execute testarLogin() primeiro.');
     return;
   }
   
@@ -144,10 +144,10 @@ async function testarListarInscricoes() {
  * 7. TESTE DE CRIAR INSCRIÇÃO
  */
 async function testarCriarInscricao() {
-  console.log('📝 TESTANDO CRIAÇÃO DE INSCRIÇÃO...');
+  console.log('<i class="fas fa-pen-alt"></i> TESTANDO CRIAÇÃO DE INSCRIÇÃO...');
   
   if (!window.testToken) {
-    console.error('❌ Token não definido. Execute testarLogin() primeiro.');
+    console.error('<i class="fas fa-times-circle"></i> Token não definido. Execute testarLogin() primeiro.');
     return;
   }
   
@@ -172,7 +172,7 @@ async function testarCriarInscricao() {
  * TESTE COMPLETO (sequencial)
  */
 async function testarTudo() {
-  console.log('🚀 INICIANDO TESTE COMPLETO DA API...\n');
+  console.log('<i class="fas fa-rocket"></i> INICIANDO TESTE COMPLETO DA API...\n');
   
   console.log('--- PASSO 1: Registrar novo usuário ---');
   await testarRegistro();
@@ -187,7 +187,7 @@ async function testarTudo() {
   console.log('\n--- PASSO 6: Criar inscrição ---');
   // await testarCriarInscricao(); // Comentado para não criar dados desnecessários
   
-  console.log('\n✅ TESTES CONCLUÍDOS!');
+  console.log('\n<i class="fas fa-check-circle"></i> TESTES CONCLUÍDOS!');
 }
 
 // Exibe instruções no console

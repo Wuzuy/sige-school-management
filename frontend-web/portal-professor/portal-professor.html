@@ -9,6 +9,7 @@
   <link rel="icon" href="../portal-escolar/assets/images/sige.png" type="image/png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body data-page="portal-professor">
 
@@ -33,27 +34,27 @@
       <div class="sec-sidebar-section">
         <div class="sec-sidebar-section-title">Módulos</div>
         <a class="sec-sidebar-item active" data-module-target="modulo-dashboard" href="#">
-          <span class="sec-sidebar-icon">&#128202;</span>
+          <span class="sec-sidebar-icon"><i class="fas fa-chart-bar"></i></span>
           <span>Dashboard</span>
         </a>
         <a class="sec-sidebar-item" data-module-target="modulo-turmas" href="#">
-          <span class="sec-sidebar-icon">&#128218;</span>
+          <span class="sec-sidebar-icon"><i class="fas fa-book-open"></i></span>
           <span>Minhas Turmas</span>
         </a>
         <a class="sec-sidebar-item" data-module-target="modulo-notas" href="#">
-          <span class="sec-sidebar-icon">&#128221;</span>
+          <span class="sec-sidebar-icon"><i class="fas fa-pen-alt"></i></span>
           <span>Lançar Notas</span>
         </a>
         <a class="sec-sidebar-item" data-module-target="modulo-frequencia" href="#">
-          <span class="sec-sidebar-icon">&#128203;</span>
+          <span class="sec-sidebar-icon"><i class="fas fa-clipboard"></i></span>
           <span>Lançar Frequência</span>
         </a>
         <a class="sec-sidebar-item" data-module-target="modulo-disciplinas" href="#">
-          <span class="sec-sidebar-icon">&#128218;</span>
+          <span class="sec-sidebar-icon"><i class="fas fa-book-open"></i></span>
           <span>Disciplinas</span>
         </a>
         <a class="sec-sidebar-item" data-module-target="modulo-planos-aula" href="#">
-          <span class="sec-sidebar-icon">&#128203;</span>
+          <span class="sec-sidebar-icon"><i class="fas fa-clipboard"></i></span>
           <span>Plano de Aula</span>
         </a>
       </div>
@@ -61,20 +62,20 @@
       <div class="sec-sidebar-section">
         <div class="sec-sidebar-section-title">Sistema</div>
         <a class="sec-sidebar-item" data-module-target="modulo-configuracoes" href="#">
-          <span class="sec-sidebar-icon">&#9881;</span>
+          <span class="sec-sidebar-icon"><i class="fas fa-cog"></i></span>
           <span>Configurações</span>
         </a>
       </div>
     </nav>
 
     <button class="sec-sidebar-toggle" id="sec-sidebar-toggle" type="button" aria-label="Abrir menu">
-      <span>&#9776;</span>
+      <span><i class="fas fa-bars"></i></span>
     </button>
 
     <div class="sec-sidebar-footer">
-      <a href="../portal-inscricao/index.html" class="sec-sidebar-link">&#8594; Portal Inscrição</a>
-      <a href="../portal-secretaria/portal-secretaria.html" class="sec-sidebar-link" id="link-secretaria">&#8594; Portal da Secretaria</a>
-      <button class="sec-sidebar-logout" data-logout type="button">&#128682; Sair</button>
+      <a href="../portal-inscricao/index.html" class="sec-sidebar-link"><i class="fas fa-arrow-right"></i> Portal Inscrição</a>
+      <a href="../portal-secretaria/portal-secretaria.html" class="sec-sidebar-link" id="link-secretaria"><i class="fas fa-arrow-right"></i> Portal da Secretaria</a>
+      <button class="sec-sidebar-logout" data-logout type="button"><i class="fas fa-sign-out-alt"></i> Sair</button>
     </div>
   </aside>
 
@@ -91,51 +92,51 @@
     <section id="modulo-dashboard" class="module-panel">
       <div class="kpi-grid">
         <div class="kpi-card" style="--kpi-color: var(--sec-accent);">
-          <div class="kpi-header"><span class="kpi-icon">&#128218;</span><span class="kpi-label">Minhas Turmas</span></div>
+          <div class="kpi-header"><span class="kpi-icon"><i class="fas fa-book-open"></i></span><span class="kpi-label">Minhas Turmas</span></div>
           <div class="kpi-body"><span class="kpi-value" id="kpi-turmas">0</span><span class="kpi-delta">Turmas ativas</span></div>
         </div>
         <div class="kpi-card" style="--kpi-color: var(--sec-success);">
-          <div class="kpi-header"><span class="kpi-icon">&#127891;</span><span class="kpi-label">Total de Alunos</span></div>
+          <div class="kpi-header"><span class="kpi-icon"><i class="fas fa-graduation-cap"></i></span><span class="kpi-label">Total de Alunos</span></div>
           <div class="kpi-body"><span class="kpi-value" id="kpi-alunos">0</span><span class="kpi-delta">Matriculados</span></div>
         </div>
         <div class="kpi-card" style="--kpi-color: var(--sec-warning);">
-          <div class="kpi-header"><span class="kpi-icon">&#128221;</span><span class="kpi-label">Disciplinas</span></div>
+          <div class="kpi-header"><span class="kpi-icon"><i class="fas fa-pen-alt"></i></span><span class="kpi-label">Disciplinas</span></div>
           <div class="kpi-body"><span class="kpi-value" id="kpi-disciplinas">0</span><span class="kpi-delta">Que leciona</span></div>
         </div>
         <div class="kpi-card" style="--kpi-color: var(--sec-primary);">
-          <div class="kpi-header"><span class="kpi-icon">&#128203;</span><span class="kpi-label">Aulas Dadas</span></div>
+          <div class="kpi-header"><span class="kpi-icon"><i class="fas fa-clipboard"></i></span><span class="kpi-label">Aulas Dadas</span></div>
           <div class="kpi-body"><span class="kpi-value" id="kpi-aulas">0</span><span class="kpi-delta">Registros de frequência</span></div>
         </div>
       </div>
 
       <div class="dashboard-stats-row">
         <div class="stat-card">
-          <h3>&#9989; Aprovados</h3>
+          <h3><i class="fas fa-check-circle"></i> Aprovados</h3>
           <span class="stat-value" id="stat-aprovados">0</span>
         </div>
         <div class="stat-card stat-card-danger">
-          <h3>&#10060; Reprovados</h3>
+          <h3><i class="fas fa-times-circle"></i> Reprovados</h3>
           <span class="stat-value" id="stat-reprovados">0</span>
         </div>
         <div class="stat-card stat-card-warning">
-          <h3>&#128200; Recuperação</h3>
+          <h3><i class="fas fa-chart-line"></i> Recuperação</h3>
           <span class="stat-value" id="stat-recuperacao">0</span>
         </div>
         <div class="stat-card stat-card-info">
-          <h3>&#128197; Cursando</h3>
+          <h3><i class="fas fa-calendar-alt"></i> Cursando</h3>
           <span class="stat-value" id="stat-cursando">0</span>
         </div>
       </div>
 
       <div class="charts-row">
         <div class="chart-card-wide">
-          <h2>&#128218; Minhas Turmas</h2>
+          <h2><i class="fas fa-book-open"></i> Minhas Turmas</h2>
           <div id="dash-turmas-lista" class="dash-turmas-lista">
             <p class="muted">Carregando...</p>
           </div>
         </div>
         <div class="chart-card-narrow">
-          <h2>&#128200; Desempenho dos Alunos</h2>
+          <h2><i class="fas fa-chart-line"></i> Desempenho dos Alunos</h2>
           <div class="chart-container"><canvas id="chart-desempenho"></canvas></div>
         </div>
       </div>
@@ -145,16 +146,16 @@
     <section id="modulo-turmas" class="module-panel hidden">
       <div class="sec-grid">
         <article class="card" style="grid-column: 1 / -1;">
-          <h2>&#128218; Minhas Turmas</h2>
+          <h2><i class="fas fa-book-open"></i> Minhas Turmas</h2>
           <div class="filtros-row">
             <div class="field" style="flex:1;"><label for="filtro-turma-texto">Buscar</label><input type="text" id="filtro-turma-texto" placeholder="Nome da turma..." /></div>
             <div class="field"><label for="filtro-turma-status">Status</label><select id="filtro-turma-status"><option value="TODOS">Todas</option><option value="ATIVO">Ativo</option><option value="INATIVO">Inativo</option></select></div>
-            <div class="field" style="display:flex;align-items:flex-end;"><button class="btn btn-primary btn-sm" id="btn-filtrar-turmas">&#128269; Filtrar</button></div>
+            <div class="field" style="display:flex;align-items:flex-end;"><button class="btn btn-primary btn-sm" id="btn-filtrar-turmas"><i class="fas fa-search"></i> Filtrar</button></div>
           </div>
           <div class="table-wrapper">
             <table><thead><tr><th>Turma</th><th>Curso</th><th>Turno</th><th>Vagas</th><th>Ano</th><th>Status</th><th>Ações</th></tr></thead><tbody id="lista-turmas"></tbody></table>
           </div>
-          <div id="turmas-empty" class="empty-state hidden"><div class="empty-icon">&#128218;</div><h3>Nenhuma turma encontrada</h3></div>
+          <div id="turmas-empty" class="empty-state hidden"><div class="empty-icon"><i class="fas fa-book-open"></i></div><h3>Nenhuma turma encontrada</h3></div>
         </article>
       </div>
     </section>
@@ -163,18 +164,18 @@
     <section id="modulo-notas" class="module-panel hidden">
       <div class="sec-grid">
         <article class="card" style="grid-column: 1 / -1;">
-          <h2>&#128221; Lançar Notas</h2>
+          <h2><i class="fas fa-pen-alt"></i> Lançar Notas</h2>
           <div class="filtros-row">
             <div class="field"><label for="notas-turma">Turma</label><select id="notas-turma"><option value="">Selecione...</option></select></div>
             <div class="field"><label for="notas-disciplina">Disciplina</label><select id="notas-disciplina"><option value="">Selecione...</option></select></div>
-            <div class="field" style="display:flex;align-items:flex-end;"><button class="btn btn-primary btn-sm" id="btn-carregar-notas">&#128269; Carregar Alunos</button></div>
+            <div class="field" style="display:flex;align-items:flex-end;"><button class="btn btn-primary btn-sm" id="btn-carregar-notas"><i class="fas fa-search"></i> Carregar Alunos</button></div>
           </div>
 
           <div id="notas-table-wrapper" class="table-wrapper hidden">
             <table><thead><tr><th>Aluno</th><th>Nota Final</th><th>Frequência %</th><th>Status</th><th>Ações</th></tr></thead><tbody id="lista-notas"></tbody></table>
           </div>
-          <div id="notas-empty" class="empty-state hidden"><div class="empty-icon">&#128221;</div><h3>Selecione uma turma e disciplina para lançar notas</h3></div>
-          <div id="notas-carregando" class="empty-state hidden"><div class="empty-icon">&#9203;</div><h3>Carregando...</h3></div>
+          <div id="notas-empty" class="empty-state hidden"><div class="empty-icon"><i class="fas fa-pen-alt"></i></div><h3>Selecione uma turma e disciplina para lançar notas</h3></div>
+          <div id="notas-carregando" class="empty-state hidden"><div class="empty-icon"><i class="fas fa-hourglass-half"></i></div><h3>Carregando...</h3></div>
         </article>
       </div>
     </section>
@@ -183,26 +184,26 @@
     <section id="modulo-frequencia" class="module-panel hidden">
       <div class="sec-grid">
         <article class="card" style="grid-column: 1 / -1;">
-          <h2>&#128203; Lançar Frequência</h2>
+          <h2><i class="fas fa-clipboard"></i> Lançar Frequência</h2>
           <div class="filtros-row">
             <div class="field"><label for="freq-turma">Turma</label><select id="freq-turma"><option value="">Selecione...</option></select></div>
             <div class="field"><label for="freq-disciplina">Disciplina</label><select id="freq-disciplina"><option value="">Selecione...</option></select></div>
             <div class="field"><label for="freq-data">Data da Aula</label>
               <div class="date-nav-wrapper">
-                <button class="btn btn-sm btn-soft" id="freq-date-prev" title="Dia anterior">&#9664;</button>
+                <button class="btn btn-sm btn-soft" id="freq-date-prev" title="Dia anterior"><i class="fas fa-caret-left"></i></button>
                 <input type="date" id="freq-data" />
-                <button class="btn btn-sm btn-soft" id="freq-date-next" title="Próximo dia">&#9654;</button>
-                <button class="btn btn-sm btn-soft" id="freq-date-today" title="Hoje">&#128197; Hoje</button>
+                <button class="btn btn-sm btn-soft" id="freq-date-next" title="Próximo dia"><i class="fas fa-caret-right"></i></button>
+                <button class="btn btn-sm btn-soft" id="freq-date-today" title="Hoje"><i class="fas fa-calendar-alt"></i> Hoje</button>
               </div>
             </div>
-            <div class="field" style="display:flex;align-items:flex-end;"><button class="btn btn-primary btn-sm" id="btn-carregar-frequencia">&#128269; Carregar Alunos</button></div>
+            <div class="field" style="display:flex;align-items:flex-end;"><button class="btn btn-primary btn-sm" id="btn-carregar-frequencia"><i class="fas fa-search"></i> Carregar Alunos</button></div>
           </div>
 
           <div id="freq-table-wrapper" class="table-wrapper hidden">
             <table><thead><tr><th>Aluno</th><th>Presença</th><th>Justificativa</th><th>Histórico</th></tr></thead><tbody id="lista-frequencia"></tbody></table>
           </div>
-          <div id="freq-empty" class="empty-state hidden"><div class="empty-icon">&#128203;</div><h3>Selecione turma, disciplina e data</h3></div>
-          <div id="freq-carregando" class="empty-state hidden"><div class="empty-icon">&#9203;</div><h3>Carregando...</h3></div>
+          <div id="freq-empty" class="empty-state hidden"><div class="empty-icon"><i class="fas fa-clipboard"></i></div><h3>Selecione turma, disciplina e data</h3></div>
+          <div id="freq-carregando" class="empty-state hidden"><div class="empty-icon"><i class="fas fa-hourglass-half"></i></div><h3>Carregando...</h3></div>
 
           <div id="freq-stats-bar" class="freq-stats-bar hidden">
             <span class="freq-stat-item"><span class="freq-stat-dot" style="background:var(--sec-success)"></span> Presentes: <strong id="freq-stats-presentes">0</strong></span>
@@ -211,9 +212,9 @@
           </div>
 
           <div class="actions" id="freq-actions" style="display:none;">
-            <button class="btn btn-primary" id="btn-salvar-frequencia">&#128190; Salvar Frequência</button>
-            <button class="btn btn-soft" id="btn-marcar-todos">&#9989; Todos Presentes</button>
-            <button class="btn btn-soft" id="btn-marcar-faltas">&#10060; Todos Ausentes</button>
+            <button class="btn btn-primary" id="btn-salvar-frequencia"><i class="fas fa-save"></i> Salvar Frequência</button>
+            <button class="btn btn-soft" id="btn-marcar-todos"><i class="fas fa-check-circle"></i> Todos Presentes</button>
+            <button class="btn btn-soft" id="btn-marcar-faltas"><i class="fas fa-times-circle"></i> Todos Ausentes</button>
           </div>
         </article>
       </div>
@@ -223,7 +224,7 @@
     <section id="modulo-disciplinas" class="module-panel hidden">
       <div class="sec-grid">
         <article class="card" style="grid-column: 1 / -1;">
-          <h2>&#128218; Minhas Disciplinas</h2>
+          <h2><i class="fas fa-book-open"></i> Minhas Disciplinas</h2>
           <div class="filtros-row">
             <div class="field" style="flex:1;"><label for="filtro-disc-texto">Buscar</label><input type="text" id="filtro-disc-texto" placeholder="Nome da disciplina..." /></div>
             <div class="field"><label for="filtro-disc-turma">Turma</label><select id="filtro-disc-turma"><option value="">Todas</option></select></div>
@@ -231,7 +232,7 @@
           <div class="table-wrapper">
             <table><thead><tr><th>Disciplina</th><th>Código</th><th>Carga Horária</th><th>Semestre</th><th>Turma</th><th>Status</th><th>Ações</th></tr></thead><tbody id="lista-disciplinas"></tbody></table>
           </div>
-          <div id="disciplinas-empty" class="empty-state hidden"><div class="empty-icon">&#128218;</div><h3>Nenhuma disciplina encontrada</h3></div>
+          <div id="disciplinas-empty" class="empty-state hidden"><div class="empty-icon"><i class="fas fa-book-open"></i></div><h3>Nenhuma disciplina encontrada</h3></div>
         </article>
       </div>
     </section>
@@ -241,7 +242,7 @@
       <div class="sec-grid">
         <article class="card" style="grid-column:1/-1;">
           <div class="flex-between">
-            <h2>&#128203; Plano de Aula</h2>
+            <h2><i class="fas fa-clipboard"></i> Plano de Aula</h2>
             <button class="btn btn-primary" id="btn-novo-plano">&#43; Novo Plano de Ensino</button>
           </div>
           <p class="muted" style="margin-bottom:16px;">Gerencie os planos de ensino das suas disciplinas e os planos de aula diários.</p>
@@ -300,7 +301,7 @@
             </div>
             <div class="flex-between" style="margin-top:12px;">
               <button class="btn btn-soft" id="btn-cancel-plano">Cancelar</button>
-              <button class="btn btn-primary" id="btn-salvar-plano">&#128190; Salvar Plano de Ensino</button>
+              <button class="btn btn-primary" id="btn-salvar-plano"><i class="fas fa-save"></i> Salvar Plano de Ensino</button>
             </div>
           </div>
 
@@ -309,13 +310,13 @@
             <div class="flex-between">
               <h3 id="plano-detalhes-title">Plano: </h3>
               <div>
-                <button class="btn btn-soft btn-sm" id="btn-editar-plano">&#9998; Editar</button>
-                <button class="btn btn-danger btn-sm" id="btn-excluir-plano">&#128465; Excluir</button>
+                <button class="btn btn-soft btn-sm" id="btn-editar-plano"><i class="fas fa-pen"></i> Editar</button>
+                <button class="btn btn-danger btn-sm" id="btn-excluir-plano"><i class="fas fa-trash-alt"></i> Excluir</button>
               </div>
             </div>
             <div id="plano-detalhes-body" style="margin:12px 0;"></div>
 
-            <h4 style="margin-top:16px;">&#128197; Planos de Aula Diários</h4>
+            <h4 style="margin-top:16px;"><i class="fas fa-calendar-alt"></i> Planos de Aula Diários</h4>
             <button class="btn btn-primary btn-sm" id="btn-nova-aula" style="margin:8px 0;">&#43; Nova Aula</button>
             <div id="planos-aula-list"></div>
 
@@ -364,7 +365,7 @@
               </div>
               <div class="flex-between" style="margin-top:8px;">
                 <button class="btn btn-soft btn-sm" id="btn-cancel-aula">Cancelar</button>
-                <button class="btn btn-primary btn-sm" id="btn-salvar-aula">&#128190; Salvar Aula</button>
+                <button class="btn btn-primary btn-sm" id="btn-salvar-aula"><i class="fas fa-save"></i> Salvar Aula</button>
               </div>
             </div>
           </div>
@@ -376,12 +377,12 @@
     <section id="modulo-configuracoes" class="module-panel hidden">
       <div class="sec-grid">
         <article class="card" style="grid-column: 1 / -1;">
-          <h2>&#9881; Configurações de Acessibilidade</h2>
+          <h2><i class="fas fa-cog"></i> Configurações de Acessibilidade</h2>
           <p class="muted" style="margin-bottom: 20px;">Personalize a aparência do sistema.</p>
           <div class="config-group">
             <div class="config-row">
               <div class="config-info">
-                <h3>&#127769; Modo Escuro</h3>
+                <h3><i class="fas fa-moon"></i> Modo Escuro</h3>
                 <p>Alterna entre tema claro e escuro.</p>
               </div>
               <label class="config-switch">
@@ -391,7 +392,7 @@
             </div>
             <div class="config-row">
               <div class="config-info">
-                <h3>&#128207; Tamanho da Fonte</h3>
+                <h3><i class="fas fa-wrench"></i> Tamanho da Fonte</h3>
                 <p>Ajusta o tamanho do texto.</p>
               </div>
               <div class="config-font-selector">
@@ -412,7 +413,7 @@
 <div class="modal-overlay hidden" id="modal-freq-history">
   <div class="modal-content" style="max-width:500px;">
     <div class="modal-header">
-      <h2>&#128203; Histórico de Frequência</h2>
+      <h2><i class="fas fa-clipboard"></i> Histórico de Frequência</h2>
       <button class="modal-close" id="freq-history-close">&times;</button>
     </div>
     <div class="modal-body">
@@ -433,7 +434,7 @@
 <div class="modal-overlay hidden" id="modal-confirm">
   <div class="modal-content" style="max-width:400px;">
     <div class="modal-header">
-      <h2>&#9888; Confirmar</h2>
+      <h2><i class="fas fa-exclamation-triangle"></i> Confirmar</h2>
       <button class="modal-close" id="confirm-close">&times;</button>
     </div>
     <div class="modal-body">

@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="assets/css/app.css" />
   <link rel="icon" href="assets/images/sige.png" type="image/png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body data-page="matricula">
   <header class="insc-header">
@@ -20,7 +21,7 @@
         <a href="status.html" class="insc-nav-link">Status</a>
         <a href="../portal-escolar/conta.html" class="insc-nav-link" data-student-only>Portal do Aluno</a>
         <a href="../portal-secretaria/portal-secretaria.html" class="insc-nav-link" data-admin-only>Secretaria</a>
-        <button class="insc-nav-link" id="btn-acessibilidade" title="Acessibilidade">&#9881;</button>
+        <button class="insc-nav-link" id="btn-acessibilidade" title="Acessibilidade"><i class="fas fa-cog"></i></button>
         <button class="insc-nav-link insc-nav-logout" data-logout>Sair</button>
       </nav>
     </div>
@@ -139,7 +140,7 @@
     <div class="acessibilidade-body">
       <div class="acessibilidade-item">
         <span class="acessibilidade-label">
-          <span id="acessibilidade-icone-tema">&#127769;</span> Modo Noturno
+          <span id="acessibilidade-icone-tema"><i class="fas fa-moon"></i></span> Modo Noturno
         </span>
         <label class="acessibilidade-switch">
           <input type="checkbox" id="toggle-dark-mode">
@@ -147,7 +148,7 @@
         </label>
       </div>
       <div class="acessibilidade-item">
-        <span class="acessibilidade-label">&#128207; Tamanho da Fonte</span>
+        <span class="acessibilidade-label"><i class="fas fa-wrench"></i> Tamanho da Fonte</span>
         <div class="acessibilidade-font">
           <button class="btn btn-sm" data-font="sm">A-</button>
           <button class="btn btn-sm btn-primary active" data-font="md">A</button>

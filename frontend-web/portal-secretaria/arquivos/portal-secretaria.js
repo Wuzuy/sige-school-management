@@ -822,7 +822,7 @@ async function loadRelatorioAlunos() {
           <td>${badge(m.status)}</td>
           <td>
             <div class="action-btns">
-              <button class="action-btn view" data-aluno-view="${a.id}" title="Visualizar">&#128065;</button>
+              <button class="action-btn view" data-aluno-view="${a.id}" title="Visualizar"><i class="fas fa-eye"></i></button>
             </div>
           </td>
         </tr>`;
@@ -1695,9 +1695,9 @@ async function loadRelatorio(filters = {}) {
         const dataIns = i.data_inscricao ? new Date(i.data_inscricao).toLocaleDateString('pt-BR') : '-';
         const actions = `
           <div class="action-btns">
-            <button class="action-btn view" data-rel-view="${i.id}" title="Visualizar">&#128065;</button>
-            <button class="action-btn approve" data-rel-aprovar="${i.id}" title="Aprovar">&#10003;</button>
-            <button class="action-btn reject" data-rel-reprovar="${i.id}" title="Reprovar">&#10007;</button>
+            <button class="action-btn view" data-rel-view="${i.id}" title="Visualizar"><i class="fas fa-eye"></i></button>
+            <button class="action-btn approve" data-rel-aprovar="${i.id}" title="Aprovar"><i class="fas fa-check"></i></button>
+            <button class="action-btn reject" data-rel-reprovar="${i.id}" title="Reprovar"><i class="fas fa-times"></i></button>
           </div>`;
         return `<tr>
           <td style="font-size:0.75rem;color:var(--sec-muted)">#${i.id}</td>
@@ -1856,7 +1856,7 @@ document.addEventListener('click', async (e) => {
     const item = state.cursos.find(c => String(c.id) === id);
     if (item) {
       const uOpts = state.unidades.map(u => `<option value="${u.id}" ${(item.id_unidade?.id||item.id_unidade)==u.id?'selected':''}>${u.nome}</option>`).join('');
-      openEditModal('&#9998; Editar Curso', `
+      openEditModal('<i class="fas fa-pen"></i> Editar Curso', `
         <div class="field"><label>Nome do Curso</label><input type="text" id="ec-nome" value="${item.nome_curso||''}" required /></div>
         <div class="field"><label>Unidade</label><select id="ec-unidade"><option value="">Selecione</option>${uOpts}</select></div>
         <div class="two-col"><div class="field"><label>Tipo</label><select id="ec-tipo"><option value="Técnico" ${item.tipo==='Técnico'?'selected':''}>Técnico</option><option value="Aprendizagem" ${item.tipo==='Aprendizagem'?'selected':''}>Aprendizagem</option><option value="Graduação" ${item.tipo==='Graduação'?'selected':''}>Graduação</option></select></div>
@@ -1884,7 +1884,7 @@ document.addEventListener('click', async (e) => {
     const id = editUnidade.dataset.unidadeEdit;
     const item = state.unidades.find(u => String(u.id) === id);
     if (item) {
-      openEditModal('&#9998; Editar Unidade', `
+      openEditModal('<i class="fas fa-pen"></i> Editar Unidade', `
         <div class="field"><label>Nome da Unidade</label><input type="text" id="eu-nome" value="${item.nome||''}" required /></div>
         <div class="field"><label>CNPJ</label><input type="text" id="eu-cnpj" value="${item.cnpj||''}" /></div>
         <div class="two-col"><div class="field"><label>Cidade</label><input type="text" id="eu-cidade" value="${item.cidade||''}" /></div>
@@ -1906,7 +1906,7 @@ document.addEventListener('click', async (e) => {
     const item = state.usuarios.find(u => String(u.id) === id);
     if (item) {
       const cargoOpts = (state.cargos || []).map(c => `<option value="${c.id}" ${item.id_cargo===c.id?'selected':''}>${c.nome}</option>`).join('');
-      openEditModal('&#9998; Editar Usuário', `
+      openEditModal('<i class="fas fa-pen"></i> Editar Usuário', `
         <div class="field"><label>Nome Completo</label><input type="text" id="euu-nome" value="${item.nomeCompleto||item.nome_completo||''}" required /></div>
         <div class="field"><label>E-mail</label><input type="email" id="euu-email" value="${item.email||''}" required /></div>
         <div class="two-col"><div class="field"><label>CPF</label><input type="text" id="euu-cpf" value="${item.cpf||''}" /></div>
@@ -1935,7 +1935,7 @@ document.addEventListener('click', async (e) => {
     const id = editEdital.dataset.editalEdit;
     const item = state.editais.find(e => String(e.id) === id);
     if (item) {
-      openEditModal('&#9998; Editar Edital', `
+      openEditModal('<i class="fas fa-pen"></i> Editar Edital', `
         <div class="field"><label>Título</label><input type="text" id="ee-titulo" value="${item.titulo||''}" required /></div>
         <div class="field"><label>URL do PDF</label><input type="url" id="ee-url" value="${item.url||''}" /></div>
         <div class="field"><label>Ativo</label><select id="ee-ativo"><option value="true" ${item.ativo?'selected':''}>Sim</option><option value="false" ${!item.ativo?'selected':''}>Não</option></select></div>`, id, async (id) => {
@@ -2011,7 +2011,7 @@ function initFilters() {
     const empty = document.createElement('div');
     empty.id = `${id}-empty`;
     empty.className = 'empty-state hidden';
-    empty.innerHTML = `<div class="empty-icon">&#128196;</div><h3>Nenhum registro encontrado</h3><p>Tente ajustar os filtros.</p>`;
+    empty.innerHTML = `<div class="empty-icon"><i class="fas fa-file-alt"></i></div><h3>Nenhum registro encontrado</h3><p>Tente ajustar os filtros.</p>`;
     wrapper.parentNode.insertBefore(empty, wrapper.nextSibling);
   }
   if (!document.getElementById(`${id}-skeleton`)) {
@@ -2226,7 +2226,7 @@ document.addEventListener('click', async (e) => {
     try {
       const data = await request(`/turmas/${id}`);
       const cursoOpts = state.cursos.filter(c=>c.status==='ATIVO').map(c => `<option value="${c.id}" ${(data.id_curso?.id||data.id_curso)==c.id?'selected':''}>${c.nome_curso}</option>`).join('');
-      openEditModal('&#9998; Editar Turma', `
+      openEditModal('<i class="fas fa-pen"></i> Editar Turma', `
         <div class="field"><label>Nome da Turma</label><input type="text" id="et-nome" value="${data.nome||''}" required /></div>
         <div class="field"><label>Curso</label><select id="et-curso"><option value="">Selecione</option>${cursoOpts}</select></div>
         <div class="two-col"><div class="field"><label>Turno</label><select id="et-turno"><option value="Matutino" ${data.turno==='Matutino'?'selected':''}>Matutino</option><option value="Vespertino" ${data.turno==='Vespertino'?'selected':''}>Vespertino</option><option value="Noturno" ${data.turno==='Noturno'?'selected':''}>Noturno</option></select></div>
@@ -2406,7 +2406,7 @@ function atualizarResumoPermissoes(containerId) {
     });
   });
 
-  let html = '<div class="perm-resumo-header">📋 Resumo do Cargo</div><div class="perm-resumo-body">';
+  let html = '<div class="perm-resumo-header"><span class="perm-resumo-icon"></span>Resumo do Cargo</div><div class="perm-resumo-body">';
   Object.keys(grouped).forEach(cat => {
     html += `<div class="perm-resumo-cat"><strong>${cat}</strong>`;
     Object.keys(grouped[cat]).forEach(mod => {
@@ -2476,8 +2476,13 @@ function renderPermissoesCategorias(permissoes, selectedIds, containerId) {
     const catEl = document.createElement('div');
     catEl.className = 'perm-categoria';
 
-    // Icone da categoria
-    const CAT_ICONS = { 'Administrativo': '\u2699', 'Acad\u00eamico': '\uD83D\uDCDA', 'Secretaria': '\uD83D\uDCCB', 'Acesso': '\uD83D\uDD11' };
+    // Icons SVG para cada categoria (consistentes em qualquer OS/APK)
+    const CAT_SVG = {
+      'Administrativo': '<svg viewBox="0 0 20 20" width="18" height="18"><circle cx="10" cy="10" r="4" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M10 1v3m0 12v3M4.1 4.1l2.1 2.1m7.7 7.7l2.1 2.1M1 10h3m12 0h3M4.1 15.9l2.1-2.1m7.7-7.7l2.1-2.1" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>',
+      'Acad\u00eamico': '<svg viewBox="0 0 20 20" width="18" height="18"><rect x="3" y="4" width="14" height="12" rx="1" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M10 4v12" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M6 8h8M6 11h5" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>',
+      'Secretaria': '<svg viewBox="0 0 20 20" width="18" height="18"><path d="M6 2h8v3H6z" fill="none" stroke="currentColor" stroke-width="1.2"/><rect x="3" y="5" width="14" height="13" rx="1" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M6 9h8M6 12h8M6 15h4" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>',
+      'Acesso': '<svg viewBox="0 0 20 20" width="18" height="18"><circle cx="8" cy="8" r="4.5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M11 11l6 6" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M15 13l2 2" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>'
+    };
     const CAT_COLORS = { 'Administrativo': '#0ea5e9', 'Acad\u00eamico': '#10b981', 'Secretaria': '#f59e0b', 'Acesso': '#8b5cf6' };
 
     // Header da categoria
@@ -2488,7 +2493,8 @@ function renderPermissoesCategorias(permissoes, selectedIds, containerId) {
     catArrow.textContent = '>';
     const catIcon = document.createElement('span');
     catIcon.className = 'cat-icon';
-    catIcon.textContent = CAT_ICONS[catNome] || '\uD83D\uDCC2';
+    catIcon.innerHTML = CAT_SVG[catNome] || '';
+    catIcon.style.color = CAT_COLORS[catNome] || '#0ea5e9';
     const catName = document.createElement('span');
     catName.className = 'cat-name';
     catName.textContent = catNome;
@@ -2581,7 +2587,7 @@ function renderPermissoesCategorias(permissoes, selectedIds, containerId) {
       selectAllRow.className = 'perm-row perm-select-all';
       const selectAllIcon = document.createElement('span');
       selectAllIcon.className = 'perm-select-all-icon';
-      selectAllIcon.textContent = '☐';
+      selectAllIcon.textContent = '<i class="far fa-square"></i>';
       const selectAllLabel = document.createElement('span');
       selectAllLabel.className = 'perm-label';
       selectAllLabel.textContent = 'Selecionar Todos';
@@ -2766,7 +2772,7 @@ document.addEventListener('click', async (e) => {
     const id = editCar.dataset.cargoEdit;
     try {
       const data = await request(`/cargos/${id}`);
-      openEditModal('&#9998; Editar Cargo', `
+      openEditModal('<i class="fas fa-pen"></i> Editar Cargo', `
         <div class="field"><label>Nome do Cargo</label><input type="text" id="ecarg-nome" value="${data.nome||''}" required /></div>
         <div class="field"><label>Descrição</label><textarea id="ecarg-desc" rows="2">${data.descricao||''}</textarea></div>
         <div id="ecarg-permissoes"></div>`, id, async (id) => {
@@ -2852,9 +2858,9 @@ async function showAlunoDetailEnhanced(id) {
         <td>${d.data_envio ? new Date(d.data_envio).toLocaleDateString('pt-BR') : '-'}</td>
         <td>${badge(d.status)}</td>
         <td>
-          <button class="doc-action-btn approve" data-doc-aprovar="${d.id}" data-aluno-id="${id}" title="Aprovar">&#10003;</button>
-          <button class="doc-action-btn reject" data-doc-reprovar="${d.id}" data-aluno-id="${id}" title="Reprovar">&#10007;</button>
-          <button class="doc-action-btn delete" data-doc-excluir="${d.id}" data-aluno-id="${id}" title="Excluir">&#128465;</button>
+          <button class="doc-action-btn approve" data-doc-aprovar="${d.id}" data-aluno-id="${id}" title="Aprovar"><i class="fas fa-check"></i></button>
+          <button class="doc-action-btn reject" data-doc-reprovar="${d.id}" data-aluno-id="${id}" title="Reprovar"><i class="fas fa-times"></i></button>
+          <button class="doc-action-btn delete" data-doc-excluir="${d.id}" data-aluno-id="${id}" title="Excluir"><i class="fas fa-trash-alt"></i></button>
         </td>
       </tr>`).join('');
     } else {
@@ -2948,7 +2954,7 @@ document.addEventListener('click', (e) => {
   const html = `
     <div class="modal-overlay" id="modal-alterar-turma-temp">
       <div class="modal-content" style="max-width:400px;">
-        <div class="modal-header"><h2>&#128218; Alterar Turma</h2><button class="modal-close" id="fechar-modal-turma-temp">&times;</button></div>
+        <div class="modal-header"><h2><i class="fas fa-book-open"></i> Alterar Turma</h2><button class="modal-close" id="fechar-modal-turma-temp">&times;</button></div>
         <div class="modal-body">
           <div class="field"><label>Selecione a nova turma</label><select id="select-nova-turma">${options}</select></div>
         </div>

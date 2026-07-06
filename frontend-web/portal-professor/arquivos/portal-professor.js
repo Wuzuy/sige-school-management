@@ -254,7 +254,7 @@ function renderTurmas(data) {
       <td>${t.vagas || '-'}</td>
       <td>${t.ano || '-'}</td>
       <td><span class="badge ${t.status === 'ATIVO' ? 'badge-success' : 'badge-danger'}">${t.status || '-'}</span></td>
-      <td><button class="action-btn view" title="Ver Alunos" data-ver-turma="${t.id}">&#128065;</button></td>
+      <td><button class="action-btn view" title="Ver Alunos" data-ver-turma="${t.id}"><i class="fas fa-eye"></i></button></td>
     </tr>
   `).join('');
   tbody.querySelectorAll('[data-ver-turma]').forEach(btn => {
@@ -326,7 +326,7 @@ async function loadNotas() {
               <option value="RECUPERACAO" ${n.status === 'RECUPERACAO' ? 'selected' : ''}>Recuperação</option>
             </select>
           </td>
-          <td>${podeLancarNota ? `<button class="btn btn-primary btn-sm" data-salvar-nota="${n.id_matricula?.id || n.id_matricula}">&#128190; Salvar</button>` : '<span class="muted" style="font-size:0.78rem;">Leitura</span>'}</td>
+          <td>${podeLancarNota ? `<button class="btn btn-primary btn-sm" data-salvar-nota="${n.id_matricula?.id || n.id_matricula}"><i class="fas fa-save"></i> Salvar</button>` : '<span class="muted" style="font-size:0.78rem;">Leitura</span>'}</td>
         </tr>
       `;
     }).join('');
@@ -434,7 +434,7 @@ async function loadFrequencia() {
             </label>
           </td>
           <td><input type="text" class="freq-justificativa" data-just-matricula="${m.id}" value="${existing?.justificativa || ''}" placeholder="Justificativa (se ausente)" ${podeLancarFreq ? '' : 'readonly'} /></td>
-          <td><button class="btn btn-sm btn-soft freq-history-btn" data-matricula="${m.id}" data-aluno="${aluno.nome_completo || ''}">&#128196; Histórico</button></td>
+          <td><button class="btn btn-sm btn-soft freq-history-btn" data-matricula="${m.id}" data-aluno="${aluno.nome_completo || ''}"><i class="fas fa-file-alt"></i> Histórico</button></td>
         </tr>
       `;
     }).join('');
@@ -581,7 +581,7 @@ async function loadDisciplinas() {
         <td>
           ${hasPerm('disciplina.concluir')
             ? `<button class="btn ${d.concluida ? 'btn-soft' : 'btn-primary'} btn-sm btn-concluir-disc" data-turma="${d.turmaId}" data-disciplina="${d.id}" data-concluida="${d.concluida}">
-                ${d.concluida ? '&#128260; Reabrir' : '&#9989; Concluir'}
+                ${d.concluida ? '<i class="fas fa-sync-alt"></i> Reabrir' : '<i class="fas fa-check-circle"></i> Concluir'}
               </button>`
             : '<span class="muted" style="font-size:0.78rem;">-</span>'}
         </td>
@@ -717,7 +717,7 @@ async function loadPlanosEnsino() {
     const list = document.getElementById('planos-ensino-list');
     if (!list) return;
     if (!planos || !planos.length) {
-      list.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128203;</div><h3>Nenhum plano de ensino</h3><p>Clique em "Novo Plano de Ensino" para criar o primeiro.</p></div>';
+      list.innerHTML = '<div class="empty-state"><div class="empty-icon"><i class="fas fa-clipboard"></i></div><h3>Nenhum plano de ensino</h3><p>Clique em "Novo Plano de Ensino" para criar o primeiro.</p></div>';
       return;
     }
     list.innerHTML = planos.map(p => `
@@ -914,8 +914,8 @@ async function selecionarPlano(id) {
               ${a.id_topico !== null && conteudo[a.id_topico] ? `&mdash; ${conteudo[a.id_topico]}` : ''}
             </div>
             <div>
-              <button class="action-btn view" onclick="editarAula(${a.id})" title="Editar">&#9998;</button>
-              <button class="action-btn" onclick="excluirAula(${a.id})" title="Excluir" style="color:var(--sec-danger)">&#128465;</button>
+              <button class="action-btn view" onclick="editarAula(${a.id})" title="Editar"><i class="fas fa-pen"></i></button>
+              <button class="action-btn" onclick="excluirAula(${a.id})" title="Excluir" style="color:var(--sec-danger)"><i class="fas fa-trash-alt"></i></button>
             </div>
           </div>
           ${a.objetivo_aula ? `<div style="margin-top:4px;color:var(--sec-muted);">${a.objetivo_aula}</div>` : ''}
@@ -941,7 +941,7 @@ async function carregarPlanoForm(id) {
     document.getElementById('pe-criterios').value = p.criterios_avaliacao || '';
     document.getElementById('pe-biblio-basica').value = p.bibliografia_basica || '';
     document.getElementById('pe-biblio-comp').value = p.bibliografia_complementar || '';
-    document.getElementById('plano-form-title').textContent = '&#9998; Editar Plano de Ensino';
+    document.getElementById('plano-form-title').textContent = '<i class="fas fa-pen"></i> Editar Plano de Ensino';
     document.getElementById('plano-ensino-form').classList.remove('hidden');
   } catch (e) { showError('Erro ao carregar dados: ' + e.message); }
 }
@@ -968,7 +968,7 @@ async function editarAula(id) {
     const aulas = await apiGet(`/planos-ensino/${__planoSelecionadoId}/aulas`);
     const a = aulas.find(x => x.id === id);
     if (!a) return;
-    document.getElementById('aula-form-title').textContent = '&#9998; Editar Aula';
+    document.getElementById('aula-form-title').textContent = '<i class="fas fa-pen"></i> Editar Aula';
     document.getElementById('pa-data').value = a.data;
     document.getElementById('pa-horario-inicio').value = a.horario_inicio || '';
     document.getElementById('pa-horario-fim').value = a.horario_fim || '';
