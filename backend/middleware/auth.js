@@ -5,6 +5,13 @@ const JWT_SECRET = process.env.JWT_SECRET || 'secreta_sige_123';
 function requireAuth(req, res, next) {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.status(401).json({ error: 'Nao autorizado' });
+
+  // Visitante: token fake gerado pelo frontend
+  if (token.startsWith('fake.')) {
+    req.user = { id: -1, email: 'visitante@local', role: 'ROLE_USER' };
+    return next();
+  }
+
   try {
     req.user = jwt.verify(token, JWT_SECRET);
     next();
@@ -102,6 +109,14 @@ async function requireAdminMaster(req, res, next) {
 function requirePermissao(codigoPermissao) {
   return async (req, res, next) => {
     if (!req.user) return res.status(401).json({ error: 'Nao autorizado' });
+
+    // Visitante: acesso somente leitura a portais basicos
+    if (req.user.email === 'visitante@local') {
+      const visitorPerms = ['portal.escolar', 'portal.inscricao'];
+      if (visitorPerms.includes(codigoPermissao)) return next();
+      return res.status(403).json({ error: 'Modo visitante: permissao negada para este recurso' });
+    }
+
     try {
       const permissoes = await getUserPermissoes(req.user.id);
       if (permissoes.includes(codigoPermissao)) return next();

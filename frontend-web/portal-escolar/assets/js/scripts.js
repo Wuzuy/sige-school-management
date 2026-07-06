@@ -730,8 +730,11 @@ async function request(path, options = {}) {
   if (!response.ok) {
     const raw = await response.text();
     if (response.status === 401) {
-      clearAuth();
-      window.location.href = getLoginPageUrl();
+      const authData = getAuth();
+      if (!authData?.token?.startsWith('fake.')) {
+        clearAuth();
+        window.location.href = getLoginPageUrl();
+      }
     }
     throw new Error(raw || 'Falha na requisição');
   }

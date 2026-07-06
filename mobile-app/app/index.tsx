@@ -32,6 +32,13 @@ export default function LoginScreen() {
     }
   };
 
+  const handleGuestLogin = () => {
+    const fakeToken = `fake.${btoa(JSON.stringify({ email: 'visitante@local', iat: Math.floor(Date.now() / 1000) }))}.${Math.floor(Math.random() * 1000000)}`;
+    const fakeUser = { id: -1, email: 'visitante@local', nomeCompleto: 'Visitante', role: 'ROLE_USER' };
+    login(fakeToken, fakeUser);
+    router.replace('/(tabs)/secretaria');
+  };
+
   const saveApiUrl = () => {
     if (apiUrl.trim()) {
       setApiBase(apiUrl.trim().replace(/\/$/, ''));
@@ -71,6 +78,10 @@ export default function LoginScreen() {
         />
         <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
           <Text style={styles.buttonText}>{loading ? 'Entrando...' : 'Entrar'}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.guestBtn} onPress={handleGuestLogin}>
+          <Text style={styles.guestBtnText}>Entrar como Visitante</Text>
         </TouchableOpacity>
       </View>
 
@@ -115,6 +126,8 @@ const styles = StyleSheet.create({
   input: { backgroundColor: '#fff', padding: 16, borderRadius: 8, marginBottom: 16, borderWidth: 1, borderColor: '#d7dee8' },
   button: { backgroundColor: '#00aaff', padding: 16, borderRadius: 8, alignItems: 'center', marginTop: 8 },
   buttonText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
+  guestBtn: { padding: 14, borderRadius: 8, alignItems: 'center', marginTop: 12, borderWidth: 1, borderColor: '#cbd5e1', backgroundColor: '#f3f4f6' },
+  guestBtnText: { color: '#222', fontWeight: '600', fontSize: 15 },
   modalOverlay: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.6)', padding: 24 },
   modalContent: { backgroundColor: '#fff', borderRadius: 16, padding: 24, width: '100%', maxWidth: 400 },
   modalTitle: { fontSize: 20, fontWeight: '700', color: '#1a1a1a', marginBottom: 4 },

@@ -49,7 +49,7 @@ export async function request(path: string, options: RequestInit = {}) {
   const res = await fetch(`${base}${path}`, { ...options, headers });
   if (!res.ok) {
     const text = await res.text();
-    if (res.status === 401) {
+    if (res.status === 401 && !_auth?.token?.startsWith('fake.')) {
       clearAuth();
     }
     throw new Error(text || 'Falha na requisicao');
