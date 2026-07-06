@@ -112,7 +112,11 @@ function requirePermissao(codigoPermissao) {
 
     // Visitante: acesso somente leitura a portais basicos
     if (req.user.email === 'visitante@local') {
-      const visitorPerms = ['portal.escolar', 'portal.inscricao'];
+      const visitorPerms = [
+        'portal.escolar', 'portal.inscricao',
+        'inscricao.visualizar', 'aluno.visualizar',
+        'disciplina.visualizar', 'turma.visualizar'
+      ];
       if (visitorPerms.includes(codigoPermissao)) return next();
       return res.status(403).json({ error: 'Modo visitante: permissao negada para este recurso' });
     }
