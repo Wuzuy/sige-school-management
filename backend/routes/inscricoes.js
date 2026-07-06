@@ -27,8 +27,23 @@ router.post('/', requireAuth, async (req, res) => {
 });
 
 // Listar inscricoes (com dados do curso e usuario)
-router.get('/', requireAuth, requirePermissao('inscricao.visualizar'), async (req, res) => {
+router.get('/', requireAuth, async (req, res) => {
   const userId = req.query.user_id;
+
+  // Se o usuario esta pedindo as proprias inscricoes, nao precisa de permissao especial
+  const isOwnData = userId && String(userId) === String(req.user.id);
+  if (!isOwnData) {
+    try {
+      const { requirePermissao } = require('../middleware/auth');
+      const permCheck = requirePermissao('inscricao.visualizar');
+      await new Promise((resolve, reject) => {
+        permCheck(req, res, (err) => err ? reject(err) : resolve());
+      });
+    } catch (e) {
+      return;
+    }
+  }
+
   let query = supabase
     .from('inscricoes')
     .select(`
