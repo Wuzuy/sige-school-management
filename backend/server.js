@@ -19,12 +19,18 @@ const authCodigoRoutes = require('./routes/auth-codigo');
 
 app.use('/api/cursos', cursosRoutes);
 app.use('/api/usuarios', usuariosRoutes);
-app.use('/api/inscricoes', inscricoesRoutes);
 app.use('/api/unidades', unidadesRoutes);
 app.use('/api/editais', editaisRoutes);
-app.use('/api/aluno', alunoRoutes);
-app.use('/api/alunos', alunosRoutes);
 app.use('/api/auth', authCodigoRoutes);
+const { requireAuth, requirePortalAtivo, requirePermissao } = require('./middleware/auth');
+app.use('/api/inscricoes', requireAuth, requirePermissao('portal.inscricao'), inscricoesRoutes);
+const portaisRoutes = require('./routes/portais');
+app.use('/api/portais', portaisRoutes);
+
+// Gate: rotas exclusivas de cada portal (ativo + permissao)
+app.use('/api/aluno', requirePortalAtivo('escolar'), requireAuth, requirePermissao('portal.escolar'), alunoRoutes);
+app.use('/api/alunos', requirePortalAtivo('secretaria'), requireAuth, requirePermissao('portal.secretaria'), alunosRoutes);
+
 const cargosRoutes = require('./routes/cargos');
 app.use('/api/cargos', cargosRoutes);
 const turmasRoutes = require('./routes/turmas');
@@ -34,9 +40,11 @@ app.use('/api/auditoria', auditoriaRoutes);
 const reclamacoesRoutes = require('./routes/reclamacoes');
 app.use('/api/reclamacoes', reclamacoesRoutes);
 const professorRoutes = require('./routes/professor');
-app.use('/api/professor', professorRoutes);
+app.use('/api/professor', requirePortalAtivo('professor'), requireAuth, requirePermissao('portal.professor'), professorRoutes);
 const disciplinasRoutes = require('./routes/disciplinas');
 app.use('/api/disciplinas', disciplinasRoutes);
+const planosAulaRoutes = require('./routes/planos-aula');
+app.use('/api/planos-ensino', requirePortalAtivo('professor'), requireAuth, requirePermissao('portal.professor'), planosAulaRoutes);
 
 const PORT = process.env.PORT || 8080;
 

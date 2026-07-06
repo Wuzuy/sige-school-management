@@ -1,158 +1,68 @@
 # ============================================
-# SEJA SENAI - GitIgnore (Repositório Privado)
+# SIGE - GitIgnore
 # ============================================
 
 # ====================
-# COMPILAÇÃO E BUILD
+# NODE
 # ====================
-target/
-build/
-out/
-bin/
-*.class
-*.jar
-*.war
-*.ear
-*.nar
-dependency-reduced-pom.xml
-
-# ====================
-# IDEs
-# ====================
-# IntelliJ IDEA
-.idea/
-*.iml
-*.iws
-*.ipr
-
-# Eclipse
-.classpath
-.project
-.settings/
-.metadata/
-
-# VS Code
-.vscode/
-*.code-workspace
-
-# NetBeans
-nbproject/
-nbbuild/
-nbdist/
-.nb-gradle/
-
-# ====================
-# MOBILE (Android/Kotlin)
-# ====================
-local.properties
-.gradle/
-captures/
-.externalNativeBuild/
-.cxx/
-*.apk
-*.ap_
-*.aab
-
-# ====================
-# SISTEMA OPERACIONAL
-# ====================
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-desktop.ini
-
-# ====================
-# LOGS
-# ====================
-*.log
-logs/
+node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.pnpm-debug.log*
 
 # ====================
-# NODE.JS / NPM
+# ENVIRONMENT
 # ====================
-node_modules/
-npm-debug.log
-package-lock.json
-yarn.lock
+.env
+.env.local
+.env.production
+.env.development
 
 # ====================
-# PYTHON
+# IDE
 # ====================
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-venv/
-ENV/
-env/
-
-# ====================
-# MAVEN
-# ====================
-.mvn/wrapper/maven-wrapper.jar
-.mvn/timing.properties
-.mvn/wrapper/maven-wrapper.properties
-
-# ====================
-# TEMPORÁRIOS
-# ====================
-*.tmp
-*.bak
+.idea/
+.vscode/
 *.swp
-*~.nib
-*.orig
+*.swo
+*~
+.project
+.classpath
+.settings/
 
 # ====================
-# CONFIGURAÇÕES SENSÍVEIS
-# (Mantidas para referência, ajuste conforme necessário)
+# OS
 # ====================
-# Descomente se quiser versionar as configurações:
-# application.properties
-# application-prod.properties
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
 
 # ====================
-# BASE DE DADOS
+# BUILDS
 # ====================
-*.db
-*.sqlite
-*.sqlite3
-h2/
-database/
-
-# ====================
-# UPLOADS E ARQUIVOS GERADOS
-# ====================
-uploads/
-generated/
 dist/
-*.pdf
-*.docx
+build/
+out/
 
 # ====================
-# TESTES E COVERAGE
+# BACKUP FILES
 # ====================
-coverage/
-*.coveragerc
-htmlcov/
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
+*.bak
+*.orig
+*.tmp
 
 # ====================
-# CLOUDFLARE WRANGLER
+# DATA (local runtime)
 # ====================
-.wrangler/
-.dev.vars
-cloudflared.exe
-*.cover
+backend/data/
+uploads/
+
+# ====================
+# CONFIG (local overrides)
+# ====================
+backend/.env.local
+backend/config/local.js
+
+

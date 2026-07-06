@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const supabase = require('../config/supabase');
-const { requireAuth } = require('../middleware/auth');
+const { requireAuth, requirePermissao } = require('../middleware/auth');
 
 // Criar inscricao
 router.post('/', requireAuth, async (req, res) => {
@@ -27,7 +27,7 @@ router.post('/', requireAuth, async (req, res) => {
 });
 
 // Listar inscricoes (com dados do curso e usuario)
-router.get('/', async (req, res) => {
+router.get('/', requireAuth, requirePermissao('inscricao.visualizar'), async (req, res) => {
   const userId = req.query.user_id;
   let query = supabase
     .from('inscricoes')
@@ -49,7 +49,7 @@ router.get('/', async (req, res) => {
 });
 
 // Obter inscricao especifica
-router.get('/:id', async (req, res) => {
+router.get('/:id', requireAuth, requirePermissao('inscricao.visualizar'), async (req, res) => {
   const { data, error } = await supabase
     .from('inscricoes')
     .select(`
@@ -65,7 +65,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Atualizar inscricao (Admin)
-router.put('/:id', requireAuth, async (req, res) => {
+router.put('/:id', requireAuth, requirePermissao('inscricao.editar'), async (req, res) => {
   const COLUNAS_VALIDAS = [
     'status_aprovacao', 'status_matricula', 'data_aceite_matricula',
     'escolaridade_declarada', 'data_inscricao'
@@ -141,8 +141,8 @@ router.put('/:id', requireAuth, async (req, res) => {
   res.json(inscricao);
 });
 
-// Aceitar/Recusar matricula (Aluno) + promove ROLE_USER para ROLE_STUDENT
-router.put('/:id/matricula', requireAuth, async (req, res) => {
+// Aceitar/Recusar matricula — requer permissao de aprovacao
+router.put('/:id/matricula', requireAuth, requirePermissao('inscricao.aprovar'), async (req, res) => {
   const { status_matricula, data_aceite_matricula } = req.body;
   const { data, error } = await supabase
     .from('inscricoes')

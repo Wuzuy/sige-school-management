@@ -113,6 +113,7 @@ function filterSidebarByPerms() {
     'modulo-cargos':         'cargo.gerenciar',
     'modulo-dashboard-professor': 'disciplina.visualizar',
     'modulo-professores':    'usuario.visualizar',
+    'modulo-portais':        'portal.gerenciar',
   };
   Object.keys(permModuleMap).forEach(moduleId => {
     const link = document.querySelector(`.sec-sidebar-item[data-module-target="${moduleId}"]`);
@@ -377,6 +378,7 @@ document.querySelectorAll('[data-module-target]').forEach(btn => {
         case 'modulo-auditoria': loadAuditoria(); break;
         case 'modulo-dashboard-professor': loadDashboardProfessor(); break;
         case 'modulo-professores': loadProfessores(); break;
+        case 'modulo-portais': loadPortais(); break;
       }
     }
     saveState();
@@ -2259,8 +2261,45 @@ document.addEventListener('click', async (e) => {
 });
 
 // ======================================
+// ==============================================
+// HIERARQUIA DE PERMISSOES (Categoria > Modulo)
+// ==============================================
+const PERM_CATEGORIAS = {
+  'Administrativo': {
+    'Alunos':      ['aluno.visualizar','aluno.criar','aluno.editar','aluno.excluir','aluno.resetar-senha','aluno.alterar-turma'],
+    'Turmas':      ['turma.visualizar','turma.criar','turma.editar','turma.excluir'],
+    'Cursos':      ['curso.visualizar','curso.criar','curso.editar','curso.excluir'],
+    'Unidades':    ['unidade.visualizar','unidade.criar','unidade.editar','unidade.excluir'],
+    'Disciplinas': ['disciplina.visualizar','disciplina.criar','disciplina.editar','disciplina.excluir','disciplina.concluir'],
+    'Usuários':    ['usuario.visualizar','usuario.criar','usuario.editar','usuario.excluir'],
+    'Cargos':      ['cargo.gerenciar'],
+    'Relatórios':  ['relatorio.visualizar','relatorio.exportar'],
+    'Auditoria':   ['auditoria.visualizar']
+  },
+  'Acadêmico': {
+    'Notas':        ['nota.visualizar','nota.lancar','nota.editar','aluno.visualizar-notas'],
+    'Frequência':   ['frequencia.visualizar','frequencia.lancar','frequencia.editar','aluno.visualizar-frequencia'],
+    'Horários':     ['aluno.visualizar-horarios'],
+    'Plano de Ensino': ['plano_ensino.visualizar','plano_ensino.criar','plano_ensino.editar','plano_ensino.excluir']
+  },
+  'Secretaria': {
+    'Matrícula':    ['matricula.visualizar'],
+    'Inscrições':   ['inscricao.visualizar','inscricao.aprovar','inscricao.editar','inscricao.excluir'],
+    'Documentos':   ['documento.aprovar','documento.reprovar','documento.excluir'],
+    'Editais':      ['edital.visualizar','edital.criar','edital.editar','edital.excluir'],
+    'Reclamações':  ['reclamacao.visualizar','reclamacao.responder']
+  },
+  'Acesso': {
+    'Portais': ['portal.secretaria','portal.professor','portal.escolar','portal.inscricao','portal.gerenciar']
+  }
+};
+
+// CACHE para evitar multiplas requisicoes
+let _permCache = null;
+
+// ==============================================
 // CARGOS / PERMISSOES CRUD
-// ======================================
+// ==============================================
 
 function populateCargoDropdowns() {
   const opts = (state.cargos || []).map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
@@ -2296,103 +2335,388 @@ async function loadCargos(filters = {}) {
 
 async function loadPermissoesCheckboxes(selectedIds = []) {
   try {
-    const data = await request('/cargos/permissoes/all');
+    if (!_permCache) _permCache = await request('/cargos/permissoes/all');
     const container = document.getElementById('cargo-permissoes-checkboxes');
     if (!container) return;
-    renderPermissoesCategorias(data, selectedIds, 'cargo-permissoes-checkboxes');
+    renderPermissoesCategorias(_permCache, selectedIds, 'cargo-permissoes-checkboxes');
   } catch { if (document.getElementById('cargo-permissoes-checkboxes')) document.getElementById('cargo-permissoes-checkboxes').innerHTML = '<span style="color:#999">Erro ao carregar permissões</span>'; }
 }
 
-// Renderiza permissoes com categorias colapsaveis
-function renderPermissoesCategorias(permissoes, selectedIds, containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  const modulos = {};
-  permissoes.forEach(p => {
-    if (!modulos[p.modulo]) modulos[p.modulo] = [];
-    modulos[p.modulo].push(p);
+// --- Helpers de contagem ---
+function contarSelecionados(container) {
+  const checks = container.querySelectorAll('.perm-check');
+  const checked = container.querySelectorAll('.perm-check:checked');
+  return { total: checks.length, selecionadas: checked.length };
+}
+
+function atualizarBadgeContagem(container) {
+  const badge = container.closest('.perm-wrapper')?.querySelector('.perm-count-badge')
+    || document.getElementById('perm-selected-count');
+  if (!badge) return;
+  const { total, selecionadas } = contarSelecionados(container);
+  badge.textContent = `${selecionadas} de ${total} selecionadas`;
+}
+
+function atualizarContagensModulos(container) {
+  container.querySelectorAll('.perm-module').forEach(mod => {
+    const checks = mod.querySelectorAll('.perm-check');
+    const checked = mod.querySelectorAll('.perm-check:checked');
+    const countEl = mod.querySelector('.mod-count');
+    if (countEl) countEl.textContent = `${checked.length}/${checks.length}`;
   });
-  container.innerHTML = '';
+  container.querySelectorAll('.perm-categoria').forEach(cat => {
+    const checks = cat.querySelectorAll('.perm-check');
+    const checked = cat.querySelectorAll('.perm-check:checked');
+    const countEl = cat.querySelector('.cat-count');
+    if (countEl) countEl.textContent = `${checked.length}/${checks.length}`;
+  });
+}
 
-  const title = document.createElement('span');
-  title.className = 'cargos-permissoes-title';
-  title.textContent = 'PERMISSÕES';
-  container.appendChild(title);
+// --- Resumo legivel do cargo ---
+function atualizarResumoPermissoes(containerId) {
+  const resumoEl = document.getElementById('cargo-permissoes-resumo');
+  if (!resumoEl) return;
+  const container = document.getElementById(containerId);
+  if (!container) { resumoEl.innerHTML = ''; return; }
+  const checked = container.querySelectorAll('.perm-check:checked');
+  if (!checked.length) { resumoEl.innerHTML = '<div class="perm-resumo-empty">Nenhuma permissão selecionada</div>'; return; }
 
-  const tree = document.createElement('div');
-  tree.className = 'perm-tree';
+  const checkedSet = new Set();
+  checked.forEach(cb => checkedSet.add(parseInt(cb.value)));
 
-  // Categorias colapsaveis
-  Object.keys(modulos).sort().forEach(mod => {
-    const perms = modulos[mod];
+  const permByCodigo = {};
+  if (_permCache) _permCache.forEach(p => { permByCodigo[p.codigo] = p; });
 
-    const modEl = document.createElement('div');
-    modEl.className = 'perm-module';
-
-    const header = document.createElement('div');
-    header.className = 'perm-module-header';
-    const arrow = document.createElement('span');
-    arrow.className = 'arrow open';
-    arrow.textContent = '>';
-    const modName = document.createElement('span');
-    modName.className = 'mod-name';
-    modName.textContent = mod;
-    const count = document.createElement('span');
-    count.className = 'mod-count';
-    count.textContent = perms.length;
-    header.appendChild(arrow);
-    header.appendChild(modName);
-    header.appendChild(count);
-    modEl.appendChild(header);
-
-    const body = document.createElement('div');
-    body.className = 'perm-module-body';
-
-    // Ordenar permissoes por nome
-    const sorted = [...perms].sort((a, b) => (a.nome || '').localeCompare(b.nome || ''));
-    sorted.forEach(p => {
-      const row = document.createElement('label');
-      row.className = 'perm-row';
-      const label = document.createElement('span');
-      label.className = 'perm-label';
-      label.textContent = p.nome;
-      row.appendChild(label);
-      const cb = document.createElement('input');
-      cb.type = 'checkbox';
-      cb.value = p.id;
-      cb.checked = selectedIds.includes(p.id);
-      cb.dataset.codigo = p.codigo;
-      cb.className = 'perm-check';
-      row.appendChild(cb);
-      body.appendChild(row);
-    });
-
-    modEl.appendChild(body);
-    tree.appendChild(modEl);
-
-    // Toggle collapse with animation
-    // Calculate and set max-height for smooth animation
-    const setMaxHeight = () => {
-      body.style.maxHeight = body.classList.contains('collapsed') ? '0px' : body.scrollHeight + 'px';
-    };
-    // Set initial max-height
-    requestAnimationFrame(() => setMaxHeight());
-    header.addEventListener('click', () => {
-      const wasCollapsed = body.classList.contains('collapsed');
-      body.classList.toggle('collapsed');
-      arrow.classList.toggle('open');
-      // After layout update, set max-height for animation
-      requestAnimationFrame(() => setMaxHeight());
-    });
-    // Update max-height when checkboxes change (height may change)
-    body.addEventListener('change', () => {
-      if (!body.classList.contains('collapsed')) {
-        body.style.maxHeight = body.scrollHeight + 'px';
+  // Agrupar por categoria > modulo usando o mapa
+  const grouped = {};
+  Object.keys(PERM_CATEGORIAS).forEach(cat => {
+    Object.keys(PERM_CATEGORIAS[cat]).forEach(mod => {
+      const codigos = PERM_CATEGORIAS[cat][mod];
+      const found = codigos.filter(cod => {
+        const p = permByCodigo[cod];
+        return p && checkedSet.has(p.id);
+      });
+      if (found.length) {
+        if (!grouped[cat]) grouped[cat] = {};
+        grouped[cat][mod] = found.map(cod => {
+          const p = permByCodigo[cod];
+          return p ? p.nome.replace(/^(Visualizar|Criar|Editar|Excluir|Lançar|Gerenciar|Aprovar|Reprovar|Responder|Exportar|Resetar|Alterar|Concluir) /, '') : cod;
+        });
       }
     });
   });
 
+  let html = '<div class="perm-resumo-header">📋 Resumo do Cargo</div><div class="perm-resumo-body">';
+  Object.keys(grouped).forEach(cat => {
+    html += `<div class="perm-resumo-cat"><strong>${cat}</strong>`;
+    Object.keys(grouped[cat]).forEach(mod => {
+      const acoes = grouped[cat][mod];
+      html += `<div class="perm-resumo-item"><span class="perm-resumo-mod">${mod}</span>: ${acoes.join(', ')}</div>`;
+    });
+    html += '</div>';
+  });
+  html += '</div>';
+  resumoEl.innerHTML = html;
+}
+
+// --- Filtro de busca (ignora collapse, usa display) ---
+function aplicarFiltroPerm(container, termo) {
+  const t = termo.toLowerCase().trim();
+  const tree = container.closest('.perm-wrapper')?.querySelector('.perm-tree') || container.querySelector('.perm-tree');
+  if (!tree) return;
+  if (t) tree.classList.add('filter-active');
+  else tree.classList.remove('filter-active');
+
+  container.querySelectorAll('.perm-categoria').forEach(cat => {
+    let catMatch = !t;
+    cat.querySelectorAll('.perm-module').forEach(mod => {
+      const modName = mod.querySelector('.mod-name')?.textContent?.toLowerCase() || '';
+      const permRows = mod.querySelectorAll('.perm-row:not(.perm-select-all)');
+      let modMatch = !t;
+      permRows.forEach(row => {
+        const label = row.querySelector('.perm-label')?.textContent?.toLowerCase() || '';
+        const cb = row.querySelector('.perm-check');
+        const codigo = cb?.dataset?.codigo?.toLowerCase() || '';
+        const match = !t || label.includes(t) || codigo.includes(t) || modName.includes(t);
+        row.style.display = match ? '' : 'none';
+        if (match) modMatch = true;
+      });
+      const selectAllRow = mod.querySelector('.perm-select-all');
+      if (selectAllRow) selectAllRow.style.display = (modMatch || !t) ? '' : 'none';
+      mod.style.display = (modMatch || !t) ? '' : 'none';
+      if (modMatch) catMatch = true;
+    });
+    cat.style.display = catMatch ? '' : 'none';
+  });
+}
+
+// --- Renderiza a arvore hierarquica (Categoria > Modulo > Permissao) ---
+function renderPermissoesCategorias(permissoes, selectedIds, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  // Cache global
+  _permCache = permissoes;
+
+  // Build lookup por codigo
+  const permByCodigo = {};
+  permissoes.forEach(p => { permByCodigo[p.codigo] = p; });
+
+  container.innerHTML = '';
+
+  const selectedSet = new Set(selectedIds);
+
+  const tree = document.createElement('div');
+  tree.className = 'perm-tree';
+
+  Object.keys(PERM_CATEGORIAS).forEach(catNome => {
+    const subModulos = PERM_CATEGORIAS[catNome];
+
+    // --- Categoria ---
+    const catEl = document.createElement('div');
+    catEl.className = 'perm-categoria';
+
+    // Icone da categoria
+    const CAT_ICONS = { 'Administrativo': '\u2699', 'Acad\u00eamico': '\uD83D\uDCDA', 'Secretaria': '\uD83D\uDCCB', 'Acesso': '\uD83D\uDD11' };
+    const CAT_COLORS = { 'Administrativo': '#0ea5e9', 'Acad\u00eamico': '#10b981', 'Secretaria': '#f59e0b', 'Acesso': '#8b5cf6' };
+
+    // Header da categoria
+    const catHeader = document.createElement('div');
+    catHeader.className = 'perm-categoria-header';
+    const catArrow = document.createElement('span');
+    catArrow.className = 'arrow';
+    catArrow.textContent = '>';
+    const catIcon = document.createElement('span');
+    catIcon.className = 'cat-icon';
+    catIcon.textContent = CAT_ICONS[catNome] || '\uD83D\uDCC2';
+    const catName = document.createElement('span');
+    catName.className = 'cat-name';
+    catName.textContent = catNome;
+
+    let catTotal = 0, catSelected = 0;
+    Object.keys(subModulos).forEach(modNome => {
+      subModulos[modNome].forEach(cod => {
+        if (permByCodigo[cod]) {
+          catTotal++;
+          if (selectedSet.has(permByCodigo[cod].id)) catSelected++;
+        }
+      });
+    });
+
+    const catCount = document.createElement('span');
+    catCount.className = 'cat-count';
+    catCount.textContent = `${catSelected}/${catTotal}`;
+
+    // Select-all da categoria
+    const catSelectAll = document.createElement('input');
+    catSelectAll.type = 'checkbox';
+    catSelectAll.className = 'cat-check-all';
+    catSelectAll.checked = catSelected > 0 && catSelected === catTotal;
+    catSelectAll.indeterminate = catSelected > 0 && catSelected < catTotal;
+
+    catHeader.appendChild(catArrow);
+    catHeader.appendChild(catIcon);
+    catHeader.appendChild(catName);
+    catHeader.appendChild(catCount);
+    catHeader.appendChild(catSelectAll);
+    catEl.appendChild(catHeader);
+
+    // Progress bar
+    const catProgress = document.createElement('div');
+    catProgress.className = 'cat-progress';
+    const catProgressFill = document.createElement('div');
+    catProgressFill.className = 'cat-progress-fill';
+    catProgressFill.style.width = catTotal > 0 ? ((catSelected / catTotal) * 100) + '%' : '0%';
+    const catColor = CAT_COLORS[catNome] || '#0ea5e9';
+    catProgressFill.style.background = catColor;
+    catProgress.appendChild(catProgressFill);
+    catEl.appendChild(catProgress);
+
+    // Body da categoria
+    const catBody = document.createElement('div');
+    catBody.className = 'perm-categoria-body collapsed';
+
+    // --- Sub-modulos ---
+    Object.keys(subModulos).forEach(modNome => {
+      const codigos = subModulos[modNome];
+      const modEl = document.createElement('div');
+      modEl.className = 'perm-module';
+
+      const modHeader = document.createElement('div');
+      modHeader.className = 'perm-module-header';
+    const modArrow = document.createElement('span');
+    modArrow.className = 'arrow';
+    modArrow.textContent = '>';
+      const modName = document.createElement('span');
+      modName.className = 'mod-name';
+      modName.textContent = modNome;
+
+      let modTotal = 0, modSelected = 0;
+      const moduloPerms = [];
+      codigos.forEach(cod => {
+        const p = permByCodigo[cod];
+        if (p) {
+          modTotal++;
+          moduloPerms.push(p);
+          if (selectedSet.has(p.id)) modSelected++;
+        }
+      });
+
+      if (modTotal === 0) return; // skip modulo vazio
+
+      const modCount = document.createElement('span');
+      modCount.className = 'mod-count';
+      modCount.textContent = `${modSelected}/${modTotal}`;
+
+      modHeader.appendChild(modArrow);
+      modHeader.appendChild(modName);
+      modHeader.appendChild(modCount);
+      modEl.appendChild(modHeader);
+
+      const modBody = document.createElement('div');
+      modBody.className = 'perm-module-body collapsed';
+
+      // --- Linha "Selecionar Todos" ---
+      const selectAllRow = document.createElement('label');
+      selectAllRow.className = 'perm-row perm-select-all';
+      const selectAllIcon = document.createElement('span');
+      selectAllIcon.className = 'perm-select-all-icon';
+      selectAllIcon.textContent = '☐';
+      const selectAllLabel = document.createElement('span');
+      selectAllLabel.className = 'perm-label';
+      selectAllLabel.textContent = 'Selecionar Todos';
+      const selectAllCb = document.createElement('input');
+      selectAllCb.type = 'checkbox';
+      selectAllCb.className = 'perm-check-all';
+      selectAllCb.checked = modSelected > 0 && modSelected === modTotal;
+      selectAllCb.indeterminate = modSelected > 0 && modSelected < modTotal;
+      selectAllRow.appendChild(selectAllIcon);
+      selectAllRow.appendChild(selectAllLabel);
+      selectAllRow.appendChild(selectAllCb);
+      modBody.appendChild(selectAllRow);
+
+      // --- Permissoes do modulo ---
+      moduloPerms.sort((a, b) => (a.nome || '').localeCompare(b.nome || ''));
+      moduloPerms.forEach(p => {
+        const row = document.createElement('label');
+        row.className = 'perm-row';
+        const label = document.createElement('span');
+        label.className = 'perm-label';
+        label.textContent = p.nome;
+        row.appendChild(label);
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.value = p.id;
+        cb.checked = selectedSet.has(p.id);
+        cb.dataset.codigo = p.codigo;
+        cb.className = 'perm-check';
+        row.appendChild(cb);
+        modBody.appendChild(row);
+      });
+
+      modEl.appendChild(modBody);
+      catBody.appendChild(modEl);
+
+      // --- Eventos do modulo ---
+
+      // Select-all: marca/desmarca todas as permissoes do modulo
+      selectAllCb.addEventListener('change', (ev) => {
+        ev.stopPropagation();
+        const checks = modBody.querySelectorAll('.perm-check');
+        checks.forEach(cb => { cb.checked = selectAllCb.checked; });
+        atualizarContagensModulos(container);
+        atualizarBadgeContagem(container);
+        atualizarResumoPermissoes(containerId);
+      });
+
+      // Checkbox individual: atualiza estado do select-all
+      modBody.addEventListener('change', (ev) => {
+        if (ev.target.classList.contains('perm-check')) {
+          const checks = modBody.querySelectorAll('.perm-check');
+          const checked = modBody.querySelectorAll('.perm-check:checked');
+          selectAllCb.checked = checked.length > 0 && checked.length === checks.length;
+          selectAllCb.indeterminate = checked.length > 0 && checked.length < checks.length;
+          atualizarContagensModulos(container);
+          atualizarBadgeContagem(container);
+          atualizarResumoPermissoes(containerId);
+        }
+      });
+
+      // Collapse/expand do modulo
+      const animarModBody = () => {
+        modBody.style.maxHeight = modBody.classList.contains('collapsed') ? '0px' : modBody.scrollHeight + 'px';
+      };
+      requestAnimationFrame(() => animarModBody());
+      modHeader.addEventListener('click', (ev) => {
+        if (ev.target.closest('.perm-check-all') || ev.target.closest('.perm-check')) return;
+        modBody.classList.toggle('collapsed');
+        modArrow.classList.toggle('open');
+        requestAnimationFrame(() => animarModBody());
+      });
+      modBody.addEventListener('change', () => {
+        if (!modBody.classList.contains('collapsed')) {
+          modBody.style.maxHeight = modBody.scrollHeight + 'px';
+        }
+      });
+    });
+
+    catEl.appendChild(catBody);
+    tree.appendChild(catEl);
+
+    // Sincroniza estado do checkbox da categoria
+    function syncCatCheckAll() {
+      const checks = catEl.querySelectorAll('.perm-check');
+      const checked = catEl.querySelectorAll('.perm-check:checked');
+      catSelectAll.checked = checked.length > 0 && checked.length === checks.length;
+      catSelectAll.indeterminate = checked.length > 0 && checked.length < checks.length;
+      catCount.textContent = `${checked.length}/${checks.length}`;
+      catProgressFill.style.width = checks.length > 0 ? ((checked.length / checks.length) * 100) + '%' : '0%';
+    }
+
+    // Select-all da categoria
+    catSelectAll.addEventListener('change', (ev) => {
+      ev.stopPropagation();
+      const checks = catEl.querySelectorAll('.perm-check');
+      checks.forEach(cb => { cb.checked = catSelectAll.checked; });
+      // Sincronizar todos os select-all dos sub-modulos
+      catEl.querySelectorAll('.perm-check-all').forEach(sa => {
+        sa.checked = catSelectAll.checked;
+        sa.indeterminate = false;
+      });
+      syncCatCheckAll();
+      atualizarBadgeContagem(container);
+      atualizarResumoPermissoes(containerId);
+    });
+
+    // Sobrescrever change dos modulos para tambem sincronizar categoria
+    catBody.querySelectorAll('.perm-module').forEach(mod => {
+      const modChecks = mod.querySelectorAll('.perm-check');
+      const modCheckAll = mod.querySelector('.perm-check-all');
+      if (!modCheckAll) return;
+      // Intercepta change do modulo para atualizar categoria
+      mod.addEventListener('change', (ev) => {
+        if (ev.target.classList.contains('perm-check') || ev.target.classList.contains('perm-check-all')) {
+          requestAnimationFrame(() => { syncCatCheckAll(); });
+        }
+      });
+    });
+
+    // Collapse/expand da categoria
+    const animarCatBody = () => {
+      catBody.style.maxHeight = catBody.classList.contains('collapsed') ? '0px' : catBody.scrollHeight + 'px';
+    };
+    requestAnimationFrame(() => animarCatBody());
+    catHeader.addEventListener('click', (ev) => {
+      if (ev.target.closest('.cat-check-all')) return;
+      catBody.classList.toggle('collapsed');
+      catArrow.classList.toggle('open');
+      requestAnimationFrame(() => animarCatBody());
+    });
+  });
+
   container.appendChild(tree);
+  atualizarBadgeContagem(container);
+  atualizarResumoPermissoes(containerId);
 }
 
 document.getElementById('cancelar-cargo')?.addEventListener('click', () => {
@@ -2428,6 +2752,12 @@ document.getElementById('form-cargo')?.addEventListener('submit', async (e) => {
 
 document.getElementById('filtro-cargo-texto')?.addEventListener('input', () => {
   loadCargos({ texto: document.getElementById('filtro-cargo-texto')?.value || '' });
+});
+
+// Filtro de busca de permissoes
+document.getElementById('perm-filtro-texto')?.addEventListener('input', () => {
+  const container = document.getElementById('cargo-permissoes-checkboxes');
+  if (container) aplicarFiltroPerm(container, document.getElementById('perm-filtro-texto').value);
 });
 
 document.addEventListener('click', async (e) => {
@@ -2871,12 +3201,14 @@ document.getElementById('btn-exportar-auditoria-csv')?.addEventListener('click',
     link.click();
   }
 });
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   // Ensure authentication
   if (typeof requireAuth === 'function') {
     __auth = requireAuth('ROLE_ADMIN');
     if (!__auth) return;
   }
+  const ativo = await checkPortalAtivo('secretaria');
+  if (!ativo) return;
   filterSidebarByPerms();
   filterCreateFormsByPerms();
   populateSidebarUser();
@@ -3120,3 +3452,57 @@ document.getElementById('form-atribuir-professor-tab')?.addEventListener('submit
     await loadProfessores();
   } catch (e) { notyf.error('Erro: ' + (e.message || '')); }
 });
+
+// =============================================
+// PORTAIS
+// =============================================
+async function loadPortais() {
+  try {
+    const data = await request('/portais');
+    const list = document.getElementById('portais-list');
+    if (!list) return;
+    list.innerHTML = data.map(p => `
+      <div class="config-row" style="padding:16px 0;border-bottom:1px solid var(--sec-border);">
+        <div class="config-info">
+          <h3>${p.nome}</h3>
+          <p>${p.descricao || ''}</p>
+          ${p.motivo ? `<p style="color:var(--sec-muted);font-style:italic;font-size:0.82rem;margin-top:4px;">${p.motivo}</p>` : ''}
+          ${p.reativar_em ? `<p style="color:var(--sec-muted);font-size:0.78rem;margin-top:2px;">Reativacao automatica em: <strong>${new Date(p.reativar_em).toLocaleString('pt-BR')}</strong></p>` : ''}
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <label class="config-switch" style="margin:0;">
+            <input type="checkbox" ${p.ativo ? 'checked' : ''} onchange="togglePortal('${p.codigo}', this.checked)">
+            <span class="config-slider"></span>
+          </label>
+          <span style="font-size:0.82rem;font-weight:600;min-width:50px;${p.ativo ? 'color:var(--sec-accent)' : 'color:var(--sec-danger)'}">${p.ativo ? 'ATIVO' : 'INATIVO'}</span>
+        </div>
+      </div>
+    `).join('');
+  } catch (e) { notyf.error('Erro ao carregar portais: ' + (e.message || '')); }
+}
+
+async function togglePortal(codigo, ativo) {
+  try {
+    const motivoInput = prompt(
+      ativo
+        ? `Reativar portal "${codigo}"? Confirme para reativar.`
+        : `Desativar portal "${codigo}"? Informe o motivo da desativacao (ou deixe em branco):`
+    );
+    if (motivoInput === null) { await loadPortais(); return; }
+    const body = { ativo };
+    if (!ativo && motivoInput.trim()) body.motivo = motivoInput.trim();
+    if (!ativo) {
+      const reativarInput = prompt('Data/hora de reativacao automatica (opcional, formato DD/MM/AAAA HH:MM):');
+      if (reativarInput && reativarInput.trim()) {
+        const partes = reativarInput.trim().match(/(\d{2})\/(\d{2})\/(\d{4})[\s]*(\d{1,2}):(\d{2})?/);
+        if (partes) {
+          const d = new Date(parseInt(partes[3]), parseInt(partes[2]) - 1, parseInt(partes[1]), parseInt(partes[4] || '0'), parseInt(partes[5] || '0'));
+          body.reativar_em = d.toISOString();
+        }
+      }
+    }
+    await request(`/portais/${codigo}`, { method: 'PUT', body: JSON.stringify(body) });
+    notyf.success(ativo ? 'Portal reativado' : 'Portal desativado');
+    await loadPortais();
+  } catch (e) { notyf.error('Erro: ' + (e.message || '')); }
+}

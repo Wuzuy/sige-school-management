@@ -3,7 +3,7 @@ const router = express.Router();
 const supabase = require('../config/supabase');
 const { requireAuth, requirePermissao } = require('../middleware/auth');
 
-router.get('/', requireAuth, async (req, res) => {
+router.get('/', requireAuth, requirePermissao('turma.visualizar'), async (req, res) => {
   const { data, error } = await supabase
     .from('turmas')
     .select(`*, id_curso (id, nome_curso, tipo, turno)`)
@@ -12,7 +12,7 @@ router.get('/', requireAuth, async (req, res) => {
   res.json(data);
 });
 
-router.get('/:id', requireAuth, async (req, res) => {
+router.get('/:id', requireAuth, requirePermissao('turma.visualizar'), async (req, res) => {
   const { data, error } = await supabase
     .from('turmas')
     .select(`*, id_curso (id, nome_curso)`)

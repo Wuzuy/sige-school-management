@@ -121,7 +121,7 @@ router.get('/turmas/:id/disciplinas', async (req, res) => {
 });
 
 // GET /api/professor/notas?turma=X&disciplina=Y
-router.get('/notas', async (req, res) => {
+router.get('/notas', requirePermissao('nota.visualizar'), async (req, res) => {
   const { turma, disciplina } = req.query;
   if (!turma || !disciplina) return res.status(400).json({ error: 'turma e disciplina required' });
 
@@ -171,7 +171,7 @@ router.get('/notas', async (req, res) => {
 });
 
 // PUT /api/professor/notas
-router.put('/notas', async (req, res) => {
+router.put('/notas', requirePermissao('nota.lancar'), async (req, res) => {
   const { id_matricula, id_disciplina, nota_final, frequencia_percentual, status, ano, semestre } = req.body;
   const uid = userId(req);
 
@@ -218,7 +218,7 @@ router.put('/notas', async (req, res) => {
 });
 
 // GET /api/professor/frequencia?turma=X&disciplina=Y&data=YYYY-MM-DD
-router.get('/frequencia', async (req, res) => {
+router.get('/frequencia', requirePermissao('frequencia.visualizar'), async (req, res) => {
   const { turma, disciplina, data } = req.query;
   const uid = userId(req);
 
@@ -290,7 +290,7 @@ router.get('/frequencia', async (req, res) => {
 });
 
 // PUT /api/professor/disciplina/concluir
-router.put('/disciplina/concluir', async (req, res) => {
+router.put('/disciplina/concluir', requirePermissao('disciplina.concluir'), async (req, res) => {
   const { id_turma, id_disciplina, concluida } = req.body;
   if (!id_turma || !id_disciplina) {
     return res.status(400).json({ error: 'id_turma e id_disciplina required' });
@@ -367,7 +367,7 @@ router.get('/frequencia/historico/:matriculaId', async (req, res) => {
 });
 
 // POST /api/professor/frequencia
-router.post('/frequencia', async (req, res) => {
+router.post('/frequencia', requirePermissao('frequencia.lancar'), async (req, res) => {
   const { registros } = req.body;
 
   if (!Array.isArray(registros) || registros.length === 0) {

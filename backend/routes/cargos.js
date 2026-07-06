@@ -4,14 +4,14 @@ const supabase = require('../config/supabase');
 const { requireAuth, requirePermissao, getUserPermissoes } = require('../middleware/auth');
 
 // === LISTAR todos os cargos ===
-router.get('/', requireAuth, async (req, res) => {
+router.get('/', requireAuth, requirePermissao('cargo.gerenciar'), async (req, res) => {
   const { data, error } = await supabase.from('cargos').select('*').order('id');
   if (error) return res.status(500).json({ error: error.message });
   res.json(data);
 });
 
 // === LISTAR todas as permissoes (deve vir antes de /:id) ===
-router.get('/permissoes/all', requireAuth, async (req, res) => {
+router.get('/permissoes/all', requireAuth, requirePermissao('cargo.gerenciar'), async (req, res) => {
   const { data, error } = await supabase.from('permissoes').select('*').order('modulo').order('id');
   if (error) return res.status(500).json({ error: error.message });
   res.json(data);
@@ -28,7 +28,7 @@ router.get('/minhas/permissoes', requireAuth, async (req, res) => {
 });
 
 // === OBTER um cargo com suas permissoes ===
-router.get('/:id', requireAuth, async (req, res) => {
+router.get('/:id', requireAuth, requirePermissao('cargo.gerenciar'), async (req, res) => {
   const { data: cargo, error } = await supabase.from('cargos').select('*').eq('id', req.params.id).single();
   if (error) return res.status(404).json({ error: 'Cargo nao encontrado' });
 

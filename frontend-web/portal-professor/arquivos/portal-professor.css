@@ -1136,6 +1136,98 @@ body[data-page="portal-professor"] {
 .muted { color: var(--sec-muted); }
 
 /* =============================================
+   PLANO DE AULA — FORMULÁRIOS E LAYOUT
+   ============================================= */
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.form-group { margin-bottom: 10px; }
+
+.form-group label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--sec-text);
+  margin-bottom: 4px;
+}
+
+.form-group label small {
+  font-weight: 400;
+  color: var(--sec-muted);
+}
+
+.form-control {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--sec-border);
+  border-radius: var(--sec-radius-sm);
+  font-size: 0.85rem;
+  background: var(--sec-card);
+  color: var(--sec-text);
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-control:focus {
+  border-color: var(--sec-accent);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+textarea.form-control { resize: vertical; }
+
+.plano-card {
+  background: var(--sec-card);
+  border: 1px solid var(--sec-border);
+  border-radius: var(--sec-radius);
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.plano-card:hover { border-color: var(--sec-accent); box-shadow: 0 0 0 2px rgba(16,185,129,0.1); }
+.plano-card.active { border-color: var(--sec-accent); background: var(--sec-accent-soft); }
+
+.aula-card {
+  background: var(--sec-bg);
+  border: 1px solid var(--sec-border);
+  border-radius: var(--sec-radius-sm);
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  font-size: 0.82rem;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 4px 6px;
+  border-radius: 4px;
+  color: var(--sec-text);
+  transition: background 0.15s ease;
+}
+.action-btn:hover { background: var(--sec-surface); }
+.action-btn.view:hover { color: var(--sec-accent); }
+
+@media (max-width: 600px) {
+  .form-row { grid-template-columns: 1fr; }
+}
+
+/* =============================================
    MOBILE
    ============================================= */
 @media (max-width: 767px) {

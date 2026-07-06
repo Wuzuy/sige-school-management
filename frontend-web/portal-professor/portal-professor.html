@@ -52,6 +52,10 @@
           <span class="sec-sidebar-icon">&#128218;</span>
           <span>Disciplinas</span>
         </a>
+        <a class="sec-sidebar-item" data-module-target="modulo-planos-aula" href="#">
+          <span class="sec-sidebar-icon">&#128203;</span>
+          <span>Plano de Aula</span>
+        </a>
       </div>
 
       <div class="sec-sidebar-section">
@@ -228,6 +232,142 @@
             <table><thead><tr><th>Disciplina</th><th>Código</th><th>Carga Horária</th><th>Semestre</th><th>Turma</th><th>Status</th><th>Ações</th></tr></thead><tbody id="lista-disciplinas"></tbody></table>
           </div>
           <div id="disciplinas-empty" class="empty-state hidden"><div class="empty-icon">&#128218;</div><h3>Nenhuma disciplina encontrada</h3></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- PLANO DE AULA -->
+    <section id="modulo-planos-aula" class="module-panel hidden">
+      <div class="sec-grid">
+        <article class="card" style="grid-column:1/-1;">
+          <div class="flex-between">
+            <h2>&#128203; Plano de Aula</h2>
+            <button class="btn btn-primary" id="btn-novo-plano">&#43; Novo Plano de Ensino</button>
+          </div>
+          <p class="muted" style="margin-bottom:16px;">Gerencie os planos de ensino das suas disciplinas e os planos de aula diários.</p>
+
+          <!-- Lista de planos de ensino -->
+          <div id="planos-ensino-list"></div>
+
+          <!-- Formulário novo/editar plano de ensino -->
+          <div id="plano-ensino-form" class="hidden" style="margin-top:16px;border-top:1px solid var(--sec-border);padding-top:16px;">
+            <h3 id="plano-form-title">&#43; Novo Plano de Ensino</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Disciplina</label>
+                <select id="pe-disciplina" class="form-control" required></select>
+              </div>
+              <div class="form-group">
+                <label>Carga Horária Total (h)</label>
+                <input type="number" id="pe-carga" class="form-control" min="0" placeholder="Ex: 80">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Ementa</label>
+              <textarea id="pe-ementa" class="form-control" rows="3" placeholder="Resumo oficial do conteúdo da disciplina"></textarea>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Objetivos Gerais</label>
+                <textarea id="pe-obj-gerais" class="form-control" rows="3" placeholder="O que a turma deve dominar ao fim do período"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Objetivos Específicos</label>
+                <textarea id="pe-obj-espec" class="form-control" rows="3" placeholder="Metas específicas por módulo"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Conteúdo Programático <small>(um item por linha)</small></label>
+              <textarea id="pe-conteudo" class="form-control" rows="5" placeholder="Módulo 1: Introdução&#10;Módulo 2: Desenvolvimento&#10;Módulo 3: Conclusão"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Metodologia Geral</label>
+              <textarea id="pe-metodologia" class="form-control" rows="2" placeholder="Ex: Aulas teóricas e práticas em laboratório"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Critérios de Avaliação</label>
+              <textarea id="pe-criterios" class="form-control" rows="3" placeholder="Ex: Prova 1 (peso 4), Prova 2 (peso 4), Trabalho (peso 2)"></textarea>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Bibliografia Básica</label>
+                <textarea id="pe-biblio-basica" class="form-control" rows="3" placeholder="Autores e obras de referência"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Bibliografia Complementar</label>
+                <textarea id="pe-biblio-comp" class="form-control" rows="3" placeholder="Leituras complementares"></textarea>
+              </div>
+            </div>
+            <div class="flex-between" style="margin-top:12px;">
+              <button class="btn btn-soft" id="btn-cancel-plano">Cancelar</button>
+              <button class="btn btn-primary" id="btn-salvar-plano">&#128190; Salvar Plano de Ensino</button>
+            </div>
+          </div>
+
+          <!-- Detalhes do plano selecionado + planos de aula diários -->
+          <div id="plano-detalhes" class="hidden" style="margin-top:16px;border-top:1px solid var(--sec-border);padding-top:16px;">
+            <div class="flex-between">
+              <h3 id="plano-detalhes-title">Plano: </h3>
+              <div>
+                <button class="btn btn-soft btn-sm" id="btn-editar-plano">&#9998; Editar</button>
+                <button class="btn btn-danger btn-sm" id="btn-excluir-plano">&#128465; Excluir</button>
+              </div>
+            </div>
+            <div id="plano-detalhes-body" style="margin:12px 0;"></div>
+
+            <h4 style="margin-top:16px;">&#128197; Planos de Aula Diários</h4>
+            <button class="btn btn-primary btn-sm" id="btn-nova-aula" style="margin:8px 0;">&#43; Nova Aula</button>
+            <div id="planos-aula-list"></div>
+
+            <!-- Formulário nova/editar aula -->
+            <div id="plano-aula-form" class="hidden" style="margin-top:12px;padding:12px;background:var(--sec-surface);border-radius:8px;">
+              <h5 id="aula-form-title">&#43; Nova Aula</h5>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Data</label>
+                  <input type="date" id="pa-data" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label>Horário Início</label>
+                  <input type="time" id="pa-horario-inicio" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label>Horário Fim</label>
+                  <input type="time" id="pa-horario-fim" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Tópico Abordado</label>
+                <select id="pa-topico" class="form-control"><option value="">Selecione da ementa...</option></select>
+              </div>
+              <div class="form-group">
+                <label>Objetivo da Aula</label>
+                <textarea id="pa-objetivo" class="form-control" rows="2" placeholder="Meta específica da aula"></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Metodologia do Dia</label>
+                  <textarea id="pa-metodologia" class="form-control" rows="2" placeholder="Ex: Aula expositiva, desenvolvimento prático"></textarea>
+                </div>
+                <div class="form-group">
+                  <label>Recursos Didáticos</label>
+                  <textarea id="pa-recursos" class="form-control" rows="2" placeholder="Ex: Projetor, laboratório, softwares"></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Atividades Realizadas</label>
+                <textarea id="pa-atividades" class="form-control" rows="2" placeholder="Exercícios ou avaliações aplicadas"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Observações / Ocorrências</label>
+                <textarea id="pa-observacoes" class="form-control" rows="2" placeholder="Imprevistos, problemas, necessidade de estender tópico"></textarea>
+              </div>
+              <div class="flex-between" style="margin-top:8px;">
+                <button class="btn btn-soft btn-sm" id="btn-cancel-aula">Cancelar</button>
+                <button class="btn btn-primary btn-sm" id="btn-salvar-aula">&#128190; Salvar Aula</button>
+              </div>
+            </div>
+          </div>
         </article>
       </div>
     </section>

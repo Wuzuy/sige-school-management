@@ -112,4 +112,26 @@ function requirePermissao(codigoPermissao) {
   };
 }
 
-module.exports = { requireAuth, requireRole, requireAdminMaster, requirePermissao, getUserPermissoes };
+// Middleware factory: verifica se um portal esta ativo (feature flag)
+function requirePortalAtivo(codigoPortal) {
+  return async (req, res, next) => {
+    const supabase = require('../config/supabase');
+    let { data, error } = await supabase.from('portais').select('*').eq('codigo', codigoPortal).single();
+    if (error || !data) return next(); // se nao existe a config, deixa passar
+    // Auto-reativar se reativar_em ja passou
+    if (!data.ativo && data.reativar_em && new Date(data.reativar_em) <= new Date()) {
+      const { data: updated } = await supabase.from('portais').update({ ativo: true, desativado_em: null, reativar_em: null }).eq('id', data.id).select().single();
+      data = updated || data;
+    }
+    if (!data.ativo) {
+      return res.status(503).json({
+        error: 'Portal temporariamente indisponivel',
+        motivo: data.motivo || 'Em manutencao',
+        portal: codigoPortal
+      });
+    }
+    next();
+  };
+}
+
+module.exports = { requireAuth, requireRole, requireAdminMaster, requirePermissao, getUserPermissoes, requirePortalAtivo };

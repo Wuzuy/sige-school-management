@@ -23,6 +23,12 @@ function requireTeacherAuth() {
   window.location.href = '../portal-escolar/index.html'; return null;
 }
 
+function hasPerm(codigo) {
+  const auth = getAuth();
+  if (!auth?.permissoes) return false;
+  return auth.permissoes.includes(codigo);
+}
+
 function populateSidebarUser(auth) {
   const user = auth?.usuario;
   if (!user) return;
@@ -124,6 +130,20 @@ async function apiPost(path, body) {
     const text = await res.text();
     throw new Error(text || 'Erro na requisição');
   }
+  return res.json();
+}
+
+async function apiDelete(path) {
+  const auth = getAuth();
+  const headers = {};
+  if (auth?.token) headers.Authorization = `Bearer ${auth.token}`;
+  const res = await fetch(`${API_BASE}${path}`, { method: 'DELETE', headers });
+  if (!res.ok) {
+    if (res.status === 401) { clearAuth(); window.location.href = getLoginPageUrl(); }
+    const text = await res.text();
+    throw new Error(text || 'Erro na requisição');
+  }
+  if (res.status === 204) return null;
   return res.json();
 }
 
@@ -288,6 +308,7 @@ async function loadNotas() {
     loading.classList.add('hidden');
     if (data.length === 0) { empty.classList.remove('hidden'); return; }
 
+    const podeLancarNota = hasPerm('nota.lancar') || hasPerm('nota.editar');
     const tbody = document.getElementById('lista-notas');
     tbody.innerHTML = data.map(n => {
       const aluno = n._aluno || n.id_matricula?.id_usuario || {};
@@ -295,17 +316,17 @@ async function loadNotas() {
       return `
         <tr>
           <td><strong>${alunoNome}</strong></td>
-          <td><input type="number" class="nota-input" step="0.1" min="0" max="10" value="${n.nota_final !== null ? n.nota_final : ''}" data-nota-matricula="${n.id_matricula?.id || n.id_matricula}" placeholder="0-10" /></td>
-          <td><input type="number" class="nota-input" step="0.1" min="0" max="100" value="${n.frequencia_percentual !== null ? n.frequencia_percentual : ''}" data-freq-matricula="${n.id_matricula?.id || n.id_matricula}" placeholder="0-100" /></td>
+          <td><input type="number" class="nota-input" step="0.1" min="0" max="10" value="${n.nota_final !== null ? n.nota_final : ''}" data-nota-matricula="${n.id_matricula?.id || n.id_matricula}" placeholder="0-10" ${podeLancarNota ? '' : 'readonly'} /></td>
+          <td><input type="number" class="nota-input" step="0.1" min="0" max="100" value="${n.frequencia_percentual !== null ? n.frequencia_percentual : ''}" data-freq-matricula="${n.id_matricula?.id || n.id_matricula}" placeholder="0-100" ${podeLancarNota ? '' : 'readonly'} /></td>
           <td>
-            <select class="status-select" data-status-matricula="${n.id_matricula?.id || n.id_matricula}">
+            <select class="status-select" data-status-matricula="${n.id_matricula?.id || n.id_matricula}" ${podeLancarNota ? '' : 'disabled'}>
               <option value="CURSANDO" ${n.status === 'CURSANDO' ? 'selected' : ''}>Cursando</option>
               <option value="APROVADO" ${n.status === 'APROVADO' ? 'selected' : ''}>Aprovado</option>
               <option value="REPROVADO" ${n.status === 'REPROVADO' ? 'selected' : ''}>Reprovado</option>
               <option value="RECUPERACAO" ${n.status === 'RECUPERACAO' ? 'selected' : ''}>Recuperação</option>
             </select>
           </td>
-          <td><button class="btn btn-primary btn-sm" data-salvar-nota="${n.id_matricula?.id || n.id_matricula}">&#128190; Salvar</button></td>
+          <td>${podeLancarNota ? `<button class="btn btn-primary btn-sm" data-salvar-nota="${n.id_matricula?.id || n.id_matricula}">&#128190; Salvar</button>` : '<span class="muted" style="font-size:0.78rem;">Leitura</span>'}</td>
         </tr>
       `;
     }).join('');
@@ -397,6 +418,7 @@ async function loadFrequencia() {
     loading.classList.add('hidden');
     if (alunos.length === 0) { empty.querySelector('h3').textContent = 'Nenhum aluno na turma'; empty.classList.remove('hidden'); return; }
 
+    const podeLancarFreq = hasPerm('frequencia.lancar') || hasPerm('frequencia.editar');
     const tbody = document.getElementById('lista-frequencia');
     tbody.innerHTML = alunos.map(m => {
       const aluno = m.id_usuario || {};
@@ -407,11 +429,11 @@ async function loadFrequencia() {
           <td><strong>${aluno.nome_completo || 'Carregando...'}</strong></td>
           <td>
             <label class="freq-toggle ${presente ? 'freq-presente' : 'freq-ausente'}">
-              <input type="checkbox" class="freq-checkbox" data-freq-matricula="${m.id}" ${presente ? 'checked' : ''} />
+              <input type="checkbox" class="freq-checkbox" data-freq-matricula="${m.id}" ${presente ? 'checked' : ''} ${podeLancarFreq ? '' : 'disabled'} />
               <span class="freq-toggle-text">${presente ? 'Presente' : 'Ausente'}</span>
             </label>
           </td>
-          <td><input type="text" class="freq-justificativa" data-just-matricula="${m.id}" value="${existing?.justificativa || ''}" placeholder="Justificativa (se ausente)" /></td>
+          <td><input type="text" class="freq-justificativa" data-just-matricula="${m.id}" value="${existing?.justificativa || ''}" placeholder="Justificativa (se ausente)" ${podeLancarFreq ? '' : 'readonly'} /></td>
           <td><button class="btn btn-sm btn-soft freq-history-btn" data-matricula="${m.id}" data-aluno="${aluno.nome_completo || ''}">&#128196; Histórico</button></td>
         </tr>
       `;
@@ -557,9 +579,11 @@ async function loadDisciplinas() {
         <td>${d.turmaNome || '-'}</td>
         <td><span class="badge ${d.concluida ? 'badge-success' : 'badge-warning'}">${d.concluida ? 'Concluída' : 'Em andamento'}</span></td>
         <td>
-          <button class="btn ${d.concluida ? 'btn-soft' : 'btn-primary'} btn-sm btn-concluir-disc" data-turma="${d.turmaId}" data-disciplina="${d.id}" data-concluida="${d.concluida}">
-            ${d.concluida ? '&#128260; Reabrir' : '&#9989; Concluir'}
-          </button>
+          ${hasPerm('disciplina.concluir')
+            ? `<button class="btn ${d.concluida ? 'btn-soft' : 'btn-primary'} btn-sm btn-concluir-disc" data-turma="${d.turmaId}" data-disciplina="${d.id}" data-concluida="${d.concluida}">
+                ${d.concluida ? '&#128260; Reabrir' : '&#9989; Concluir'}
+              </button>`
+            : '<span class="muted" style="font-size:0.78rem;">-</span>'}
         </td>
       </tr>
     `).join('');
@@ -590,9 +614,12 @@ async function loadDisciplinas() {
 // INIT
 // =============================================
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const auth = requireTeacherAuth();
   if (!auth) return;
+
+  const ativo = await checkPortalAtivo('professor');
+  if (!ativo) return;
 
   populateSidebarUser(auth);
   setupModuleNav();
@@ -605,6 +632,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadFrequenciaTurmas();
   loadTurmas();
   loadDisciplinas();
+  initPlanosAula();
 
   document.getElementById('btn-filtrar-turmas').addEventListener('click', () => renderTurmas(state.turmas));
   document.getElementById('filtro-turma-texto').addEventListener('input', () => renderTurmas(state.turmas));
@@ -616,6 +644,14 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('freq-turma').addEventListener('change', (e) => { if (e.target.value) loadFrequenciaDisciplinas(e.target.value); });
   document.getElementById('btn-carregar-frequencia').addEventListener('click', loadFrequencia);
   document.getElementById('btn-salvar-frequencia').addEventListener('click', salvarFrequencia);
+
+  // RBAC granular: hide grade/frequency save buttons if sem permissao
+  if (!hasPerm('nota.lancar') && !hasPerm('nota.editar')) {
+    document.querySelectorAll('[data-salvar-nota]').forEach(b => b.style.display = 'none');
+  }
+  if (!hasPerm('frequencia.lancar') && !hasPerm('frequencia.editar')) {
+    document.getElementById('btn-salvar-frequencia').style.display = 'none';
+  }
 
   document.getElementById('btn-marcar-todos').addEventListener('click', () => {
     const cbs = document.querySelectorAll('.freq-checkbox');
@@ -655,3 +691,302 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('freq-history-close-btn').addEventListener('click', () => document.getElementById('modal-freq-history').classList.add('hidden'));
   document.getElementById('modal-freq-history').addEventListener('click', (e) => { if (e.target === e.currentTarget) document.getElementById('modal-freq-history').classList.add('hidden'); });
 });
+
+// ==============================================
+// PLANO DE AULA
+// ==============================================
+var __planoEditandoId = null;
+var __planoSelecionadoId = null;
+var __aulaEditandoId = null;
+
+async function loadDisciplinasOptions(selectId) {
+  try {
+    const disciplinas = await apiGet('/disciplinas');
+    const sel = document.getElementById(selectId);
+    if (!sel) return;
+    sel.innerHTML = '<option value="">Selecione...</option>' +
+      disciplinas.filter(d => d.ativo !== false).map(d =>
+        `<option value="${d.id}">${d.nome}</option>`
+      ).join('');
+  } catch (e) { showError('Erro ao carregar disciplinas: ' + e.message); }
+}
+
+async function loadPlanosEnsino() {
+  try {
+    const planos = await apiGet('/planos-ensino');
+    const list = document.getElementById('planos-ensino-list');
+    if (!list) return;
+    if (!planos || !planos.length) {
+      list.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128203;</div><h3>Nenhum plano de ensino</h3><p>Clique em "Novo Plano de Ensino" para criar o primeiro.</p></div>';
+      return;
+    }
+    list.innerHTML = planos.map(p => `
+      <div class="plano-card${__planoSelecionadoId === p.id ? ' active' : ''}" onclick="selecionarPlano(${p.id})">
+        <div class="flex-between">
+          <div><strong>${p.id_disciplina?.nome || 'Disciplina'}</strong></div>
+          <div style="font-size:0.78rem;color:var(--sec-muted)">${p.carga_horaria || '?'}h</div>
+        </div>
+        <div style="font-size:0.78rem;color:var(--sec-muted);margin-top:4px;">
+          Criado em ${new Date(p.created_at).toLocaleDateString('pt-BR')}
+        </div>
+      </div>
+    `).join('');
+  } catch (e) { showError('Erro ao carregar planos: ' + e.message); }
+}
+
+function initPlanosAula() {
+  // Carrega disciplinas no select do form
+  loadDisciplinasOptions('pe-disciplina');
+
+  // Botão novo plano
+  document.getElementById('btn-novo-plano')?.addEventListener('click', () => {
+    __planoEditandoId = null;
+    document.getElementById('plano-form-title').textContent = '&#43; Novo Plano de Ensino';
+    document.getElementById('plano-ensino-form').classList.remove('hidden');
+    document.getElementById('plano-detalhes').classList.add('hidden');
+    document.getElementById('pe-disciplina').value = '';
+    document.getElementById('pe-carga').value = '';
+    document.getElementById('pe-ementa').value = '';
+    document.getElementById('pe-obj-gerais').value = '';
+    document.getElementById('pe-obj-espec').value = '';
+    document.getElementById('pe-conteudo').value = '';
+    document.getElementById('pe-metodologia').value = '';
+    document.getElementById('pe-criterios').value = '';
+    document.getElementById('pe-biblio-basica').value = '';
+    document.getElementById('pe-biblio-comp').value = '';
+  });
+
+  // Cancelar plano
+  document.getElementById('btn-cancel-plano')?.addEventListener('click', () => {
+    document.getElementById('plano-ensino-form').classList.add('hidden');
+  });
+
+  // Salvar plano
+  document.getElementById('btn-salvar-plano')?.addEventListener('click', async () => {
+    const data = {
+      id_disciplina: parseInt(document.getElementById('pe-disciplina').value),
+      carga_horaria: parseInt(document.getElementById('pe-carga').value) || 0,
+      ementa: document.getElementById('pe-ementa').value,
+      objetivos_gerais: document.getElementById('pe-obj-gerais').value,
+      objetivos_especificos: document.getElementById('pe-obj-espec').value,
+      conteudo_programatico: document.getElementById('pe-conteudo').value.split('\n').filter(Boolean),
+      metodologia_geral: document.getElementById('pe-metodologia').value,
+      criterios_avaliacao: document.getElementById('pe-criterios').value,
+      bibliografia_basica: document.getElementById('pe-biblio-basica').value,
+      bibliografia_complementar: document.getElementById('pe-biblio-comp').value
+    };
+    if (!data.id_disciplina) { showError('Selecione uma disciplina'); return; }
+    try {
+      if (__planoEditandoId) {
+        await apiPut(`/planos-ensino/${__planoEditandoId}`, data);
+        showSuccess('Plano atualizado');
+      } else {
+        await apiPost('/planos-ensino', data);
+        showSuccess('Plano criado');
+      }
+      document.getElementById('plano-ensino-form').classList.add('hidden');
+      __planoEditandoId = null;
+      await loadPlanosEnsino();
+    } catch (e) { showError('Erro ao salvar: ' + e.message); }
+  });
+
+  // Editar plano
+  document.getElementById('btn-editar-plano')?.addEventListener('click', () => {
+    if (!__planoSelecionadoId) return;
+    __planoEditandoId = __planoSelecionadoId;
+    carregarPlanoForm(__planoSelecionadoId);
+  });
+
+  // Excluir plano
+  document.getElementById('btn-excluir-plano')?.addEventListener('click', async () => {
+    if (!__planoSelecionadoId) return;
+    if (!confirm('Excluir este plano de ensino e todas as suas aulas?')) return;
+    try {
+      await apiDelete(`/planos-ensino/${__planoSelecionadoId}`);
+      showSuccess('Plano excluído');
+      __planoSelecionadoId = null;
+      document.getElementById('plano-detalhes').classList.add('hidden');
+      await loadPlanosEnsino();
+    } catch (e) { showError('Erro ao excluir: ' + e.message); }
+  });
+
+  // Nova aula
+  document.getElementById('btn-nova-aula')?.addEventListener('click', () => {
+    if (!__planoSelecionadoId) { showError('Selecione um plano primeiro'); return; }
+    __aulaEditandoId = null;
+    document.getElementById('aula-form-title').textContent = '&#43; Nova Aula';
+    document.getElementById('plano-aula-form').classList.remove('hidden');
+    document.getElementById('pa-data').value = new Date().toISOString().slice(0, 10);
+    document.getElementById('pa-horario-inicio').value = '';
+    document.getElementById('pa-horario-fim').value = '';
+    document.getElementById('pa-objetivo').value = '';
+    document.getElementById('pa-metodologia').value = '';
+    document.getElementById('pa-recursos').value = '';
+    document.getElementById('pa-atividades').value = '';
+    document.getElementById('pa-observacoes').value = '';
+    // Carregar tópicos do plano selecionado
+    carregarTopicosPlano();
+  });
+
+  // Cancelar aula
+  document.getElementById('btn-cancel-aula')?.addEventListener('click', () => {
+    document.getElementById('plano-aula-form').classList.add('hidden');
+  });
+
+  // Salvar aula
+  document.getElementById('btn-salvar-aula')?.addEventListener('click', async () => {
+    if (!__planoSelecionadoId) { showError('Selecione um plano'); return; }
+    const data = {
+      data: document.getElementById('pa-data').value,
+      horario_inicio: document.getElementById('pa-horario-inicio').value || null,
+      horario_fim: document.getElementById('pa-horario-fim').value || null,
+      id_topico: parseInt(document.getElementById('pa-topico').value) || null,
+      objetivo_aula: document.getElementById('pa-objetivo').value,
+      metodologia_dia: document.getElementById('pa-metodologia').value,
+      recursos_didaticos: document.getElementById('pa-recursos').value,
+      atividades_realizadas: document.getElementById('pa-atividades').value,
+      observacoes: document.getElementById('pa-observacoes').value
+    };
+    if (!data.data) { showError('Data obrigatória'); return; }
+    try {
+      if (__aulaEditandoId) {
+        await apiPut(`/planos-ensino/aulas/${__aulaEditandoId}`, data);
+        showSuccess('Aula atualizada');
+      } else {
+        await apiPost(`/planos-ensino/${__planoSelecionadoId}/aulas`, data);
+        showSuccess('Aula registrada');
+      }
+      document.getElementById('plano-aula-form').classList.add('hidden');
+      __aulaEditandoId = null;
+      await selecionarPlano(__planoSelecionadoId);
+    } catch (e) { showError('Erro ao salvar aula: ' + e.message); }
+  });
+
+  // Carrega planos ao entrar no módulo
+  document.querySelector('[data-module-target="modulo-planos-aula"]')?.addEventListener('click', () => {
+    loadPlanosEnsino();
+  });
+}
+
+async function selecionarPlano(id) {
+  __planoSelecionadoId = id;
+  document.querySelectorAll('.plano-card').forEach(c => c.classList.remove('active'));
+  const card = document.querySelector(`.plano-card[onclick*="selecionarPlano(${id})"]`);
+  if (card) card.classList.add('active');
+
+  try {
+    const plano = await apiGet(`/planos-ensino/${id}`);
+    const aulas = await apiGet(`/planos-ensino/${id}/aulas`);
+    const detalhes = document.getElementById('plano-detalhes');
+    const body = document.getElementById('plano-detalhes-body');
+    detalhes.classList.remove('hidden');
+    document.getElementById('plano-form-title').textContent = 'Editar Plano de Ensino';
+
+    document.getElementById('plano-detalhes-title').textContent = `Plano: ${plano.id_disciplina?.nome || 'Disciplina'}`;
+
+    const conteudo = Array.isArray(plano.conteudo_programatico) ? plano.conteudo_programatico : [];
+    body.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.82rem;">
+        <div><strong>Carga Horária:</strong> ${plano.carga_horaria || '?'}h</div>
+        <div><strong>Professor:</strong> ${plano.id_professor?.nome_completo || '-'}</div>
+      </div>
+      ${plano.ementa ? `<div style="margin-top:8px;"><strong>Ementa:</strong><br>${plano.ementa}</div>` : ''}
+      ${plano.objetivos_gerais ? `<div style="margin-top:8px;"><strong>Objetivos Gerais:</strong><br>${plano.objetivos_gerais}</div>` : ''}
+      ${plano.objetivos_especificos ? `<div style="margin-top:8px;"><strong>Objetivos Específicos:</strong><br>${plano.objetivos_especificos}</div>` : ''}
+      ${conteudo.length ? `<div style="margin-top:8px;"><strong>Conteúdo Programático:</strong><ol style="margin:4px 0 0 20px;">${conteudo.map((t, i) => `<li>${t}</li>`).join('')}</ol></div>` : ''}
+      ${plano.metodologia_geral ? `<div style="margin-top:8px;"><strong>Metodologia Geral:</strong><br>${plano.metodologia_geral}</div>` : ''}
+      ${plano.criterios_avaliacao ? `<div style="margin-top:8px;"><strong>Critérios de Avaliação:</strong><br>${plano.criterios_avaliacao}</div>` : ''}
+      ${plano.bibliografia_basica ? `<div style="margin-top:8px;"><strong>Bibliografia Básica:</strong><br>${plano.bibliografia_basica}</div>` : ''}
+      ${plano.bibliografia_complementar ? `<div style="margin-top:8px;"><strong>Bibliografia Complementar:</strong><br>${plano.bibliografia_complementar}</div>` : ''}
+    `;
+
+    // Lista de aulas
+    const aulaList = document.getElementById('planos-aula-list');
+    if (!aulas || !aulas.length) {
+      aulaList.innerHTML = '<p class="muted" style="font-size:0.82rem;">Nenhuma aula registrada ainda.</p>';
+    } else {
+      aulaList.innerHTML = aulas.map(a => `
+        <div class="aula-card">
+          <div class="flex-between">
+            <div>
+              <strong>${new Date(a.data + 'T12:00:00').toLocaleDateString('pt-BR')}</strong>
+              ${a.horario_inicio ? ` ${a.horario_inicio.slice(0,5)}-${a.horario_fim ? a.horario_fim.slice(0,5) : ''}` : ''}
+              ${a.id_topico !== null && conteudo[a.id_topico] ? `&mdash; ${conteudo[a.id_topico]}` : ''}
+            </div>
+            <div>
+              <button class="action-btn view" onclick="editarAula(${a.id})" title="Editar">&#9998;</button>
+              <button class="action-btn" onclick="excluirAula(${a.id})" title="Excluir" style="color:var(--sec-danger)">&#128465;</button>
+            </div>
+          </div>
+          ${a.objetivo_aula ? `<div style="margin-top:4px;color:var(--sec-muted);">${a.objetivo_aula}</div>` : ''}
+          ${a.observacoes ? `<div style="margin-top:4px;font-style:italic;">${a.observacoes}</div>` : ''}
+        </div>
+      `).join('');
+    }
+    // Atualiza tópicos
+    carregarTopicosPlano();
+  } catch (e) { showError('Erro ao carregar detalhes: ' + e.message); }
+}
+
+async function carregarPlanoForm(id) {
+  try {
+    const p = await apiGet(`/planos-ensino/${id}`);
+    document.getElementById('pe-disciplina').value = p.id_disciplina?.id || '';
+    document.getElementById('pe-carga').value = p.carga_horaria || '';
+    document.getElementById('pe-ementa').value = p.ementa || '';
+    document.getElementById('pe-obj-gerais').value = p.objetivos_gerais || '';
+    document.getElementById('pe-obj-espec').value = p.objetivos_especificos || '';
+    document.getElementById('pe-conteudo').value = Array.isArray(p.conteudo_programatico) ? p.conteudo_programatico.join('\n') : '';
+    document.getElementById('pe-metodologia').value = p.metodologia_geral || '';
+    document.getElementById('pe-criterios').value = p.criterios_avaliacao || '';
+    document.getElementById('pe-biblio-basica').value = p.bibliografia_basica || '';
+    document.getElementById('pe-biblio-comp').value = p.bibliografia_complementar || '';
+    document.getElementById('plano-form-title').textContent = '&#9998; Editar Plano de Ensino';
+    document.getElementById('plano-ensino-form').classList.remove('hidden');
+  } catch (e) { showError('Erro ao carregar dados: ' + e.message); }
+}
+
+function carregarTopicosPlano() {
+  const sel = document.getElementById('pa-topico');
+  if (!sel) return;
+  // Pega os tópicos do plano selecionado no body (renderizado acima)
+  const body = document.getElementById('plano-detalhes-body');
+  if (!body) return;
+  // Tenta parsear do objeto plano que está em memória - busca via API novamente
+  if (!__planoSelecionadoId) return;
+  apiGet(`/planos-ensino/${__planoSelecionadoId}`).then(p => {
+    const conteudo = Array.isArray(p.conteudo_programatico) ? p.conteudo_programatico : [];
+    sel.innerHTML = '<option value="">Selecione da ementa...</option>' +
+      conteudo.map((t, i) => `<option value="${i}">${t}</option>`).join('');
+  }).catch(() => {});
+}
+
+async function editarAula(id) {
+  if (!__planoSelecionadoId) return;
+  __aulaEditandoId = id;
+  try {
+    const aulas = await apiGet(`/planos-ensino/${__planoSelecionadoId}/aulas`);
+    const a = aulas.find(x => x.id === id);
+    if (!a) return;
+    document.getElementById('aula-form-title').textContent = '&#9998; Editar Aula';
+    document.getElementById('pa-data').value = a.data;
+    document.getElementById('pa-horario-inicio').value = a.horario_inicio || '';
+    document.getElementById('pa-horario-fim').value = a.horario_fim || '';
+    document.getElementById('pa-topico').value = a.id_topico ?? '';
+    document.getElementById('pa-objetivo').value = a.objetivo_aula || '';
+    document.getElementById('pa-metodologia').value = a.metodologia_dia || '';
+    document.getElementById('pa-recursos').value = a.recursos_didaticos || '';
+    document.getElementById('pa-atividades').value = a.atividades_realizadas || '';
+    document.getElementById('pa-observacoes').value = a.observacoes || '';
+    document.getElementById('plano-aula-form').classList.remove('hidden');
+  } catch (e) { showError('Erro ao carregar aula: ' + e.message); }
+}
+
+async function excluirAula(id) {
+  if (!confirm('Excluir esta aula?')) return;
+  try {
+    await apiDelete(`/planos-ensino/aulas/${id}`);
+    showSuccess('Aula excluída');
+    await selecionarPlano(__planoSelecionadoId);
+  } catch (e) { showError('Erro ao excluir: ' + e.message); }
+}

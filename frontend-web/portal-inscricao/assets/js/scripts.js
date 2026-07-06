@@ -751,6 +751,39 @@ function setupProtectedPage(auth) {
   setupLogoutButtons();
 }
 
+async function checkPortalAtivo(codigo) {
+  try {
+    const auth = getAuth();
+    if (!auth?.token) return true;
+    const res = await fetch(`${API_BASE}/portais/${codigo}`, {
+      headers: { Authorization: `Bearer ${auth.token}` }
+    });
+    if (!res.ok) return true;
+    const portal = await res.json();
+    if (portal && portal.ativo === false) {
+      const motivo = portal.motivo || 'Em manutencao';
+      const reativar = portal.reativar_em
+        ? new Date(portal.reativar_em).toLocaleString('pt-BR')
+        : null;
+      const overlay = document.createElement('div');
+      overlay.id = 'portal-maintenance-overlay';
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;background:var(--sec-bg,#f5f6fa);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center;';
+      overlay.innerHTML = `
+        <div style="font-size:4rem;margin-bottom:16px;">&#9888;</div>
+        <h2 style="margin:0 0 8px;color:var(--sec-danger,#e74c3c);">Portal Indispon&iacute;vel</h2>
+        <p style="max-width:480px;color:var(--sec-text,#555);margin:0 0 16px;font-size:1rem;">${motivo}</p>
+        ${reativar ? `<p style="color:var(--sec-muted,#888);font-size:0.85rem;">Previs&atilde;o de reativa&ccedil;&atilde;o: <strong>${reativar}</strong></p>` : ''}
+        <button onclick="window.location.href='../portal-escolar/index.html'" style="margin-top:12px;padding:10px 24px;border:none;border-radius:6px;background:var(--sec-accent,#10b981);color:#fff;cursor:pointer;font-size:0.9rem;">Voltar ao In&iacute;cio</button>
+      `;
+      document.body.appendChild(overlay);
+      return false;
+    }
+    return true;
+  } catch (e) {
+    return true;
+  }
+}
+
 async function request(path, options = {}) {
   const auth = getAuth();
   const headers = { ...(options.headers || {}) };
@@ -2290,12 +2323,16 @@ function initAcessibilidade() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   initAcessibilidade();
   
   const page = document.body.dataset.page;
 
-  if (page === 'login') initLoginPage();
+  if (page === 'login') { initLoginPage(); return; }
+  // Verifica se o portal inscricao esta ativo (exceto na pagina de login)
+  const ativo = await checkPortalAtivo('inscricao');
+  if (!ativo) return;
+
   if (page === 'home') initHomePage();
   if (page === 'inscricao') initInscricaoPage();
   if (page === 'status') initStatusPage();
