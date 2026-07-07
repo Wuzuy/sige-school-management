@@ -10,7 +10,7 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const [showConfig, setShowConfig] = useState(false);
   const [apiUrl, setApiUrl] = useState(getApiBase());
-  const { login } = useAuth();
+  const { login, logout } = useAuth();
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -24,19 +24,21 @@ export default function LoginScreen() {
         body: JSON.stringify({ email, senha: password }),
       });
       login(data.token, data.usuario);
+      // Verifica se o usuario tem acesso ao portal escolar (aluno)
+      const perms = await request('/cargos/minhas/permissoes');
+      const hasEscolar = Array.isArray(perms) && perms.includes('portal.escolar');
+      if (!hasEscolar) {
+        logout();
+        Alert.alert('Acesso Negado', 'Apenas alunos podem acessar o aplicativo.');
+        setLoading(false);
+        return;
+      }
       router.replace('/(tabs)/secretaria');
     } catch (e: any) {
       Alert.alert('Erro de conexao', e.message || 'Network request failed');
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleGuestLogin = () => {
-    const fakeToken = `fake.${btoa(JSON.stringify({ email: 'visitante@local', iat: Math.floor(Date.now() / 1000) }))}.${Math.floor(Math.random() * 1000000)}`;
-    const fakeUser = { id: -1, email: 'visitante@local', nomeCompleto: 'Visitante', role: 'ROLE_USER' };
-    login(fakeToken, fakeUser);
-    router.replace('/(tabs)/secretaria');
   };
 
   const saveApiUrl = () => {
@@ -80,9 +82,6 @@ export default function LoginScreen() {
           <Text style={styles.buttonText}>{loading ? 'Entrando...' : 'Entrar'}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.guestBtn} onPress={handleGuestLogin}>
-          <Text style={styles.guestBtnText}>Entrar como Visitante</Text>
-        </TouchableOpacity>
       </View>
 
       <Modal visible={showConfig} transparent animationType="fade">

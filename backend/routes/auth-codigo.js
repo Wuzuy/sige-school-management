@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const supabase = require('../config/supabase');
-const { requireAuth } = require('../middleware/auth');
+const { requireAuth, requirePermissao } = require('../middleware/auth');
 
 function gerarCodigo() {
   return String(Math.floor(100000 + Math.random() * 900000));
@@ -18,7 +18,7 @@ async function buscarDadosAluno(idUsuario) {
 }
 
 // Gerar codigo de acesso (aluno logado)
-router.post('/gerar-codigo', requireAuth, async (req, res) => {
+router.post('/gerar-codigo', requireAuth, requirePermissao('portal.escolar'), async (req, res) => {
   const codigo = gerarCodigo();
   const expiraEm = new Date(Date.now() + 30 * 1000).toISOString();
   const matricula = await buscarDadosAluno(req.user.id);
@@ -42,7 +42,7 @@ router.post('/gerar-codigo', requireAuth, async (req, res) => {
 });
 
 // Validar codigo de acesso (gate / catraca)
-router.post('/validar-codigo', async (req, res) => {
+router.post('/validar-codigo', requireAuth, requirePermissao('catraca.acessar'), async (req, res) => {
   const { codigo } = req.body;
   if (!codigo) return res.status(400).json({ error: 'Codigo obrigatorio' });
 

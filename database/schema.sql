@@ -452,7 +452,9 @@ INSERT INTO permissoes (codigo, nome, descricao, modulo) VALUES
   ('portal.professor',         'Acesso Professor',        'Acessar portal do professor', 'portais'),
   ('portal.escolar',           'Acesso Aluno',            'Acessar portal do aluno', 'portais'),
   ('portal.inscricao',         'Acesso Inscricao',        'Acessar portal de inscricao', 'portais'),
-  ('portal.gerenciar',         'Gerenciar Portais',       'Ativar/desativar portais', 'portais')
+  ('portal.gerenciar',         'Gerenciar Portais',       'Ativar/desativar portais', 'portais'),
+  -- CATRACA
+  ('catraca.acessar',          'Acessar Catraca',         'Validar codigos de acesso na catraca', 'catraca')
 ON CONFLICT (codigo) DO NOTHING;
 
 -- ============================================
@@ -477,7 +479,8 @@ SELECT 3, id FROM permissoes WHERE codigo IN (
   'reclamacao.visualizar', 'reclamacao.responder',
   'relatorio.visualizar', 'relatorio.exportar',
   'auditoria.visualizar',
-  'portal.secretaria'
+  'portal.secretaria',
+  'catraca.acessar'
 ) ON CONFLICT DO NOTHING;
 
 -- Professor (4)

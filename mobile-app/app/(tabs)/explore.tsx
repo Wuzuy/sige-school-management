@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { request } from '@/services/api';
 
@@ -11,6 +11,21 @@ export default function ExploreScreen() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
   const [mode, setMode] = useState<'camera' | 'manual'>('camera');
+  const [permChecked, setPermChecked] = useState(false);
+  const [hasPerm, setHasPerm] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const perms = await request('/cargos/minhas/permissoes');
+        setHasPerm(Array.isArray(perms) && perms.includes('catraca.acessar'));
+      } catch {
+        setHasPerm(false);
+      } finally {
+        setPermChecked(true);
+      }
+    })();
+  }, []);
 
   const validar = async (code: string) => {
     if (!code.trim()) return;
@@ -34,6 +49,20 @@ export default function ExploreScreen() {
   const handleBarCodeScanned = ({ data }: { data: string }) => {
     if (!scanned) validar(data);
   };
+
+  if (!permChecked) {
+    return <View style={s.center}><ActivityIndicator size="large" color="#00aaff" /></View>;
+  }
+
+  if (!hasPerm) {
+    return (
+      <View style={s.center}>
+        <Ionicons name="lock-closed" size={48} color="#e74c3c" />
+        <Text style={s.deniedTitle}>Acesso Restrito</Text>
+        <Text style={s.deniedText}>Apenas funcionarios da secretaria podem acessar o autenticador.</Text>
+      </View>
+    );
+  }
 
   if (!permission) {
     return <View style={s.center}><ActivityIndicator size="large" color="#00aaff" /></View>;
@@ -199,4 +228,6 @@ const s = StyleSheet.create({
   novoBtn: { backgroundColor: '#00aaff', paddingVertical: 14, paddingHorizontal: 32, borderRadius: 12, marginTop: 20 },
   novoBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 15 },
   permissionText: { fontSize: 14, color: '#666', marginTop: 12, marginBottom: 16, textAlign: 'center' },
+  deniedTitle: { fontSize: 20, fontWeight: '800', color: '#e74c3c', marginTop: 12, marginBottom: 8 },
+  deniedText: { fontSize: 14, color: '#666', textAlign: 'center', paddingHorizontal: 32, lineHeight: 20 },
 });
