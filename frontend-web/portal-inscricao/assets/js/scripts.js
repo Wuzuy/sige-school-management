@@ -1108,7 +1108,8 @@ async function initInscricaoPage() {
       cpf_inscricao: cpf,
       telefone_inscricao: telefone,
       email_inscricao: email,
-      data_nascimento_inscricao: dataNascimento
+      data_nascimento_inscricao: dataNascimento,
+      consentimento_lgpd: true
     };
 
     try {

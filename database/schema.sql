@@ -139,6 +139,8 @@ CREATE TABLE inscricoes (
   data_nascimento_inscricao DATE,
   status_matricula        VARCHAR(20),
   data_aceite_matricula   DATE,
+  consentimento_lgpd      BOOLEAN NOT NULL DEFAULT FALSE,
+  data_consentimento      TIMESTAMP DEFAULT NOW(),
   created_at              TIMESTAMP DEFAULT NOW()
 );
 

@@ -6,7 +6,11 @@ const { requireAuth, requirePermissao } = require('../middleware/auth');
 // Criar inscricao
 router.post('/', requireAuth, async (req, res) => {
   const payload = req.body;
-  
+
+  if (!payload.consentimento_lgpd) {
+    return res.status(400).json({ error: 'Consentimento LGPD obrigatorio para realizar a inscricao.' });
+  }
+
   const insertData = {
     id_usuario: payload.id_usuario.id,
     id_curso: payload.id_curso.id,
@@ -18,7 +22,9 @@ router.post('/', requireAuth, async (req, res) => {
     cpf_inscricao: payload.cpf_inscricao,
     telefone_inscricao: payload.telefone_inscricao,
     email_inscricao: payload.email_inscricao,
-    data_nascimento_inscricao: payload.data_nascimento_inscricao
+    data_nascimento_inscricao: payload.data_nascimento_inscricao,
+    consentimento_lgpd: payload.consentimento_lgpd,
+    data_consentimento: new Date().toISOString()
   };
 
   const { data, error } = await supabase.from('inscricoes').insert([insertData]).select();
