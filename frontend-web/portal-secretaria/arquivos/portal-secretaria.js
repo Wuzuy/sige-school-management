@@ -581,30 +581,39 @@ async function loadDashboard() {
       });
     }
 
-    // Timeline
-    const dias = Array.from({ length: diasPeriodo }, (_, i) => {
-      const d = new Date(hoje);
-      d.setDate(d.getDate() - i);
-      return d.toISOString().slice(0, 10);
-    }).reverse();
-    const contagem = {};
-    dias.forEach(d => contagem[d] = 0);
-    dataPeriodo.forEach(i => {
-      if (i.data_inscricao) {
-        const key = i.data_inscricao.slice(0, 10);
-        if (contagem[key] !== undefined) contagem[key]++;
+    // Timeline - 12 intervals
+    const numIntervalos = 12;
+    const intervaloSize = Math.ceil(diasPeriodo / numIntervalos);
+    const labelsTimeline = [];
+    const dadosTimeline = [];
+    for (let i = numIntervalos - 1; i >= 0; i--) {
+      const fim = new Date(hoje);
+      fim.setDate(fim.getDate() - i * intervaloSize);
+      const inicio = new Date(fim);
+      inicio.setDate(inicio.getDate() - intervaloSize + 1);
+      if (dashPeriodo === 'ano') {
+        const mesNum = fim.getMonth() + 1;
+        labelsTimeline.push(String(mesNum).padStart(2, '0'));
+      } else {
+        labelsTimeline.push(
+          inicio.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + '-' +
+          fim.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
+        );
       }
-    });
+      dadosTimeline.push(dataPeriodo.filter(item =>
+        item.data_inscricao && new Date(item.data_inscricao) >= inicio && new Date(item.data_inscricao) <= fim
+      ).length);
+    }
     destroyChart(chartTimeline);
     const ctx3 = document.getElementById('chart-timeline')?.getContext('2d');
     if (ctx3) {
       chartTimeline = new Chart(ctx3, {
         type: 'line',
         data: {
-          labels: dias.map(d => new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })),
+          labels: labelsTimeline,
           datasets: [{
             label: 'Inscrições',
-            data: dias.map(d => contagem[d]),
+            data: dadosTimeline,
             borderColor: c.accent,
             backgroundColor: c.accent + '22',
             fill: true, tension: 0.3, pointRadius: 2, pointBackgroundColor: c.accent, borderWidth: 2,
@@ -614,7 +623,7 @@ async function loadDashboard() {
           responsive: true, maintainAspectRatio: false,
           plugins: { legend: { display: false } },
           scales: {
-            x: { ticks: { color: c.text, font: { size: 8 }, maxRotation: 45 }, grid: { display: false } },
+            x: { ticks: { color: c.text, font: { size: 10 }, maxRotation: 45 }, grid: { display: false } },
             y: { beginAtZero: true, ticks: { color: c.text, font: { size: 9 }, stepSize: 1 }, grid: { color: c.grid } }
           }
         }
@@ -1017,16 +1026,25 @@ document.getElementById('exportar-csv-btn')?.addEventListener('click', async () 
 
     if (selected.includes('timeline')) {
       const hoje2 = new Date();
-      const dias = Array.from({ length: dashPeriodo === 'mes' ? 30 : dashPeriodo === 'trimestre' ? 90 : dashPeriodo === 'semestre' ? 180 : 365 }, (_, i) => {
-        const d = new Date(hoje2);
-        d.setDate(d.getDate() - i);
-        return d.toISOString().slice(0, 10);
-      }).reverse();
-      const cont = {};
-      dias.forEach(d => cont[d] = 0);
-      data.forEach(i => { if (i.data_inscricao) { const k = i.data_inscricao.slice(0, 10); if (cont[k] !== undefined) cont[k]++; } });
-      rows.push(['EVOLUÇÃO DIÁRIA', 'Inscrições', '', '', '']);
-      dias.forEach(d => rows.push([new Date(d + 'T12:00:00').toLocaleDateString('pt-BR'), cont[d], '', '', '']));
+      const diasExport = dashPeriodo === 'mes' ? 30 : dashPeriodo === 'trimestre' ? 90 : dashPeriodo === 'semestre' ? 180 : 365;
+      const numInt = 12;
+      const intSize = Math.ceil(diasExport / numInt);
+      const rowsTimeline = [];
+      for (let i = numInt - 1; i >= 0; i--) {
+        const fim = new Date(hoje2);
+        fim.setDate(fim.getDate() - i * intSize);
+        const inicio = new Date(fim);
+        inicio.setDate(inicio.getDate() - intSize + 1);
+        const count = data.filter(item =>
+          item.data_inscricao && new Date(item.data_inscricao) >= inicio && new Date(item.data_inscricao) <= fim
+        ).length;
+        const label = dashPeriodo === 'ano'
+          ? String(fim.getMonth() + 1).padStart(2, '0')
+          : inicio.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + '-' + fim.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+        rowsTimeline.push([label, count, '', '', '']);
+      }
+      rows.push(['EVOLUÇÃO (12 intervalos)', 'Inscrições', '', '', '']);
+      rowsTimeline.forEach(r => rows.push(r));
     }
 
     const csv = rows.map(r => r.map(c => `"${String(c ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
@@ -1096,17 +1114,24 @@ document.getElementById('exportar-pdf-btn')?.addEventListener('click', async () 
 
     if (selected.includes('timeline')) {
       const hoje2 = new Date();
-      const dias = Array.from({ length: dashPeriodo === 'mes' ? 30 : dashPeriodo === 'trimestre' ? 90 : dashPeriodo === 'semestre' ? 180 : 365 }, (_, i) => {
-        const d = new Date(hoje2);
-        d.setDate(d.getDate() - i);
-        return d.toISOString().slice(0, 10);
-      }).reverse();
-      const cont = {};
-      dias.forEach(d => cont[d] = 0);
-      data.forEach(i => { if (i.data_inscricao) { const k = i.data_inscricao.slice(0, 10); if (cont[k] !== undefined) cont[k]++; } });
-      html += `<div class="print-chart"><h3>Evolução Diária</h3>
-      <table class="print-tabela"><thead><tr><th>Data</th><th>Inscrições</th></tr></thead><tbody>`;
-      dias.forEach(d => html += `<tr><td>${new Date(d + 'T12:00:00').toLocaleDateString('pt-BR')}</td><td>${cont[d]}</td></tr>`);
+      const diasExport = dashPeriodo === 'mes' ? 30 : dashPeriodo === 'trimestre' ? 90 : dashPeriodo === 'semestre' ? 180 : 365;
+      const numInt = 12;
+      const intSize = Math.ceil(diasExport / numInt);
+      html += `<div class="print-chart"><h3>Evolução (12 intervalos)</h3>
+      <table class="print-tabela"><thead><tr><th>Período</th><th>Inscrições</th></tr></thead><tbody>`;
+      for (let i = numInt - 1; i >= 0; i--) {
+        const fim = new Date(hoje2);
+        fim.setDate(fim.getDate() - i * intSize);
+        const inicio = new Date(fim);
+        inicio.setDate(inicio.getDate() - intSize + 1);
+        const count = data.filter(item =>
+          item.data_inscricao && new Date(item.data_inscricao) >= inicio && new Date(item.data_inscricao) <= fim
+        ).length;
+        const label = dashPeriodo === 'ano'
+          ? String(fim.getMonth() + 1).padStart(2, '0')
+          : inicio.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + '-' + fim.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+        html += `<tr><td>${label}</td><td>${count}</td></tr>`;
+      }
       html += `</tbody></table></div>`;
     }
 
