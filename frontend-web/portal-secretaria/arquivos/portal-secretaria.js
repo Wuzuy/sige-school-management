@@ -581,8 +581,8 @@ async function loadDashboard() {
       });
     }
 
-    // Timeline - 12 intervals
-    const numIntervalos = 12;
+    // Timeline
+    const numIntervalos = dashPeriodo === 'ano' ? 12 : dashPeriodo === 'semestre' || dashPeriodo === 'trimestre' ? 6 : 30;
     const intervaloSize = Math.ceil(diasPeriodo / numIntervalos);
     const labelsTimeline = [];
     const dadosTimeline = [];
@@ -592,8 +592,9 @@ async function loadDashboard() {
       const inicio = new Date(fim);
       inicio.setDate(inicio.getDate() - intervaloSize + 1);
       if (dashPeriodo === 'ano') {
-        const mesNum = fim.getMonth() + 1;
-        labelsTimeline.push(String(mesNum).padStart(2, '0'));
+        labelsTimeline.push(String(fim.getMonth() + 1).padStart(2, '0'));
+      } else if (dashPeriodo === 'mes') {
+        labelsTimeline.push(fim.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }));
       } else {
         labelsTimeline.push(
           inicio.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + '-' +
@@ -1027,7 +1028,7 @@ document.getElementById('exportar-csv-btn')?.addEventListener('click', async () 
     if (selected.includes('timeline')) {
       const hoje2 = new Date();
       const diasExport = dashPeriodo === 'mes' ? 30 : dashPeriodo === 'trimestre' ? 90 : dashPeriodo === 'semestre' ? 180 : 365;
-      const numInt = 12;
+      const numInt = dashPeriodo === 'ano' ? 12 : dashPeriodo === 'semestre' || dashPeriodo === 'trimestre' ? 6 : 30;
       const intSize = Math.ceil(diasExport / numInt);
       const rowsTimeline = [];
       for (let i = numInt - 1; i >= 0; i--) {
@@ -1038,12 +1039,13 @@ document.getElementById('exportar-csv-btn')?.addEventListener('click', async () 
         const count = data.filter(item =>
           item.data_inscricao && new Date(item.data_inscricao) >= inicio && new Date(item.data_inscricao) <= fim
         ).length;
-        const label = dashPeriodo === 'ano'
-          ? String(fim.getMonth() + 1).padStart(2, '0')
-          : inicio.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + '-' + fim.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+        let label;
+        if (dashPeriodo === 'ano') label = String(fim.getMonth() + 1).padStart(2, '0');
+        else if (dashPeriodo === 'mes') label = fim.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+        else label = inicio.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + '-' + fim.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
         rowsTimeline.push([label, count, '', '', '']);
       }
-      rows.push(['EVOLUÇÃO (12 intervalos)', 'Inscrições', '', '', '']);
+      rows.push(['EVOLUÇÃO', 'Inscrições', '', '', '']);
       rowsTimeline.forEach(r => rows.push(r));
     }
 
@@ -1115,9 +1117,9 @@ document.getElementById('exportar-pdf-btn')?.addEventListener('click', async () 
     if (selected.includes('timeline')) {
       const hoje2 = new Date();
       const diasExport = dashPeriodo === 'mes' ? 30 : dashPeriodo === 'trimestre' ? 90 : dashPeriodo === 'semestre' ? 180 : 365;
-      const numInt = 12;
+      const numInt = dashPeriodo === 'ano' ? 12 : dashPeriodo === 'semestre' || dashPeriodo === 'trimestre' ? 6 : 30;
       const intSize = Math.ceil(diasExport / numInt);
-      html += `<div class="print-chart"><h3>Evolução (12 intervalos)</h3>
+      html += `<div class="print-chart"><h3>Evolução</h3>
       <table class="print-tabela"><thead><tr><th>Período</th><th>Inscrições</th></tr></thead><tbody>`;
       for (let i = numInt - 1; i >= 0; i--) {
         const fim = new Date(hoje2);
@@ -1127,9 +1129,10 @@ document.getElementById('exportar-pdf-btn')?.addEventListener('click', async () 
         const count = data.filter(item =>
           item.data_inscricao && new Date(item.data_inscricao) >= inicio && new Date(item.data_inscricao) <= fim
         ).length;
-        const label = dashPeriodo === 'ano'
-          ? String(fim.getMonth() + 1).padStart(2, '0')
-          : inicio.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + '-' + fim.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+        let label;
+        if (dashPeriodo === 'ano') label = String(fim.getMonth() + 1).padStart(2, '0');
+        else if (dashPeriodo === 'mes') label = fim.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+        else label = inicio.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + '-' + fim.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
         html += `<tr><td>${label}</td><td>${count}</td></tr>`;
       }
       html += `</tbody></table></div>`;
