@@ -71,9 +71,9 @@ async function main() {
   console.log(`Base: ${cursos.length} cursos, ${turmas.length} turmas, ${disciplinas.length} disciplinas, ${professores.length} professores, ${estudantes.length} estudantes\n`);
 
   // ============================================================
-  // 1. INSCRICOES (~150 com picos sazonais)
+  // 1. INSCRICOES (~140 com picos sazonais)
   // ============================================================
-  console.log('=== 1. Gerando inscricoes (~150) ===');
+  console.log('=== 1. Gerando inscricoes (~140) ===');
   const statusInsc = ['EM_ANALISE', 'APROVADO', 'RECUSADO'];
   const escolaridades = ['fundamental-completo','medio-incompleto','medio-completo','superior-incompleto','superior-completo'];
   const cursosPorUnidade = {};
@@ -82,7 +82,7 @@ async function main() {
   let total = 0;
   const inscExist = await countRows('inscricoes');
 
-  for (let i = 0; i < 150; i++) {
+  for (let i = 0; i < 140; i++) {
     const curso = aleatorio(cursos);
     const alunoId = aleatorio(estudantes);
     const diasAtras = Math.floor(Math.random() * 365);
@@ -109,15 +109,15 @@ async function main() {
   console.log(`  [OK] ${total} inscricoes\n`);
 
   // ============================================================
-  // 2. MATRICULAS (~100, algumas trancadas)
+  // 2. MATRICULAS (~85, algumas trancadas)
   // ============================================================
-  console.log('=== 2. Gerando matriculas (~100) ===');
+  console.log('=== 2. Gerando matriculas (~85) ===');
   const statusMat = ['ATIVO', 'ATIVO', 'ATIVO', 'TRANCADO', 'CONCLUIDO'];
   const matExist = await countRows('matriculas');
   batch = [];
   let totalMat = 0;
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 85; i++) {
     const turma = aleatorio(turmas);
     const alunoId = aleatorio(estudantes);
     const diasAtras = Math.floor(Math.random() * 300);
@@ -139,15 +139,15 @@ async function main() {
   console.log(`  [OK] ${totalMat} matriculas\n`);
 
   // ============================================================
-  // 3. HISTORICO ESCOLAR (~200 com notas realistas)
+  // 3. HISTORICO ESCOLAR (~180 com notas realistas)
   // ============================================================
-  console.log('=== 3. Gerando historico escolar (~200) ===');
+  console.log('=== 3. Gerando historico escolar (~180) ===');
   const rMatriculas = await fetch(supabaseUrl2 + '/rest/v1/matriculas?select=id', { headers: { 'apikey': serviceKey, 'Authorization': 'Bearer ' + serviceKey } });
   const mats = (await rMatriculas.json()).map(m => m.id);
   batch = [];
   let totalHist = 0;
 
-  for (let i = 0; i < 200 && mats.length > 0; i++) {
+  for (let i = 0; i < 180 && mats.length > 0; i++) {
     const matId = aleatorio(mats);
     const disc = aleatorio(disciplinas);
     const prof = aleatorio(professores);
@@ -175,13 +175,13 @@ async function main() {
   console.log(`  [OK] ${totalHist} registros\n`);
 
   // ============================================================
-  // 4. FREQUENCIA (~200 com presenca variada)
+  // 4. FREQUENCIA (~180 com presenca variada)
   // ============================================================
-  console.log('=== 4. Gerando frequencia (~200) ===');
+  console.log('=== 4. Gerando frequencia (~180) ===');
   batch = [];
   let totalFreq = 0;
 
-  for (let i = 0; i < 200 && mats.length > 0; i++) {
+  for (let i = 0; i < 180 && mats.length > 0; i++) {
     const matId = aleatorio(mats);
     const disc = aleatorio(disciplinas);
     const diasAtras = Math.floor(Math.random() * 180);
@@ -202,9 +202,9 @@ async function main() {
   console.log(`  [OK] ${totalFreq} registros\n`);
 
   // ============================================================
-  // 5. RECLAMACOES (~100)
+  // 5. RECLAMACOES (~85)
   // ============================================================
-  console.log('=== 5. Gerando reclamacoes (~100) ===');
+  console.log('=== 5. Gerando reclamacoes (~85) ===');
   const catgs = ['Secretaria','Acadêmico','Financeiro','Infraestrutura','Professores','Matrícula','Biblioteca','Transporte'];
   const assuntos = ['Erro no histórico escolar','Problema com acesso ao sistema','Atraso na entrega de documentos','Reclamação sobre professor','Problema na matrícula','Cobrança indevida','Problema no transporte','Falta de material na biblioteca','Horário de aulas','Divergência de notas','Atendimento da secretaria','Problema no laboratório','Falta de limpeza','Problema com uniforme','Acesso à plataforma EAD','Problema no estacionamento','Problema no estágio','Barulho em sala de aula','Problema na cantina'];
   const sts = ['PENDENTE','EM_ANDAMENTO','RESOLVIDA','FECHADA'];
@@ -213,7 +213,7 @@ async function main() {
   batch = [];
   let totalRec = 0;
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 85; i++) {
     const alunoId = aleatorio(estudantes);
     const diasAtras = Math.floor(Math.random() * 180);
     const dtAbertura = new Date(NOW - diasAtras * DAY).toISOString().split('T')[0];
@@ -239,9 +239,9 @@ async function main() {
   console.log(`  [OK] ${totalRec} reclamacoes\n`);
 
   // ============================================================
-  // 6. AUDITORIA (~200 registros realistas)
+  // 6. AUDITORIA (~180 registros realistas)
   // ============================================================
-  console.log('=== 6. Gerando auditoria (~200) ===');
+  console.log('=== 6. Gerando auditoria (~180) ===');
   const auditTipos = ['LOGIN', 'CREATE', 'UPDATE', 'DELETE', 'VIEW'];
   const auditAcoes = {
     LOGIN: ['Usuario fez login no sistema','Usuario fez logout','Tentativa de login falhou'],
@@ -254,7 +254,7 @@ async function main() {
   batch = [];
   let totalAudit = 0;
 
-  for (let i = 0; i < 200; i++) {
+  for (let i = 0; i < 180; i++) {
     const tipo = aleatorio(auditTipos);
     const usuario = aleatorio(auditUsers);
     const acoes = auditAcoes[tipo];

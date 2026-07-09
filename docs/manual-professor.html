@@ -38,7 +38,7 @@
       <li class="nav-section">Manuais</li>
       <li><a href="manual-candidato.html"><span class="nav-icon">&#128193;</span> Manual do Candidato</a></li>
       <li><a href="manual-aluno.html"><span class="nav-icon">&#127891;</span> Manual do Aluno</a></li>
-      <li><a href="manual-professor.html"><span class="nav-icon">&#128218;</span> Manual do Professor</a></li>
+      <li><a href="manual-professor.html" class="active"><span class="nav-icon">&#128218;</span> Manual do Professor</a></li>
       <li><a href="manual-secretaria.html"><span class="nav-icon">&#128188;</span> Manual da Secretaria</a></li>
     </ul>
   </aside>
@@ -54,25 +54,24 @@
 
     <div class="page-header">
       <h1>Manual do Professor</h1>
-      <p>Guia de uso do sistema SIGE para professores — consulta de dados acadêmicos, acompanhamento de alunos e integração com a Secretaria.</p>
+      <p>Guia de uso do sistema SIGE para professores — gerenciamento de turmas, lançamento de notas, frequência e planos de aula.</p>
     </div>
 
     <section class="step">
       <h2>1. Introdução</h2>
-      <p>O SIGE (Sistema de Inscrição e Gestão Escolar) conta com um <strong>Portal do Professor</strong> dedicado, um sistema com tema verde exclusivo para docentes. Através dele, professores podem gerenciar turmas, lançar notas, registrar frequência e acompanhar o desempenho acadêmico dos alunos em tempo real.</p>
+      <p>O SIGE conta com um <strong>Portal do Professor</strong> dedicado, um sistema com tema verde exclusivo para docentes. Através dele, professores podem gerenciar turmas, lançar notas, registrar frequência, criar planos de aula e acompanhar o desempenho acadêmico dos alunos em tempo real.</p>
       <p>O portal do professor permite acesso tanto para professores quanto para administradores da instituição. Administradores visualizam todas as turmas e disciplinas, enquanto professores veem apenas aquelas às quais foram vinculados pela Secretaria.</p>
-    
+
       <div class="screenshot-grid">
         <div class="screenshot-item">
-          <a href="printscreens/portal-professor-dashboard.png" target="_blank">
-            <img  alt="Dashboard" loading="lazy">
-          </a>
+          <img src="printscreens/portal-professor-professor-dashboard.png" alt="Dashboard">
           <div class="caption">
             <strong>Portal do Professor</strong>
-            Visão inicial do sistema com cards de acesso rápido.
+            Visão inicial do sistema com KPIs e módulos.
           </div>
         </div>
-      </div></section>
+      </div>
+    </section>
 
     <section class="step">
       <h2>2. Acessando o Sistema</h2>
@@ -87,169 +86,99 @@
       <div class="alert alert-warning">
         Caso não possua dados de acesso, entre em contato com a Secretaria da instituição para solicitar a criação da sua conta.
       </div>
-    
-      <div class="screenshot-grid">
-        <div class="screenshot-item">
-          <a href="printscreens/portal-professor-login.png" target="_blank">
-            <img src="printscreens/portal-professor-login.png" alt="Tela de Login" loading="lazy">
-          </a>
-          <div class="caption">
-            <strong>Tela de Login</strong>
-            Acesso com e-mail institucional e senha no Portal de Inscrição.
-          </div>
-        </div>
-      </div></section>
+    </section>
 
     <section class="step">
       <h2>3. Visão Geral</h2>
-      <p>O Portal do Professor possui 6 módulos principais, acessíveis pela barra lateral esquerda:</p>
+      <p>O Portal do Professor possui 7 módulos principais, acessíveis pela barra lateral esquerda:</p>
       <ul>
         <li><strong>Dashboard</strong> — visão geral com KPIs, gráfico de desempenho dos alunos (aprovados/reprovados/recuperação/cursando) e lista de turmas</li>
         <li><strong>Minhas Turmas</strong> — listagem das turmas vinculadas com opção de ver alunos e redirecionamento para notas</li>
         <li><strong>Lançar Notas</strong> — registro de notas por turma e disciplina com salvamento individual</li>
         <li><strong>Lançar Frequência</strong> — registro de presenças e faltas com barra de estatísticas, navegação rápida de datas e histórico por aluno</li>
         <li><strong>Disciplinas</strong> — consulta com filtro por turma, status (concluída/em andamento) e botão para concluir/reabrir disciplina</li>
+        <li><strong>Plano de Aula</strong> — criação de planos de ensino por disciplina com ementa, objetivos, conteúdo programático, bibliografia, e planos de aula diários com data, tópico, metodologia e atividades</li>
         <li><strong>Configurações</strong> — modo escuro e ajuste de tamanho da fonte</li>
       </ul>
-      <div class="screenshot-grid">
-        <div class="screenshot-item">
-          <a href="printscreens/portal-professor-dashboard.png" target="_blank">
-            <img  alt="Dashboard" loading="lazy">
-          </a>
-          <div class="caption">
-            <strong>Dashboard</strong>
-            Visão inicial com cards de acesso rápido às principais funcionalidades.
-          </div>
-        </div>
-      </div>
     </section>
 
     <section class="step">
       <h2>4. Funcionalidades Disponíveis</h2>
 
       <h3>4.1 Dashboard</h3>
-      <p>A tela inicial exibe um painel completo com 4 KPIs: <strong>Aulas Dadas</strong> (mês atual), <strong>Total de Alunos</strong> (matriculados nas suas turmas), <strong>Taxa de Presença</strong> (%) e <strong>Disciplinas</strong> (ministradas por você).</p>
-      <p>Na seção <strong>Desempenho dos Alunos</strong>, um gráfico de rosca mostra a distribuição por situação: Aprovados (&ge;7,0), Recuperação (4,0-6,9), Reprovados (&lt;4,0) e Cursando (sem notas). Abaixo, a lista <strong>Minhas Turmas</strong> traz atalhos para Lançar Notas e Ver Alunos.</p>
+      <p>A tela inicial exibe um painel completo com 4 KPIs: <strong>Minhas Turmas</strong> (ativas), <strong>Total de Alunos</strong> (matriculados), <strong>Disciplinas</strong> (lecionadas) e <strong>Aulas Dadas</strong> (registros de frequência).</p>
+      <p>Na seção <strong>Desempenho dos Alunos</strong>, um gráfico de rosca mostra a distribuição por situação: Aprovados, Reprovados, Recuperação e Cursando. Abaixo, a lista <strong>Minhas Turmas</strong> traz atalhos para Lançar Notas e Ver Alunos.</p>
 
       <h3>4.2 Minhas Turmas</h3>
-      <p>Lista todas as turmas vinculadas ao professor. Cada turma exibe o nome, código, turno e período. Ao clicar em <strong>Ver Alunos</strong>, é aberta uma tabela com os dados dos alunos matriculados — nome, matrícula, e-mail e status.</p>
-      <div class="screenshot-grid">
-        <div class="screenshot-item">
-          <a href="printscreens/portal-professor-turmas.png" target="_blank">
-            <img  alt="Minhas Turmas" loading="lazy">
-          </a>
-          <div class="caption">
-            <strong>Minhas Turmas</strong>
-            Listagem das turmas vinculadas com acesso aos dados dos alunos.
-          </div>
-        </div>
-      </div>
+      <p>Lista todas as turmas vinculadas ao professor. Cada turma exibe o nome, curso, turno, vagas e ano. Ao clicar em <strong>Ver Alunos</strong>, é aberta uma tabela com os dados dos alunos matriculados — nome, e-mail e status.</p>
+      <p>Use a barra de busca e o filtro por status (Ativo/Inativo) para localizar turmas específicas.</p>
 
       <h3>4.3 Lançar Notas</h3>
-      <p>Selecione uma turma e uma disciplina para visualizar a lista de alunos com nome, matrícula e nota atual. Para cada aluno, insira a nota (0 a 10) e clique em <strong>Salvar</strong> no card do aluno — o salvamento é individual e imediato. O sistema exibe confirmação visual em cada card.</p>
-      <div class="screenshot-grid">
-        <div class="screenshot-item">
-          <a href="printscreens/portal-professor-notas.png" target="_blank">
-            <img  alt="Lançar Notas" loading="lazy">
-          </a>
-          <div class="caption">
-            <strong>Lançar Notas</strong>
-            Registro de notas por turma e disciplina com salvamento individual por aluno.
-          </div>
-        </div>
-      </div>
+      <p>Selecione uma turma e uma disciplina para visualizar a lista de alunos com nome, nota final e frequência. Para cada aluno, insira a nota (0 a 10) e clique em <strong>Salvar</strong> — o salvamento é individual e imediato.</p>
+      <p>O sistema exibe o status de cada aluno (Aprovado, Recuperação, Reprovado, Cursando) baseado na nota registrada.</p>
 
       <h3>4.4 Lançar Frequência</h3>
-      <p>Selecione turma, disciplina e data para registrar a frequência. Uma <strong>barra de estatísticas</strong> no topo mostra o total de presentes e ausentes. Use os botões &lt; e &gt; para navegar entre as datas ou clique em <strong>Hoje</strong> para voltar à data atual.</p>
-      <p>Para cada aluno, clique no botão <strong>Presente</strong> (verde) ou <strong>Ausente</strong> (vermelho) — a cor muda instantaneamente indicando o estado salvo. O ícone de <strong>histórico</strong> (&clock;) ao lado de cada aluno abre um modal com o resumo de presenças por data e o percentual de presença acumulado.</p>
-      <div class="screenshot-grid">
-        <div class="screenshot-item">
-          <a href="printscreens/portal-professor-frequencia.png" target="_blank">
-            <img  alt="Lançar Frequência" loading="lazy">
-          </a>
-          <div class="caption">
-            <strong>Lançar Frequência</strong>
-            Registro de presenças e faltas por turma, disciplina e data.
-          </div>
-        </div>
-      </div>
+      <p>Selecione turma, disciplina e data para registrar a frequência. Uma <strong>barra de estatísticas</strong> no topo mostra o total de presentes, ausentes e total de alunos.</p>
+      <p>Use os botões de navegação de data (&lt; dia anterior, &gt; próximo dia, <strong>Hoje</strong>) para alternar rapidamente entre as datas.</p>
+      <p>Para cada aluno, marque <strong>Presente</strong> ou <strong>Ausente</strong> com justificativa opcional. O ícone de <strong>histórico</strong> ao lado de cada aluno abre um modal com o resumo de presenças por data e percentual acumulado.</p>
+      <p>Use os botões <strong>Todos Presentes</strong> e <strong>Todos Ausentes</strong> para agilizar o registro. Após as marcações, clique em <strong>Salvar Frequência</strong>.</p>
 
       <h3>4.5 Disciplinas</h3>
-      <p>Exibe a lista de disciplinas com filtro por turma. Cada linha mostra <strong>nome</strong>, <strong>carga horária</strong>, <strong>turmas vinculadas</strong> e <strong>status</strong> (Concluída / Em andamento).</p>
-      <p>O professor pode clicar em <strong>Concluir Disciplina</strong> para marcar que já encerrou o conteúdo; o selo "Concluída" aparece na tela. É possível <strong>Reabrir</strong> a disciplina se necessário. Professores veem apenas suas disciplinas; administradores veem todas.</p>
-      <div class="screenshot-grid">
-        <div class="screenshot-item">
-          <a href="printscreens/portal-professor-disciplinas.png" target="_blank">
-            <img  alt="Disciplinas" loading="lazy">
-          </a>
-          <div class="caption">
-            <strong>Disciplinas</strong>
-            Listagem das disciplinas com nome, carga horária e turmas vinculadas.
-          </div>
-        </div>
-      </div>
+      <p>Exibe a lista de disciplinas com filtro por turma e busca por nome. Cada linha mostra <strong>nome</strong>, <strong>código</strong>, <strong>carga horária</strong>, <strong>semestre</strong>, <strong>turma</strong> e <strong>status</strong> (Concluída / Em andamento).</p>
+      <p>O professor pode clicar em <strong>Concluir</strong> para marcar que já encerrou o conteúdo. É possível <strong>Reabrir</strong> a disciplina se necessário. Professores veem apenas suas disciplinas; administradores veem todas.</p>
 
-      <h3>4.6 Configurações</h3>
-      <p>Permite alternar entre <strong>modo claro e escuro</strong>, ajustar o <strong>tamanho da fonte</strong> (pequena, média, grande) e alterar a senha de acesso.</p>
-      <div class="screenshot-grid">
-        <div class="screenshot-item">
-          <a href="printscreens/portal-professor-configuracoes.png" target="_blank">
-            <img  alt="Configurações" loading="lazy">
-          </a>
-          <div class="caption">
-            <strong>Configurações</strong>
-            Alteração de senha e personalização da aparência do sistema.
-          </div>
-        </div>
-      </div>
-    </section>
+      <h3>4.6 Plano de Aula</h3>
+      <p>O módulo <strong>Plano de Aula</strong> permite criar e gerenciar planos de ensino completos por disciplina, além de planos de aula diários.</p>
 
-    <section class="step">
-      <h2>5. Apoio da Secretaria</h2>
-      <p>A Secretaria é responsável pelo gerenciamento das contas de professores e pelo vínculo dos docentes às turmas e disciplinas no sistema. Após esse vínculo, o professor pode registrar notas e frequência diretamente pelo Portal do Professor.</p>
-      <p>Responsabilidades da Secretaria:</p>
+      <h4>Plano de Ensino</h4>
+      <p>Para cada disciplina, é possível criar um plano de ensino contendo:</p>
       <ul>
-        <li>Criar e gerenciar contas de professores</li>
-        <li>Configurar permissões de acesso no sistema</li>
-        <li>Vincular professores às turmas e disciplinas</li>
-        <li>Processar reclamações e direcioná-las aos docentes</li>
+        <li><strong>Disciplina:</strong> selecione a disciplina vinculada</li>
+        <li><strong>Carga Horária Total:</strong> horas previstas</li>
+        <li><strong>Ementa:</strong> resumo oficial do conteúdo</li>
+        <li><strong>Objetivos Gerais e Específicos</strong></li>
+        <li><strong>Conteúdo Programático:</strong> módulos e tópicos (um por linha)</li>
+        <li><strong>Metodologia Geral</strong></li>
+        <li><strong>Critérios de Avaliação</strong></li>
+        <li><strong>Bibliografia Básica e Complementar</strong></li>
       </ul>
-      <div class="alert alert-info">
-        Administradores que acessam o Portal do Professor visualizam todas as turmas e disciplinas do sistema, podendo gerenciar notas e frequência de qualquer turma.
-      </div>
+      <p>Após criar, é possível editar, visualizar detalhes ou excluir o plano.</p>
+
+      <h4>Planos de Aula Diários</h4>
+      <p>Dentro de cada plano de ensino, é possível cadastrar aulas individuais com:</p>
+      <ul>
+        <li><strong>Data</strong> e <strong>Horário</strong> (início e fim)</li>
+        <li><strong>Tópico Abordado:</strong> selecionado a partir do conteúdo programático do plano de ensino</li>
+        <li><strong>Objetivo da Aula</strong></li>
+        <li><strong>Metodologia do Dia</strong></li>
+        <li><strong>Recursos Didáticos</strong></li>
+        <li><strong>Atividades Realizadas</strong></li>
+        <li><strong>Observações / Ocorrências</strong></li>
+      </ul>
+
+      <h3>4.7 Configurações</h3>
+      <p>Permite alternar entre <strong>modo claro e escuro</strong> e ajustar o <strong>tamanho da fonte</strong> (pequena, média, grande). As preferências são salvas automaticamente.</p>
     </section>
 
     <section class="step">
-      <h2>6. Fluxo de Trabalho</h2>
+      <h2>5. Fluxo de Trabalho</h2>
       <p>O dia a dia do professor no SIGE segue o fluxo abaixo:</p>
       <ol>
         <li><strong>Login</strong> — acesse o Portal de Inscrição com seu e-mail e senha</li>
         <li><strong>Dashboard</strong> — visualize os KPIs e o gráfico de desempenho dos alunos</li>
-        <li><strong>Minhas Turmas</strong> — consulte as turmas vinculadas e visualize os alunos</li>
-        <li><strong>Lançar Notas</strong> — registre as notas dos alunos por turma e disciplina (salvamento individual)</li>
-        <li><strong>Lançar Frequência</strong> — registre presenças e faltas com navegação entre datas e botão colorido por aluno</li>
-        <li><strong>Disciplinas</strong> — consulte e conclua disciplinas quando o conteúdo for encerrado</li>
+        <li><strong>Plano de Aula</strong> — crie ou revise o plano de ensino da disciplina</li>
+        <li><strong>Lançar Frequência</strong> — registre presenças e faltas da aula do dia</li>
+        <li><strong>Lançar Notas</strong> — registre as notas dos alunos após avaliações</li>
+        <li><strong>Minhas Turmas / Disciplinas</strong> — consulte e conclua disciplinas quando o conteúdo for encerrado</li>
         <li><strong>Encerramento</strong> — realize logout ao final do período de uso</li>
       </ol>
-      <p>Este fluxo permite que o professor gerencie de forma autônoma as notas e frequências de suas turmas, com os dados sendo salvos diretamente no sistema.</p>
       <div class="alert alert-success">
         Para acessar o Portal da Secretaria, utilize o link na barra lateral do Portal do Professor (disponível apenas para administradores).
       </div>
-    
-      <div class="screenshot-grid">
-        <div class="screenshot-item">
-          <a href="printscreens/portal-professor-modal.png" target="_blank">
-            <img  alt="Modal de Confirmação" loading="lazy">
-          </a>
-          <div class="caption">
-            <strong>Modal de Confirmação</strong>
-            Diálogo de confirmação para ações importantes no sistema.
-          </div>
-        </div>
-      </div></section>
+    </section>
 
     <footer class="site-footer">
-      <p>SIGE — Sistema de Inscrição e Gestão Escolar &copy; 2025</p>
+      <p>SIGE — Sistema de Inscrição e Gestão Escolar &copy; 2026</p>
     </footer>
   </main>
 </div>
