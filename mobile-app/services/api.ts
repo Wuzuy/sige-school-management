@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 
-const RENDER_API = 'https://sige-1gqx.onrender.com/api';
+const RENDER_API = 'https://seu-backend.exemplo.com/api';
 
 // Armazenamento em memoria (funciona no React Native e Web)
 let _apiBase: string | null = null;
