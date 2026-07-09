@@ -8,7 +8,7 @@
   }
   if (host.includes('vercel.app')) {
     // Substitua pela URL do seu backend no Render
-    window.API_BASE_URL = 'https://seu-backend.exemplo.com/api';
+    window.API_BASE_URL = '/api';
     console.log('API: modo producao ->', window.API_BASE_URL);
   }
 })();

@@ -3,5 +3,8 @@
   "outputDirectory": "frontend-web",
   "redirects": [
     { "source": "/", "destination": "/portal-escolar/index.html" }
+  ],
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://seu-backend.exemplo.com/api/$1" }
   ]
 }
