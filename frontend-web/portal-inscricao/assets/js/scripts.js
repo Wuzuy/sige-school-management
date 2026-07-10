@@ -1177,7 +1177,6 @@ async function initStatusPage() {
         </tr>
       `;
     },
-    paginaPadrao: 1
   });
 
   setupStatusDetailClicks(body, inscricoes, detailsCard, timeline, etapasCard);

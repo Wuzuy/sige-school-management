@@ -258,7 +258,6 @@ function renderTurmas(data) {
         <td><button class="action-btn view" title="Ver Alunos" data-ver-turma="${t.id}"><i class="fas fa-eye"></i></button></td>
       </tr>
     `,
-    paginaPadrao: 1
   });
 }
 
@@ -331,7 +330,6 @@ async function loadNotas() {
           </tr>
         `;
       },
-      paginaPadrao: 1
     });
   } catch (err) {
     loading.classList.add('hidden');
@@ -423,7 +421,6 @@ async function loadFrequencia() {
           </tr>
         `;
       },
-      paginaPadrao: 1
     });
 
     wrapper.classList.remove('hidden');
@@ -557,7 +554,6 @@ async function loadDisciplinas() {
           </td>
         </tr>
       `,
-      paginaPadrao: 1
     });
   } catch (err) {
     showError('Erro ao carregar disciplinas: ' + err.message);
@@ -755,7 +751,6 @@ async function loadPlanosEnsino() {
           </div>
         </div>
       `,
-      paginaPadrao: 1
     });
   } catch (e) { showError('Erro ao carregar planos: ' + e.message); }
 }

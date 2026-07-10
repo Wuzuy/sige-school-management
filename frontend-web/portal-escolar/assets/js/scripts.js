@@ -936,7 +936,6 @@ async function initHomePage() {
           </tr>
         `;
       },
-      paginaPadrao: 1
     });
 
     body.addEventListener('click', (e) => {

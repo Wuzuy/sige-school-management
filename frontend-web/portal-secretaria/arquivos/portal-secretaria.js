@@ -844,7 +844,6 @@ async function loadRelatorioAlunos() {
           </td>
         </tr>`;
       },
-      paginaPadrao: 1
     });
     window.__relatorioAlunosData = filtered;
   } catch {}
@@ -1225,7 +1224,6 @@ async function loadInscricoes(filters = {}) {
         <td>${badge(i.status_aprovacao)}</td>
         <td><button class="btn btn-soft btn-sm" data-inscricao-view="${i.id}">Detalhes</button></td>
       </tr>`,
-      paginaPadrao: 1
     });
   } catch { showEmpty('inscricoes', 'Erro ao carregar inscricoes.'); }
 }
@@ -1355,7 +1353,6 @@ async function loadCursos(filters = {}) {
           ${hasPerm('curso.excluir') ? `<button class="btn btn-danger btn-sm" data-curso-del="${c.id}">Excluir</button>` : ''}
         </td>
       </tr>`,
-      paginaPadrao: 1
     });
   } catch { showEmpty('cursos', 'Erro ao carregar cursos.'); }
 }
@@ -1515,7 +1512,6 @@ async function loadUnidades(filters = {}) {
           ${hasPerm('unidade.excluir') ? `<button class="btn btn-danger btn-sm" data-unidade-del="${u.id}">Excluir</button>` : ''}
         </td>
       </tr>`,
-      paginaPadrao: 1
     });
   } catch { showEmpty('unidades', 'Erro ao carregar unidades.'); }
 }
@@ -1552,7 +1548,6 @@ async function loadUsuarios(filters = {}) {
           ${hasPerm('usuario.excluir') ? `<button class="btn btn-danger btn-sm" data-usuario-del="${u.id}">Excluir</button>` : ''}
         </td>
       </tr>`},
-      paginaPadrao: 1
     });
   } catch { showEmpty('usuarios', 'Erro ao carregar usuarios.'); }
 }
@@ -1583,7 +1578,6 @@ async function loadEditais(filters = {}) {
           ${hasPerm('edital.excluir') ? `<button class="btn btn-danger btn-sm" data-edital-del="${e.id}">Excluir</button>` : ''}
         </td>
       </tr>`,
-      paginaPadrao: 1
     });
   } catch { showEmpty('editais', 'Erro ao carregar editais.'); }
 }
@@ -1627,7 +1621,6 @@ async function loadAlunos(filters = {}) {
           <td><button class="btn btn-soft btn-sm" data-aluno-view="${a.id}">Detalhes</button></td>
         </tr>`;
       },
-      paginaPadrao: 1
     });
   } catch { showEmpty('alunos', 'Erro ao carregar alunos.'); }
 }
@@ -1802,7 +1795,6 @@ async function loadRelatorio(filters = {}) {
           <td>${actions}</td>
         </tr>`;
       },
-      paginaPadrao: 1
     });
   } catch {
     document.getElementById('relatorio-carregando')?.classList.add('hidden');
@@ -2269,7 +2261,6 @@ async function loadTurmas(filters = {}) {
           ${hasPerm('turma.excluir') ? `<button class="btn btn-danger btn-sm" data-turma-del="${t.id}">Excluir</button>` : ''}
         </td>
       </tr>`,
-      paginaPadrao: 1
     });
   } catch { if (document.getElementById('lista-turmas')) document.getElementById('lista-turmas').innerHTML = '<tr><td colspan="7" style="text-align:center;color:#999">Erro ao carregar turmas</td></tr>'; }
 }
@@ -2430,7 +2421,6 @@ async function loadCargos(filters = {}) {
         <td>${c.descricao || '-'}</td>
         <td>${c.is_admin_master || !hasPerm('cargo.gerenciar') ? '-' : `<button class="btn btn-soft btn-sm" data-cargo-edit="${c.id}">Editar</button> <button class="btn btn-danger btn-sm" data-cargo-del="${c.id}">Excluir</button>`}</td>
       </tr>`,
-      paginaPadrao: 1
     });
   } catch { if (document.getElementById('lista-cargos')) document.getElementById('lista-cargos').innerHTML = '<tr><td colspan="3" style="text-align:center;color:#999">Erro ao carregar cargos</td></tr>'; }
 }
@@ -3209,7 +3199,6 @@ async function loadReclamacoesStandalone(filters = {}) {
           <button class="btn btn-soft btn-sm" data-reclamacao-view-aluno="${r.alunoId}" style="font-size:0.7rem;">Ver Aluno</button>
         </td>
       </tr>`,
-      paginaPadrao: 1
     });
   } catch {}
 }
@@ -3266,7 +3255,6 @@ async function loadAuditoria(filters = {}) {
       containerVazio: document.getElementById('auditoria-empty'),
       dados: logs,
       renderizarItem: renderRow,
-      paginaPadrao: 1
     });
   } catch {
     // Fallback: load from localStorage
@@ -3292,7 +3280,6 @@ async function loadAuditoria(filters = {}) {
       containerVazio: document.getElementById('auditoria-empty'),
       dados: f,
       renderizarItem: renderRow,
-      paginaPadrao: 1
     });
   }
 }
@@ -3410,7 +3397,6 @@ async function loadDisciplinas() {
         <td>${d.id_curso?.nome_curso || '-'}</td>
         <td>${d.editBtn} ${d.delBtn}</td>
       </tr>`,
-      paginaPadrao: 1
     });
     const selCurso = document.getElementById('disciplina-curso');
     if (state.cursos && selCurso) {
@@ -3439,7 +3425,6 @@ async function loadAtribuicoes() {
         <td>${a.id_professor?.nome_completo || '-'}</td>
         <td>${permDel ? `<button class="btn btn-danger btn-sm" data-atribuicao-del="${a.id}">Excluir</button>` : ''}</td>
       </tr>`,
-      paginaPadrao: 1
     });
   } catch (e) { notyf.error('Erro ao carregar atribuicoes: ' + (e.message || '')); }
 }
@@ -3592,7 +3577,6 @@ async function loadProfessores() {
           <td>${disciplinas || '-'}</td>
         </tr>`;
       },
-      paginaPadrao: 1
     });
   } catch (e) { notyf.error('Erro: ' + (e.message || '')); }
 }
