@@ -1137,78 +1137,50 @@ async function initStatusPage() {
   const etapasCard = document.querySelector('#etapas-card');
   const timeline = document.querySelector('#timeline-etapas');
 
+  let inscricoes;
+
   try {
-    const inscricoes = await request('/inscricoes?user_id=' + auth.usuario.id, { headers: authHeaders(false) });
-
-    if (!inscricoes || inscricoes.length === 0) {
-      statusText.textContent = 'Sem inscrições enviadas.';
-      body.innerHTML = '<tr><td colspan="5">Nenhuma inscrição encontrada.</td></tr>';
-      return;
-    }
-
-    statusText.textContent = inscricoes[0].status_aprovacao;
-    body.innerHTML = '';
-
-    inscricoes.forEach((item) => {
-      const tr = document.createElement('tr');
-      
-      const unidadeNome = item?.id_unidade?.nome || item.id_unidade || '-';
-      const btnMatricula = item.status_matricula === 'AGUARDANDO_ACEITE' 
-        ? `<a href="matricula.html?inscricaoId=${item.id}" class="btn btn-primary" style="margin-left: 8px; font-size: 0.85rem;">Aceitar Matrícula</a>`
-        : '';
-      
-      tr.innerHTML = `
-        <td>${item?.id_curso?.nome_curso || '-'}</td>
-        <td>${unidadeNome}</td>
-        <td>${formatDate(item.data_inscricao)}</td>
-        <td><span class="status">${item.status_aprovacao}</span></td>
-        <td>
-          <button class="btn btn-soft" data-detalhes-inscricao="${item.id}">Ver detalhes</button>
-          ${btnMatricula}
-        </td>
-      `;
-      body.appendChild(tr);
-    });
-
-    setupStatusDetailClicks(body, inscricoes, detailsCard, timeline, etapasCard);
+    inscricoes = await request('/inscricoes?user_id=' + auth.usuario.id, { headers: authHeaders(false) });
   } catch (error) {
     showInfo('Não foi possível carregar o status real. Exibindo exemplo de inscrição.');
-    const minhas = getMockInscricoes(auth);
+    inscricoes = getMockInscricoes(auth);
     statusText.textContent = 'Dados de demonstração';
-    renderStatusList(body, minhas);
-    setupStatusDetailClicks(body, minhas, detailsCard, timeline, etapasCard);
-    return;
   }
-}
 
-function renderStatusList(body, minhas) {
-  body.innerHTML = '';
-
-  if (!Array.isArray(minhas) || minhas.length === 0) {
+  if (!inscricoes || inscricoes.length === 0) {
+    statusText.textContent = 'Sem inscrições enviadas.';
     body.innerHTML = '<tr><td colspan="5">Nenhuma inscrição encontrada.</td></tr>';
     return;
   }
 
-  minhas.forEach((item) => {
-    const unidadeNome = item?.id_unidade?.nome || item.id_unidade || '-';
-    const btnMatricula = item.status_matricula === 'AGUARDANDO_ACEITE' 
-      ? `<a href="matricula.html?inscricaoId=${item.id}" class="btn btn-primary" style="margin-left: 8px; font-size: 0.85rem;">Aceitar Matrícula</a>`
-      : '';
+  statusText.textContent = inscricoes[0].status_aprovacao;
 
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${item?.id_curso?.nome_curso || '-'}</td>
-      <td>${unidadeNome}</td>
-      <td>${formatDate(item.data_inscricao)}</td>
-      <td><span class="status">${item.status_aprovacao}</span></td>
-      <td>
-        <button class="btn btn-soft" data-detalhes-inscricao="${item.id}">Ver detalhes</button>
-        ${btnMatricula}
-      </td>
-    `;
-
-    body.appendChild(tr);
+  new Paginacao({
+    container: document.getElementById('paginacao-inscricoes'),
+    containerTabela: body,
+    dados: inscricoes,
+    renderizarItem: item => {
+      const unidadeNome = item?.id_unidade?.nome || item.id_unidade || '-';
+      const btnMatricula = item.status_matricula === 'AGUARDANDO_ACEITE' 
+        ? `<a href="matricula.html?inscricaoId=${item.id}" class="btn btn-primary" style="margin-left: 8px; font-size: 0.85rem;">Aceitar Matrícula</a>`
+        : '';
+      return `
+        <tr>
+          <td>${item?.id_curso?.nome_curso || '-'}</td>
+          <td>${unidadeNome}</td>
+          <td>${formatDate(item.data_inscricao)}</td>
+          <td><span class="status">${item.status_aprovacao}</span></td>
+          <td>
+            <button class="btn btn-soft" data-detalhes-inscricao="${item.id}">Ver detalhes</button>
+            ${btnMatricula}
+          </td>
+        </tr>
+      `;
+    },
+    paginaPadrao: 1
   });
+
+  setupStatusDetailClicks(body, inscricoes, detailsCard, timeline, etapasCard);
 }
 
 function setupStatusDetailClicks(body, minhas, detailsCard, timeline, etapasCard) {

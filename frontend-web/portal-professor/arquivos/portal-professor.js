@@ -242,27 +242,23 @@ function renderTurmas(data) {
     if (texto && !t.nome.toLowerCase().includes(texto) && !(t.id_curso?.nome_curso || '').toLowerCase().includes(texto)) return false;
     return true;
   });
-  const tbody = document.getElementById('lista-turmas');
-  const empty = document.getElementById('turmas-empty');
-  if (filtered.length === 0) { tbody.innerHTML = ''; empty.classList.remove('hidden'); return; }
-  empty.classList.add('hidden');
-  tbody.innerHTML = filtered.map(t => `
-    <tr>
-      <td><strong>${t.nome}</strong></td>
-      <td>${t.id_curso?.nome_curso || '-'}</td>
-      <td>${t.turno || '-'}</td>
-      <td>${t.vagas || '-'}</td>
-      <td>${t.ano || '-'}</td>
-      <td><span class="badge ${t.status === 'ATIVO' ? 'badge-success' : 'badge-danger'}">${t.status || '-'}</span></td>
-      <td><button class="action-btn view" title="Ver Alunos" data-ver-turma="${t.id}"><i class="fas fa-eye"></i></button></td>
-    </tr>
-  `).join('');
-  tbody.querySelectorAll('[data-ver-turma]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.getElementById('notas-turma').value = btn.dataset.verTurma;
-      document.querySelector('[data-module-target="modulo-notas"]').click();
-      document.getElementById('btn-carregar-notas').click();
-    });
+  new Paginacao({
+    container: document.getElementById('paginacao-turmas'),
+    containerTabela: document.getElementById('lista-turmas'),
+    containerVazio: document.getElementById('turmas-empty'),
+    dados: filtered,
+    renderizarItem: t => `
+      <tr>
+        <td><strong>${t.nome}</strong></td>
+        <td>${t.id_curso?.nome_curso || '-'}</td>
+        <td>${t.turno || '-'}</td>
+        <td>${t.vagas || '-'}</td>
+        <td>${t.ano || '-'}</td>
+        <td><span class="badge ${t.status === 'ATIVO' ? 'badge-success' : 'badge-danger'}">${t.status || '-'}</span></td>
+        <td><button class="action-btn view" title="Ver Alunos" data-ver-turma="${t.id}"><i class="fas fa-eye"></i></button></td>
+      </tr>
+    `,
+    paginaPadrao: 1
   });
 }
 
@@ -306,51 +302,36 @@ async function loadNotas() {
     const data = await apiGet(`/professor/notas?turma=${turmaId}&disciplina=${disciplinaId}`);
     state.notas = data;
     loading.classList.add('hidden');
-    if (data.length === 0) { empty.classList.remove('hidden'); return; }
-
-    const podeLancarNota = hasPerm('nota.lancar') || hasPerm('nota.editar');
-    const tbody = document.getElementById('lista-notas');
-    tbody.innerHTML = data.map(n => {
-      const aluno = n._aluno || n.id_matricula?.id_usuario || {};
-      const alunoNome = aluno.nome_completo || 'Carregando...';
-      return `
-        <tr>
-          <td><strong>${alunoNome}</strong></td>
-          <td><input type="number" class="nota-input" step="0.1" min="0" max="10" value="${n.nota_final !== null ? n.nota_final : ''}" data-nota-matricula="${n.id_matricula?.id || n.id_matricula}" placeholder="0-10" ${podeLancarNota ? '' : 'readonly'} /></td>
-          <td><input type="number" class="nota-input" step="0.1" min="0" max="100" value="${n.frequencia_percentual !== null ? n.frequencia_percentual : ''}" data-freq-matricula="${n.id_matricula?.id || n.id_matricula}" placeholder="0-100" ${podeLancarNota ? '' : 'readonly'} /></td>
-          <td>
-            <select class="status-select" data-status-matricula="${n.id_matricula?.id || n.id_matricula}" ${podeLancarNota ? '' : 'disabled'}>
-              <option value="CURSANDO" ${n.status === 'CURSANDO' ? 'selected' : ''}>Cursando</option>
-              <option value="APROVADO" ${n.status === 'APROVADO' ? 'selected' : ''}>Aprovado</option>
-              <option value="REPROVADO" ${n.status === 'REPROVADO' ? 'selected' : ''}>Reprovado</option>
-              <option value="RECUPERACAO" ${n.status === 'RECUPERACAO' ? 'selected' : ''}>Recuperação</option>
-            </select>
-          </td>
-          <td>${podeLancarNota ? `<button class="btn btn-primary btn-sm" data-salvar-nota="${n.id_matricula?.id || n.id_matricula}"><i class="fas fa-save"></i> Salvar</button>` : '<span class="muted" style="font-size:0.78rem;">Leitura</span>'}</td>
-        </tr>
-      `;
-    }).join('');
+    if (data.length === 0) { wrapper.classList.add('hidden'); empty.classList.remove('hidden'); return; }
     wrapper.classList.remove('hidden');
 
-    tbody.querySelectorAll('[data-salvar-nota]').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const matriculaId = parseInt(btn.dataset.salvarNota);
-        const row = btn.closest('tr');
-        const inputs = row.querySelectorAll('.nota-input');
-        const statusSelect = row.querySelector('.status-select');
-        try {
-          await apiPut('/professor/notas', {
-            id_matricula: matriculaId,
-            id_disciplina: parseInt(disciplinaId),
-            nota_final: inputs[0].value ? parseFloat(inputs[0].value) : null,
-            frequencia_percentual: inputs[1].value ? parseFloat(inputs[1].value) : null,
-            status: statusSelect.value,
-          });
-          showSuccess('Nota salva com sucesso!');
-        } catch (err) {
-          showError('Erro ao salvar nota: ' + err.message);
-        }
-      });
+    const podeLancarNota = hasPerm('nota.lancar') || hasPerm('nota.editar');
+    new Paginacao({
+      container: document.getElementById('paginacao-notas'),
+      containerTabela: document.getElementById('lista-notas'),
+      containerVazio: document.getElementById('notas-empty'),
+      dados: data,
+      renderizarItem: n => {
+        const aluno = n._aluno || n.id_matricula?.id_usuario || {};
+        const alunoNome = aluno.nome_completo || 'Carregando...';
+        return `
+          <tr>
+            <td><strong>${alunoNome}</strong></td>
+            <td><input type="number" class="nota-input" step="0.1" min="0" max="10" value="${n.nota_final !== null ? n.nota_final : ''}" data-nota-matricula="${n.id_matricula?.id || n.id_matricula}" placeholder="0-10" ${podeLancarNota ? '' : 'readonly'} /></td>
+            <td><input type="number" class="nota-input" step="0.1" min="0" max="100" value="${n.frequencia_percentual !== null ? n.frequencia_percentual : ''}" data-freq-matricula="${n.id_matricula?.id || n.id_matricula}" placeholder="0-100" ${podeLancarNota ? '' : 'readonly'} /></td>
+            <td>
+              <select class="status-select" data-status-matricula="${n.id_matricula?.id || n.id_matricula}" ${podeLancarNota ? '' : 'disabled'}>
+                <option value="CURSANDO" ${n.status === 'CURSANDO' ? 'selected' : ''}>Cursando</option>
+                <option value="APROVADO" ${n.status === 'APROVADO' ? 'selected' : ''}>Aprovado</option>
+                <option value="REPROVADO" ${n.status === 'REPROVADO' ? 'selected' : ''}>Reprovado</option>
+                <option value="RECUPERACAO" ${n.status === 'RECUPERACAO' ? 'selected' : ''}>Recuperação</option>
+              </select>
+            </td>
+            <td>${podeLancarNota ? `<button class="btn btn-primary btn-sm" data-salvar-nota="${n.id_matricula?.id || n.id_matricula}"><i class="fas fa-save"></i> Salvar</button>` : '<span class="muted" style="font-size:0.78rem;">Leitura</span>'}</td>
+          </tr>
+        `;
+      },
+      paginaPadrao: 1
     });
   } catch (err) {
     loading.classList.add('hidden');
@@ -419,56 +400,36 @@ async function loadFrequencia() {
     if (alunos.length === 0) { empty.querySelector('h3').textContent = 'Nenhum aluno na turma'; empty.classList.remove('hidden'); return; }
 
     const podeLancarFreq = hasPerm('frequencia.lancar') || hasPerm('frequencia.editar');
-    const tbody = document.getElementById('lista-frequencia');
-    tbody.innerHTML = alunos.map(m => {
-      const aluno = m.id_usuario || {};
-      const existing = freqMap[m.id];
-      const presente = existing ? existing.presenca : false;
-      return `
-        <tr>
-          <td><strong>${aluno.nome_completo || 'Carregando...'}</strong></td>
-          <td>
-            <label class="freq-toggle ${presente ? 'freq-presente' : 'freq-ausente'}">
-              <input type="checkbox" class="freq-checkbox" data-freq-matricula="${m.id}" ${presente ? 'checked' : ''} ${podeLancarFreq ? '' : 'disabled'} />
-              <span class="freq-toggle-text">${presente ? 'Presente' : 'Ausente'}</span>
-            </label>
-          </td>
-          <td><input type="text" class="freq-justificativa" data-just-matricula="${m.id}" value="${existing?.justificativa || ''}" placeholder="Justificativa (se ausente)" ${podeLancarFreq ? '' : 'readonly'} /></td>
-          <td><button class="btn btn-sm btn-soft freq-history-btn" data-matricula="${m.id}" data-aluno="${aluno.nome_completo || ''}"><i class="fas fa-file-alt"></i> Histórico</button></td>
-        </tr>
-      `;
-    }).join('');
+    new Paginacao({
+      container: document.getElementById('paginacao-frequencia'),
+      containerTabela: document.getElementById('lista-frequencia'),
+      containerVazio: document.getElementById('freq-empty'),
+      dados: alunos,
+      renderizarItem: m => {
+        const aluno = m.id_usuario || {};
+        const existing = freqMap[m.id];
+        const presente = existing ? existing.presenca : false;
+        return `
+          <tr>
+            <td><strong>${aluno.nome_completo || 'Carregando...'}</strong></td>
+            <td>
+              <label class="freq-toggle ${presente ? 'freq-presente' : 'freq-ausente'}">
+                <input type="checkbox" class="freq-checkbox" data-freq-matricula="${m.id}" ${presente ? 'checked' : ''} ${podeLancarFreq ? '' : 'disabled'} />
+                <span class="freq-toggle-text">${presente ? 'Presente' : 'Ausente'}</span>
+              </label>
+            </td>
+            <td><input type="text" class="freq-justificativa" data-just-matricula="${m.id}" value="${existing?.justificativa || ''}" placeholder="Justificativa (se ausente)" ${podeLancarFreq ? '' : 'readonly'} /></td>
+            <td><button class="btn btn-sm btn-soft freq-history-btn" data-matricula="${m.id}" data-aluno="${aluno.nome_completo || ''}"><i class="fas fa-file-alt"></i> Histórico</button></td>
+          </tr>
+        `;
+      },
+      paginaPadrao: 1
+    });
 
     wrapper.classList.remove('hidden');
     actions.style.display = 'flex';
     statsBar.classList.remove('hidden');
-
-    tbody.querySelectorAll('.freq-checkbox').forEach(cb => {
-      cb.addEventListener('change', () => {
-        const label = cb.closest('.freq-toggle');
-        const span = label.querySelector('.freq-toggle-text');
-        if (cb.checked) {
-          span.textContent = 'Presente';
-          label.classList.remove('freq-ausente');
-          label.classList.add('freq-presente');
-        } else {
-          span.textContent = 'Ausente';
-          label.classList.remove('freq-presente');
-          label.classList.add('freq-ausente');
-        }
-        updateFreqStats();
-      });
-    });
-
-    tbody.querySelectorAll('.freq-history-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        openFreqHistory(btn.dataset.matricula, btn.dataset.aluno, disciplinaId);
-      });
-    });
-
-    document.getElementById('freq-stats-presentes').textContent = alunos.length;
-    document.getElementById('freq-stats-ausentes').textContent = '0';
-    document.getElementById('freq-stats-total').textContent = alunos.length;
+    updateFreqStats();
   } catch (err) {
     loading.classList.add('hidden');
     showError('Erro ao carregar frequência: ' + err.message);
@@ -565,45 +526,38 @@ async function loadDisciplinas() {
     if (texto) filtered = filtered.filter(d => d.nome.toLowerCase().includes(texto));
     if (turmaFilter) filtered = filtered.filter(d => d.turmaNome === turmaFilter);
 
-    const tbody = document.getElementById('lista-disciplinas');
     const empty = document.getElementById('disciplinas-empty');
-    if (filtered.length === 0) { tbody.innerHTML = ''; empty.classList.remove('hidden'); return; }
+    if (filtered.length === 0) {
+      document.getElementById('lista-disciplinas').innerHTML = '';
+      empty.classList.remove('hidden');
+      document.getElementById('paginacao-disciplinas').innerHTML = '';
+      return;
+    }
     empty.classList.add('hidden');
 
-    tbody.innerHTML = filtered.map(d => `
-      <tr>
-        <td><strong>${d.nome}</strong></td>
-        <td>${d.codigo || '-'}</td>
-        <td>${d.carga_horaria || '-'}h</td>
-        <td>${d.semestre || '-'}º</td>
-        <td>${d.turmaNome || '-'}</td>
-        <td><span class="badge ${d.concluida ? 'badge-success' : 'badge-warning'}">${d.concluida ? 'Concluída' : 'Em andamento'}</span></td>
-        <td>
-          ${hasPerm('disciplina.concluir')
-            ? `<button class="btn ${d.concluida ? 'btn-soft' : 'btn-primary'} btn-sm btn-concluir-disc" data-turma="${d.turmaId}" data-disciplina="${d.id}" data-concluida="${d.concluida}">
-                ${d.concluida ? '<i class="fas fa-sync-alt"></i> Reabrir' : '<i class="fas fa-check-circle"></i> Concluir'}
-              </button>`
-            : '<span class="muted" style="font-size:0.78rem;">-</span>'}
-        </td>
-      </tr>
-    `).join('');
-
-    tbody.querySelectorAll('.btn-concluir-disc').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const turmaId = btn.dataset.turma;
-        const disciplinaId = btn.dataset.disciplina;
-        const concluida = btn.dataset.concluida === 'true';
-        const action = concluida ? 'reabrir' : 'concluir';
-        const ok = await showConfirm(`Tem certeza que deseja ${action} esta disciplina?`);
-        if (!ok) return;
-        try {
-          await apiPut('/professor/disciplina/concluir', { id_turma: parseInt(turmaId), id_disciplina: parseInt(disciplinaId), concluida: !concluida });
-          showSuccess(`Disciplina ${action === 'concluir' ? 'concluída' : 'reaberta'} com sucesso!`);
-          loadDisciplinas();
-        } catch (err) {
-          showError('Erro: ' + err.message);
-        }
-      });
+    new Paginacao({
+      container: document.getElementById('paginacao-disciplinas'),
+      containerTabela: document.getElementById('lista-disciplinas'),
+      containerVazio: document.getElementById('disciplinas-empty'),
+      dados: filtered,
+      renderizarItem: d => `
+        <tr>
+          <td><strong>${d.nome}</strong></td>
+          <td>${d.codigo || '-'}</td>
+          <td>${d.carga_horaria || '-'}h</td>
+          <td>${d.semestre || '-'}º</td>
+          <td>${d.turmaNome || '-'}</td>
+          <td><span class="badge ${d.concluida ? 'badge-success' : 'badge-warning'}">${d.concluida ? 'Concluída' : 'Em andamento'}</span></td>
+          <td>
+            ${hasPerm('disciplina.concluir')
+              ? `<button class="btn ${d.concluida ? 'btn-soft' : 'btn-primary'} btn-sm btn-concluir-disc" data-turma="${d.turmaId}" data-disciplina="${d.id}" data-concluida="${d.concluida}">
+                  ${d.concluida ? '<i class="fas fa-sync-alt"></i> Reabrir' : '<i class="fas fa-check-circle"></i> Concluir'}
+                </button>`
+              : '<span class="muted" style="font-size:0.78rem;">-</span>'}
+          </td>
+        </tr>
+      `,
+      paginaPadrao: 1
     });
   } catch (err) {
     showError('Erro ao carregar disciplinas: ' + err.message);
@@ -645,10 +599,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('btn-carregar-frequencia').addEventListener('click', loadFrequencia);
   document.getElementById('btn-salvar-frequencia').addEventListener('click', salvarFrequencia);
 
-  // RBAC granular: hide grade/frequency save buttons if sem permissao
-  if (!hasPerm('nota.lancar') && !hasPerm('nota.editar')) {
-    document.querySelectorAll('[data-salvar-nota]').forEach(b => b.style.display = 'none');
-  }
   if (!hasPerm('frequencia.lancar') && !hasPerm('frequencia.editar')) {
     document.getElementById('btn-salvar-frequencia').style.display = 'none';
   }
@@ -686,6 +636,79 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('filtro-disc-texto').addEventListener('input', () => loadDisciplinas());
   document.getElementById('filtro-disc-turma').addEventListener('change', () => loadDisciplinas());
 
+  // Event delegation for dynamically rendered paginated content
+  document.getElementById('lista-turmas').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-ver-turma]');
+    if (!btn) return;
+    document.getElementById('notas-turma').value = btn.dataset.verTurma;
+    document.querySelector('[data-module-target="modulo-notas"]').click();
+    document.getElementById('btn-carregar-notas').click();
+  });
+
+  document.getElementById('lista-notas').addEventListener('click', async (e) => {
+    const btn = e.target.closest('[data-salvar-nota]');
+    if (!btn) return;
+    const matriculaId = parseInt(btn.dataset.salvarNota);
+    const disciplinaId = document.getElementById('notas-disciplina').value;
+    const row = btn.closest('tr');
+    const inputs = row.querySelectorAll('.nota-input');
+    const statusSelect = row.querySelector('.status-select');
+    try {
+      await apiPut('/professor/notas', {
+        id_matricula: matriculaId,
+        id_disciplina: parseInt(disciplinaId),
+        nota_final: inputs[0].value ? parseFloat(inputs[0].value) : null,
+        frequencia_percentual: inputs[1].value ? parseFloat(inputs[1].value) : null,
+        status: statusSelect.value,
+      });
+      showSuccess('Nota salva com sucesso!');
+    } catch (err) {
+      showError('Erro ao salvar nota: ' + err.message);
+    }
+  });
+
+  document.getElementById('lista-frequencia').addEventListener('change', (e) => {
+    const cb = e.target.closest('.freq-checkbox');
+    if (!cb) return;
+    const label = cb.closest('.freq-toggle');
+    const span = label.querySelector('.freq-toggle-text');
+    if (cb.checked) {
+      span.textContent = 'Presente';
+      label.classList.remove('freq-ausente');
+      label.classList.add('freq-presente');
+    } else {
+      span.textContent = 'Ausente';
+      label.classList.remove('freq-presente');
+      label.classList.add('freq-ausente');
+    }
+    updateFreqStats();
+  });
+
+  document.getElementById('lista-frequencia').addEventListener('click', (e) => {
+    const btn = e.target.closest('.freq-history-btn');
+    if (!btn) return;
+    const disciplinaId = document.getElementById('freq-disciplina').value;
+    openFreqHistory(btn.dataset.matricula, btn.dataset.aluno, disciplinaId);
+  });
+
+  document.getElementById('lista-disciplinas').addEventListener('click', async (e) => {
+    const btn = e.target.closest('.btn-concluir-disc');
+    if (!btn) return;
+    const turmaId = btn.dataset.turma;
+    const disciplinaId = btn.dataset.disciplina;
+    const concluida = btn.dataset.concluida === 'true';
+    const action = concluida ? 'reabrir' : 'concluir';
+    const ok = await showConfirm(`Tem certeza que deseja ${action} esta disciplina?`);
+    if (!ok) return;
+    try {
+      await apiPut('/professor/disciplina/concluir', { id_turma: parseInt(turmaId), id_disciplina: parseInt(disciplinaId), concluida: !concluida });
+      showSuccess(`Disciplina ${action === 'concluir' ? 'concluída' : 'reaberta'} com sucesso!`);
+      loadDisciplinas();
+    } catch (err) {
+      showError('Erro: ' + err.message);
+    }
+  });
+
   // History modal close
   document.getElementById('freq-history-close').addEventListener('click', () => document.getElementById('modal-freq-history').classList.add('hidden'));
   document.getElementById('freq-history-close-btn').addEventListener('click', () => document.getElementById('modal-freq-history').classList.add('hidden'));
@@ -716,21 +739,24 @@ async function loadPlanosEnsino() {
     const planos = await apiGet('/planos-ensino');
     const list = document.getElementById('planos-ensino-list');
     if (!list) return;
-    if (!planos || !planos.length) {
-      list.innerHTML = '<div class="empty-state"><div class="empty-icon"><i class="fas fa-clipboard"></i></div><h3>Nenhum plano de ensino</h3><p>Clique em "Novo Plano de Ensino" para criar o primeiro.</p></div>';
-      return;
-    }
-    list.innerHTML = planos.map(p => `
-      <div class="plano-card${__planoSelecionadoId === p.id ? ' active' : ''}" onclick="selecionarPlano(${p.id})">
-        <div class="flex-between">
-          <div><strong>${p.id_disciplina?.nome || 'Disciplina'}</strong></div>
-          <div style="font-size:0.78rem;color:var(--sec-muted)">${p.carga_horaria || '?'}h</div>
+    new Paginacao({
+      container: document.getElementById('paginacao-planos'),
+      containerTabela: list,
+      containerVazio: document.getElementById('planos-empty'),
+      dados: planos || [],
+      renderizarItem: p => `
+        <div class="plano-card${__planoSelecionadoId === p.id ? ' active' : ''}" onclick="selecionarPlano(${p.id})">
+          <div class="flex-between">
+            <div><strong>${p.id_disciplina?.nome || 'Disciplina'}</strong></div>
+            <div style="font-size:0.78rem;color:var(--sec-muted)">${p.carga_horaria || '?'}h</div>
+          </div>
+          <div style="font-size:0.78rem;color:var(--sec-muted);margin-top:4px;">
+            Criado em ${new Date(p.created_at).toLocaleDateString('pt-BR')}
+          </div>
         </div>
-        <div style="font-size:0.78rem;color:var(--sec-muted);margin-top:4px;">
-          Criado em ${new Date(p.created_at).toLocaleDateString('pt-BR')}
-        </div>
-      </div>
-    `).join('');
+      `,
+      paginaPadrao: 1
+    });
   } catch (e) { showError('Erro ao carregar planos: ' + e.message); }
 }
 

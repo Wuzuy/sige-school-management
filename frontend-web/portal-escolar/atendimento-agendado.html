@@ -95,35 +95,40 @@
       </form>
     </div>
 
-    <div class="containerAA" id="atendimento-container">
-      <p id="loading-atendimentos" style="color: var(--muted);">Carregando agendamentos...</p>
+    <div id="atendimento-proximo"></div>
+    <div id="atendimentos-cards" style="margin-top: 24px;">
+      <h1 style="font-size: 1.1rem; margin-bottom: 16px; color: #1e293b;">Todos os Agendamentos</h1>
+      <div id="atendimentos-lista"></div>
+      <div id="paginacao-atendimentos" class="paginacao-wrapper"></div>
+      <div class="contadorReunioes" id="atendimentos-contadores"></div>
     </div>
   </section>
   <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
   <script src="assets/js/api-config.js"></script>
   <script src="assets/js/scripts.js"></script>
   <script src="assets/js/sidebar-nav.js"></script>
+  <script src="assets/js/paginacao.js"></script>
   <script>
     async function carregarAtendimentos() {
       try {
         const atendimentos = await request('/aluno/atendimentos');
-        const container = document.getElementById('atendimento-container');
+        const proximoContainer = document.getElementById('atendimento-proximo');
+        const listaContainer = document.getElementById('atendimentos-lista');
+        const pagContainer = document.getElementById('paginacao-atendimentos');
+        const contadores = document.getElementById('atendimentos-contadores');
 
         if (!atendimentos || atendimentos.length === 0) {
-          container.innerHTML = '<div class="empty-state"><p style="font-size:1.2rem;margin-bottom:8px;">Nenhum atendimento agendado</p><p>Clique em "Solicitar Atendimento" para agendar.</p></div>';
+          proximoContainer.innerHTML = '<div class="empty-state"><p style="font-size:1.2rem;margin-bottom:8px;">Nenhum atendimento agendado</p><p>Clique em "Solicitar Atendimento" para agendar.</p></div>';
+          if (listaContainer) listaContainer.innerHTML = '';
+          if (pagContainer) pagContainer.innerHTML = '';
+          if (contadores) contadores.innerHTML = '';
           return;
         }
 
         const proximo = atendimentos.find(a => a.status === 'AGENDADO' || a.status === 'PENDENTE');
-        const hoje = new Date().toISOString().slice(0, 10);
-        const hojeAtendimentos = atendimentos.filter(a => a.data_atendimento === hoje && a.status !== 'CANCELADO');
-        const totalHoje = hojeAtendimentos.length;
-        const totalSemana = atendimentos.filter(a => a.status !== 'CANCELADO').length;
-
-        let html = '';
 
         if (proximo) {
-          html += `
+          proximoContainer.innerHTML = `
             <div class="containerAAG">
               <h2>${proximo.id_responsavel?.nome_completo || 'Atendimento'}</h2>
               <p class="proximo-status">Próximo atendimento &bull; ${proximo.status === 'AGENDADO' ? 'Confirmado' : 'Pendente'}</p>
@@ -149,7 +154,7 @@
             </div>
           `;
         } else {
-          html += `
+          proximoContainer.innerHTML = `
             <div class="containerAAG">
               <div class="empty-state">
                 <p style="font-size:1.1rem;margin-bottom:8px;">Nenhum próximo atendimento</p>
@@ -159,38 +164,49 @@
           `;
         }
 
-        html += `
-          <div class="containerCardsAA">
-            <h1>Todos os Agendamentos</h1>
-            ${atendimentos.filter(a => a.status !== 'CANCELADO').length === 0 ? '<p style="color:var(--muted);">Nenhum agendamento ativo.</p>' :
-            atendimentos.map(a => `
-              <div class="cardAA">
-                <div>
-                  <p><strong>${a.id_responsavel?.nome_completo || 'Atendimento'}</strong></p>
-                  <p>${a.data_atendimento ? new Date(a.data_atendimento + 'T12:00:00').toLocaleDateString('pt-BR') : '-'}</p>
-                </div>
-                <div>
-                  <span class="badge-status badge-${a.status === 'AGENDADO' ? 'agendado' : a.status === 'CONCLUIDO' ? 'concluido' : 'cancelado'}">${a.status === 'AGENDADO' ? 'Agendado' : a.status === 'CONCLUIDO' ? 'Concluído' : 'Cancelado'}</span>
-                  <p>${a.tipo || ''} ${a.hora ? 'às ' + a.hora.slice(0, 5) : ''}</p>
-                </div>
+        const hoje = new Date().toISOString().slice(0, 10);
+        const hojeAtendimentos = atendimentos.filter(a => a.data_atendimento === hoje && a.status !== 'CANCELADO');
+        const ativos = atendimentos.filter(a => a.status !== 'CANCELADO');
+        const totalSemana = ativos.length;
+
+        if (contadores) {
+          contadores.innerHTML = `
+            <div class="reuniao">
+              <h1>${hojeAtendimentos.length}</h1>
+              <p>Hoje</p>
+            </div>
+            <div class="reuniao">
+              <h1>${totalSemana}</h1>
+              <p>Total</p>
+            </div>
+          `;
+        }
+
+        if (ativos.length === 0) {
+          listaContainer.innerHTML = '<p style="color:var(--muted);">Nenhum agendamento ativo.</p>';
+          if (pagContainer) pagContainer.innerHTML = '';
+          return;
+        }
+
+        new Paginacao({
+          container: pagContainer,
+          containerTabela: listaContainer,
+          dados: ativos,
+          renderizarItem: a => `
+            <div class="cardAA">
+              <div>
+                <p><strong>${a.id_responsavel?.nome_completo || 'Atendimento'}</strong></p>
+                <p>${a.data_atendimento ? new Date(a.data_atendimento + 'T12:00:00').toLocaleDateString('pt-BR') : '-'}</p>
               </div>
-            `).join('')}
-            <div class="contadorReunioes">
-              <div class="reuniao">
-                <h1>${totalHoje}</h1>
-                <p>Hoje</p>
-              </div>
-              <div class="reuniao">
-                <h1>${totalSemana}</h1>
-                <p>Total</p>
+              <div>
+                <span class="badge-status badge-${a.status === 'AGENDADO' ? 'agendado' : a.status === 'CONCLUIDO' ? 'concluido' : 'cancelado'}">${a.status === 'AGENDADO' ? 'Agendado' : a.status === 'CONCLUIDO' ? 'Concluído' : 'Cancelado'}</span>
+                <p>${a.tipo || ''} ${a.hora ? 'às ' + a.hora.slice(0, 5) : ''}</p>
               </div>
             </div>
-          </div>
-        `;
-
-        container.innerHTML = html;
+          `
+        });
       } catch (e) {
-        document.getElementById('atendimento-container').innerHTML = '<div class="empty-state"><p style="color:#dc2626;">Erro ao carregar agendamentos.</p></div>';
+        document.getElementById('atendimento-proximo').innerHTML = '<div class="empty-state"><p style="color:#dc2626;">Erro ao carregar agendamentos.</p></div>';
         showError('Erro ao carregar atendimentos');
       }
     }

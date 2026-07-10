@@ -98,23 +98,27 @@
           </tbody>
         </table>
       </div>
+      <div id="paginacao-reclamacoes" class="paginacao-wrapper"></div>
     </div>
   </section>
   <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
   <script src="assets/js/api-config.js"></script>
   <script src="assets/js/scripts.js"></script>
   <script src="assets/js/sidebar-nav.js"></script>
+  <script src="assets/js/paginacao.js"></script>
   <script>
     async function carregarReclamacoes() {
       try {
         const reclamacoes = await request('/aluno/reclamacoes');
         const body = document.getElementById('reclamacoes-table');
+        const pagContainer = document.getElementById('paginacao-reclamacoes');
 
         if (!reclamacoes || reclamacoes.length === 0) {
           body.innerHTML = '<tr><td colspan="6" class="muted" style="text-align:center; padding:20px;">Nenhuma reclamação encontrada.</td></tr>';
           document.getElementById('count-pendente').textContent = '0';
           document.getElementById('count-andamento').textContent = '0';
           document.getElementById('count-resolvida').textContent = '0';
+          if (pagContainer) pagContainer.innerHTML = '';
           return;
         }
 
@@ -132,19 +136,26 @@
         const statusLabels = { PENDENTE: 'Pendente', EM_ANDAMENTO: 'Em Andamento', RESOLVIDO: 'Resolvido', RESOLVIDA: 'Resolvido' };
         const statusColors = { PENDENTE: '#fef3c7; color:#b45309', EM_ANDAMENTO: '#dbeafe; color:#1e40af', RESOLVIDO: '#d1fae5; color:#047857', RESOLVIDA: '#d1fae5; color:#047857' };
 
-        body.innerHTML = reclamacoes.map(r => `
-          <tr>
-            <td>${r.protocolo || '-'}</td>
-            <td>${r.data_abertura ? new Date(r.data_abertura).toLocaleDateString('pt-BR') : '-'}</td>
-            <td>${r.categoria || '-'}</td>
-            <td>${r.assunto || '-'}</td>
-            <td><span class="status" style="background: ${statusColors[r.status] || '#f1f5f9; color:#475569'}">${statusLabels[r.status] || r.status || 'Pendente'}</span></td>
-            <td><a href="detalhes-reclamacao.html?id=${r.id}" class="btn btn-soft btn-sm">Ver Detalhes</a></td>
-          </tr>
-        `).join('');
+        new Paginacao({
+          container: pagContainer,
+          containerTabela: body,
+          dados: reclamacoes,
+          renderizarItem: r => `
+            <tr>
+              <td>${r.protocolo || '-'}</td>
+              <td>${r.data_abertura ? new Date(r.data_abertura).toLocaleDateString('pt-BR') : '-'}</td>
+              <td>${r.categoria || '-'}</td>
+              <td>${r.assunto || '-'}</td>
+              <td><span class="status" style="background: ${statusColors[r.status] || '#f1f5f9; color:#475569'}">${statusLabels[r.status] || r.status || 'Pendente'}</span></td>
+              <td><a href="detalhes-reclamacao.html?id=${r.id}" class="btn btn-soft btn-sm">Ver Detalhes</a></td>
+            </tr>
+          `
+        });
       } catch (e) {
         document.getElementById('reclamacoes-table').innerHTML = '<tr><td colspan="6" class="muted" style="text-align:center; padding:20px; color:#dc2626;">Erro ao carregar reclamações.</td></tr>';
         showError('Erro ao carregar reclamações');
+        const pagContainer = document.getElementById('paginacao-reclamacoes');
+        if (pagContainer) pagContainer.innerHTML = '';
       }
     }
 

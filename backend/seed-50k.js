@@ -322,9 +322,180 @@ async function main() {
   if (batch.length) totalAtend += await insertBatch('atendimentos', batch);
   console.log('  [OK] ' + totalAtend + ' atendimentos\n');
 
+  // 8. PLANOS DE ENSINO (~100)
+  console.log('=== 8. Gerando planos de ensino (~100) ===');
+  const ementas = ['Estudo dos fundamentos teoricos e praticos da disciplina, abordando conceitos essenciais para a formacao profissional.',
+    'Disciplina que visa proporcionar ao aluno conhecimentos avancados nas areas de aplicacao, com enfase em resolucao de problemas.',
+    'Abordagem sistematica dos principais topicos, integrando teoria e pratica por meio de atividades individuais e em grupo.',
+    'Curso destinado ao desenvolvimento de competencias especificas, utilizando metodologias ativas de aprendizagem.',
+    'Exploracao aprofundada dos topicos centrais, com foco na analise critica e aplicacao em contextos reais.'];
+  const objetivos = ['Compreender os conceitos fundamentais','Analisar e aplicar metodologias','Desenvolver pensamento critico',
+    'Resolver problemas complexos','Integrar conhecimentos teoricos e praticos','Avaliar resultados e propor melhorias'];
+  batch = [];
+  let totalPE = 0;
+  for (let i = 0; i < 100 && disciplinas.length > 0; i++) {
+    const disc = aleatorio(disciplinas);
+    batch.push({
+      id_disciplina: disc.id,
+      id_professor: aleatorio(professores),
+      carga_horaria: disc.carga_horaria || 60,
+      ementa: aleatorio(ementas),
+      objetivos_gerais: aleatorio(objetivos) + ' na area de ' + disc.nome + '.',
+      objetivos_especificos: '- ' + aleatorio(objetivos) + '\n- ' + aleatorio(objetivos) + '\n- ' + aleatorio(objetivos),
+      conteudo_programatico: JSON.stringify([
+        { topico: 'Introducao', semanas: 2 },
+        { topico: 'Desenvolvimento', semanas: 4 },
+        { topico: 'Aplicacoes', semanas: 4 },
+        { topico: 'Avaliacao', semanas: 2 }
+      ]),
+      metodologia_geral: 'Aulas expositivas dialogadas, estudos de caso, atividades praticas em laboratorio e seminarios.',
+      criterios_avaliacao: 'Provas individuais (60%), trabalhos em grupo (20%), participacao e atividades (20%).',
+      bibliografia_basica: 'Livro texto da disciplina; Material complementar fornecido pelo professor.',
+      bibliografia_complementar: 'Artigos cientificos, periodicos especializados e recursos online.'
+    });
+    if (batch.length >= BATCH) { totalPE += await insertBatch('planos_ensino', batch); batch = []; }
+  }
+  if (batch.length) totalPE += await insertBatch('planos_ensino', batch);
+  console.log('  [OK] ' + totalPE + ' planos de ensino\n');
+
+  // Buscar planos_ensino IDs
+  const rPE = await fetch(supabaseUrl2 + '/rest/v1/planos_ensino?select=id', { headers: { 'apikey': serviceKey, 'Authorization': 'Bearer ' + serviceKey } });
+  const planosEnsino = (await rPE.json()).map(p => p.id);
+
+  // 9. PLANOS DE AULA (~500)
+  console.log('=== 9. Gerando planos de aula (~500) ===');
+  const aulasAssuntos = ['Introducao ao conteudo','Revisao de conceitos','Exercicios praticos','Avaliacao diagnostica',
+    'Discussao em grupo','Apresentacao de seminarios','Estudo de caso','Laboratorio pratico','Prova','Encerramento'];
+  batch = [];
+  let totalPA = 0;
+  for (let i = 0; i < 500 && planosEnsino.length > 0; i++) {
+    const dataAula = new Date(NOW - Math.floor(Math.random() * 180) * DAY);
+    batch.push({
+      id_plano_ensino: aleatorio(planosEnsino),
+      data: dataAula.toISOString().split('T')[0],
+      horario_inicio: String(8 + Math.floor(Math.random() * 8)).padStart(2,'0') + ':00',
+      horario_fim: String(9 + Math.floor(Math.random() * 8)).padStart(2,'0') + ':00',
+      objetivo_aula: aleatorio(aulasAssuntos) + ' - compreender e aplicar os conceitos abordados.',
+      metodologia_dia: aleatorio(['Aula expositiva com slides','Atividade pratica guiada','Discussao em grupo','Exercicios individuais','Seminario']),
+      recursos_didaticos: aleatorio(['Quadro branco e slides','Laboratorio com computadores','Material impresso','Plataforma EAD']),
+      atividades_realizadas: aleatorio(['Resolucao de exercicios','Debate orientado','Pesquisa dirigida','Apresentacao oral']),
+      observacoes: Math.random() > 0.7 ? 'Aula concluida conforme planejado.' : null
+    });
+    if (batch.length >= BATCH) { totalPA += await insertBatch('planos_aula', batch); batch = []; }
+  }
+  if (batch.length) totalPA += await insertBatch('planos_aula', batch);
+  console.log('  [OK] ' + totalPA + ' planos de aula\n');
+
+  // 10. DOCUMENTOS (~500)
+  console.log('=== 10. Gerando documentos (~500) ===');
+  const docNomes = ['RG','CPF','Comprovante de Residencia','Historico Escolar','Diploma','Certidao de Nascimento',
+    'Comprovante de Trabalho','Declaracao de Renda','Foto 3x4','Comprovante de Matricula','Atestado Medico','Certificado'];
+  const docStatus = ['PENDENTE','APROVADO','REPROVADO'];
+  batch = [];
+  let totalDoc = 0;
+  for (let i = 0; i < 500 && estudantes.length > 0; i++) {
+    const status = aleatorio(docStatus);
+    batch.push({
+      id_usuario: aleatorio(estudantes),
+      nome: aleatorio(docNomes) + ' - ' + (i + 1),
+      tipo: aleatorio(['pdf','jpg','png','doc']),
+      arquivo_url: '/uploads/documentos/' + (i + 1) + '.' + aleatorio(['pdf','jpg','png','doc']),
+      data_envio: new Date(NOW - Math.floor(Math.random() * 365) * DAY).toISOString().split('T')[0],
+      status,
+      observacoes: status === 'REPROVADO' ? 'Documento ilegivel ou incompleto.' : (status === 'APROVADO' ? 'Documento validado.' : 'Aguardando analise.')
+    });
+    if (batch.length >= BATCH) { totalDoc += await insertBatch('documentos', batch); batch = []; }
+  }
+  if (batch.length) totalDoc += await insertBatch('documentos', batch);
+  console.log('  [OK] ' + totalDoc + ' documentos\n');
+
+  // 11. EDITAIS (~10)
+  console.log('=== 11. Gerando editais (~10) ===');
+  batch = [];
+  let totalEd = 0;
+  const editaisData = [
+    { titulo: 'Processo Seletivo 2026.1 - Vagas Remanescentes', url: '/editais/ps-2026-1' },
+    { titulo: 'Edital de Bolsas de Estudo 2026', url: '/editais/bolsas-2026' },
+    { titulo: 'Edital de Monitoria 2026', url: '/editais/monitoria-2026' },
+    { titulo: 'Edital de Iniciacao Cientifica', url: '/editais/ic-2026' },
+    { titulo: 'Processo Seletivo Simplificado para Docentes', url: '/editais/docentes-2026' },
+    { titulo: 'Edital de Extensao Universitaria', url: '/editais/extensao-2026' },
+    { titulo: 'Edital de Transferencia Externa 2026.2', url: '/editais/transferencia-2026-2' },
+    { titulo: 'Edital de Apoio a Eventos Academicos', url: '/editais/eventos-2026' },
+    { titulo: 'Edital de Intercambio Internacional', url: '/editais/intercambio-2026' },
+    { titulo: 'Edital de Estagio Curricular Obrigatorio', url: '/editais/estagio-2026' }
+  ];
+  for (const e of editaisData) {
+    batch.push({ titulo: e.titulo, url: e.url, ativo: Math.random() > 0.3 });
+    if (batch.length >= BATCH) { totalEd += await insertBatch('editais', batch); batch = []; }
+  }
+  if (batch.length) totalEd += await insertBatch('editais', batch);
+  console.log('  [OK] ' + totalEd + ' editais\n');
+
+  // 12. AGENDA EVENTOS (~30)
+  console.log('=== 12. Gerando agenda eventos (~30) ===');
+  const eventos = [
+    { titulo: 'Inicio das Aulas', tipo: 'CALENDARIO' }, { titulo: 'Semana de Provas', tipo: 'PROVA' },
+    { titulo: 'Feriado - Carnaval', tipo: 'FERIADO' }, { titulo: 'Feriado - Pascoa', tipo: 'FERIADO' },
+    { titulo: 'Recesso Escolar', tipo: 'RECESSO' }, { titulo: 'Fim do Semestre', tipo: 'CALENDARIO' },
+    { titulo: 'Matricula Online', tipo: 'MATRICULA' }, { titulo: 'Encerramento do Ano Letivo', tipo: 'CALENDARIO' },
+    { titulo: 'Semana Pedagogica', tipo: 'CALENDARIO' }, { titulo: 'Feira de Profissoes', tipo: 'EVENTO' },
+    { titulo: 'Palestra - Mercado de Trabalho', tipo: 'EVENTO' }, { titulo: 'Workshop de Inovacao', tipo: 'EVENTO' },
+    { titulo: 'Feriado - Tiradentes', tipo: 'FERIADO' }, { titulo: 'Feriado - Independencia', tipo: 'FERIADO' },
+    { titulo: 'Feriado - Finados', tipo: 'FERIADO' }, { titulo: 'Feriado - Proclamacao Republica', tipo: 'FERIADO' },
+    { titulo: 'Feriado - Natal', tipo: 'FERIADO' }, { titulo: 'Formatura', tipo: 'EVENTO' },
+    { titulo: 'Semana da Administracao', tipo: 'EVENTO' }, { titulo: 'Dia da Cultura', tipo: 'EVENTO' },
+    { titulo: 'Campeonato Esportivo', tipo: 'EVENTO' }, { titulo: 'Visita Tecnica', tipo: 'EVENTO' },
+    { titulo: 'Reuniao de Pais', tipo: 'REUNIAO' }, { titulo: 'Conselho de Classe', tipo: 'REUNIAO' },
+    { titulo: 'Plantao Pedagogico', tipo: 'REUNIAO' }, { titulo: 'Entrega de Notas', tipo: 'CALENDARIO' },
+    { titulo: 'Semana de Avaliacoes Finais', tipo: 'PROVA' }, { titulo: 'Recuperacao Final', tipo: 'PROVA' },
+    { titulo: 'Resultado Final', tipo: 'CALENDARIO' }, { titulo: 'Colacao de Grau', tipo: 'EVENTO' }
+  ];
+  batch = [];
+  let totalEv = 0;
+  for (let i = 0; i < eventos.length; i++) {
+    const diasInicio = Math.floor(Math.random() * 365);
+    const dtInicio = new Date(NOW - diasInicio * DAY);
+    const dtFim = new Date(dtInicio.getTime() + (1 + Math.floor(Math.random() * 5)) * DAY);
+    batch.push({
+      titulo: eventos[i].titulo,
+      descricao: eventos[i].titulo + ' - evento academico agendado para o periodo.',
+      data_inicio: dtInicio.toISOString().split('T')[0],
+      data_fim: dtFim.toISOString().split('T')[0],
+      tipo: eventos[i].tipo,
+      id_curso: Math.random() > 0.5 ? aleatorio(cursos) : null,
+      publico: Math.random() > 0.2
+    });
+    if (batch.length >= BATCH) { totalEv += await insertBatch('agenda_eventos', batch); batch = []; }
+  }
+  if (batch.length) totalEv += await insertBatch('agenda_eventos', batch);
+  console.log('  [OK] ' + totalEv + ' eventos\n');
+
+  // 13. CODIGOS DE ACESSO (~100)
+  console.log('=== 13. Gerando codigos de acesso (~100) ===');
+  batch = [];
+  let totalCA = 0;
+  for (let i = 0; i < 100 && estudantes.length > 0; i++) {
+    const usado = Math.random() > 0.5;
+    const criado = new Date(NOW - Math.floor(Math.random() * 90) * DAY);
+    const expira = new Date(criado.getTime() + 24 * 60 * 60 * 1000);
+    batch.push({
+      id_usuario: aleatorio(estudantes),
+      codigo: String(100000 + i).slice(-6),
+      criado_em: criado.toISOString(),
+      expira_em: expira.toISOString(),
+      usado,
+      validado_em: usado ? new Date(criado.getTime() + Math.floor(Math.random() * 60) * 60000).toISOString() : null
+    });
+    if (batch.length >= BATCH) { totalCA += await insertBatch('codigos_acesso', batch); batch = []; }
+  }
+  if (batch.length) totalCA += await insertBatch('codigos_acesso', batch);
+  console.log('  [OK] ' + totalCA + ' codigos de acesso\n');
+
   // RESUMO
   console.log('=== RESUMO FINAL ===');
-  const tables = ['inscricoes','matriculas','historico_escolar','frequencia','reclamacoes','auditoria','atendimentos'];
+  const tables = ['inscricoes','matriculas','historico_escolar','frequencia','reclamacoes','auditoria','atendimentos',
+    'planos_ensino','planos_aula','documentos','editais','agenda_eventos','codigos_acesso'];
   let totalGeral = 0;
   for (const t of tables) {
     const c = await countRows(t);

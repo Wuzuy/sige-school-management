@@ -813,15 +813,22 @@ async function loadRelatorioAlunos() {
       filtered = filtered.filter(a => a.matriculas?.[0]?.status === statusMat);
 
     const tbody = document.getElementById('relatorio-alunos-tbody');
-    const empty = document.getElementById('relatorio-alunos-empty');
+    const pagContainer = document.getElementById('paginacao-relatorios-alunos');
     if (!filtered.length) {
+      const empty = document.getElementById('relatorio-alunos-empty');
       if (tbody) tbody.innerHTML = '';
       if (empty) empty.classList.remove('hidden');
+      if (pagContainer) pagContainer.innerHTML = '';
       return;
     }
-    if (empty) empty.classList.add('hidden');
-    if (tbody) {
-      tbody.innerHTML = filtered.map(a => {
+    const relEmpty = document.getElementById('relatorio-alunos-empty');
+    if (relEmpty) relEmpty.classList.add('hidden');
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: tbody,
+      containerVazio: document.getElementById('relatorio-alunos-empty'),
+      dados: filtered,
+      renderizarItem: a => {
         const m = a.matriculas?.[0] || {};
         const cursoNome = m.id_curso?.nome_curso || '-';
         return `<tr>
@@ -836,8 +843,9 @@ async function loadRelatorioAlunos() {
             </div>
           </td>
         </tr>`;
-      }).join('');
-    }
+      },
+      paginaPadrao: 1
+    });
     window.__relatorioAlunosData = filtered;
   } catch {}
 }
@@ -1197,19 +1205,28 @@ async function loadInscricoes(filters = {}) {
     }
 
     const tbody = document.getElementById('lista-inscricoes');
+    const pagContainer = document.getElementById('paginacao-inscricoes');
     if (filtered.length === 0) {
       showEmpty('inscricoes', 'Nenhuma inscricao encontrada com esses filtros.');
+      if (pagContainer) pagContainer.innerHTML = '';
       return;
     }
     showTable('inscricoes');
-    tbody.innerHTML = filtered.sort((a, b) => new Date(b.data_inscricao || 0) - new Date(a.data_inscricao || 0))
-      .map(i => `<tr>
+    filtered.sort((a, b) => new Date(b.data_inscricao || 0) - new Date(a.data_inscricao || 0));
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: tbody,
+      containerVazio: document.getElementById('inscricoes-empty'),
+      dados: filtered,
+      renderizarItem: i => `<tr>
         <td><strong>${i.id_usuario?.nome_completo || i.nome_completo_inscricao || '-'}</strong></td>
         <td>${i.id_curso?.nome_curso || '-'}</td>
         <td>${i.data_inscricao ? new Date(i.data_inscricao).toLocaleDateString('pt-BR') : '-'}</td>
         <td>${badge(i.status_aprovacao)}</td>
         <td><button class="btn btn-soft btn-sm" data-inscricao-view="${i.id}">Detalhes</button></td>
-      </tr>`).join('');
+      </tr>`,
+      paginaPadrao: 1
+    });
   } catch { showEmpty('inscricoes', 'Erro ao carregar inscricoes.'); }
 }
 
@@ -1320,18 +1337,26 @@ async function loadCursos(filters = {}) {
     }
 
     const tbody = document.getElementById('lista-cursos');
-    if (filtered.length === 0) { showEmpty('cursos', 'Nenhum curso encontrado.'); return; }
+    const pagContainer = document.getElementById('paginacao-cursos');
+    if (filtered.length === 0) { showEmpty('cursos', 'Nenhum curso encontrado.'); if (pagContainer) pagContainer.innerHTML = ''; return; }
     showTable('cursos');
-    tbody.innerHTML = filtered.map(c => `<tr>
-      <td><strong>${c.nome_curso || '-'}</strong></td>
-      <td>${c.id_unidade?.nome || '-'}</td>
-      <td>${c.turno || '-'}</td>
-      <td>${badge(c.status)}</td>
-      <td>
-        ${hasPerm('curso.editar') ? `<button class="btn btn-soft btn-sm" data-curso-edit="${c.id}">Editar</button>` : ''}
-        ${hasPerm('curso.excluir') ? `<button class="btn btn-danger btn-sm" data-curso-del="${c.id}">Excluir</button>` : ''}
-      </td>
-    </tr>`).join('');
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: tbody,
+      containerVazio: document.getElementById('cursos-empty'),
+      dados: filtered,
+      renderizarItem: c => `<tr>
+        <td><strong>${c.nome_curso || '-'}</strong></td>
+        <td>${c.id_unidade?.nome || '-'}</td>
+        <td>${c.turno || '-'}</td>
+        <td>${badge(c.status)}</td>
+        <td>
+          ${hasPerm('curso.editar') ? `<button class="btn btn-soft btn-sm" data-curso-edit="${c.id}">Editar</button>` : ''}
+          ${hasPerm('curso.excluir') ? `<button class="btn btn-danger btn-sm" data-curso-del="${c.id}">Excluir</button>` : ''}
+        </td>
+      </tr>`,
+      paginaPadrao: 1
+    });
   } catch { showEmpty('cursos', 'Erro ao carregar cursos.'); }
 }
 
@@ -1473,17 +1498,25 @@ async function loadUnidades(filters = {}) {
     if (filters.texto) { const t = filters.texto.toLowerCase(); f = f.filter(u => u.nome?.toLowerCase().includes(t) || (u.cnpj || '').includes(t)); }
     if (filters.estado) { f = f.filter(u => (u.estado || '').toLowerCase() === filters.estado.toLowerCase()); }
     const tbody = document.getElementById('lista-unidades');
-    if (f.length === 0) { showEmpty('unidades', 'Nenhuma unidade encontrada.'); return; }
+    const pagContainer = document.getElementById('paginacao-unidades');
+    if (f.length === 0) { showEmpty('unidades', 'Nenhuma unidade encontrada.'); if (pagContainer) pagContainer.innerHTML = ''; return; }
     showTable('unidades');
-    tbody.innerHTML = f.map(u => `<tr>
-      <td><strong>${u.nome || '-'}</strong></td>
-      <td>${u.cnpj || '-'}</td>
-      <td>${u.cidade || '-'}/${u.estado || '-'}</td>
-      <td>
-        ${hasPerm('unidade.editar') ? `<button class="btn btn-soft btn-sm" data-unidade-edit="${u.id}">Editar</button>` : ''}
-        ${hasPerm('unidade.excluir') ? `<button class="btn btn-danger btn-sm" data-unidade-del="${u.id}">Excluir</button>` : ''}
-      </td>
-    </tr>`).join('');
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: tbody,
+      containerVazio: document.getElementById('unidades-empty'),
+      dados: f,
+      renderizarItem: u => `<tr>
+        <td><strong>${u.nome || '-'}</strong></td>
+        <td>${u.cnpj || '-'}</td>
+        <td>${u.cidade || '-'}/${u.estado || '-'}</td>
+        <td>
+          ${hasPerm('unidade.editar') ? `<button class="btn btn-soft btn-sm" data-unidade-edit="${u.id}">Editar</button>` : ''}
+          ${hasPerm('unidade.excluir') ? `<button class="btn btn-danger btn-sm" data-unidade-del="${u.id}">Excluir</button>` : ''}
+        </td>
+      </tr>`,
+      paginaPadrao: 1
+    });
   } catch { showEmpty('unidades', 'Erro ao carregar unidades.'); }
 }
 
@@ -1498,21 +1531,29 @@ async function loadUsuarios(filters = {}) {
     if (filters.texto) { const t = filters.texto.toLowerCase(); f = f.filter(u => (u.nomeCompleto || u.nome_completo || '').toLowerCase().includes(t) || (u.email || '').toLowerCase().includes(t)); }
     if (filters.cargo && filters.cargo !== 'TODOS') { f = f.filter(u => u.id_cargo === parseInt(filters.cargo)); }
     const tbody = document.getElementById('lista-usuarios');
-    if (f.length === 0) { showEmpty('usuarios', 'Nenhum usuario encontrado.'); return; }
+    const pagContainer = document.getElementById('paginacao-usuarios');
+    if (f.length === 0) { showEmpty('usuarios', 'Nenhum usuario encontrado.'); if (pagContainer) pagContainer.innerHTML = ''; return; }
     showTable('usuarios');
     const cargos = state.cargos || [];
-    tbody.innerHTML = f.map(u => {
-      const c = cargos.find(c => c.id === u.id_cargo);
-      const nomeCargo = c ? c.nome : roleLabel(u.role);
-      return `<tr>
-      <td><strong>${u.nomeCompleto || u.nome_completo || '-'}</strong></td>
-      <td>${u.email || '-'}</td>
-      <td>${badge(nomeCargo)}</td>
-      <td>
-        ${hasPerm('usuario.editar') ? `<button class="btn btn-soft btn-sm" data-usuario-edit="${u.id}">Editar</button>` : ''}
-        ${hasPerm('usuario.excluir') ? `<button class="btn btn-danger btn-sm" data-usuario-del="${u.id}">Excluir</button>` : ''}
-      </td>
-    </tr>`}).join('');
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: tbody,
+      containerVazio: document.getElementById('usuarios-empty'),
+      dados: f,
+      renderizarItem: u => {
+        const c = cargos.find(c => c.id === u.id_cargo);
+        const nomeCargo = c ? c.nome : roleLabel(u.role);
+        return `<tr>
+        <td><strong>${u.nomeCompleto || u.nome_completo || '-'}</strong></td>
+        <td>${u.email || '-'}</td>
+        <td>${badge(nomeCargo)}</td>
+        <td>
+          ${hasPerm('usuario.editar') ? `<button class="btn btn-soft btn-sm" data-usuario-edit="${u.id}">Editar</button>` : ''}
+          ${hasPerm('usuario.excluir') ? `<button class="btn btn-danger btn-sm" data-usuario-del="${u.id}">Excluir</button>` : ''}
+        </td>
+      </tr>`},
+      paginaPadrao: 1
+    });
   } catch { showEmpty('usuarios', 'Erro ao carregar usuarios.'); }
 }
 
@@ -1525,17 +1566,25 @@ async function loadEditais(filters = {}) {
     if (filters.texto) { const t = filters.texto.toLowerCase(); f = f.filter(e => e.titulo?.toLowerCase().includes(t)); }
     if (filters.status && filters.status !== 'TODOS') { f = f.filter(e => (e.ativo ? 'ATIVO' : 'INATIVO') === filters.status); }
     const tbody = document.getElementById('lista-editais');
-    if (f.length === 0) { showEmpty('editais', 'Nenhum edital encontrado.'); return; }
+    const pagContainer = document.getElementById('paginacao-editais');
+    if (f.length === 0) { showEmpty('editais', 'Nenhum edital encontrado.'); if (pagContainer) pagContainer.innerHTML = ''; return; }
     showTable('editais');
-    tbody.innerHTML = f.map(e => `<tr>
-      <td><strong>${e.titulo || '-'}</strong></td>
-      <td><a href="${e.url || '#'}" target="_blank" style="color:var(--sec-accent)">Abrir</a></td>
-      <td>${badge(e.ativo ? 'ATIVO' : 'INATIVO')}</td>
-      <td>
-        ${hasPerm('edital.editar') ? `<button class="btn btn-soft btn-sm" data-edital-edit="${e.id}">Editar</button>` : ''}
-        ${hasPerm('edital.excluir') ? `<button class="btn btn-danger btn-sm" data-edital-del="${e.id}">Excluir</button>` : ''}
-      </td>
-    </tr>`).join('');
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: tbody,
+      containerVazio: document.getElementById('editais-empty'),
+      dados: f,
+      renderizarItem: e => `<tr>
+        <td><strong>${e.titulo || '-'}</strong></td>
+        <td><a href="${e.url || '#'}" target="_blank" style="color:var(--sec-accent)">Abrir</a></td>
+        <td>${badge(e.ativo ? 'ATIVO' : 'INATIVO')}</td>
+        <td>
+          ${hasPerm('edital.editar') ? `<button class="btn btn-soft btn-sm" data-edital-edit="${e.id}">Editar</button>` : ''}
+          ${hasPerm('edital.excluir') ? `<button class="btn btn-danger btn-sm" data-edital-del="${e.id}">Excluir</button>` : ''}
+        </td>
+      </tr>`,
+      paginaPadrao: 1
+    });
   } catch { showEmpty('editais', 'Erro ao carregar editais.'); }
 }
 
@@ -1559,19 +1608,27 @@ async function loadAlunos(filters = {}) {
       f = f.filter(a => a.matriculas?.some(m => m.status === filters.statusMat));
     }
     const tbody = document.getElementById('lista-alunos');
-    if (f.length === 0) { showEmpty('alunos', 'Nenhum aluno encontrado.'); return; }
+    const pagContainer = document.getElementById('paginacao-alunos');
+    if (f.length === 0) { showEmpty('alunos', 'Nenhum aluno encontrado.'); if (pagContainer) pagContainer.innerHTML = ''; return; }
     showTable('alunos');
-    tbody.innerHTML = f.map(a => {
-      const m = a.matriculas?.[0] || {};
-      return `<tr>
-        <td><strong>${a.nome_completo || '-'}</strong></td>
-        <td>${a.email || '-'}</td>
-        <td>${m.id_curso?.nome_curso || '-'}</td>
-        <td>${m.id_turma?.nome || '-'}</td>
-        <td>${badge(m.status)}</td>
-        <td><button class="btn btn-soft btn-sm" data-aluno-view="${a.id}">Detalhes</button></td>
-      </tr>`;
-    }).join('');
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: tbody,
+      containerVazio: document.getElementById('alunos-empty'),
+      dados: f,
+      renderizarItem: a => {
+        const m = a.matriculas?.[0] || {};
+        return `<tr>
+          <td><strong>${a.nome_completo || '-'}</strong></td>
+          <td>${a.email || '-'}</td>
+          <td>${m.id_curso?.nome_curso || '-'}</td>
+          <td>${m.id_turma?.nome || '-'}</td>
+          <td>${badge(m.status)}</td>
+          <td><button class="btn btn-soft btn-sm" data-aluno-view="${a.id}">Detalhes</button></td>
+        </tr>`;
+      },
+      paginaPadrao: 1
+    });
   } catch { showEmpty('alunos', 'Erro ao carregar alunos.'); }
 }
 
@@ -1709,14 +1766,21 @@ async function loadRelatorio(filters = {}) {
     document.getElementById('relatorio-carregando')?.classList.add('hidden');
 
     // Table
+    const pagContainer = document.getElementById('paginacao-relatorios');
     if (total === 0) {
       document.getElementById('relatorio-empty')?.classList.remove('hidden');
+      if (pagContainer) pagContainer.innerHTML = '';
       return;
     }
 
     const sorted = [...filtered].sort((a, b) => new Date(b.data_inscricao || 0) - new Date(a.data_inscricao || 0));
-    if (tbody) {
-      tbody.innerHTML = sorted.map(i => {
+    window.__relatorioData = sorted;
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: tbody,
+      containerVazio: document.getElementById('relatorio-empty'),
+      dados: sorted,
+      renderizarItem: i => {
         const alunoNome = i.id_usuario?.nome_completo || i.nome_completo_inscricao || '-';
         const documento = i.id_usuario?.cpf || i.cpf_inscricao || '-';
         const cursoNome = i.id_curso?.nome_curso || '-';
@@ -1737,11 +1801,9 @@ async function loadRelatorio(filters = {}) {
           <td>${badge(i.status_matricula || '')}</td>
           <td>${actions}</td>
         </tr>`;
-      }).join('');
-
-      // Store relatório data for export
-      window.__relatorioData = sorted;
-    }
+      },
+      paginaPadrao: 1
+    });
   } catch {
     document.getElementById('relatorio-carregando')?.classList.add('hidden');
     document.getElementById('relatorio-empty')?.classList.remove('hidden');
@@ -2188,9 +2250,14 @@ async function loadTurmas(filters = {}) {
     }
 
     const tbody = document.getElementById('lista-turmas');
-    if (f.length === 0) { if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#999">Nenhuma turma encontrada</td></tr>'; return; }
-    if (tbody) {
-      tbody.innerHTML = f.map(t => `<tr>
+    const pagContainer = document.getElementById('paginacao-turmas');
+    if (f.length === 0) { if (tbody) tbody.innerHTML = ''; if (pagContainer) pagContainer.innerHTML = ''; return; }
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: tbody,
+      containerVazio: null,
+      dados: f,
+      renderizarItem: t => `<tr>
         <td><strong>${t.nome || '-'}</strong></td>
         <td>${t.id_curso?.nome_curso || '-'}</td>
         <td>${t.turno || '-'}</td>
@@ -2201,8 +2268,9 @@ async function loadTurmas(filters = {}) {
           ${hasPerm('turma.editar') ? `<button class="btn btn-soft btn-sm" data-turma-edit="${t.id}">Editar</button>` : ''}
           ${hasPerm('turma.excluir') ? `<button class="btn btn-danger btn-sm" data-turma-del="${t.id}">Excluir</button>` : ''}
         </td>
-      </tr>`).join('');
-    }
+      </tr>`,
+      paginaPadrao: 1
+    });
   } catch { if (document.getElementById('lista-turmas')) document.getElementById('lista-turmas').innerHTML = '<tr><td colspan="7" style="text-align:center;color:#999">Erro ao carregar turmas</td></tr>'; }
 }
 
@@ -2350,14 +2418,20 @@ async function loadCargos(filters = {}) {
     if (filters.texto) { const t = filters.texto.toLowerCase(); f = f.filter(c => (c.nome || '').toLowerCase().includes(t) || (c.descricao || '').toLowerCase().includes(t)); }
 
     const tbody = document.getElementById('lista-cargos');
-    if (f.length === 0) { if (tbody) tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#999">Nenhum cargo encontrado</td></tr>'; return; }
-    if (tbody) {
-      tbody.innerHTML = f.map(c => `<tr>
+    const pagContainer = document.getElementById('paginacao-cargos');
+    if (f.length === 0) { if (tbody) tbody.innerHTML = ''; if (pagContainer) pagContainer.innerHTML = ''; return; }
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: tbody,
+      containerVazio: null,
+      dados: f,
+      renderizarItem: c => `<tr>
         <td><strong>${c.nome}</strong>${c.is_admin_master ? ' <span class="badge badge-warning">Admin Master</span>' : ''}</td>
         <td>${c.descricao || '-'}</td>
         <td>${c.is_admin_master || !hasPerm('cargo.gerenciar') ? '-' : `<button class="btn btn-soft btn-sm" data-cargo-edit="${c.id}">Editar</button> <button class="btn btn-danger btn-sm" data-cargo-del="${c.id}">Excluir</button>`}</td>
-      </tr>`).join('');
-    }
+      </tr>`,
+      paginaPadrao: 1
+    });
   } catch { if (document.getElementById('lista-cargos')) document.getElementById('lista-cargos').innerHTML = '<tr><td colspan="3" style="text-align:center;color:#999">Erro ao carregar cargos</td></tr>'; }
 }
 
@@ -3110,11 +3184,22 @@ async function loadReclamacoesStandalone(filters = {}) {
     }));
 
     const tbody = document.getElementById('lista-reclamacoes');
-    const empty = document.getElementById('reclamacoes-empty');
-    if (!reclamacoes.length) { if (tbody) tbody.innerHTML = ''; if (empty) empty.classList.remove('hidden'); return; }
-    if (empty) empty.classList.add('hidden');
-    if (tbody) {
-      tbody.innerHTML = reclamacoes.map(r => `<tr>
+    const pagContainer = document.getElementById('paginacao-reclamacoes');
+    if (!reclamacoes.length) {
+      const empty = document.getElementById('reclamacoes-empty');
+      if (tbody) tbody.innerHTML = '';
+      if (empty) empty.classList.remove('hidden');
+      if (pagContainer) pagContainer.innerHTML = '';
+      return;
+    }
+    const reclEmpty = document.getElementById('reclamacoes-empty');
+    if (reclEmpty) reclEmpty.classList.add('hidden');
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: tbody,
+      containerVazio: document.getElementById('reclamacoes-empty'),
+      dados: reclamacoes,
+      renderizarItem: r => `<tr>
         <td><strong>${r.alunoNome || '-'}</strong></td>
         <td>${r.assunto || '-'}</td>
         <td>${r.data_abertura ? new Date(r.data_abertura).toLocaleDateString('pt-BR') : '-'}</td>
@@ -3123,8 +3208,9 @@ async function loadReclamacoesStandalone(filters = {}) {
           ${hasPerm('reclamacao.responder') ? `<button class="btn btn-soft btn-sm" data-reclamacao-responder='${JSON.stringify({ id: r.id, assunto: r.assunto, descricao: r.descricao || r.mensagem || '' }).replace(/'/g, "&#39;")}' style="font-size:0.7rem;">Responder</button>` : ''}
           <button class="btn btn-soft btn-sm" data-reclamacao-view-aluno="${r.alunoId}" style="font-size:0.7rem;">Ver Aluno</button>
         </td>
-      </tr>`).join('');
-    }
+      </tr>`,
+      paginaPadrao: 1
+    });
   } catch {}
 }
 
@@ -3148,6 +3234,13 @@ document.addEventListener('click', (e) => {
 // AUDITORIA MODULE
 // ======================================
 async function loadAuditoria(filters = {}) {
+  const renderRow = l => `<tr>
+    <td style="font-size:0.75rem;color:var(--sec-muted);white-space:nowrap;">${new Date(l.timestamp).toLocaleString('pt-BR')}</td>
+    <td><strong>${l.usuario}</strong></td>
+    <td>${l.acao}</td>
+    <td><span class="audit-badge ${(l.tipo || '').toLowerCase()}">${l.tipo || '-'}</span></td>
+    <td style="font-size:0.78rem;color:var(--sec-muted);max-width:250px;overflow:hidden;text-overflow:ellipsis;">${l.detalhes || '-'}</td>
+  </tr>`;
   try {
     const params = new URLSearchParams();
     if (filters.texto) params.set('texto', filters.texto);
@@ -3155,23 +3248,26 @@ async function loadAuditoria(filters = {}) {
     params.set('limit', '500');
     const res = await request('/auditoria?' + params.toString());
     const logs = res.data || [];
-    const total = res.total || 0;
 
     const tbody = document.getElementById('lista-auditoria');
-    const empty = document.getElementById('auditoria-empty');
-    if (!logs.length) { if (tbody) tbody.innerHTML = ''; if (empty) empty.classList.remove('hidden'); return; }
-    if (empty) empty.classList.add('hidden');
-    if (tbody) {
-      tbody.innerHTML = logs.map(l => `<tr>
-        <td style="font-size:0.75rem;color:var(--sec-muted);white-space:nowrap;">${new Date(l.timestamp).toLocaleString('pt-BR')}</td>
-        <td><strong>${l.usuario}</strong></td>
-        <td>${l.acao}</td>
-        <td><span class="audit-badge ${(l.tipo || '').toLowerCase()}">${l.tipo || '-'}</span></td>
-        <td style="font-size:0.78rem;color:var(--sec-muted);max-width:250px;overflow:hidden;text-overflow:ellipsis;">${l.detalhes || '-'}</td>
-      </tr>`).join('');
+    const pagContainer = document.getElementById('paginacao-auditoria');
+    if (!logs.length) {
+      const empty = document.getElementById('auditoria-empty');
+      if (tbody) tbody.innerHTML = '';
+      if (empty) empty.classList.remove('hidden');
+      if (pagContainer) pagContainer.innerHTML = '';
+      return;
     }
-    const info = document.getElementById('auditoria-info');
-    if (info) info.textContent = total > 500 ? `Exibindo ${logs.length} de ${total} registros` : `${total} registro(s)`;
+    const auditEmpty = document.getElementById('auditoria-empty');
+    if (auditEmpty) auditEmpty.classList.add('hidden');
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: tbody,
+      containerVazio: document.getElementById('auditoria-empty'),
+      dados: logs,
+      renderizarItem: renderRow,
+      paginaPadrao: 1
+    });
   } catch {
     // Fallback: load from localStorage
     const logs = JSON.parse(localStorage.getItem('sige-audit') || '[]');
@@ -3180,18 +3276,24 @@ async function loadAuditoria(filters = {}) {
     if (t) f = f.filter(l => (l.usuario || '').toLowerCase().includes(t) || (l.acao || '').toLowerCase().includes(t) || (l.detalhes || '').toLowerCase().includes(t));
     if (filters.tipo && filters.tipo !== 'TODOS') f = f.filter(l => l.tipo === filters.tipo);
     const tbody = document.getElementById('lista-auditoria');
-    const empty = document.getElementById('auditoria-empty');
-    if (!f.length) { if (tbody) tbody.innerHTML = ''; if (empty) empty.classList.remove('hidden'); return; }
-    if (empty) empty.classList.add('hidden');
-    if (tbody) {
-      tbody.innerHTML = f.map(l => `<tr>
-        <td style="font-size:0.75rem;color:var(--sec-muted);white-space:nowrap;">${new Date(l.timestamp).toLocaleString('pt-BR')}</td>
-        <td><strong>${l.usuario}</strong></td>
-        <td>${l.acao}</td>
-        <td><span class="audit-badge ${(l.tipo || '').toLowerCase()}">${l.tipo || '-'}</span></td>
-        <td style="font-size:0.78rem;color:var(--sec-muted);max-width:250px;overflow:hidden;text-overflow:ellipsis;">${l.detalhes || '-'}</td>
-      </tr>`).join('');
+    const pagContainer = document.getElementById('paginacao-auditoria');
+    if (!f.length) {
+      const empty = document.getElementById('auditoria-empty');
+      if (tbody) tbody.innerHTML = '';
+      if (empty) empty.classList.remove('hidden');
+      if (pagContainer) pagContainer.innerHTML = '';
+      return;
     }
+    const auditEmpty = document.getElementById('auditoria-empty');
+    if (auditEmpty) auditEmpty.classList.add('hidden');
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: tbody,
+      containerVazio: document.getElementById('auditoria-empty'),
+      dados: f,
+      renderizarItem: renderRow,
+      paginaPadrao: 1
+    });
   }
 }
 
@@ -3293,14 +3395,23 @@ async function loadDisciplinas() {
     const data = await request('/disciplinas');
     state.disciplinas = data;
     const tbody = document.getElementById('lista-disciplinas');
-    tbody.innerHTML = filterEditDeleteButtonsByPerms('disciplina', data).map(d => `
-      <tr>
+    const pagContainer = document.getElementById('paginacao-disciplinas');
+    const discData = filterEditDeleteButtonsByPerms('disciplina', data);
+    if (discData.length === 0) { if (pagContainer) pagContainer.innerHTML = ''; tbody.innerHTML = ''; return; }
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: tbody,
+      containerVazio: null,
+      dados: discData,
+      renderizarItem: d => `<tr>
         <td><strong>${d.nome || '-'}</strong></td>
         <td>${d.codigo || '-'}</td>
         <td>${d.carga_horaria || 0}h</td>
         <td>${d.id_curso?.nome_curso || '-'}</td>
         <td>${d.editBtn} ${d.delBtn}</td>
-      </tr>`).join('');
+      </tr>`,
+      paginaPadrao: 1
+    });
     const selCurso = document.getElementById('disciplina-curso');
     if (state.cursos && selCurso) {
       selCurso.innerHTML = '<option value="">Nenhum</option>' + state.cursos.map(c => `<option value="${c.id}">${c.nome_curso}</option>`).join('');
@@ -3314,14 +3425,22 @@ async function loadAtribuicoes() {
     const data = await request('/disciplinas/atribuicoes');
     state.atribuicoes = data;
     const tbody = document.getElementById('lista-atribuicoes');
+    const pagContainer = document.getElementById('paginacao-atribuicoes');
     const permDel = hasPerm('disciplina.excluir');
-    tbody.innerHTML = data.map(a => `
-      <tr>
+    if (data.length === 0) { if (pagContainer) pagContainer.innerHTML = ''; tbody.innerHTML = ''; return; }
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: tbody,
+      containerVazio: null,
+      dados: data,
+      renderizarItem: a => `<tr>
         <td>${a.id_disciplina?.nome || '-'}</td>
         <td>${a.id_turma?.nome || '-'}</td>
         <td>${a.id_professor?.nome_completo || '-'}</td>
         <td>${permDel ? `<button class="btn btn-danger btn-sm" data-atribuicao-del="${a.id}">Excluir</button>` : ''}</td>
-      </tr>`).join('');
+      </tr>`,
+      paginaPadrao: 1
+    });
   } catch (e) { notyf.error('Erro ao carregar atribuicoes: ' + (e.message || '')); }
 }
 
@@ -3453,9 +3572,16 @@ async function loadProfessores() {
 
     const texto = (document.getElementById('filtro-professor-texto')?.value || '').toLowerCase();
     const tbody = document.getElementById('lista-professores');
-    tbody.innerHTML = professores
-      .filter(p => !texto || p.nomeCompleto.toLowerCase().includes(texto) || (p.email || '').toLowerCase().includes(texto))
-      .map(p => {
+    const pagContainer = document.getElementById('paginacao-professores');
+    const filteredProf = professores
+      .filter(p => !texto || p.nomeCompleto.toLowerCase().includes(texto) || (p.email || '').toLowerCase().includes(texto));
+    if (filteredProf.length === 0) { if (pagContainer) pagContainer.innerHTML = ''; tbody.innerHTML = ''; return; }
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: tbody,
+      containerVazio: null,
+      dados: filteredProf,
+      renderizarItem: p => {
         const profAtrib = atribuicoes.filter(a => a.id_professor?.id === p.id);
         const turmas = [...new Set(profAtrib.map(a => a.id_turma?.nome).filter(Boolean))].join(', ');
         const disciplinas = profAtrib.map(a => a.id_disciplina?.nome).filter(Boolean).join(', ');
@@ -3465,7 +3591,9 @@ async function loadProfessores() {
           <td>${turmas || '-'}</td>
           <td>${disciplinas || '-'}</td>
         </tr>`;
-      }).join('');
+      },
+      paginaPadrao: 1
+    });
   } catch (e) { notyf.error('Erro: ' + (e.message || '')); }
 }
 

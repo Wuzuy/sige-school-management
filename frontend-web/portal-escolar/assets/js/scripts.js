@@ -894,9 +894,9 @@ async function initHomePage() {
   if (!auth) return;
   setupProtectedPage(auth);
 
-  // Esta pagina espera #courses-body (pagina de cursos)
-  // Se nao existir, apenas retorna (ex: dashboard index.html)
   const body = document.querySelector('#courses-body');
+  const pagContainer = document.getElementById('paginacao-cursos');
+  const empty = document.getElementById('courses-empty');
   if (!body) return;
 
   try {
@@ -913,35 +913,37 @@ async function initHomePage() {
         .map(insc => insc?.id_curso?.id)
     );
 
-    body.innerHTML = '';
-
-    cursosAtivos.forEach((curso) => {
-      const jaInscrito = cursosInscritos.has(curso.id);
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${curso?.id_unidade?.nome || '-'}</td>
-        <td>${curso.nome_curso}</td>
-        <td>${curso.turno}</td>
-        <td>${formatDate(curso.data_inicio)}</td>
-        <td>${curso.duracao_meses} meses</td>
-        <td>
-          ${jaInscrito 
-            ? '<span class="status" style="background: #d1fae5; color: #065f46;">Já inscrito</span>' 
-            : `<button class="btn btn-primary" data-inscrever="${curso.id}">Inscrever-se</button>`
-          }
-        </td>
-      `;
-      body.appendChild(tr);
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: body,
+      containerVazio: empty,
+      dados: cursosAtivos,
+      renderizarItem: curso => {
+        const jaInscrito = cursosInscritos.has(curso.id);
+        return `
+          <tr>
+            <td>${curso?.id_unidade?.nome || '-'}</td>
+            <td>${curso.nome_curso}</td>
+            <td>${curso.turno}</td>
+            <td>${formatDate(curso.data_inicio)}</td>
+            <td>${curso.duracao_meses} meses</td>
+            <td>
+              ${jaInscrito 
+                ? '<span class="status" style="background: #d1fae5; color: #065f46;">Já inscrito</span>' 
+                : `<button class="btn btn-primary" data-inscrever="${curso.id}">Inscrever-se</button>`
+              }
+            </td>
+          </tr>
+        `;
+      },
+      paginaPadrao: 1
     });
 
-    if (cursosAtivos.length === 0) {
-      body.innerHTML = '<tr><td colspan="6">Nenhum curso ativo disponível no momento.</td></tr>';
-    }
-
-    body.querySelectorAll('[data-inscrever]').forEach((button) => {
-      button.addEventListener('click', () => {
-        window.location.href = `inscricao.html?cursoId=${button.getAttribute('data-inscrever')}`;
-      });
+    body.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-inscrever]');
+      if (btn) {
+        window.location.href = `inscricao.html?cursoId=${btn.getAttribute('data-inscrever')}`;
+      }
     });
   } catch (error) {
     showError(`Não foi possível carregar cursos: ${error.message}`);
@@ -2319,22 +2321,32 @@ async function initHistoricoPage() {
 
   const body = document.querySelector('#historico-body');
   if (!body) return;
+  const pagContainer = document.getElementById('paginacao-historico');
 
   try {
     const data = await request('/aluno/historico', { headers: authHeaders(false) });
-    body.innerHTML = data.length
-      ? data.map((h) => `
+    if (!data || !data.length) {
+      body.innerHTML = '<tr><td colspan="5">Nenhum historico encontrado.</td></tr>';
+      if (pagContainer) pagContainer.innerHTML = '';
+      return;
+    }
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: body,
+      dados: data,
+      renderizarItem: (h) => `
         <tr>
           <td>${h.id_disciplina?.nome || '-'}</td>
           <td>${h.id_professor?.nome_completo || '-'}</td>
           <td>${h.nota_final != null ? h.nota_final.toFixed(1) : '-'}</td>
           <td>${h.frequencia_percentual != null ? h.frequencia_percentual.toFixed(0) + '%' : '-'}</td>
           <td><span class="status ${h.status === 'APROVADO' ? 'alert-ok' : h.status === 'REPROVADO' ? 'alert-danger' : 'alert-info'}">${h.status || 'CURSANDO'}</span></td>
-        </tr>`).join('')
-      : '<tr><td colspan="5">Nenhum historico encontrado.</td></tr>';
+        </tr>`
+    });
   } catch (error) {
     showError('Erro ao carregar historico: ' + error.message);
     body.innerHTML = '<tr><td colspan="5">Erro ao carregar dados.</td></tr>';
+    if (pagContainer) pagContainer.innerHTML = '';
   }
 }
 
@@ -2345,21 +2357,31 @@ async function initDocumentosPage() {
 
   const body = document.querySelector('#documentos-body');
   if (!body) return;
+  const pagContainer = document.getElementById('paginacao-documentos');
 
   try {
     const data = await request('/aluno/documentos', { headers: authHeaders(false) });
-    body.innerHTML = data.length
-      ? data.map((d) => `
+    if (!data || !data.length) {
+      body.innerHTML = '<tr><td colspan="4">Nenhum documento encontrado.</td></tr>';
+      if (pagContainer) pagContainer.innerHTML = '';
+      return;
+    }
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: body,
+      dados: data,
+      renderizarItem: (d) => `
         <tr>
           <td>${d.nome}</td>
           <td>${d.data_envio ? new Date(d.data_envio).toLocaleDateString('pt-BR') : '-'}</td>
           <td><span class="status ${d.status === 'APROVADO' ? 'alert-ok' : d.status === 'RECUSADO' ? 'alert-danger' : 'alert-info'}">${d.status || 'PENDENTE'}</span></td>
           <td>${d.arquivo_url ? `<a href="${d.arquivo_url}" target="_blank" class="btn btn-soft">Download</a>` : '-'}</td>
-        </tr>`).join('')
-      : '<tr><td colspan="4">Nenhum documento encontrado.</td></tr>';
+        </tr>`
+    });
   } catch (error) {
     showError('Erro ao carregar documentos: ' + error.message);
     body.innerHTML = '<tr><td colspan="4">Erro ao carregar dados.</td></tr>';
+    if (pagContainer) pagContainer.innerHTML = '';
   }
 }
 
@@ -2370,22 +2392,32 @@ async function initFrequenciaPage() {
 
   const body = document.querySelector('#frequencia-body');
   if (!body) return;
+  const pagContainer = document.getElementById('paginacao-frequencia');
 
   try {
     const data = await request('/aluno/frequencia', { headers: authHeaders(false) });
-    body.innerHTML = data.length
-      ? data.map((f) => `
+    if (!data || !data.length) {
+      body.innerHTML = '<tr><td colspan="5">Nenhum registro de frequencia encontrado.</td></tr>';
+      if (pagContainer) pagContainer.innerHTML = '';
+      return;
+    }
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: body,
+      dados: data,
+      renderizarItem: (f) => `
         <tr>
           <td>${f.disciplina}</td>
           <td>${f.totalAulas}</td>
           <td>${f.presencas}</td>
           <td>${f.faltas}</td>
           <td>${f.frequenciaPercentual}%</td>
-        </tr>`).join('')
-      : '<tr><td colspan="5">Nenhum registro de frequencia encontrado.</td></tr>';
+        </tr>`
+    });
   } catch (error) {
     showError('Erro ao carregar frequencia: ' + error.message);
     body.innerHTML = '<tr><td colspan="5">Erro ao carregar dados.</td></tr>';
+    if (pagContainer) pagContainer.innerHTML = '';
   }
 }
 
@@ -2396,32 +2428,40 @@ async function initAgendaPage() {
 
   const container = document.querySelector('#agenda-events');
   if (!container) return;
+  const pagContainer = document.getElementById('paginacao-agenda');
 
   try {
     const data = await request('/aluno/agenda', { headers: authHeaders(false) });
 
-    if (!data.length) {
+    if (!data || !data.length) {
       container.innerHTML = '<p class="muted">Nenhum evento agendado.</p>';
+      if (pagContainer) pagContainer.innerHTML = '';
       return;
     }
 
-    container.innerHTML = data.map((e) => `
-      <div class="card" style="margin-bottom: 12px;">
-        <div style="display: flex; justify-content: space-between; align-items: start;">
-          <div>
-            <h3 style="margin: 0 0 4px;">${e.titulo}</h3>
-            <p class="muted" style="margin: 0;">${e.descricao || ''}</p>
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: container,
+      dados: data,
+      renderizarItem: (e) => `
+        <div class="card" style="margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div>
+              <h3 style="margin: 0 0 4px;">${e.titulo}</h3>
+              <p class="muted" style="margin: 0;">${e.descricao || ''}</p>
+            </div>
+            <span class="status ${e.tipo === 'PROVA' ? 'alert-danger' : e.tipo === 'FERIADO' ? 'alert-ok' : 'alert-info'}">${e.tipo || 'EVENTO'}</span>
           </div>
-          <span class="status ${e.tipo === 'PROVA' ? 'alert-danger' : e.tipo === 'FERIADO' ? 'alert-ok' : 'alert-info'}">${e.tipo || 'EVENTO'}</span>
-        </div>
-        <p style="margin: 8px 0 0; font-size: 0.85rem; color: var(--muted);">
-          ${new Date(e.data_inicio).toLocaleDateString('pt-BR')}
-          ${e.data_fim && e.data_fim !== e.data_inicio ? ' a ' + new Date(e.data_fim).toLocaleDateString('pt-BR') : ''}
-        </p>
-      </div>`).join('');
+          <p style="margin: 8px 0 0; font-size: 0.85rem; color: var(--muted);">
+            ${new Date(e.data_inicio).toLocaleDateString('pt-BR')}
+            ${e.data_fim && e.data_fim !== e.data_inicio ? ' a ' + new Date(e.data_fim).toLocaleDateString('pt-BR') : ''}
+          </p>
+        </div>`
+    });
   } catch (error) {
     showError('Erro ao carregar agenda: ' + error.message);
     container.innerHTML = '<p class="muted">Erro ao carregar agenda.</p>';
+    if (pagContainer) pagContainer.innerHTML = '';
   }
 }
 
@@ -2432,20 +2472,30 @@ async function initCalendarioPage() {
 
   const body = document.querySelector('#calendario-body');
   if (!body) return;
+  const pagContainer = document.getElementById('paginacao-calendario');
 
   try {
     const data = await request('/aluno/calendario', { headers: authHeaders(false) });
-    body.innerHTML = data.length
-      ? data.map((e) => `
+    if (!data || !data.length) {
+      body.innerHTML = '<tr><td colspan="3">Nenhum evento encontrado.</td></tr>';
+      if (pagContainer) pagContainer.innerHTML = '';
+      return;
+    }
+    new Paginacao({
+      container: pagContainer,
+      containerTabela: body,
+      dados: data,
+      renderizarItem: (e) => `
         <tr>
           <td>${e.titulo}</td>
           <td>${new Date(e.data_inicio).toLocaleDateString('pt-BR')}</td>
           <td>${e.descricao || ''}</td>
-        </tr>`).join('')
-      : '<tr><td colspan="3">Nenhum evento encontrado.</td></tr>';
+        </tr>`
+    });
   } catch (error) {
     showError('Erro ao carregar calendario: ' + error.message);
     body.innerHTML = '<tr><td colspan="3">Erro ao carregar dados.</td></tr>';
+    if (pagContainer) pagContainer.innerHTML = '';
   }
 }
 

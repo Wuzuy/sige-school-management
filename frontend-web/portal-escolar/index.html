@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body data-page="dashboard">
+<body data-page="home">
   <header class="topbar">
     <div class="brand">
       <img src="assets/images/sige.png" alt="SIGE" />
@@ -86,6 +86,26 @@
           <a href="../portal-secretaria/portal-secretaria.html" class="btn btn-primary">Acessar</a>
         </div>
       </article>
+      <article class="card" style="grid-column: span 12;">
+        <h2>Cursos Ativos</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Unidade</th>
+                <th>Curso</th>
+                <th>Turno</th>
+                <th>Início</th>
+                <th>Duração</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody id="courses-body"></tbody>
+          </table>
+        </div>
+        <p id="courses-empty" class="hidden muted" style="padding: 20px; text-align: center;">Nenhum curso ativo disponível no momento.</p>
+        <div id="paginacao-cursos" class="paginacao-wrapper"></div>
+      </article>
     </section>
   </main>
 
@@ -93,6 +113,7 @@
   <script src="assets/js/api-config.js"></script>
   <script src="assets/js/scripts.js"></script>
   <script src="assets/js/sidebar-nav.js"></script>
+  <script src="assets/js/paginacao.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       setupMobileMenu();
