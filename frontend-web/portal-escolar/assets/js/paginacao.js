@@ -7,7 +7,7 @@ class Paginacao {
     this.renderizarItem = opcoes.renderizarItem || (() => '');
     this.aoMudar = opcoes.aoMudar || null;
     this.pagina = 1;
-    this.itensPorPagina = opcoes.paginaPadrao || 1;
+    this.itensPorPagina = opcoes.paginaPadrao || 5;
     this.mostrarResumo = opcoes.mostrarResumo !== false;
     this.mostrarSeletor = opcoes.mostrarSeletor !== false;
     this.mostrarNavegacao = opcoes.mostrarNavegacao !== false;
@@ -75,7 +75,7 @@ class Paginacao {
     }
 
     if (this.mostrarSeletor && this.total > 1) {
-      const opcoes = [1, 10, 20, 50].map(n =>
+      const opcoes = [5, 10, 20, 50].map(n =>
         `<option value="${n}"${n === this.itensPorPagina ? ' selected' : ''}>${n} por página</option>`
       ).join('');
       html += `<span class="paginacao-seletor"><label>Exibir:</label> <select class="paginacao-tamanho">${opcoes}</select></span>`;
