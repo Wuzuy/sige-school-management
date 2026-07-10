@@ -30,8 +30,10 @@ async function insertBatch(table, rows) {
 }
 
 async function countRows(table) {
-  const r = await fetch(supabaseUrl2 + '/rest/v1/' + table + '?select=id', { headers: { 'apikey': serviceKey, 'Authorization': 'Bearer ' + serviceKey } });
+  const r = await fetch(supabaseUrl2 + '/rest/v1/' + table + '?select=id&limit=0', { headers: { 'apikey': serviceKey, 'Authorization': 'Bearer ' + serviceKey, 'Prefer': 'count=exact' } });
   if (!r.ok) return 0;
+  const cr = r.headers.get('content-range');
+  if (cr) return parseInt(cr.split('/')[1], 10);
   return (await r.json()).length;
 }
 
@@ -74,11 +76,57 @@ async function main() {
 
   // Delete existing data
   console.log('=== Deletando dados existentes ===');
-  const delTables = ['planos_aula', 'planos_ensino', 'frequencia', 'historico_escolar', 'atendimentos', 'auditoria', 'reclamacoes', 'matriculas', 'inscricoes'];
+  const delTables = ['planos_aula', 'planos_ensino', 'frequencia', 'historico_escolar', 'atendimentos', 'auditoria', 'reclamacoes', 'matriculas', 'inscricoes', 'codigos_acesso', 'documentos'];
   for (const t of delTables) {
     console.log('  Deletando ' + t + '...');
     await deleteAll(t);
   }
+  // Delete bulk-generated usuarios from previous runs (keep base ids 1-10)
+  console.log('  Deletando usuarios em massa...');
+  await supabase.from('usuarios').delete().gt('id', 10);
+
+  console.log('\n=== Gerando usuarios em massa ===');
+  const BULK_STUDENTS = 5000;
+  const BULK_TEACHERS = 20;
+  let batch = [];
+  let totalUsers = 0;
+
+  const BASE_LAST_ID = 10;
+  for (let i = 0; i < BULK_STUDENTS; i++) {
+    batch.push({
+      id: BASE_LAST_ID + 1 + i,
+      nome_completo: nomeRealistico(i),
+      email: emailRealistico(i),
+      senha: '$2b$10$AT//Wih4CoxhVnuQ.TCKOeerkQGvNiyBfXqb.JVCZ2J.GCJVq8nI6',
+      cpf: cpfCurto(i),
+      telefone: '(11) 9' + String(90000 + i).slice(-4) + '-' + String(40000 + i).slice(-4),
+      data_nascimento: dataEntre('1995-01-01', '2005-12-31'),
+      role: 'ROLE_STUDENT',
+      id_cargo: 5
+    });
+    if (batch.length >= BATCH) { totalUsers += await insertBatch('usuarios', batch); batch = []; }
+  }
+  if (batch.length) totalUsers += await insertBatch('usuarios', batch);
+  console.log('  [OK] ' + totalUsers + ' estudantes');
+
+  batch = [];
+  let totalTeachers = 0;
+  for (let i = 0; i < BULK_TEACHERS; i++) {
+    batch.push({
+      id: BASE_LAST_ID + 1 + BULK_STUDENTS + i,
+      nome_completo: nomeRealistico(i + 10000),
+      email: 'prof.' + emailRealistico(i + 10000),
+      senha: '$2b$10$AT//Wih4CoxhVnuQ.TCKOeerkQGvNiyBfXqb.JVCZ2J.GCJVq8nI6',
+      cpf: cpfCurto(i + 10000),
+      telefone: '(11) 9' + String(70000 + i).slice(-4) + '-' + String(30000 + i).slice(-4),
+      data_nascimento: dataEntre('1975-01-01', '1995-12-31'),
+      role: 'ROLE_TEACHER',
+      id_cargo: 4
+    });
+    if (batch.length >= BATCH) { totalTeachers += await insertBatch('usuarios', batch); batch = []; }
+  }
+  if (batch.length) totalTeachers += await insertBatch('usuarios', batch);
+  console.log('  [OK] ' + totalTeachers + ' professores\n');
 
   // Buscar dados base
   const rCursos = await fetch(supabaseUrl2 + '/rest/v1/cursos?select=id', { headers: { 'apikey': serviceKey, 'Authorization': 'Bearer ' + serviceKey } });
@@ -103,7 +151,7 @@ async function main() {
   console.log('=== 1. Gerando inscricoes (~8000) ===');
   const statusInsc = ['EM_ANALISE', 'APROVADO', 'RECUSADO'];
   const escolaridades = ['fundamental-completo','medio-incompleto','medio-completo','superior-incompleto','superior-completo'];
-  let batch = [];
+  batch = [];
   let total = 0;
 
   for (let i = 0; i < 8000; i++) {

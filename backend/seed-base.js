@@ -35,16 +35,16 @@ const senha = '$2b$10$AT//Wih4CoxhVnuQ.TCKOeerkQGvNiyBfXqb.JVCZ2J.GCJVq8nI6';
 
   // USUARIOS com nomes realistas
   const usuarios = [
-    { id: 1, nome_completo: 'Lucas Matheus Lima Sandin',  email: 'lucas.sandin@sige.com.br',    senha, cpf: '000.000.000-01', telefone: '(11) 99999-0001', data_nascimento: '1980-01-15', role: 'ROLE_ADMIN',   id_cargo: 1 },
-    { id: 2, nome_completo: 'Ricardo Augusto Barbosa',     email: 'ricardo.barbosa@sige.com.br', senha, cpf: '000.000.000-02', telefone: '(11) 99999-0002', data_nascimento: '1985-03-20', role: 'ROLE_ADMIN',   id_cargo: 2 },
-    { id: 3, nome_completo: 'Patricia Oliveira Santos',    email: 'patricia.santos@sige.com.br', senha, cpf: '000.000.000-03', telefone: '(11) 99999-0003', data_nascimento: '1990-05-10', role: 'ROLE_USER',    id_cargo: 3 },
-    { id: 4, nome_completo: 'Camila Rodrigues Costa',      email: 'camila.costa@sige.com.br',    senha, cpf: '000.000.000-04', telefone: '(11) 99999-0004', data_nascimento: '1992-07-22', role: 'ROLE_USER',    id_cargo: 3 },
-    { id: 5, nome_completo: 'Marcelo Henrique Pereira',    email: 'marcelo.pereira@sige.com.br', senha, cpf: '000.000.000-05', telefone: '(11) 99999-0005', data_nascimento: '1988-11-30', role: 'ROLE_TEACHER', id_cargo: 4 },
-    { id: 6, nome_completo: 'Fernando Alves Nunes',        email: 'fernando.nunes@sige.com.br',  senha, cpf: '000.000.000-06', telefone: '(11) 99999-0006', data_nascimento: '1991-09-15', role: 'ROLE_TEACHER', id_cargo: 4 },
-    { id: 7, nome_completo: 'Joao Vitor Silva',            email: 'joao.silva@sige.com.br',      senha, cpf: '111.111.111-01', telefone: '(11) 98888-0001', data_nascimento: '2002-02-10', role: 'ROLE_STUDENT', id_cargo: 5 },
-    { id: 8, nome_completo: 'Maria Eduarda Souza',         email: 'maria.souza@sige.com.br',     senha, cpf: '111.111.111-02', telefone: '(11) 98888-0002', data_nascimento: '2003-04-18', role: 'ROLE_STUDENT', id_cargo: 5 },
-    { id: 9, nome_completo: 'Gabriel Santos Lima',         email: 'gabriel.lima@sige.com.br',    senha, cpf: '222.222.222-01', telefone: '(11) 97777-0001', data_nascimento: '2001-08-05', role: 'ROLE_USER',    id_cargo: 6 },
-    { id: 10, nome_completo: 'Rafaela Martins Dias',       email: 'rafaela.dias@sige.com.br',    senha, cpf: '222.222.222-02', telefone: '(11) 97777-0002', data_nascimento: '2000-12-25', role: 'ROLE_USER',    id_cargo: 6 }
+    { id: 1, nome_completo: 'Lucas Matheus Lima Sandin',  email: 'admin@sige.com.br',         senha, cpf: '000.000.000-01', telefone: '(11) 99999-0001', data_nascimento: '1980-01-15', role: 'ROLE_ADMIN',   id_cargo: 1 },
+    { id: 2, nome_completo: 'Ricardo Augusto Barbosa',     email: 'coordenador@sige.com.br',   senha, cpf: '000.000.000-02', telefone: '(11) 99999-0002', data_nascimento: '1985-03-20', role: 'ROLE_ADMIN',   id_cargo: 2 },
+    { id: 3, nome_completo: 'Patricia Oliveira Santos',    email: 'secretaria@sige.com.br',    senha, cpf: '000.000.000-03', telefone: '(11) 99999-0003', data_nascimento: '1990-05-10', role: 'ROLE_USER',    id_cargo: 3 },
+    { id: 4, nome_completo: 'Camila Rodrigues Costa',      email: 'secretaria2@sige.com.br',   senha, cpf: '000.000.000-04', telefone: '(11) 99999-0004', data_nascimento: '1992-07-22', role: 'ROLE_USER',    id_cargo: 3 },
+    { id: 5, nome_completo: 'Marcelo Henrique Pereira',    email: 'professor@sige.com.br',     senha, cpf: '000.000.000-05', telefone: '(11) 99999-0005', data_nascimento: '1988-11-30', role: 'ROLE_TEACHER', id_cargo: 4 },
+    { id: 6, nome_completo: 'Fernando Alves Nunes',        email: 'professor2@sige.com.br',    senha, cpf: '000.000.000-06', telefone: '(11) 99999-0006', data_nascimento: '1991-09-15', role: 'ROLE_TEACHER', id_cargo: 4 },
+    { id: 7, nome_completo: 'Joao Vitor Silva',            email: 'aluno1@sige.com.br',        senha, cpf: '111.111.111-01', telefone: '(11) 98888-0001', data_nascimento: '2002-02-10', role: 'ROLE_STUDENT', id_cargo: 5 },
+    { id: 8, nome_completo: 'Maria Eduarda Souza',         email: 'aluno2@sige.com.br',        senha, cpf: '111.111.111-02', telefone: '(11) 98888-0002', data_nascimento: '2003-04-18', role: 'ROLE_STUDENT', id_cargo: 5 },
+    { id: 9, nome_completo: 'Gabriel Santos Lima',         email: 'candidato@sige.com.br',     senha, cpf: '222.222.222-01', telefone: '(11) 97777-0001', data_nascimento: '2001-08-05', role: 'ROLE_USER',    id_cargo: 6 },
+    { id: 10, nome_completo: 'Rafaela Martins Dias',       email: 'candidato2@sige.com.br',    senha, cpf: '222.222.222-02', telefone: '(11) 97777-0002', data_nascimento: '2000-12-25', role: 'ROLE_USER',    id_cargo: 6 }
   ];
   await i('usuarios', usuarios);
 
