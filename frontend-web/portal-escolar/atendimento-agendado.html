@@ -56,7 +56,45 @@
   </aside>
   <section class="hero interface">
     <h1 style="margin-bottom: 8px; color: #1e293b;">Atendimento Agendado</h1>
-    <p style="margin-bottom: 24px; color: var(--muted);">Acompanhe seus agendamentos e atendimentos</p>
+    <p style="margin-bottom: 24px; color: var(--muted);">Acompanhe e solicite seus agendamentos</p>
+
+    <div style="margin-bottom: 20px;">
+      <button class="btn btn-primary" id="btn-solicitar-atendimento" type="button">
+        <i class="fas fa-calendar-plus"></i> Solicitar Atendimento
+      </button>
+    </div>
+
+    <div id="form-solicitar-atendimento" style="display:none; background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: var(--shadow); border: 1px solid var(--border);">
+      <h2 style="margin: 0 0 16px; color: #1e293b;">Solicitar Novo Atendimento</h2>
+      <form id="atendimento-form">
+        <div class="field">
+          <label for="tipo-atendimento">Tipo de Atendimento <span class="required">*</span></label>
+          <select id="tipo-atendimento" required>
+            <option value="">Selecione</option>
+            <option value="Orientacao Academica">Orientação Acadêmica</option>
+            <option value="Documentacao">Documentação</option>
+            <option value="Suporte Financeiro">Suporte Financeiro</option>
+            <option value="Suporte Tecnico">Suporte Técnico</option>
+            <option value="Matricula">Matrícula</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="data-atendimento">Data <span class="required">*</span></label>
+          <input type="date" id="data-atendimento" required min="">
+        </div>
+        <div class="field">
+          <label for="hora-atendimento">Horário <span class="required">*</span></label>
+          <input type="time" id="hora-atendimento" required>
+        </div>
+        <div class="field">
+          <label for="obs-atendimento">Observações</label>
+          <textarea id="obs-atendimento" rows="3" placeholder="Informações adicionais..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" id="btn-enviar-atendimento">Solicitar</button>
+        <button type="button" class="btn btn-soft" id="btn-cancelar-atendimento">Cancelar</button>
+      </form>
+    </div>
+
     <div class="containerAA" id="atendimento-container">
       <p id="loading-atendimentos" style="color: var(--muted);">Carregando agendamentos...</p>
     </div>
@@ -66,18 +104,13 @@
   <script src="assets/js/scripts.js"></script>
   <script src="assets/js/sidebar-nav.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      const auth = requireAuth();
-      if (!auth) return;
-      setupProtectedPage(auth);
-      setupMobileMenu();
-
+    async function carregarAtendimentos() {
       try {
         const atendimentos = await request('/aluno/atendimentos');
         const container = document.getElementById('atendimento-container');
 
         if (!atendimentos || atendimentos.length === 0) {
-          container.innerHTML = '<div class="empty-state"><p style="font-size:1.2rem;margin-bottom:8px;">Nenhum atendimento agendado</p><p>Você ainda não possui agendamentos. Entre em contato com a secretaria para agendar.</p></div>';
+          container.innerHTML = '<div class="empty-state"><p style="font-size:1.2rem;margin-bottom:8px;">Nenhum atendimento agendado</p><p>Clique em "Solicitar Atendimento" para agendar.</p></div>';
           return;
         }
 
@@ -160,6 +193,64 @@
         document.getElementById('atendimento-container').innerHTML = '<div class="empty-state"><p style="color:#dc2626;">Erro ao carregar agendamentos.</p></div>';
         showError('Erro ao carregar atendimentos');
       }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const auth = requireAuth();
+      if (!auth) return;
+      setupProtectedPage(auth);
+      setupMobileMenu();
+
+      carregarAtendimentos();
+
+      document.getElementById('data-atendimento').min = new Date().toISOString().slice(0, 10);
+
+      document.getElementById('btn-solicitar-atendimento').addEventListener('click', () => {
+        const form = document.getElementById('form-solicitar-atendimento');
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+      });
+
+      document.getElementById('btn-cancelar-atendimento').addEventListener('click', () => {
+        document.getElementById('form-solicitar-atendimento').style.display = 'none';
+        document.getElementById('atendimento-form').reset();
+      });
+
+      document.getElementById('atendimento-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btn-enviar-atendimento');
+        btn.disabled = true;
+        btn.textContent = 'Solicitando...';
+
+        try {
+          const tipo = document.getElementById('tipo-atendimento').value;
+          const data_atendimento = document.getElementById('data-atendimento').value;
+          const hora = document.getElementById('hora-atendimento').value;
+          const observacoes = document.getElementById('obs-atendimento').value.trim() || null;
+
+          if (!tipo || !data_atendimento || !hora) {
+            showWarning('Preencha todos os campos obrigatórios.');
+            btn.disabled = false;
+            btn.textContent = 'Solicitar';
+            return;
+          }
+
+          await request('/aluno/atendimentos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tipo, data_atendimento, hora, observacoes })
+          });
+
+          showSuccess('Atendimento solicitado com sucesso!');
+          document.getElementById('atendimento-form').reset();
+          document.getElementById('form-solicitar-atendimento').style.display = 'none';
+          carregarAtendimentos();
+        } catch (e) {
+          showError('Erro ao solicitar atendimento. Tente novamente.');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Solicitar';
+        }
+      });
     });
   </script>
 </body>

@@ -39,8 +39,8 @@ const SIDEBAR_NAVIGATION = {
       icon: '<i class="fas fa-comment-dots"></i>',
       items: [
         { label: 'Reclamações', icon: '<i class="fas fa-exclamation-triangle"></i>', href: 'reclamacoes.html' },
-        { label: 'Ouvidoria', icon: '<i class="fas fa-microphone"></i>', href: 'ouvidoria.html' },
         { label: 'Atendimento Agendado', icon: '<i class="fas fa-phone"></i>', href: 'atendimento-agendado.html' },
+        { label: 'Apelação', icon: '<i class="fas fa-gavel"></i>', href: 'ouvidoria.html' },
       ]
     },
     {

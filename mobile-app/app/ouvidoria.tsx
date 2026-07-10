@@ -2,18 +2,26 @@ import { useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { request } from '@/services/api';
 
-export default function OuvidoriaScreen() {
+export default function ApeleScreen() {
+  const [protocolo, setProtocolo] = useState('');
   const [assunto, setAssunto] = useState('');
-  const [descricao, setDescricao] = useState('');
+  const [motivo, setMotivo] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async () => {
-    if (!assunto || !descricao) { Alert.alert('Erro', 'Preencha todos os campos'); return; }
+    if (!protocolo || !assunto || !motivo) { Alert.alert('Erro', 'Preencha todos os campos'); return; }
     setSubmitting(true);
     try {
-      await request('/aluno/reclamacoes', { method: 'POST', body: JSON.stringify({ assunto, descricao, categoria: 'OUVIDORIA' }) });
-      Alert.alert('Sucesso', 'Mensagem enviada a ouvidoria');
-      setAssunto(''); setDescricao('');
+      await request('/aluno/reclamacoes', {
+        method: 'POST',
+        body: JSON.stringify({
+          categoria: 'APELACAO',
+          assunto,
+          descricao: 'Protocolo original: ' + protocolo + '\n\nMotivo da apelação:\n' + motivo
+        })
+      });
+      Alert.alert('Sucesso', 'Apelação registrada com sucesso');
+      setProtocolo(''); setAssunto(''); setMotivo('');
     } catch (e: any) { Alert.alert('Erro', e.message); }
     finally { setSubmitting(false); }
   };
@@ -21,12 +29,13 @@ export default function OuvidoriaScreen() {
   return (
     <ScrollView style={s.container} contentContainerStyle={{ paddingBottom: 40 }}>
       <View style={s.card}>
-        <Text style={s.title}>Ouvidoria</Text>
-        <Text style={s.subtitle}>Envie sua mensagem para a ouvidoria da instituicao</Text>
+        <Text style={s.title}>Apelação</Text>
+        <Text style={s.subtitle}>Recorra de uma reclamação que não foi resolvida adequadamente</Text>
+        <TextInput style={s.input} placeholder="Protocolo da reclamação original" value={protocolo} onChangeText={setProtocolo} />
         <TextInput style={s.input} placeholder="Assunto" value={assunto} onChangeText={setAssunto} />
-        <TextInput style={[s.input, s.textArea]} placeholder="Descreva sua mensagem..." value={descricao} onChangeText={setDescricao} multiline />
+        <TextInput style={[s.input, s.textArea]} placeholder="Descreva o motivo da apelação..." value={motivo} onChangeText={setMotivo} multiline />
         <TouchableOpacity style={s.button} onPress={handleSubmit} disabled={submitting}>
-          <Text style={s.buttonText}>{submitting ? 'Enviando...' : 'Enviar'}</Text>
+          <Text style={s.buttonText}>{submitting ? 'Enviando...' : 'Registrar Apelação'}</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

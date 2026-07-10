@@ -58,8 +58,9 @@
         return;
       }
 
+      let r;
       try {
-        const r = await request('/aluno/reclamacoes/' + id);
+        r = await request('/aluno/reclamacoes/' + id);
 
         const statusLabels = { PENDENTE: 'Pendente', EM_ANDAMENTO: 'Em Andamento', RESOLVIDO: 'Resolvido', RESOLVIDA: 'Resolvido' };
         const statusColors = {
@@ -151,6 +152,17 @@
                 <p style="font-size:0.85rem;color:var(--muted);margin:0 0 4px;text-transform:uppercase;font-weight:600;">Prioridade</p>
                 <p style="font-size:1rem;color:#1e293b;margin:0;font-weight:500;">${r.prioridade || 'NORMAL'}</p>
               </div>
+              ${r.status === 'RESOLVIDA' || r.status === 'RESOLVIDO' || r.status === 'FECHADA' ? `
+              <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border);">
+                <p style="font-size:0.9rem;color:var(--muted);margin-bottom:12px;">Não ficou satisfeito com a resolução?</p>
+                <button class="btn btn-warning btn-sm" id="btn-apelar" style="width:100%;">
+                  <i class="fas fa-gavel"></i> Apele esta Reclamação
+                </button>
+                <div id="form-apelacao" style="display:none;margin-top:12px;">
+                  <textarea id="motivo-apelacao" rows="4" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;margin-bottom:8px;" placeholder="Descreva o motivo da apelação..."></textarea>
+                  <button class="btn btn-primary btn-sm" id="btn-enviar-apelacao" style="width:100%;">Enviar Apelação</button>
+                </div>
+              </div>` : ''}
             </div>
           </div>
         `;
@@ -158,6 +170,34 @@
         document.getElementById('detalhes-content').innerHTML = '<p style="color:#dc2626;">Erro ao carregar detalhes da reclamação.</p>';
         showError('Erro ao carregar detalhes');
       }
+
+      document.addEventListener('click', (e) => {
+        if (e.target.id === 'btn-apelar') {
+          const form = document.getElementById('form-apelacao');
+          form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+        if (e.target.id === 'btn-enviar-apelacao') {
+          const motivo = document.getElementById('motivo-apelacao').value.trim();
+          if (!motivo) { showWarning('Descreva o motivo da apelação.'); return; }
+          (async () => {
+            try {
+              await request('/aluno/reclamacoes', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  categoria: 'APELACAO',
+                  assunto: 'Apelação - ' + (r.assunto || 'Reclamação #' + id),
+                  descricao: 'Protocolo original: ' + (r.protocolo || '#') + '\n\nMotivo da apelação:\n' + motivo
+                })
+              });
+              showSuccess('Apelação registrada com sucesso!');
+              document.getElementById('form-apelacao').style.display = 'none';
+              document.getElementById('btn-apelar').disabled = true;
+              document.getElementById('btn-apelar').textContent = 'Apelação Enviada';
+            } catch (e) { showError('Erro ao enviar apelação.'); }
+          })();
+        }
+      });
     });
   </script>
 </body>

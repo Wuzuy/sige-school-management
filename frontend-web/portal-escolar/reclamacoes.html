@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SIGE - Reclamações e Ouvidoria</title>
+  <title>SIGE - Reclamações</title>
   <link rel="stylesheet" href="assets/css/app.css" />
   <link rel="icon" href="assets/images/sige.png" type="image/png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
@@ -24,6 +24,38 @@
     <nav id="sidebar-nav"></nav>
   </aside>
   <section class="hero interface">
+    <div style="margin-bottom: 20px;">
+      <button class="btn btn-primary" id="btn-nova-reclamacao" type="button">
+        <i class="fas fa-plus"></i> Nova Reclamação
+      </button>
+    </div>
+
+    <div id="form-nova-reclamacao" style="display:none; background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: var(--shadow); border: 1px solid var(--border);">
+      <h2 style="margin: 0 0 16px; color: #1e293b;">Nova Reclamação</h2>
+      <form id="reclamacao-form">
+        <div class="field">
+          <label for="cat-reclamacao">Categoria <span class="required">*</span></label>
+          <select id="cat-reclamacao" required>
+            <option value="">Selecione</option>
+            <option value="ACADEMICO">Assunto Acadêmico</option>
+            <option value="ADMINISTRATIVO">Assunto Administrativo</option>
+            <option value="INFRAESTRUTURA">Infraestrutura</option>
+            <option value="OUTRO">Outro</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="assunto-reclamacao">Assunto <span class="required">*</span></label>
+          <input type="text" id="assunto-reclamacao" placeholder="Resumo da reclamação" required>
+        </div>
+        <div class="field">
+          <label for="desc-reclamacao">Descrição <span class="required">*</span></label>
+          <textarea id="desc-reclamacao" rows="5" placeholder="Descreva detalhadamente..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" id="btn-enviar-reclamacao">Enviar Reclamação</button>
+        <button type="button" class="btn btn-soft" id="btn-cancelar-reclamacao">Cancelar</button>
+      </form>
+    </div>
+
     <div class="containerCardR" id="reclamacoes-summary">
       <div class="cardR" style="border-left: 5px solid #f59e0b;">
         <div>
@@ -73,12 +105,7 @@
   <script src="assets/js/scripts.js"></script>
   <script src="assets/js/sidebar-nav.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      const auth = requireAuth();
-      if (!auth) return;
-      setupProtectedPage(auth);
-      setupMobileMenu();
-
+    async function carregarReclamacoes() {
       try {
         const reclamacoes = await request('/aluno/reclamacoes');
         const body = document.getElementById('reclamacoes-table');
@@ -119,6 +146,61 @@
         document.getElementById('reclamacoes-table').innerHTML = '<tr><td colspan="6" class="muted" style="text-align:center; padding:20px; color:#dc2626;">Erro ao carregar reclamações.</td></tr>';
         showError('Erro ao carregar reclamações');
       }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const auth = requireAuth();
+      if (!auth) return;
+      setupProtectedPage(auth);
+      setupMobileMenu();
+
+      carregarReclamacoes();
+
+      document.getElementById('btn-nova-reclamacao').addEventListener('click', () => {
+        const form = document.getElementById('form-nova-reclamacao');
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+      });
+
+      document.getElementById('btn-cancelar-reclamacao').addEventListener('click', () => {
+        document.getElementById('form-nova-reclamacao').style.display = 'none';
+        document.getElementById('reclamacao-form').reset();
+      });
+
+      document.getElementById('reclamacao-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btn-enviar-reclamacao');
+        btn.disabled = true;
+        btn.textContent = 'Enviando...';
+
+        try {
+          const categoria = document.getElementById('cat-reclamacao').value;
+          const assunto = document.getElementById('assunto-reclamacao').value.trim();
+          const descricao = document.getElementById('desc-reclamacao').value.trim();
+
+          if (!categoria || !assunto || !descricao) {
+            showWarning('Preencha todos os campos obrigatórios.');
+            btn.disabled = false;
+            btn.textContent = 'Enviar Reclamação';
+            return;
+          }
+
+          await request('/aluno/reclamacoes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ categoria, assunto, descricao })
+          });
+
+          showSuccess('Reclamação enviada com sucesso!');
+          document.getElementById('reclamacao-form').reset();
+          document.getElementById('form-nova-reclamacao').style.display = 'none';
+          carregarReclamacoes();
+        } catch (e) {
+          showError('Erro ao enviar reclamação. Tente novamente.');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Enviar Reclamação';
+        }
+      });
     });
   </script>
 </body>

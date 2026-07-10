@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SIGE - Ouvidoria</title>
+  <title>SIGE - Apelação</title>
   <link rel="stylesheet" href="assets/css/app.css" />
   <link rel="icon" href="assets/images/sige.png" type="image/png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
@@ -24,61 +24,34 @@
     <nav id="sidebar-nav"></nav>
   </aside>
   <section class="hero interface">
-    <div class="gridOuvidoria">
-      <div class="ouvidoriaForm">
-        <h1>Envie sua Mensagem</h1>
-        <p class="subtitle">Registre sua reclamação, sugestão ou solicitação. Responderemos o mais breve possível.</p>
+    <div style="max-width: 800px; margin: 0 auto;">
+      <div style="background: white; border-radius: 12px; padding: 32px; box-shadow: var(--shadow); border: 1px solid var(--border);">
+        <div style="text-align: center; margin-bottom: 24px;">
+          <i class="fas fa-gavel" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 12px;"></i>
+          <h1 style="margin: 0 0 8px; color: #1e293b;">Apelação</h1>
+          <p style="color: var(--muted); margin: 0;">Recorra de uma reclamação que você considera não ter sido resolvida adequadamente.</p>
+        </div>
 
-        <form id="ouvidoria-form">
+        <form id="apelacao-form">
           <div class="field">
-            <label for="categoria">Categoria <span class="required">*</span></label>
-            <select id="categoria" name="categoria" required>
-              <option value="">Selecione uma categoria</option>
-              <option value="ACADEMICO">Assunto Acadêmico</option>
-              <option value="ADMINISTRATIVO">Assunto Administrativo</option>
-              <option value="INFRAESTRUTURA">Infraestrutura</option>
-              <option value="OUTRO">Outro</option>
-            </select>
+            <label for="protocolo-apelacao">Protocolo da Reclamação Original <span class="required">*</span></label>
+            <input type="text" id="protocolo-apelacao" placeholder="Ex: PROT-2026-0000123" required>
+            <small class="fieldHint">Informe o protocolo da reclamação que deseja recorrer.</small>
           </div>
 
           <div class="field">
-            <label for="assunto">Assunto <span class="required">*</span></label>
-            <input type="text" id="assunto" name="assunto" placeholder="Resumo da sua mensagem" required>
+            <label for="assunto-apelacao">Assunto <span class="required">*</span></label>
+            <input type="text" id="assunto-apelacao" placeholder="Resumo da apelação" required>
           </div>
 
           <div class="field">
-            <label for="mensagem">Mensagem / Descrição <span class="required">*</span></label>
-            <textarea id="mensagem" name="mensagem" placeholder="Descreva sua mensagem em detalhes..." rows="6" required></textarea>
-            <small class="fieldHint">Mínimo de 10 caracteres. Seja claro e objetivo.</small>
+            <label for="motivo-apelacao">Motivo da Apelação <span class="required">*</span></label>
+            <textarea id="motivo-apelacao" rows="6" placeholder="Explique detalhadamente por que você considera que a reclamação não foi resolvida adequadamente..." required></textarea>
+            <small class="fieldHint">Descreva os pontos que não foram atendidos na resolução anterior.</small>
           </div>
 
-          <button type="submit" class="btn btn-primary" id="btn-enviar-ouvidoria">Enviar Mensagem</button>
+          <button type="submit" class="btn btn-primary" id="btn-enviar-apelacao">Registrar Apelação</button>
         </form>
-      </div>
-
-      <div class="ouvidoriaInfo">
-        <h2>Informações de Contato</h2>
-        <p class="infoSubtitle">Outros canais de atendimento</p>
-
-        <div class="infoCard">
-          <h3>E-mail</h3>
-          <p class="infoContent">ouvidoria@escola.edu.br</p>
-        </div>
-
-        <div class="infoCard">
-          <h3>Horário de Atendimento</h3>
-          <p class="infoContent">Segunda a Sexta</p>
-          <p class="infoSecondary">8h00 às 18h00</p>
-        </div>
-
-        <div class="compromissoCard">
-          <h3>Compromisso com Você</h3>
-          <ul class="compromissoList">
-            <li>Todas as manifestações são analisadas com atenção e confidencialidade.</li>
-            <li>Prazo de resposta: até 5 dias úteis.</li>
-            <li>Seu anonimato será preservado, se desejar.</li>
-          </ul>
-        </div>
       </div>
     </div>
   </section>
@@ -93,37 +66,41 @@
       setupProtectedPage(auth);
       setupMobileMenu();
 
-      document.getElementById('ouvidoria-form').addEventListener('submit', async (e) => {
+      document.getElementById('apelacao-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const btn = document.getElementById('btn-enviar-ouvidoria');
+        const btn = document.getElementById('btn-enviar-apelacao');
         btn.disabled = true;
         btn.textContent = 'Enviando...';
 
         try {
-          const categoria = document.getElementById('categoria').value;
-          const assunto = document.getElementById('assunto').value.trim();
-          const mensagem = document.getElementById('mensagem').value.trim();
+          const protocolo = document.getElementById('protocolo-apelacao').value.trim();
+          const assunto = document.getElementById('assunto-apelacao').value.trim();
+          const motivo = document.getElementById('motivo-apelacao').value.trim();
 
-          if (!categoria || !assunto || !mensagem) {
+          if (!protocolo || !assunto || !motivo) {
             showWarning('Preencha todos os campos obrigatórios.');
             btn.disabled = false;
-            btn.textContent = 'Enviar Mensagem';
+            btn.textContent = 'Registrar Apelação';
             return;
           }
 
           await request('/aluno/reclamacoes', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ categoria, assunto, descricao: mensagem })
+            body: JSON.stringify({
+              categoria: 'APELACAO',
+              assunto: assunto,
+              descricao: 'Protocolo original: ' + protocolo + '\n\nMotivo da apelação:\n' + motivo
+            })
           });
 
-          showSuccess('Mensagem enviada com sucesso! Em breve retornaremos.');
-          document.getElementById('ouvidoria-form').reset();
+          showSuccess('Apelação registrada com sucesso! Em breve analisaremos.');
+          document.getElementById('apelacao-form').reset();
         } catch (e) {
-          showError('Erro ao enviar mensagem. Tente novamente.');
+          showError('Erro ao registrar apelação. Tente novamente.');
         } finally {
           btn.disabled = false;
-          btn.textContent = 'Enviar Mensagem';
+          btn.textContent = 'Registrar Apelação';
         }
       });
     });
