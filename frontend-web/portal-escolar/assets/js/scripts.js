@@ -1035,182 +1035,15 @@ async function initInscricaoPage() {
         headers: authHeaders(),
         body: JSON.stringify(payload),
       });
-      showSuccess('Inscrição enviada com sucesso! Acompanhe o status na aba Status.', 'Enviado!');
-      setTimeout(() => window.location.href = 'status.html', 2000);
+      showSuccess('Inscrição enviada com sucesso!', 'Enviado!');
+      setTimeout(() => window.location.href = 'index.html', 2000);
     } catch (error) {
       showError(`Não foi possível concluir a inscrição: ${error.message}`);
     }
   });
 }
 
-async function initStatusPage() {
-  const auth = requireAuth();
-  if (!auth) return;
-  setupProtectedPage(auth);
 
-  const statusText = document.querySelector('#status-atual');
-  const body = document.querySelector('#status-body');
-  const detailsCard = document.querySelector('#curso-detalhes-card');
-  const etapasCard = document.querySelector('#etapas-card');
-  const timeline = document.querySelector('#timeline-etapas');
-
-  try {
-    const inscricoes = await request(`/inscricoes?user_id=${auth.usuario.id}`, { headers: authHeaders(false) });
-    if (!inscricoes.length) {
-      statusText.textContent = 'Sem inscrições enviadas.';
-      body.innerHTML = '<tr><td colspan="5">Nenhuma inscrição encontrada.</td></tr>';
-      return;
-    }
-
-    statusText.textContent = inscricoes[0].status_aprovacao;
-    body.innerHTML = '';
-
-    inscricoes.forEach((item) => {
-      const tr = document.createElement('tr');
-      
-      // Verificar se há matrícula disponível para aceite
-      const btnMatricula = item.status_matricula === 'AGUARDANDO_ACEITE' 
-        ? `<a href="matricula.html?inscricaoId=${item.id}" class="btn btn-primary" style="margin-left: 8px; font-size: 0.85rem;">Aceitar Matrícula</a>`
-        : '';
-      
-      tr.innerHTML = `
-        <td>${item?.id_curso?.nome_curso || '-'}</td>
-        <td>${item.id_unidade}</td>
-        <td>${formatDate(item.data_inscricao)}</td>
-        <td><span class="status">${item.status_aprovacao}</span></td>
-        <td>
-          <button class="btn btn-soft" data-detalhes-inscricao="${item.id}">Ver detalhes</button>
-          ${btnMatricula}
-        </td>
-      `;
-      body.appendChild(tr);
-    });
-
-    body.addEventListener('click', async (event) => {
-      const button = event.target.closest('[data-detalhes-inscricao]');
-      if (!button) return;
-
-      const idInscricao = button.getAttribute('data-detalhes-inscricao');
-      const inscricao = inscricoes.find(i => i.id === Number(idInscricao));
-      
-      if (!inscricao) {
-        showWarning('Inscrição não encontrada.');
-        return;
-      }
-
-      const cursoId = inscricao?.id_curso?.id;
-      if (!cursoId) {
-        showWarning('Curso não identificado para esta inscrição.');
-        return;
-      }
-
-      try {
-        const course = await request(`/cursos/${cursoId}`, { headers: authHeaders(false) });
-        fillCourseDetailsPanel(course, {
-          name: '#detalhe-curso-nome',
-          type: '#detalhe-curso-tipo',
-          shift: '#detalhe-curso-turno',
-          unit: '#detalhe-curso-unidade',
-          start: '#detalhe-curso-inicio',
-          duration: '#detalhe-curso-duracao',
-          status: '#detalhe-curso-status',
-        });
-        detailsCard?.classList.remove('hidden');
-
-        // Renderizar timeline de etapas
-        renderTimelineEtapas(timeline, inscricao);
-        etapasCard?.classList.remove('hidden');
-
-        // Scroll suave até os detalhes
-        etapasCard?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      } catch (error) {
-        showError(`Não foi possível carregar os detalhes: ${error.message}`);
-      }
-    });
-  } catch (error) {
-    showError(`Falha ao carregar status: ${error.message}`);
-  }
-}
-
-function renderTimelineEtapas(container, inscricao) {
-  if (!container) return;
-
-  const etapas = [
-    {
-      numero: 1,
-      titulo: 'Inscrição Realizada',
-      descricao: `Sua inscrição foi enviada em ${formatDate(inscricao.data_inscricao)}`,
-      data: formatDate(inscricao.data_inscricao),
-      status: 'concluida'
-    },
-    {
-      numero: 2,
-      titulo: 'Análise de Inscrição',
-      descricao: `Status: ${inscricao.status_aprovacao}`,
-      data: inscricao.status_aprovacao === 'APROVADA' ? 'Aprovada' : 'Em análise',
-      status: inscricao.status_aprovacao === 'APROVADA' ? 'concluida' : 
-              inscricao.status_aprovacao === 'REPROVADA' ? 'pendente' : 'em-andamento'
-    }
-  ];
-
-  // Adicionar etapa de prova se estiver definida
-  if (inscricao.realiza_prova === 'SIM' && inscricao.data_prova) {
-    etapas.push({
-      numero: 3,
-      titulo: 'Prova do Processo Seletivo',
-      descricao: inscricao.situacao_aprovacao_prova 
-        ? `Resultado: ${inscricao.situacao_aprovacao_prova}` 
-        : 'Aguardando realização da prova',
-      data: `Data: ${formatDate(inscricao.data_prova)}`,
-      status: inscricao.situacao_aprovacao_prova === 'APROVADO' ? 'concluida' :
-              inscricao.situacao_aprovacao_prova === 'REPROVADO' ? 'pendente' :
-              new Date(inscricao.data_prova) < new Date() ? 'em-andamento' : 'pendente'
-    });
-  } else if (inscricao.realiza_prova === 'NAO') {
-    etapas.push({
-      numero: 3,
-      titulo: 'Prova do Processo Seletivo',
-      descricao: 'Não há prova para este curso',
-      data: '',
-      status: 'concluida'
-    });
-  }
-
-  // Adicionar etapa de lista de espera se aplicável
-  if (inscricao.lista_espera === 'SIM') {
-    etapas.push({
-      numero: etapas.length + 1,
-      titulo: 'Lista de Espera',
-      descricao: 'Você está na lista de espera. Aguarde convocação.',
-      data: '',
-      status: 'em-andamento'
-    });
-  }
-
-  // Adicionar etapa de matrícula
-  if (inscricao.status_matricula) {
-    const statusMatricula = inscricao.status_matricula;
-    etapas.push({
-      numero: etapas.length + 1,
-      titulo: 'Matrícula',
-      descricao: `Status: ${statusMatricula}`,
-      data: inscricao.data_aceite_matricula ? `Aceita em: ${formatDate(inscricao.data_aceite_matricula)}` : '',
-      status: statusMatricula === 'CONCLUIDA' ? 'concluida' :
-              statusMatricula === 'RECUSADA' ? 'pendente' : 'em-andamento'
-    });
-  }
-
-  container.innerHTML = etapas.map(etapa => `
-    <div class="etapa-item ${etapa.status}">
-      <div class="etapa-icon">${etapa.numero}</div>
-      <div class="etapa-content">
-        <div class="etapa-titulo">${etapa.titulo}</div>
-        <div class="etapa-descricao">${etapa.descricao}</div>
-        ${etapa.data ? `<div class="etapa-data">${etapa.data}</div>` : ''}
-      </div>
-    </div>
-  `).join('');
-}
 
 function toDateInputValue(value) {
   if (!value) return '';
@@ -1227,7 +1060,7 @@ async function initMatriculaPage() {
 
   if (!inscricaoId) {
     showWarning('Inscrição não identificada. Redirecionando...');
-    setTimeout(() => window.location.href = 'status.html', 2000);
+    setTimeout(() => window.location.href = 'index.html', 2000);
     return;
   }
 
@@ -1238,14 +1071,14 @@ async function initMatriculaPage() {
     // Verificar se a inscrição pertence ao usuário logado
     if (inscricao.id_usuario.id !== auth.usuario.id) {
       showError('Acesso não autorizado a esta matrícula.');
-      setTimeout(() => window.location.href = 'status.html', 2000);
+      setTimeout(() => window.location.href = 'index.html', 2000);
       return;
     }
 
     // Verificar se o status permite matrícula
     if (inscricao.status_matricula !== 'AGUARDANDO_ACEITE') {
       showWarning('Esta matrícula não está disponível para aceite.');
-      setTimeout(() => window.location.href = 'status.html', 2000);
+      setTimeout(() => window.location.href = 'index.html', 2000);
       return;
     }
 
@@ -1318,7 +1151,7 @@ async function initMatriculaPage() {
         });
 
         showInfo('Matrícula recusada.');
-        setTimeout(() => window.location.href = 'status.html', 2000);
+        setTimeout(() => window.location.href = 'index.html', 2000);
       } catch (error) {
         showError(`Erro ao recusar matrícula: ${error.message}`);
       }
@@ -1326,7 +1159,7 @@ async function initMatriculaPage() {
 
   } catch (error) {
     showError(`Falha ao carregar dados da matrícula: ${error.message}`);
-    setTimeout(() => window.location.href = 'status.html', 2000);
+    setTimeout(() => window.location.href = 'index.html', 2000);
   }
 }
 
@@ -2536,7 +2369,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   if (page === 'home') initHomePage();
   if (page === 'inscricao') initInscricaoPage();
-  if (page === 'status') initStatusPage();
   if (page === 'matricula') initMatriculaPage();
   if (page === 'portal-secretaria') initPortalSecretariaPage();
   if (page === 'historico') initHistoricoPage();

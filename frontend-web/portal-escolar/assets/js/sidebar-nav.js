@@ -10,7 +10,6 @@ const SIDEBAR_NAVIGATION = {
       icon: '<i class="fas fa-home"></i>',
       items: [
         { label: 'Página Inicial', icon: '<i class="fas fa-home"></i>', href: 'index.html' },
-        { label: 'Status', icon: '<i class="fas fa-info-circle"></i>', href: 'status.html' },
         { label: 'Portal da Secretaria', icon: '<i class="fas fa-building"></i>', href: '../portal-secretaria/portal-secretaria.html', perm: 'portal.secretaria' },
         { label: 'Portal de Inscrição', icon: '<i class="fas fa-pen-alt"></i>', href: '../portal-inscricao/index.html', perm: 'portal.inscricao' },
       ]
