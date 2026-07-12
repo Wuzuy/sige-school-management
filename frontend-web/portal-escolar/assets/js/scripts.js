@@ -902,7 +902,7 @@ async function initHomePage() {
   try {
     const [cursos, inscricoes] = await Promise.all([
       request('/cursos', { headers: authHeaders(false) }),
-      request('/inscricoes', { headers: authHeaders(false) })
+      request(`/inscricoes?user_id=${auth.usuario.id}`, { headers: authHeaders(false) })
     ]);
 
     const cursosAtivos = cursos.filter(curso => curso.status === 'ATIVO');
@@ -1055,19 +1055,17 @@ async function initStatusPage() {
   const timeline = document.querySelector('#timeline-etapas');
 
   try {
-    const inscricoes = await request('/inscricoes', { headers: authHeaders(false) });
-
-    const minhas = inscricoes.filter((item) => item?.id_usuario?.id === auth.usuario.id);
-    if (minhas.length === 0) {
+    const inscricoes = await request(`/inscricoes?user_id=${auth.usuario.id}`, { headers: authHeaders(false) });
+    if (!inscricoes.length) {
       statusText.textContent = 'Sem inscrições enviadas.';
       body.innerHTML = '<tr><td colspan="5">Nenhuma inscrição encontrada.</td></tr>';
       return;
     }
 
-    statusText.textContent = minhas[0].status_aprovacao;
+    statusText.textContent = inscricoes[0].status_aprovacao;
     body.innerHTML = '';
 
-    minhas.forEach((item) => {
+    inscricoes.forEach((item) => {
       const tr = document.createElement('tr');
       
       // Verificar se há matrícula disponível para aceite
@@ -1093,7 +1091,7 @@ async function initStatusPage() {
       if (!button) return;
 
       const idInscricao = button.getAttribute('data-detalhes-inscricao');
-      const inscricao = minhas.find(i => i.id === Number(idInscricao));
+      const inscricao = inscricoes.find(i => i.id === Number(idInscricao));
       
       if (!inscricao) {
         showWarning('Inscrição não encontrada.');
