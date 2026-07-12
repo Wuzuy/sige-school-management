@@ -72,11 +72,11 @@ function emailRealistico(i) {
 }
 
 async function main() {
-  console.log('=== POPULACAO 50K REGISTROS ===\n');
+  console.log('=== POPULACAO DE DADOS ===\n');
 
   // Delete existing data
   console.log('=== Deletando dados existentes ===');
-  const delTables = ['planos_aula', 'planos_ensino', 'frequencia', 'historico_escolar', 'atendimentos', 'auditoria', 'reclamacoes', 'matriculas', 'inscricoes', 'codigos_acesso', 'documentos'];
+  const delTables = ['planos_aula', 'planos_ensino', 'frequencia', 'historico_escolar', 'atendimentos', 'auditoria', 'reclamacoes', 'matriculas', 'inscricoes', 'codigos_acesso', 'documentos', 'editais', 'agenda_eventos'];
   for (const t of delTables) {
     console.log('  Deletando ' + t + '...');
     await deleteAll(t);
@@ -86,8 +86,8 @@ async function main() {
   await supabase.from('usuarios').delete().gt('id', 10);
 
   console.log('\n=== Gerando usuarios em massa ===');
-  const BULK_STUDENTS = 5000;
-  const BULK_TEACHERS = 20;
+  const BULK_STUDENTS = 500;
+  const BULK_TEACHERS = 10;
   let batch = [];
   let totalUsers = 0;
 
@@ -147,14 +147,14 @@ async function main() {
 
   console.log(`\nBase: ${cursos.length} cursos, ${turmas.length} turmas, ${disciplinas.length} disciplinas, ${professores.length} professores, ${estudantes.length} estudantes\n`);
 
-  // 1. INSCRICOES (~8000)
-  console.log('=== 1. Gerando inscricoes (~8000) ===');
+  // 1. INSCRICOES (~500)
+  console.log('=== 1. Gerando inscricoes (~500) ===');
   const statusInsc = ['EM_ANALISE', 'APROVADO', 'RECUSADO'];
   const escolaridades = ['fundamental-completo','medio-incompleto','medio-completo','superior-incompleto','superior-completo'];
   batch = [];
   let total = 0;
 
-  for (let i = 0; i < 8000; i++) {
+  for (let i = 0; i < 500; i++) {
     batch.push({
       id_usuario: aleatorio(estudantes),
       id_curso: aleatorio(cursos),
@@ -173,13 +173,13 @@ async function main() {
   if (batch.length) total += await insertBatch('inscricoes', batch);
   console.log('  [OK] ' + total + ' inscricoes\n');
 
-  // 2. MATRICULAS (~5000)
-  console.log('=== 2. Gerando matriculas (~5000) ===');
+  // 2. MATRICULAS (~500)
+  console.log('=== 2. Gerando matriculas (~500) ===');
   const statusMat = ['ATIVO', 'ATIVO', 'ATIVO', 'TRANCADO', 'CONCLUIDO'];
   batch = [];
   let totalMat = 0;
 
-  for (let i = 0; i < 5000; i++) {
+  for (let i = 0; i < 500; i++) {
     const turma = aleatorio(turmas);
     batch.push({
       id_usuario: aleatorio(estudantes),
@@ -198,12 +198,12 @@ async function main() {
   const rMats = await fetch(supabaseUrl2 + '/rest/v1/matriculas?select=id', { headers: { 'apikey': serviceKey, 'Authorization': 'Bearer ' + serviceKey } });
   const mats = (await rMats.json()).map(m => m.id);
 
-  // 3. HISTORICO ESCOLAR (~10000)
-  console.log('=== 3. Gerando historico escolar (~10000) ===');
+  // 3. HISTORICO ESCOLAR (~500)
+  console.log('=== 3. Gerando historico escolar (~500) ===');
   batch = [];
   let totalHist = 0;
 
-  for (let i = 0; i < 10000 && mats.length > 0; i++) {
+  for (let i = 0; i < 500 && mats.length > 0; i++) {
     const nota = notaRealista();
     const freq = +(70 + Math.random() * 28).toFixed(1);
     const aprovado = nota >= 6 && freq >= 75;
@@ -222,12 +222,12 @@ async function main() {
   if (batch.length) totalHist += await insertBatch('historico_escolar', batch);
   console.log('  [OK] ' + totalHist + ' registros\n');
 
-  // 4. FREQUENCIA (~10000)
-  console.log('=== 4. Gerando frequencia (~10000) ===');
+  // 4. FREQUENCIA (~500)
+  console.log('=== 4. Gerando frequencia (~500) ===');
   batch = [];
   let totalFreq = 0;
 
-  for (let i = 0; i < 10000 && mats.length > 0; i++) {
+  for (let i = 0; i < 500 && mats.length > 0; i++) {
     const presente = Math.random() < 0.85;
     batch.push({
       id_matricula: aleatorio(mats),
@@ -241,8 +241,8 @@ async function main() {
   if (batch.length) totalFreq += await insertBatch('frequencia', batch);
   console.log('  [OK] ' + totalFreq + ' registros\n');
 
-  // 5. RECLAMACOES (~5000)
-  console.log('=== 5. Gerando reclamacoes (~5000) ===');
+  // 5. RECLAMACOES (~500)
+  console.log('=== 5. Gerando reclamacoes (~500) ===');
   const catgs = ['Secretaria','Academico','Financeiro','Infraestrutura','Professores','Matricula','Biblioteca','Transporte'];
   const assuntos = ['Erro no historico escolar','Problema com acesso ao sistema','Atraso na entrega de documentos','Reclamacao sobre professor','Problema na matricula','Cobranca indevida','Problema no transporte','Falta de material na biblioteca','Horario de aulas','Divergencia de notas','Atendimento da secretaria','Problema no laboratorio','Falta de limpeza','Problema com uniforme','Acesso a plataforma EAD','Problema no estacionamento','Problema no estagio','Barulho em sala de aula','Problema na cantina'];
   const sts = ['PENDENTE','EM_ANDAMENTO','RESOLVIDA','FECHADA'];
@@ -250,7 +250,7 @@ async function main() {
   batch = [];
   let totalRec = 0;
 
-  for (let i = 0; i < 5000; i++) {
+  for (let i = 0; i < 500; i++) {
     const diasAtras = Math.floor(Math.random() * 180);
     const status = aleatorio(sts);
     batch.push({
@@ -270,8 +270,8 @@ async function main() {
   if (batch.length) totalRec += await insertBatch('reclamacoes', batch);
   console.log('  [OK] ' + totalRec + ' reclamacoes\n');
 
-  // 6. AUDITORIA (~10000)
-  console.log('=== 6. Gerando auditoria (~10000) ===');
+  // 6. AUDITORIA (~500)
+  console.log('=== 6. Gerando auditoria (~500) ===');
   const auditTipos = ['LOGIN', 'CREATE', 'UPDATE', 'DELETE', 'VIEW'];
   const auditAcoes = {
     LOGIN: ['Usuario fez login no sistema','Usuario fez logout','Tentativa de login falhou'],
@@ -284,7 +284,7 @@ async function main() {
   batch = [];
   let totalAudit = 0;
 
-  for (let i = 0; i < 10000; i++) {
+  for (let i = 0; i < 500; i++) {
     const tipo = aleatorio(auditTipos);
     const acoes = auditAcoes[tipo];
     batch.push({
@@ -299,14 +299,14 @@ async function main() {
   if (batch.length) totalAudit += await insertBatch('auditoria', batch);
   console.log('  [OK] ' + totalAudit + ' registros\n');
 
-  // 7. ATENDIMENTOS (~2000)
-  console.log('=== 7. Gerando atendimentos (~2000) ===');
+  // 7. ATENDIMENTOS (~500)
+  console.log('=== 7. Gerando atendimentos (~500) ===');
   const tiposAtend = ['Orientacao Academica','Documentacao','Suporte Financeiro','Suporte Tecnico','Matricula'];
   const statusAtend = ['AGENDADO','REALIZADO','CANCELADO','REAGENDADO'];
   batch = [];
   let totalAtend = 0;
 
-  for (let i = 0; i < 2000; i++) {
+  for (let i = 0; i < 500; i++) {
     const dt = new Date(NOW - Math.floor(Math.random() * 120) * DAY);
     batch.push({
       id_usuario: aleatorio(estudantes),
@@ -322,8 +322,8 @@ async function main() {
   if (batch.length) totalAtend += await insertBatch('atendimentos', batch);
   console.log('  [OK] ' + totalAtend + ' atendimentos\n');
 
-  // 8. PLANOS DE ENSINO (~100)
-  console.log('=== 8. Gerando planos de ensino (~100) ===');
+  // 8. PLANOS DE ENSINO (~50)
+  console.log('=== 8. Gerando planos de ensino (~50) ===');
   const ementas = ['Estudo dos fundamentos teoricos e praticos da disciplina, abordando conceitos essenciais para a formacao profissional.',
     'Disciplina que visa proporcionar ao aluno conhecimentos avancados nas areas de aplicacao, com enfase em resolucao de problemas.',
     'Abordagem sistematica dos principais topicos, integrando teoria e pratica por meio de atividades individuais e em grupo.',
@@ -333,7 +333,7 @@ async function main() {
     'Resolver problemas complexos','Integrar conhecimentos teoricos e praticos','Avaliar resultados e propor melhorias'];
   batch = [];
   let totalPE = 0;
-  for (let i = 0; i < 100 && disciplinas.length > 0; i++) {
+  for (let i = 0; i < 50 && disciplinas.length > 0; i++) {
     const disc = aleatorio(disciplinas);
     batch.push({
       id_disciplina: disc.id,
@@ -362,13 +362,13 @@ async function main() {
   const rPE = await fetch(supabaseUrl2 + '/rest/v1/planos_ensino?select=id', { headers: { 'apikey': serviceKey, 'Authorization': 'Bearer ' + serviceKey } });
   const planosEnsino = (await rPE.json()).map(p => p.id);
 
-  // 9. PLANOS DE AULA (~500)
-  console.log('=== 9. Gerando planos de aula (~500) ===');
+  // 9. PLANOS DE AULA (~100)
+  console.log('=== 9. Gerando planos de aula (~100) ===');
   const aulasAssuntos = ['Introducao ao conteudo','Revisao de conceitos','Exercicios praticos','Avaliacao diagnostica',
     'Discussao em grupo','Apresentacao de seminarios','Estudo de caso','Laboratorio pratico','Prova','Encerramento'];
   batch = [];
   let totalPA = 0;
-  for (let i = 0; i < 500 && planosEnsino.length > 0; i++) {
+  for (let i = 0; i < 100 && planosEnsino.length > 0; i++) {
     const dataAula = new Date(NOW - Math.floor(Math.random() * 180) * DAY);
     batch.push({
       id_plano_ensino: aleatorio(planosEnsino),
@@ -386,14 +386,14 @@ async function main() {
   if (batch.length) totalPA += await insertBatch('planos_aula', batch);
   console.log('  [OK] ' + totalPA + ' planos de aula\n');
 
-  // 10. DOCUMENTOS (~500)
-  console.log('=== 10. Gerando documentos (~500) ===');
+  // 10. DOCUMENTOS (~100)
+  console.log('=== 10. Gerando documentos (~100) ===');
   const docNomes = ['RG','CPF','Comprovante de Residencia','Historico Escolar','Diploma','Certidao de Nascimento',
     'Comprovante de Trabalho','Declaracao de Renda','Foto 3x4','Comprovante de Matricula','Atestado Medico','Certificado'];
   const docStatus = ['PENDENTE','APROVADO','REPROVADO'];
   batch = [];
   let totalDoc = 0;
-  for (let i = 0; i < 500 && estudantes.length > 0; i++) {
+  for (let i = 0; i < 100 && estudantes.length > 0; i++) {
     const status = aleatorio(docStatus);
     batch.push({
       id_usuario: aleatorio(estudantes),
@@ -471,8 +471,8 @@ async function main() {
   if (batch.length) totalEv += await insertBatch('agenda_eventos', batch);
   console.log('  [OK] ' + totalEv + ' eventos\n');
 
-  // 13. CODIGOS DE ACESSO (~100)
-  console.log('=== 13. Gerando codigos de acesso (~100) ===');
+  // 13. CODIGOS DE ACESSO (~50)
+  console.log('=== 13. Gerando codigos de acesso (~50) ===');
   batch = [];
   let totalCA = 0;
   for (let i = 0; i < 100 && estudantes.length > 0; i++) {
