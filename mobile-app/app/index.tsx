@@ -66,6 +66,7 @@ export default function LoginScreen() {
         <TextInput
           style={styles.input}
           placeholder="Email"
+          placeholderTextColor="#999"
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
@@ -74,6 +75,7 @@ export default function LoginScreen() {
         <TextInput
           style={styles.input}
           placeholder="Senha"
+          placeholderTextColor="#999"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
@@ -97,6 +99,7 @@ export default function LoginScreen() {
               value={apiUrl}
               onChangeText={setApiUrl}
               placeholder="http://IP:8080/api"
+              placeholderTextColor="#999"
               autoCapitalize="none"
             />
             <TouchableOpacity style={styles.button} onPress={saveApiUrl}>
