@@ -43,11 +43,11 @@ const SIDEBAR_NAVIGATION = {
       ]
     },
     {
-      title: 'Documentação',
+      title: 'Financeiro',
       icon: '<i class="fas fa-file-alt"></i>',
       roles: ['student'],
       items: [
-        { label: 'Meus Documentos', icon: '<i class="fas fa-bookmark"></i>', href: 'meus-documentos.html' },
+        { label: 'Documentos Financeiros', icon: '<i class="fas fa-bookmark"></i>', href: 'meus-documentos.html' },
       ]
     },
     {
