@@ -2215,6 +2215,40 @@ async function initDocumentosPage() {
   }
 }
 
+async function initFinanceiroPage() {
+  const auth = requireAuth();
+  if (!auth) return;
+  setupProtectedPage(auth);
+
+  const content = document.querySelector('#financeiro-content');
+  if (!content) return;
+
+  try {
+    const data = await request('/aluno/financeiro', { headers: authHeaders(false) });
+    if (!data || !data.length) {
+      content.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">Nenhum dado financeiro encontrado.</p>';
+      return;
+    }
+    const rows = data.map(d => `
+      <tr>
+        <td>${d.descricao || '-'}</td>
+        <td>${d.vencimento ? new Date(d.vencimento).toLocaleDateString('pt-BR') : '-'}</td>
+        <td>${d.valor ? 'R$ ' + parseFloat(d.valor).toFixed(2) : '-'}</td>
+        <td><span class="status ${d.status === 'PAGO' ? 'alert-ok' : d.status === 'VENCIDO' ? 'alert-danger' : 'alert-info'}">${d.status || 'PENDENTE'}</span></td>
+        <td>${d.boleto_url ? `<a href="${d.boleto_url}" target="_blank" class="btn btn-soft">Boleto</a>` : '-'}</td>
+      </tr>
+    `).join('');
+    content.innerHTML = `<table class="table"><thead><tr><th>Descrição</th><th>Vencimento</th><th>Valor</th><th>Status</th><th>Ação</th></tr></thead><tbody>${rows}</tbody></table>`;
+  } catch (error) {
+    content.innerHTML = `
+      <p style="text-align: center; color: #999; padding: 40px;">
+        Módulo Financeiro em desenvolvimento.<br><br>
+        <i class="fas fa-credit-card" style="font-size: 48px; opacity: 0.3;"></i><br><br>
+        Em breve você poderá consultar boletos, mensalidades e situação financeira aqui.
+      </p>`;
+  }
+}
+
 async function initFrequenciaPage() {
   const auth = requireAuth();
   if (!auth) return;
@@ -2377,6 +2411,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (page === 'agenda') initAgendaPage();
   if (page === 'calendario') initCalendarioPage();
   if (page === 'horarios') initQuadroHorariosPage();
+  if (page === 'financeiro') initFinanceiroPage();
 });
 
 //FUNÇÃO DA SIDEBAR

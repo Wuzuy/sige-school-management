@@ -43,11 +43,19 @@ const SIDEBAR_NAVIGATION = {
       ]
     },
     {
-      title: 'Financeiro',
+      title: 'Documentos',
       icon: '<i class="fas fa-file-alt"></i>',
       roles: ['student'],
       items: [
-        { label: 'Documentos Financeiros', icon: '<i class="fas fa-bookmark"></i>', href: 'meus-documentos.html' },
+        { label: 'Meus Documentos', icon: '<i class="fas fa-bookmark"></i>', href: 'meus-documentos.html' },
+      ]
+    },
+    {
+      title: 'Financeiro',
+      icon: '<i class="fas fa-credit-card"></i>',
+      roles: ['student'],
+      items: [
+        { label: 'Financeiro', icon: '<i class="fas fa-credit-card"></i>', href: 'financeiro.html' },
       ]
     },
     {

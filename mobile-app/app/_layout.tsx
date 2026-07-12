@@ -16,6 +16,7 @@ export default function RootLayout() {
         <Stack.Screen name="reclamacoes" options={{ headerShown: true, title: 'Reclamacoes', headerTintColor: '#003366' }} />
         <Stack.Screen name="ouvidoria" options={{ headerShown: true, title: 'Apele', headerTintColor: '#003366' }} />
         <Stack.Screen name="atendimento" options={{ headerShown: true, title: 'Atendimento Agendado', headerTintColor: '#003366' }} />
+        <Stack.Screen name="documentos" options={{ headerShown: true, title: 'Documentos', headerTintColor: '#003366' }} />
         <Stack.Screen name="calendario" options={{ headerShown: true, title: 'Calendario Escolar', headerTintColor: '#003366' }} />
       </Stack>
       <StatusBar style="auto" />

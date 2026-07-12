@@ -83,7 +83,7 @@ export default function Dashboard() {
       </View>
 
       <Text style={styles.sectionTitle}>Academico</Text>
-      <View style={styles.grid}><Menu icon="book-outline" title="Notas" route="/notas" /><Menu icon="calendar-outline" title="Agenda" route="/agenda" /><Menu icon="calendar" title="Calendario" route="/calendario" /><Menu icon="checkmark-circle-outline" title="Frequencia" route="/faltas" /><Menu icon="layers-outline" title="Curriculo" route="/curriculo" /><Menu icon="wallet-outline" title="Financeiro" route="/financeiro" /><Menu icon="chatbubble-ellipses-outline" title="Reclamacoes" route="/reclamacoes" /><Menu icon="alert-circle-outline" title="Apele" route="/ouvidoria" /><Menu icon="time-outline" title="Atendimento" route="/atendimento" /></View>
+      <View style={styles.grid}><Menu icon="book-outline" title="Notas" route="/notas" /><Menu icon="calendar-outline" title="Agenda" route="/agenda" /><Menu icon="calendar" title="Calendario" route="/calendario" /><Menu icon="checkmark-circle-outline" title="Frequencia" route="/faltas" /><Menu icon="layers-outline" title="Curriculo" route="/curriculo" /><Menu icon="document-text-outline" title="Documentos" route="/documentos" /><Menu icon="card-outline" title="Financeiro" route="/financeiro" /><Menu icon="chatbubble-ellipses-outline" title="Reclamacoes" route="/reclamacoes" /><Menu icon="alert-circle-outline" title="Apele" route="/ouvidoria" /><Menu icon="time-outline" title="Atendimento" route="/atendimento" /></View>
     </ScrollView>
   );
 }
