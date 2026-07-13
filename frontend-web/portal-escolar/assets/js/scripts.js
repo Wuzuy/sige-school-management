@@ -2229,23 +2229,67 @@ async function initFinanceiroPage() {
       content.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">Nenhum dado financeiro encontrado.</p>';
       return;
     }
-    const rows = data.map(d => `
-      <tr>
-        <td>${d.descricao || '-'}</td>
-        <td>${d.vencimento ? new Date(d.vencimento).toLocaleDateString('pt-BR') : '-'}</td>
-        <td>${d.valor ? 'R$ ' + parseFloat(d.valor).toFixed(2) : '-'}</td>
-        <td><span class="status ${d.status === 'PAGO' ? 'alert-ok' : d.status === 'VENCIDO' ? 'alert-danger' : 'alert-info'}">${d.status || 'PENDENTE'}</span></td>
-        <td>${d.boleto_url ? `<a href="${d.boleto_url}" target="_blank" class="btn btn-soft">Boleto</a>` : '-'}</td>
-      </tr>
-    `).join('');
-    content.innerHTML = `<table class="table"><thead><tr><th>Descrição</th><th>Vencimento</th><th>Valor</th><th>Status</th><th>Ação</th></tr></thead><tbody>${rows}</tbody></table>`;
-  } catch (error) {
+
+    const total = data.length;
+    const pagas = data.filter(d => d.status === 'PAGO').length;
+    const vencidas = data.filter(d => d.status === 'VENCIDO').length;
+    const pendentes = data.filter(d => d.status === 'PENDENTE').length;
+    const totalDevido = data.filter(d => d.status !== 'PAGO' && d.status !== 'CANCELADO')
+      .reduce((s, d) => s + parseFloat(d.valor || 0), 0);
+
     content.innerHTML = `
-      <p style="text-align: center; color: #999; padding: 40px;">
-        Módulo Financeiro em desenvolvimento.<br><br>
-        <i class="fas fa-credit-card" style="font-size: 48px; opacity: 0.3;"></i><br><br>
-        Em breve você poderá consultar boletos, mensalidades e situação financeira aqui.
-      </p>`;
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px;">
+        <div class="card" style="padding: 20px; text-align: center;">
+          <div style="font-size: 28px; font-weight: 800; color: #1a1a1a;">${total}</div>
+          <div style="font-size: 12px; color: #999;">Total de Lancamentos</div>
+        </div>
+        <div class="card" style="padding: 20px; text-align: center;">
+          <div style="font-size: 28px; font-weight: 800; color: #27ae60;">${pagas}</div>
+          <div style="font-size: 12px; color: #999;">Pagas</div>
+        </div>
+        <div class="card" style="padding: 20px; text-align: center;">
+          <div style="font-size: 28px; font-weight: 800; color: #e74c3c;">${vencidas}</div>
+          <div style="font-size: 12px; color: #999;">Vencidas</div>
+        </div>
+        <div class="card" style="padding: 20px; text-align: center;">
+          <div style="font-size: 28px; font-weight: 800; color: #f39c12;">${pendentes}</div>
+          <div style="font-size: 12px; color: #999;">A Vencer</div>
+        </div>
+        <div class="card" style="padding: 20px; text-align: center; grid-column: 1 / -1;">
+          <div style="font-size: 28px; font-weight: 800; color: ${totalDevido > 0 ? '#e74c3c' : '#27ae60'};">R$ ${totalDevido.toFixed(2)}</div>
+          <div style="font-size: 12px; color: #999;">Total em Aberto</div>
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <table class="table" id="financeiro-table">
+          <thead><tr><th>Descricao</th><th>Vencimento</th><th>Valor</th><th>Status</th><th>Boleto</th></tr></thead>
+          <tbody id="financeiro-body"></tbody>
+        </table>
+        <div id="paginacao-financeiro"></div>
+      </div>`;
+
+    const body = document.querySelector('#financeiro-body');
+    const pagContainer = document.getElementById('paginacao-financeiro');
+    if (body && pagContainer) {
+      new Paginacao({
+        container: pagContainer,
+        containerTabela: body,
+        dados: data,
+        renderizarItem: (d) => {
+          const valor = parseFloat(d.valor || 0);
+          const statusColor = d.status === 'PAGO' ? 'alert-ok' : d.status === 'VENCIDO' ? 'alert-danger' : d.status === 'CANCELADO' ? '' : 'alert-info';
+          return '<tr>' +
+            '<td>' + (d.descricao || '-') + '</td>' +
+            '<td>' + (d.data_vencimento ? new Date(d.data_vencimento + 'T12:00:00').toLocaleDateString('pt-BR') : '-') + '</td>' +
+            '<td>R$ ' + valor.toFixed(2) + '</td>' +
+            '<td><span class="status ' + statusColor + '">' + (d.status || 'PENDENTE') + '</span></td>' +
+            '<td>' + (d.boleto_url ? '<a href="' + d.boleto_url + '" target="_blank" class="btn btn-soft btn-sm"><i class="fas fa-barcode"></i> Boleto</a>' : '-') + '</td>' +
+            '</tr>';
+        }
+      });
+    }
+  } catch (error) {
+    content.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">Erro ao carregar dados financeiros.</p>';
   }
 }
 

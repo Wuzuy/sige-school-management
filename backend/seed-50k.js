@@ -76,7 +76,7 @@ async function main() {
 
   // Delete existing data
   console.log('=== Deletando dados existentes ===');
-  const delTables = ['planos_aula', 'planos_ensino', 'frequencia', 'historico_escolar', 'atendimentos', 'auditoria', 'reclamacoes', 'matriculas', 'inscricoes', 'codigos_acesso', 'documentos', 'editais', 'agenda_eventos'];
+  const delTables = ['planos_aula', 'planos_ensino', 'frequencia', 'historico_escolar', 'atendimentos', 'auditoria', 'reclamacoes', 'matriculas', 'inscricoes', 'codigos_acesso', 'documentos', 'editais', 'agenda_eventos', 'financeiro'];
   for (const t of delTables) {
     console.log('  Deletando ' + t + '...');
     await deleteAll(t);
@@ -492,10 +492,47 @@ async function main() {
   if (batch.length) totalCA += await insertBatch('codigos_acesso', batch);
   console.log('  [OK] ' + totalCA + ' codigos de acesso\n');
 
+  // 14. FINANCEIRO (~500 registros de mensalidades)
+  console.log('=== 14. Gerando financeiro (~500) ===');
+  const financeiroTipos = ['MENSALIDADE', 'BOLETO', 'TAXA', 'REM Matricula'];
+  const financeiroStatus = ['PENDENTE', 'PAGO', 'VENCIDO', 'CANCELADO'];
+  const meses = [1,2,3,4,5,6,7,8,9,10,11,12];
+  batch = [];
+  let totalFin = 0;
+  for (let i = 0; i < 500 && estudantes.length > 0; i++) {
+    const estudante = aleatorio(estudantes);
+    const mesRef = aleatorio(meses);
+    const anoRef = 2026;
+    const tipo = aleatorio(financeiroTipos);
+    const isPago = Math.random() > 0.4;
+    const isVencido = !isPago && Math.random() > 0.5;
+    const status = isPago ? 'PAGO' : (isVencido ? 'VENCIDO' : 'PENDENTE');
+    const vencimento = new Date(anoRef, mesRef - 1, 10);
+    const pagamento = isPago ? new Date(vencimento.getTime() - Math.floor(Math.random() * 10) * DAY).toISOString().split('T')[0] : null;
+    const valorBase = 500 + Math.floor(Math.random() * 1500);
+
+    batch.push({
+      id_usuario: estudante,
+      descricao: tipo + ' ' + String(mesRef).padStart(2,'0') + '/' + anoRef,
+      tipo,
+      valor: tipo === 'REM Matricula' ? +(200 + Math.random() * 300).toFixed(2) : +(valorBase).toFixed(2),
+      data_vencimento: vencimento.toISOString().split('T')[0],
+      data_pagamento: pagamento,
+      status,
+      boleto_url: status !== 'CANCELADO' ? '/boletos/boleto-' + (i + 1) + '.pdf' : null,
+      boleto_codigo: '34191.' + String(1000 + i).slice(-5) + ' 12345.678901 23456.789012 1 ' + String(100000000000 + i).slice(-11),
+      mes_referencia: mesRef,
+      ano_referencia: anoRef
+    });
+    if (batch.length >= BATCH) { totalFin += await insertBatch('financeiro', batch); batch = []; }
+  }
+  if (batch.length) totalFin += await insertBatch('financeiro', batch);
+  console.log('  [OK] ' + totalFin + ' registros financeiros\n');
+
   // RESUMO
   console.log('=== RESUMO FINAL ===');
   const tables = ['inscricoes','matriculas','historico_escolar','frequencia','reclamacoes','auditoria','atendimentos',
-    'planos_ensino','planos_aula','documentos','editais','agenda_eventos','codigos_acesso'];
+    'planos_ensino','planos_aula','documentos','editais','agenda_eventos','codigos_acesso','financeiro'];
   let totalGeral = 0;
   for (const t of tables) {
     const c = await countRows(t);

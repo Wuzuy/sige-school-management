@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS
   auditoria, codigos_acesso, planos_aula, planos_ensino,
   horarios, frequencia, historico_escolar, matriculas,
   inscricoes, documentos, reclamacoes_historico, reclamacoes,
-  agenda_eventos, atendimentos, editais, disciplinas,
+  agenda_eventos, atendimentos, editais, financeiro, disciplinas,
   turmas, cursos, unidades, usuarios,
   cargos_permissoes, permissoes, cargos, portais
 CASCADE;
@@ -361,6 +361,27 @@ CREATE TABLE portais (
 );
 
 -- ============================================
+-- 24. FINANCEIRO (boletos, mensalidades)
+-- ============================================
+CREATE TABLE financeiro (
+  id              SERIAL PRIMARY KEY,
+  id_usuario      INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+  id_matricula    INTEGER REFERENCES matriculas(id) ON DELETE SET NULL,
+  descricao       VARCHAR(300) NOT NULL,
+  tipo            VARCHAR(50) DEFAULT 'MENSALIDADE',
+  valor           DECIMAL(10,2) NOT NULL,
+  data_vencimento DATE NOT NULL,
+  data_pagamento  DATE,
+  status          VARCHAR(20) DEFAULT 'PENDENTE',
+  boleto_url      TEXT,
+  boleto_codigo   VARCHAR(100),
+  mes_referencia  INTEGER,
+  ano_referencia  INTEGER,
+  created_at      TIMESTAMP DEFAULT NOW(),
+  updated_at      TIMESTAMP DEFAULT NOW()
+);
+
+-- ============================================
 -- RBAC — CARGOS
 -- ============================================
 INSERT INTO cargos (id, nome, descricao, is_admin_master) VALUES
@@ -456,7 +477,9 @@ INSERT INTO permissoes (codigo, nome, descricao, modulo) VALUES
   ('portal.inscricao',         'Acesso Inscricao',        'Acessar portal de inscricao', 'portais'),
   ('portal.gerenciar',         'Gerenciar Portais',       'Ativar/desativar portais', 'portais'),
   -- CATRACA
-  ('catraca.acessar',          'Acessar Catraca',         'Validar codigos de acesso na catraca', 'catraca')
+  ('catraca.acessar',          'Acessar Catraca',         'Validar codigos de acesso na catraca', 'catraca'),
+  -- FINANCEIRO
+  ('financeiro.visualizar',    'Visualizar Financeiro',   'Ver boletos e mensalidades', 'financeiro')
 ON CONFLICT (codigo) DO NOTHING;
 
 -- ============================================
@@ -482,7 +505,8 @@ SELECT 3, id FROM permissoes WHERE codigo IN (
   'relatorio.visualizar', 'relatorio.exportar',
   'auditoria.visualizar',
   'portal.secretaria',
-  'catraca.acessar'
+  'catraca.acessar',
+  'financeiro.visualizar'
 ) ON CONFLICT DO NOTHING;
 
 -- Professor (4)
@@ -503,7 +527,8 @@ INSERT INTO cargos_permissoes (id_cargo, id_permissao)
 SELECT 5, id FROM permissoes WHERE codigo IN (
   'aluno.visualizar-notas', 'aluno.visualizar-frequencia',
   'aluno.visualizar-horarios', 'matricula.visualizar',
-  'portal.escolar', 'portal.inscricao'
+  'portal.escolar', 'portal.inscricao',
+  'financeiro.visualizar'
 ) ON CONFLICT DO NOTHING;
 
 -- Candidato (6)

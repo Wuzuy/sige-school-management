@@ -314,4 +314,20 @@ router.get('/curriculo', requireAuth, async (req, res) => {
   res.json(data || []);
 });
 
+// ============================================
+// FINANCEIRO (mensalidades, boletos)
+// ============================================
+router.get('/financeiro', requireAuth, async (req, res) => {
+  const uid = userId(req);
+
+  const { data, error } = await supabase
+    .from('financeiro')
+    .select('*')
+    .eq('id_usuario', uid)
+    .order('data_vencimento', { ascending: false });
+
+  if (error) return res.status(500).json({ error: error.message });
+  res.json(data || []);
+});
+
 module.exports = router;
