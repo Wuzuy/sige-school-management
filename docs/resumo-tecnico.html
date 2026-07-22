@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resumo Técnico — SIGE Docs</title>
+  <link rel="stylesheet" href="site.css">
+  <style>
+    .diagram-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.5rem; overflow-x: auto; margin-bottom: 1.5rem; font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.4; }
+    .flow-list { list-style: none; padding: 0; }
+    .flow-list li { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.6rem 1rem; margin-bottom: 0.4rem; font-family: var(--font-mono); font-size: 0.85rem; }
+    .flow-list li .arrow { color: var(--secondary); font-weight: 700; }
+    .flow-list li .method-tag { display: inline-block; padding: 0.1em 0.4em; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+    .flow-list li .method-get { background: #dbeafe; color: #1d4ed8; }
+    .flow-list li .method-post { background: #dcfce7; color: #16a34a; }
+    .flow-list li .method-put { background: #fef3c7; color: #d97706; }
+    .infra-card { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .infra-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1rem; text-align: center; }
+    .infra-item .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+    .infra-item .value { font-size: 1.1rem; font-weight: 700; margin-top: 0.25rem; }
+    .perm-table .perm-grupo { font-weight: 700; font-size: 0.85rem; color: var(--primary); padding: 0.5rem 0.75rem; background: rgba(10,59,122,0.05); }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+    @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
+    .conceito-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 0.75rem; }
+    .conceito-card h4 { margin: 0 0 0.35rem; font-size: 1rem; }
+    .conceito-card p { margin: 0; font-size: 0.9rem; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-logo">
+    <button class="hamburger" aria-label="Abrir menu">&#9776;</button>
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+    SIGE Docs
+  </div>
+  <div class="header-actions">
+    <button class="theme-toggle" aria-label="Alternar modo escuro">&#127769;</button>
+  </div>
+</header>
+
+<div class="wrapper">
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li class="nav-section">Introdução</li>
+      <li><a href="index.html"><span class="nav-icon">&#127968;</span> Início</a></li>
+      <li class="nav-section">Documentação Técnica</li>
+      <li><a href="resumo-tecnico.html" class="active"><span class="nav-icon">&#128221;</span> Resumo Técnico</a></li>
+      <li><a href="roteiro-tecnico.html"><span class="nav-icon">&#127891;</span> Roteiro Técnico</a></li>
+      <li class="nav-section">Portais Web</li>
+      <li><a href="portal-inscricao.html"><span class="nav-icon">&#128196;</span> Portal de Inscrição</a></li>
+      <li><a href="portal-escolar.html"><span class="nav-icon">&#127891;</span> Portal Escolar</a></li>
+      <li><a href="portal-secretaria.html"><span class="nav-icon">&#128188;</span> Portal da Secretaria</a></li>
+      <li class="nav-section">Mobile</li>
+      <li><a href="mobile.html"><span class="nav-icon">&#128241;</span> Aplicativo Mobile</a></li>
+      <li class="nav-section">Backend</li>
+      <li><a href="backend.html"><span class="nav-icon">&#9881;&#65039;</span> Backend API</a></li>
+      <li><a href="database.html"><span class="nav-icon">&#128451;</span> Banco de Dados</a></li>
+      <li class="nav-section">Deploy</li>
+      <li><a href="deploy.html"><span class="nav-icon">&#128640;</span> Guia de Deploy</a></li>
+      <li class="nav-section">Manuais</li>
+      <li><a href="manual-candidato.html"><span class="nav-icon">&#128218;</span> Manual do Candidato</a></li>
+      <li><a href="manual-aluno.html"><span class="nav-icon">&#127891;</span> Manual do Aluno</a></li>
+      <li><a href="manual-professor.html"><span class="nav-icon">&#128218;</span> Manual do Professor</a></li>
+      <li><a href="manual-secretaria.html"><span class="nav-icon">&#128188;</span> Manual da Secretaria</a></li>
+    </ul>
+  </aside>
+
+  <div class="sidebar-overlay"></div>
+
+  <main class="main-content full">
+    <div class="breadcrumbs">
+      <a href="index.html">Início</a> <span class="sep">/</span>
+      <span>Resumo Técnico</span>
+    </div>
+
+    <div class="page-header">
+      <h1>Resumo Técnico — SIGE</h1>
+      <p>Sistema de Inscrição e Gestão Escolar — visão geral da arquitetura, stack, banco de dados e fluxos.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 1. ARQUITETURA GERAL -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>1. Arquitetura Geral</h2>
+      <div class="diagram-box">
+<pre>┌──────────────────────────────────────────────────────────┐
+│                       Clientes                          │
+│  ┌────────────┐  ┌────────────┐  ┌──────────────────┐   │
+│  │ Web        │  │ Web        │  │ Mobile App       │   │
+│  │ (Vanilla   │  │ (Vanilla   │  │ (React Native    │   │
+│  │  JS)       │  │  JS)       │  │  Expo SDK 54)    │   │
+│  └─────┬──────┘  └─────┬──────┘  └───────┬──────────┘   │
+│        │               │                 │              │
+│        └───────────────┴─────────────────┘              │
+│                            │ HTTP REST                  │
+│                            ▼                            │
+│                 ┌─────────────────────┐                 │
+│                 │  Express 5 API      │                 │
+│                 │  (Node.js 22)       │                 │
+│                 │  Porta 8080         │                 │
+│                 │  16 arquivos de rota│                 │
+│                 └─────────┬───────────┘                 │
+│                           │ Supabase JS Client           │
+│                           ▼                             │
+│                 ┌─────────────────────┐                 │
+│                 │  Supabase           │                 │
+│                 │  (PostgreSQL 15+)   │                 │
+│                 │  24 tabelas         │                 │
+│                 └─────────────────────┘                 │
+└──────────────────────────────────────────────────────────┘</pre>
+      </div>
+
+      <p><strong>Estilo arquitetural:</strong> REST API monolítica (backend) + frontends web estáticos + app nativo. Sem microsserviços, sem filas, sem cache distribuído. Autenticação stateless via JWT.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 2. STACK TECNOLÓGICO -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>2. Stack Tecnológico</h2>
+
+      <div class="two-col">
+        <div>
+          <h3>Backend</h3>
+          <table>
+            <thead><tr><th>Componente</th><th>Versão</th></tr></thead>
+            <tbody>
+              <tr><td>Runtime</td><td>Node.js 22 LTS</td></tr>
+              <tr><td>Framework</td><td>Express 5.x</td></tr>
+              <tr><td>Auth</td><td>JWT (jsonwebtoken + bcryptjs)</td></tr>
+              <tr><td>Database</td><td>Supabase JS Client v2</td></tr>
+              <tr><td>Porta</td><td>8080</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3>Mobile App</h3>
+          <table>
+            <thead><tr><th>Componente</th><th>Versão</th></tr></thead>
+            <tbody>
+              <tr><td>Framework</td><td>React Native 0.81.5</td></tr>
+              <tr><td>SDK</td><td>Expo 54</td></tr>
+              <tr><td>Roteamento</td><td>Expo Router v6 (file-based)</td></tr>
+              <tr><td>Navegação</td><td>@react-navigation/bottom-tabs v7</td></tr>
+              <tr><td>QR Code</td><td>react-native-qrcode-svg</td></tr>
+              <tr><td>Auth</td><td>In-memory (Context API)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h3>Frontend Web</h3>
+          <table>
+            <thead><tr><th>Componente</th><th>Versão</th></tr></thead>
+            <tbody>
+              <tr><td>HTML</td><td>HTML5 semântico</td></tr>
+              <tr><td>CSS</td><td>CSS3 responsivo (Flexbox/Grid)</td></tr>
+              <tr><td>JS</td><td>Vanilla ES6+ (sem framework)</td></tr>
+              <tr><td>Charts</td><td>Chart.js 4.4.7</td></tr>
+              <tr><td>Notificações</td><td>Notyf 3</td></tr>
+              <tr><td>Ícones</td><td>Font Awesome 6.5.1</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3>Database</h3>
+          <table>
+            <thead><tr><th>Componente</th><th>Versão</th></tr></thead>
+            <tbody>
+              <tr><td>Tipo</td><td>PostgreSQL 15+</td></tr>
+              <tr><td>Hospedagem</td><td>Supabase (cloud)</td></tr>
+              <tr><td>Tabelas</td><td>24</td></tr>
+              <tr><td>RBAC</td><td>Custom (cargos + permissoes)</td></tr>
+              <tr><td>Migrações</td><td>SQL manual (SQL Editor)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 3. DECISÕES DE ARQUITETURA -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>3. Decisões de Arquitetura</h2>
+
+      <div class="conceito-card">
+        <h4>Por que Vanilla JS no frontend web?</h4>
+        <p>Projeto didático — alunos aprendem JS puro sem abstração de frameworks. Cada página HTML carrega só o que precisa, sem bundle ou build step.</p>
+      </div>
+      <div class="conceito-card">
+        <h4>Por que Expo e não React Native CLI?</h4>
+        <p>Expo simplifica build (EAS), atualização OTA e acesso a APIs nativas sem configurar Xcode/Android Studio. SDK 54 garante estabilidade.</p>
+      </div>
+      <div class="conceito-card">
+        <h4>Por que Supabase e não Firebase?</h4>
+        <p>PostgreSQL relacional é mais adequado para dados acadêmicos (notas, histórico, matrículas). Gratuito, sem vendor lock-in, SQL padrão.</p>
+      </div>
+      <div class="conceito-card">
+        <h4>Por que Express 5 e não 4?</h4>
+        <p>Express 5 traz suporte nativo a async/await nos middlewares, removendo a necessidade de try-catch wrappers manuais.</p>
+      </div>
+      <div class="conceito-card">
+        <h4>Por que JWT e não sessions?</h4>
+        <p>Stateless — não requer armazenamento no servidor. Escalável horizontalmente sem shared session store. Expiração de 24h.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 4. API REST — ENDPOINTS -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>4. API REST — Endpoints</h2>
+
+      <h3>Públicos (sem autenticação)</h3>
+      <div class="table-responsive">
+        <table>
+          <thead><tr><th>Método</th><th>Rota</th><th>Descrição</th></tr></thead>
+          <tbody>
+            <tr><td><span class="method method-post">POST</span></td><td><code>/api/usuarios/login</code></td><td>Login (email + senha → JWT)</td></tr>
+            <tr><td><span class="method method-post">POST</span></td><td><code>/api/usuarios</code></td><td>Registrar novo usuário</td></tr>
+            <tr><td><span class="method method-get">GET</span></td><td><code>/api/cursos</code></td><td>Listar cursos ativos</td></tr>
+            <tr><td><span class="method method-get">GET</span></td><td><code>/api/unidades</code></td><td>Listar unidades</td></tr>
+            <tr><td><span class="method method-get">GET</span></td><td><code>/api/editais</code></td><td>Listar editais ativos</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Autenticados (JWT obrigatório)</h3>
+      <div class="table-responsive">
+        <table>
+          <thead><tr><th>Método</th><th>Rota</th><th>Descrição</th></tr></thead>
+          <tbody>
+            <tr><td><span class="method method-get">GET</span></td><td><code>/api/usuarios/me</code></td><td>Dados do usuário logado</td></tr>
+            <tr><td><span class="method method-put">PUT</span></td><td><code>/api/usuarios/me</code></td><td>Atualizar próprio perfil</td></tr>
+            <tr><td><span class="method method-get">GET</span></td><td><code>/api/aluno/matriculas</code></td><td>Matrículas do aluno</td></tr>
+            <tr><td><span class="method method-get">GET</span></td><td><code>/api/aluno/historico</code></td><td>Histórico escolar (notas)</td></tr>
+            <tr><td><span class="method method-get">GET</span></td><td><code>/api/aluno/frequencia</code></td><td>Frequência por disciplina</td></tr>
+            <tr><td><span class="method method-get">GET</span></td><td><code>/api/aluno/horarios</code></td><td>Quadro de horários</td></tr>
+            <tr><td><span class="method method-get">GET</span></td><td><code>/api/aluno/documentos</code></td><td>Documentos do aluno</td></tr>
+            <tr><td><span class="method method-get">GET</span></td><td><code>/api/aluno/financeiro</code></td><td>Financeiro (mensalidades)</td></tr>
+            <tr><td><span class="method method-get">GET</span></td><td><code>/api/aluno/agenda</code></td><td>Agenda/eventos acadêmicos</td></tr>
+            <tr><td><span class="method method-get">GET</span></td><td><code>/api/aluno/curriculo</code></td><td>Estrutura curricular</td></tr>
+            <tr><td><span class="method method-post">POST</span></td><td><code>/api/aluno/reclamacoes</code></td><td>Abrir reclamação</td></tr>
+            <tr><td><span class="method method-post">POST</span></td><td><code>/api/professor/notas</code></td><td>Lançar notas</td></tr>
+            <tr><td><span class="method method-post">POST</span></td><td><code>/api/professor/frequencia</code></td><td>Lançar frequência</td></tr>
+            <tr><td><span class="method method-get">GET</span></td><td><code>/api/professor/turmas</code></td><td>Turmas do professor</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Administrativos (permissão específica)</h3>
+      <div class="table-responsive">
+        <table>
+          <thead><tr><th>Método</th><th>Rota</th><th>Descrição</th></tr></thead>
+          <tbody>
+            <tr><td><span class="method method-get">GET</span></td><td><code>/api/inscricoes</code></td><td>Listar inscrições (secretaria)</td></tr>
+            <tr><td><span class="method method-put">PUT</span></td><td><code>/api/inscricoes/:id</code></td><td>Aprovar/reprovar inscrição</td></tr>
+            <tr><td><span class="method method-get">GET</span></td><td><code>/api/alunos</code></td><td>Listar alunos</td></tr>
+            <tr><td><span class="method method-get">GET</span></td><td><code>/api/alunos/:id</code></td><td>Detalhes do aluno</td></tr>
+            <tr><td><span class="method method-post">POST</span></td><td><code>/api/turmas</code></td><td>Criar turma</td></tr>
+            <tr><td><span class="method method-put">PUT</span></td><td><code>/api/turmas/:id</code></td><td>Editar turma</td></tr>
+            <tr><td><span class="method method-post">POST</span></td><td><code>/api/cargos</code></td><td>Criar cargo (RBAC)</td></tr>
+            <tr><td><span class="method method-get">GET</span></td><td><code>/api/auditoria</code></td><td>Log de auditoria</td></tr>
+            <tr><td><span class="method method-put">PUT</span></td><td><code>/api/portais/:codigo</code></td><td>Ativar/desativar portal</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 5. MODELO DE DADOS -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>5. Modelo de Dados</h2>
+
+      <h3>24 tabelas — principais relacionamentos</h3>
+      <div class="diagram-box">
+<pre>usuarios (1) ────── (N) inscricoes (N) ────── (1) cursos
+    │                                            │
+    │                                            │
+    └── (N) matriculas (N) ──────────────── (1) ─┘
+              │
+              ├── (N) historico_escolar (N) ── (1) disciplinas
+              │                                  │
+              ├── (N) frequencia ────────── (N) ──┘
+              │
+              └── (N) financeiro
+
+cursos (1) ── (N) disciplinas
+cursos (1) ── (N) turmas
+turmas (1) ── (N) horarios ── (N) disciplinas
+                            └── (N) usuarios (professores)</pre>
+      </div>
+
+      <h3>RBAC — 6 Cargos Padrão</h3>
+      <div class="table-responsive">
+        <table>
+          <thead><tr><th>Cargo</th><th>is_admin_master</th><th>Acesso</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Admin Master</strong> (id=1)</td><td><span class="badge badge-green">SIM</span></td><td>Tudo, inclusive gerenciar cargos</td></tr>
+            <tr><td><strong>Administrador</strong> (id=2)</td><td><span class="badge badge-red">NÃO</span></td><td>Tudo exceto cargos</td></tr>
+            <tr><td><strong>Secretaria</strong> (id=3)</td><td><span class="badge badge-red">NÃO</span></td><td>Alunos, turmas, inscrições, docs, relatórios</td></tr>
+            <tr><td><strong>Professor</strong> (id=4)</td><td><span class="badge badge-red">NÃO</span></td><td>Notas, frequência, planos de ensino</td></tr>
+            <tr><td><strong>Aluno</strong> (id=5)</td><td><span class="badge badge-red">NÃO</span></td><td>Próprios dados (notas, frequência, financeiro)</td></tr>
+            <tr><td><strong>Candidato</strong> (id=6)</td><td><span class="badge badge-red">NÃO</span></td><td>Apenas portal de inscrição</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Estrutura de tabelas</h3>
+      <div class="table-responsive">
+        <table>
+          <thead><tr><th>#</th><th>Tabela</th><th>Finalidade</th><th>Chaves Estrangeiras</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><code>usuarios</code></td><td>Usuários (alunos, professores, admins)</td><td><code>id_cargo → cargos</code></td></tr>
+            <tr><td>2</td><td><code>cargos</code></td><td>Perfis RBAC</td><td>—</td></tr>
+            <tr><td>3</td><td><code>permissoes</code></td><td>Catálogo de permissões (58+)</td><td>—</td></tr>
+            <tr><td>4</td><td><code>cargos_permissoes</code></td><td>M:N cargos ↔ permissoes</td><td><code>id_cargo, id_permissao</code></td></tr>
+            <tr><td>5</td><td><code>cursos</code></td><td>Programas acadêmicos</td><td><code>id_unidade → unidades</code></td></tr>
+            <tr><td>6</td><td><code>turmas</code></td><td>Grupos/turmas</td><td><code>id_curso → cursos</code></td></tr>
+            <tr><td>7</td><td><code>disciplinas</code></td><td>Matérias acadêmicas</td><td><code>id_curso → cursos</code></td></tr>
+            <tr><td>8</td><td><code>inscricoes</code></td><td>Candidaturas</td><td><code>id_usuario, id_curso</code></td></tr>
+            <tr><td>9</td><td><code>matriculas</code></td><td>Matrículas ativas</td><td><code>id_usuario, id_turma, id_curso</code></td></tr>
+            <tr><td>10</td><td><code>historico_escolar</code></td><td>Notas/histórico</td><td><code>id_matricula, id_disciplina, id_professor</code></td></tr>
+            <tr><td>11</td><td><code>frequencia</code></td><td>Registro de chamada</td><td><code>id_matricula, id_disciplina</code></td></tr>
+            <tr><td>12</td><td><code>horarios</code></td><td>Grade horária</td><td><code>id_turma, id_disciplina, id_professor</code></td></tr>
+            <tr><td>13</td><td><code>documentos</code></td><td>Documentos do aluno</td><td><code>id_usuario</code></td></tr>
+            <tr><td>14</td><td><code>financeiro</code></td><td>Mensalidades/boletos</td><td><code>id_usuario, id_matricula</code></td></tr>
+            <tr><td>15</td><td><code>codigos_acesso</code></td><td>Códigos 6 dígitos (catraca)</td><td><code>id_usuario</code></td></tr>
+            <tr><td>16</td><td><code>agenda_eventos</code></td><td>Calendário acadêmico</td><td>— (público)</td></tr>
+            <tr><td>17</td><td><code>auditoria</code></td><td>Log de ações</td><td><code>id_usuario</code></td></tr>
+            <tr><td>18</td><td><code>reclamacoes</code></td><td>Reclamações/tickets</td><td><code>id_usuario</code></td></tr>
+            <tr><td>19</td><td><code>atendimentos</code></td><td>Agendamentos</td><td><code>id_usuario, id_responsavel</code></td></tr>
+            <tr><td>20</td><td><code>planos_ensino</code></td><td>Planos de ensino</td><td><code>id_disciplina, id_professor</code></td></tr>
+            <tr><td>21</td><td><code>planos_aula</code></td><td>Planos de aula</td><td><code>id_plano_ensino</code></td></tr>
+            <tr><td>22</td><td><code>portais</code></td><td>Feature flags</td><td>—</td></tr>
+            <tr><td>23</td><td><code>editais</code></td><td>Editais públicos</td><td>—</td></tr>
+            <tr><td>24</td><td><code>unidades</code></td><td>Campi/unidades</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 6. AUTENTICAÇÃO E SEGURANÇA -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>6. Autenticação e Segurança</h2>
+
+      <h3>Fluxo de Login (JWT)</h3>
+      <ul class="flow-list">
+        <li><span class="method-tag method-post">POST</span> <code>/api/usuarios/login</code> <span class="arrow">→</span> body: <code>{ email, senha }</code></li>
+        <li><span class="arrow">→</span> bcrypt.compare(senha, hash_armazenado)</li>
+        <li><span class="arrow">→</span> jwt.sign({ id, role, id_cargo, permissoes }, JWT_SECRET, { expiresIn: '1d' })</li>
+        <li><span class="arrow">→</span> Response: <code>{ token, usuario, permissoes }</code></li>
+        <li><span class="arrow">→</span> Frontend armazena token em localStorage (web) / in-memory (mobile)</li>
+      </ul>
+
+      <h3>Cadeia de Middleware</h3>
+      <div class="table-responsive">
+        <table>
+          <thead><tr><th>Middleware</th><th>Função</th></tr></thead>
+          <tbody>
+            <tr><td><code>requireAuth</code></td><td>Extrai e valida JWT do header <code>Authorization: Bearer &lt;token&gt;</code></td></tr>
+            <tr><td><code>requireRole(...roles)</code></td><td>Verifica campo <code>role</code> do usuário (legado)</td></tr>
+            <tr><td><code>requirePermissao(codigo)</code></td><td>Verifica permissão granular via <code>cargos_permissoes</code></td></tr>
+            <tr><td><code>requirePortalAtivo(codigo)</code></td><td>Verifica se o portal está ativo na tabela <code>portais</code></td></tr>
+            <tr><td><code>requireAdminMaster</code></td><td>Verifica flag <code>is_admin_master</code> no cargo</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Segurança</h3>
+      <div class="table-responsive">
+        <table>
+          <thead><tr><th>Aspecto</th><th>Implementação</th></tr></thead>
+          <tbody>
+            <tr><td>Senhas</td><td>bcryptjs com 10 salt rounds</td></tr>
+            <tr><td>Sessão</td><td>JWT com expiração de 24h</td></tr>
+            <tr><td>Autorização</td><td>RBAC granular (58+ permissões, 6 cargos)</td></tr>
+            <tr><td>Feature flags</td><td>Tabela <code>portais</code> — desativa portal inteiro</td></tr>
+            <tr><td>CORS</td><td>Liberado (<code>cors()</code>) — projeto didático</td></tr>
+            <tr><td>SQL Injection</td><td>Prevenido pelo Supabase JS Client (queries parametrizadas)</td></tr>
+            <tr><td>HTTPS</td><td>Via infraestrutura (Vercel + Render)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 7. FLUXOS PRINCIPAIS -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>7. Fluxos Principais</h2>
+
+      <h3>Fluxo de Inscrição (Candidato → Aluno)</h3>
+      <ul class="flow-list">
+        <li><span class="arrow">➜</span> Candidato acessa portal-inscricao → escolhe curso</li>
+        <li><span class="arrow">➜</span> Preenche formulário + aceita LGPD</li>
+        <li><span class="arrow">➜</span> <span class="method-tag method-post">POST</span> <code>/api/inscricoes</code> → status: EM_ANALISE</li>
+        <li><span class="arrow">➜</span> Admin aprova: <span class="method-tag method-put">PUT</span> <code>/api/inscricoes/:id</code> → status_aprovacao: APROVADO</li>
+        <li><span class="arrow">➜</span> Aluno aceita matrícula → sistema cria matrícula + atualiza role para ROLE_STUDENT</li>
+        <li><span class="arrow">➜</span> Aluno acessa portal-escolar com dados completos</li>
+      </ul>
+
+      <h3>Fluxo de Lançamento de Notas (Professor)</h3>
+      <ul class="flow-list">
+        <li><span class="arrow">➜</span> Professor acessa portal-professor → clica "Lançar Notas"</li>
+        <li><span class="arrow">➜</span> Seleciona turma → disciplina → "Carregar Alunos"</li>
+        <li><span class="arrow">➜</span> Tabela de alunos aparece com inputs de nota</li>
+        <li><span class="arrow">➜</span> Professor digita notas → clica "Salvar"</li>
+        <li><span class="arrow">➜</span> <span class="method-tag method-post">POST</span> <code>/api/professor/notas</code> → dados em <code>historico_escolar</code></li>
+      </ul>
+
+      <h3>Fluxo de Autenticação na Catraca</h3>
+      <ul class="flow-list">
+        <li><span class="arrow">➜</span> Aluno abre app → aba "Acesso"</li>
+        <li><span class="arrow">➜</span> App gera código de 6 dígitos + QR code</li>
+        <li><span class="arrow">➜</span> <span class="method-tag method-post">POST</span> <code>/api/auth/gerar-codigo</code> → salvo em <code>codigos_acesso</code> com expiração de 30s</li>
+        <li><span class="arrow">➜</span> Aluno apresenta QR/código na catraca</li>
+        <li><span class="arrow">➜</span> Catraca valida: <span class="method-tag method-post">POST</span> <code>/api/auth/validar-codigo</code></li>
+        <li><span class="arrow">➜</span> Server verifica: existe + não expirou + não usado → libera acesso</li>
+      </ul>
+
+      <h3>Fluxo de Requisição (Exemplo: Aluno vê histórico)</h3>
+      <ul class="flow-list">
+        <li><span class="arrow">➜</span> Aluno abre <code>/portal-escolar/historico-escolar.html</code></li>
+        <li><span class="arrow">➜</span> Página chama <code>initHistoricoPage()</code> em scripts.js</li>
+        <li><span class="arrow">➜</span> <span class="method-tag method-get">GET</span> <code>/api/aluno/historico</code> com header <code>Authorization: Bearer &lt;JWT&gt;</code></li>
+        <li><span class="arrow">➜</span> Backend: <code>requireAuth</code> → <code>requirePermissao('portal.escolar')</code> → query Supabase</li>
+        <li><span class="arrow">➜</span> Supabase: <code>SELECT * FROM historico_escolar WHERE id_matricula IN (matriculas do aluno)</code></li>
+        <li><span class="arrow">➜</span> Frontend renderiza tabela com notas por disciplina</li>
+      </ul>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 8. ESTRUTURA DE DIRETÓRIOS -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>8. Estrutura de Diretórios</h2>
+      <pre><code>sige/
+├── backend/
+│   ├── routes/              # 16 arquivos de rota
+│   ├── middleware/auth.js   # requireAuth, requirePermissao, etc.
+│   ├── config/supabase.js   # Cliente Supabase
+│   └── server.js            # Entry point (porta 8080)
+│
+├── frontend-web/
+│   ├── portal-inscricao/    # 8 páginas HTML (candidato)
+│   ├── portal-escolar/      # 19 páginas HTML (aluno)
+│   ├── portal-professor/    # 1 SPA (professor)
+│   ├── portal-secretaria/   # 1 SPA (admin)
+│   └── assets/              # CSS, imagens, JS
+│
+├── mobile-app/
+│   ├── app/                 # Telas (file-based routing, Expo Router)
+│   │   ├── (tabs)/          # Abas inferiores (Inicio, Carteirinha, Acesso)
+│   │   ├── _layout.tsx      # Layout root
+│   │   ├── index.tsx        # Login
+│   │   └── *.tsx            # 12+ telas (notas, faltas, agenda, etc.)
+│   ├── services/api.ts      # Cliente HTTP + auth in-memory
+│   └── contexts/AuthContext.tsx
+│
+├── database/
+│   ├── schema.sql           # DDL completo (24 tabelas)
+│   ├── seed-institucional.sql # ~4000 linhas de dados realistas
+│   └── *.sql                # Migrações específicas
+│
+└── docs/                    # Documentação e screenshots</code></pre>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 9. CONCEITOS-CHAVE -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>9. Conceitos-Chave</h2>
+
+      <div class="conceito-card">
+        <h4>JWT (JSON Web Token)</h4>
+        <p>Token stateless com payload <code>{ id, role, cargo, permissoes }</code>. Assinado com HMAC-SHA256. Não requer armazenamento no servidor. Expira em 24h.</p>
+      </div>
+
+      <div class="conceito-card">
+        <h4>bcrypt</h4>
+        <p>Algoritmo de hash de senha com salt embutido. 10 rounds = ~10ms por hash. Resiste a ataques de rainbow table e brute-force. NUNCA armazenamos senhas em texto plano.</p>
+      </div>
+
+      <div class="conceito-card">
+        <h4>RBAC (Role-Based Access Control)</h4>
+        <p>Permissões agrupadas em cargos. Cada cargo tem 58+ permissões granulares via tabela <code>cargos_permissoes</code>. Admin Master (is_admin_master=true) bypassa todas as verificações.</p>
+      </div>
+
+      <div class="conceito-card">
+        <h4>Expo Router (file-based routing)</h4>
+        <p>Cada arquivo em <code>app/</code> vira uma rota automaticamente. Similar a Next.js. Suporta layouts aninhados, tabs, modais. </p>
+      </div>
+
+      <div class="conceito-card">
+        <h4>Supabase</h4>
+        <p>BaaS open-source. Fornece PostgreSQL gerenciado + API REST + Auth + Storage. Usamos apenas como cliente de banco (não usamos Supabase Auth). Autenticação é 100% custom via JWT.</p>
+      </div>
+
+      <div class="conceito-card">
+        <h4>CORS (Cross-Origin Resource Sharing)</h4>
+        <p>Middleware <code>cors()</code> permite requisições de qualquer origem. Configuração didática — em produção, restringiria para origens específicas (Vercel, domínio próprio).</p>
+      </div>
+
+      <div class="conceito-card">
+        <h4>REST (Representational State Transfer)</h4>
+        <p>API stateless baseada em recursos. Verbos HTTP: GET (ler), POST (criar), PUT (atualizar), DELETE (remover). Respostas sempre em JSON com códigos padronizados (200, 201, 400, 401, 403, 404, 500).</p>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 10. INFRAESTRUTURA -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>10. Infraestrutura</h2>
+
+      <div class="infra-card">
+        <div class="infra-item">
+          <div class="label">Frontend Web</div>
+          <div class="value">Vercel</div>
+        </div>
+        <div class="infra-item">
+          <div class="label">Backend</div>
+          <div class="value">Render</div>
+        </div>
+        <div class="infra-item">
+          <div class="label">Banco de Dados</div>
+          <div class="value">Supabase (PostgreSQL)</div>
+        </div>
+        <div class="infra-item">
+          <div class="label">Mobile Build</div>
+          <div class="value">EAS Build (Expo)</div>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead><tr><th>Recurso</th><th>URL / Identificador</th></tr></thead>
+          <tbody>
+            <tr><td>Backend (produção)</td><td><code>https://sige-1gqx.onrender.com</code></td></tr>
+            <tr><td>Backend (proxy)</td><td><code>https://seu-backend.exemplo.com</code></td></tr>
+            <tr><td>Supabase Dashboard</td><td><code>https://supabase.com/dashboard/project/seu-projeto</code></td></tr>
+            <tr><td>Frontend (Vercel)</td><td>Auto-deploy do GitHub</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert alert-info">
+        <strong>Importante:</strong> O projeto <strong>não possui testes automatizados</strong>. É focado em funcionalidade e demonstração acadêmica. Não há Docker — deploy é feito diretamente via Git.
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <p>SIGE — Sistema de Inscrição e Gestão Escolar &copy; 2026</p>
+    </footer>
+  </main>
+</div>
+
+<script src="menu.js"></script>
+</body>
+</html>

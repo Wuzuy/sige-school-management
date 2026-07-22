@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roteiro Técnico — SIGE Docs</title>
+  <link rel="stylesheet" href="site.css">
+  <style>
+    .qa-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 0.75rem; overflow: hidden; }
+    .qa-question { padding: 1rem 1.25rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; color: var(--primary); font-size: 0.95rem; transition: background 0.15s; user-select: none; }
+    .qa-question:hover { background: rgba(10,59,122,0.04); }
+    .qa-question .toggle-icon { margin-left: auto; font-size: 0.8rem; transition: transform 0.2s; color: var(--text-muted); }
+    .qa-question.open .toggle-icon { transform: rotate(90deg); }
+    .qa-answer { padding: 0 1.25rem 1rem; font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; display: none; }
+    .qa-answer.open { display: block; }
+    .qa-answer code { font-size: 0.85em; }
+    .step-list { list-style: none; padding: 0; counter-reset: step; }
+    .step-list li { counter-increment: step; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.75rem 1rem 0.75rem 2.5rem; margin-bottom: 0.4rem; position: relative; font-size: 0.9rem; }
+    .step-list li::before { content: counter(step); position: absolute; left: 0.6rem; top: 50%; transform: translateY(-50%); width: 22px; height: 22px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .topic-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.25rem; }
+    .topic-section h3 { margin: 0 0 0.75rem; color: var(--primary); font-size: 1.05rem; border: none; padding: 0; }
+    .topic-section p { margin: 0 0 0.5rem; font-size: 0.9rem; }
+    .topic-section ul { margin: 0 0 0 1rem; font-size: 0.9rem; }
+    @media (max-width: 768px) { .qa-question { font-size: 0.9rem; padding: 0.75rem 1rem; } .qa-answer { font-size: 0.85rem; padding: 0 1rem 0.75rem; } }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-logo">
+    <button class="hamburger" aria-label="Abrir menu">&#9776;</button>
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+    SIGE Docs
+  </div>
+  <div class="header-actions">
+    <button class="theme-toggle" aria-label="Alternar modo escuro">&#127769;</button>
+  </div>
+</header>
+
+<div class="wrapper">
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li class="nav-section">Introdução</li>
+      <li><a href="index.html"><span class="nav-icon">&#127968;</span> Início</a></li>
+      <li class="nav-section">Documentação Técnica</li>
+      <li><a href="resumo-tecnico.html"><span class="nav-icon">&#128221;</span> Resumo Técnico</a></li>
+      <li><a href="roteiro-tecnico.html"><span class="nav-icon">&#127891;</span> Roteiro Técnico</a></li>
+      <li class="nav-section">Portais Web</li>
+      <li><a href="portal-inscricao.html"><span class="nav-icon">&#128196;</span> Portal de Inscrição</a></li>
+      <li><a href="portal-escolar.html"><span class="nav-icon">&#127891;</span> Portal Escolar</a></li>
+      <li><a href="portal-secretaria.html"><span class="nav-icon">&#128188;</span> Portal da Secretaria</a></li>
+      <li class="nav-section">Mobile</li>
+      <li><a href="mobile.html"><span class="nav-icon">&#128241;</span> Aplicativo Mobile</a></li>
+      <li class="nav-section">Backend</li>
+      <li><a href="backend.html"><span class="nav-icon">&#9881;&#65039;</span> Backend API</a></li>
+      <li><a href="database.html"><span class="nav-icon">&#128451;</span> Banco de Dados</a></li>
+      <li class="nav-section">Deploy</li>
+      <li><a href="deploy.html"><span class="nav-icon">&#128640;</span> Guia de Deploy</a></li>
+      <li class="nav-section">Manuais</li>
+      <li><a href="manual-candidato.html"><span class="nav-icon">&#128218;</span> Manual do Candidato</a></li>
+      <li><a href="manual-aluno.html"><span class="nav-icon">&#127891;</span> Manual do Aluno</a></li>
+      <li><a href="manual-professor.html"><span class="nav-icon">&#128218;</span> Manual do Professor</a></li>
+      <li><a href="manual-secretaria.html"><span class="nav-icon">&#128188;</span> Manual da Secretaria</a></li>
+    </ul>
+  </aside>
+
+  <div class="sidebar-overlay"></div>
+
+  <main class="main-content full">
+    <div class="breadcrumbs">
+      <a href="index.html">Início</a> <span class="sep">/</span>
+      <span>Roteiro Técnico</span>
+    </div>
+
+    <div class="page-header">
+      <h1>Roteiro Técnico — SIGE</h1>
+      <p>Guia universal para responder perguntas técnicas sobre o projeto. Cada aluno deve saber explicar os pontos abaixo com suas próprias palavras.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 1. VISÃO GERAL -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>1. Visão Geral do Projeto</h2>
+
+      <div class="topic-section">
+        <h3>O que é o SIGE?</h3>
+        <p>Sistema de Inscrição e Gestão Escolar — três portais em um: inscrição (candidato), escolar (aluno), secretaria (admin), além do portal professor e app mobile. Tudo online: inscrição, matrícula, notas, frequência, financeiro, carteirinha digital.</p>
+      </div>
+
+      <div class="topic-section">
+        <h3>Qual problema resolve?</h3>
+        <p>Elimina papelada, fila presencial e horário comercial. O aluno faz inscrição, acompanha notas, baixa documentos e resolve tudo digitalmente, sem precisar ir até a escola.</p>
+      </div>
+
+      <div class="topic-section">
+        <h3>Quantos usuários suporta?</h3>
+        <p>Backend stateless com Express + Supabase (PostgreSQL gerenciado). Escalável horizontalmente — sem limite fixo, depende do plano Supabase. O plano gratuito oferece 500 MB de banco e 5 GB de bandwidth.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 2. STACK TECNOLÓGICA -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>2. Stack Tecnológica</h2>
+
+      <table>
+        <thead><tr><th>Camada</th><th>Tecnologia</th><th>Versão</th></tr></thead>
+        <tbody>
+          <tr><td>Backend</td><td>Node.js + Express</td><td>22 / ^5.2</td></tr>
+          <tr><td>Banco</td><td>PostgreSQL (Supabase)</td><td>15+</td></tr>
+          <tr><td>ORM/Client</td><td>Supabase JS Client</td><td>^2.108</td></tr>
+          <tr><td>Auth</td><td>JWT + bcryptjs</td><td>custom</td></tr>
+          <tr><td>Frontend Web</td><td>HTML5 + CSS3 + Vanilla JS</td><td>—</td></tr>
+          <tr><td>Mobile</td><td>React Native (Expo SDK 54)</td><td>0.81.5</td></tr>
+          <tr><td>Mobile Routing</td><td>Expo Router v6</td><td>file-based</td></tr>
+          <tr><td>Charts</td><td>Chart.js 4.4</td><td>admin dashboard</td></tr>
+          <tr><td>Notificações</td><td>Notyf 3</td><td>web toasts</td></tr>
+        </tbody>
+      </table>
+
+      <div class="topic-section">
+        <h3>Por que Vanilla JS no frontend web?</h3>
+        <p>Projeto didático — os alunos aprendem JavaScript puro sem a abstração de frameworks como React. Decisão intencional de arquitetura para facilitar o aprendizado.</p>
+      </div>
+
+      <div class="topic-section">
+        <h3>Por que Expo e não React Native CLI?</h3>
+        <p>Expo simplifica o build (EAS Build), permite atualização OTA (Over-The-Air) e acesso a APIs nativas sem configurar Xcode ou Android Studio manualmente.</p>
+      </div>
+
+      <div class="topic-section">
+        <h3>Por que Supabase e não Firebase?</h3>
+        <p>PostgreSQL relacional é mais adequado para dados acadêmicos (notas, histórico, matrículas). Supabase é open-source, gratuito, sem vendor lock-in, e usa SQL padrão.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 3. BACKEND -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>3. Backend — Arquitetura</h2>
+
+      <div class="topic-section">
+        <h3>Framework</h3>
+        <p>Express 5.x. Fluxo de requisição: rota → middleware → controller → query Supabase → JSON response.</p>
+        <pre><code>Cliente → HTTP → cors() → json() → auth middleware → handler → Supabase → JSON</code></pre>
+      </div>
+
+      <div class="topic-section">
+        <h3>Autenticação (JWT)</h3>
+        <ol class="step-list" style="margin-top:0.5rem">
+          <li>Usuário envia <code>{ email, senha }</code> para <code>POST /api/usuarios/login</code></li>
+          <li>Servidor compara senha com hash via <code>bcrypt.compare()</code></li>
+          <li>Gera JWT: <code>jwt.sign({ id, role, id_cargo, permissoes }, JWT_SECRET, { expiresIn: '1d' })</code></li>
+          <li>Retorna <code>{ token, usuario, permissoes }</code></li>
+          <li>Cliente armazena token e envia no header <code>Authorization: Bearer &lt;token&gt;</code></li>
+        </ol>
+      </div>
+
+      <div class="topic-section">
+        <h3>Middlewares de segurança (4 tipos)</h3>
+        <table>
+          <thead><tr><th>Middleware</th><th>Função</th></tr></thead>
+          <tbody>
+            <tr><td><code>requireAuth</code></td><td>Extrai e valida JWT</td></tr>
+            <tr><td><code>requireRole(...roles)</code></td><td>Verifica role legada</td></tr>
+            <tr><td><code>requirePermissao(codigo)</code></td><td>Verifica permissão granular (58+)</td></tr>
+            <tr><td><code>requirePortalAtivo(codigo)</code></td><td>Verifica feature flag do portal</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="topic-section">
+        <h3>16 arquivos de rota</h3>
+        <div class="table-responsive">
+          <table>
+            <thead><tr><th>Arquivo</th><th>Endpoints principais</th></tr></thead>
+            <tbody>
+              <tr><td><code>routes/usuarios.js</code></td><td>Login, register, GET /me, CRUD</td></tr>
+              <tr><td><code>routes/aluno.js</code></td><td>Matrículas, histórico, notas, frequência, horários, documentos, financeiro, agenda, currículo</td></tr>
+              <tr><td><code>routes/alunos.js</code></td><td>Listar/detalhar alunos (admin)</td></tr>
+              <tr><td><code>routes/inscricoes.js</code></td><td>Criar, listar, aprovar/reprovar inscrições</td></tr>
+              <tr><td><code>routes/professor.js</code></td><td>Turmas, notas, frequência, planos</td></tr>
+              <tr><td><code>routes/cursos.js</code></td><td>CRUD cursos</td></tr>
+              <tr><td><code>routes/turmas.js</code></td><td>CRUD turmas</td></tr>
+              <tr><td><code>routes/cargos.js</code></td><td>CRUD cargos + permissões (RBAC)</td></tr>
+              <tr><td><code>routes/auth-codigo.js</code></td><td>Gerar/validar código 6 dígitos (catraca)</td></tr>
+              <tr><td><code>routes/portais.js</code></td><td>Feature flags dos portais</td></tr>
+              <tr><td><code>routes/auditoria.js</code></td><td>Log de auditoria</td></tr>
+              <tr><td colspan="2" style="color:var(--text-muted);font-size:0.85rem">+ disciplinas.js, planos-aula.js, reclamacoes.js, editais.js, unidades.js</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 4. BANCO DE DADOS -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>4. Banco de Dados</h2>
+
+      <div class="topic-section">
+        <h3>24 tabelas — principais</h3>
+        <div class="table-responsive">
+          <table>
+            <thead><tr><th>Tabela</th><th>Função</th><th>FKs</th></tr></thead>
+            <tbody>
+              <tr><td><code>usuarios</code></td><td>Usuários</td><td>id_cargo → cargos</td></tr>
+              <tr><td><code>cargos</code></td><td>Perfis RBAC</td><td>—</td></tr>
+              <tr><td><code>permissoes</code></td><td>Catálogo de permissões</td><td>—</td></tr>
+              <tr><td><code>cargos_permissoes</code></td><td>M:N cargos ↔ permissoes</td><td>id_cargo, id_permissao</td></tr>
+              <tr><td><code>cursos</code></td><td>Cursos</td><td>id_unidade</td></tr>
+              <tr><td><code>turmas</code></td><td>Turmas</td><td>id_curso</td></tr>
+              <tr><td><code>disciplinas</code></td><td>Disciplinas</td><td>id_curso</td></tr>
+              <tr><td><code>inscricoes</code></td><td>Candidaturas</td><td>id_usuario, id_curso</td></tr>
+              <tr><td><code>matriculas</code></td><td>Matrículas ativas</td><td>id_usuario, id_turma, id_curso</td></tr>
+              <tr><td><code>historico_escolar</code></td><td>Notas/histórico</td><td>id_matricula, id_disciplina</td></tr>
+              <tr><td><code>frequencia</code></td><td>Chamada</td><td>id_matricula, id_disciplina</td></tr>
+              <tr><td><code>horarios</code></td><td>Grade horária</td><td>id_turma, id_disciplina</td></tr>
+              <tr><td><code>financeiro</code></td><td>Mensalidades</td><td>id_usuario, id_matricula</td></tr>
+              <tr><td><code>documentos</code></td><td>Documentos do aluno</td><td>id_usuario</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="topic-section">
+        <h3>RBAC — 6 Cargos</h3>
+        <div class="table-responsive">
+          <table>
+            <thead><tr><th>Cargo</th><th>Acesso</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Admin Master</strong> (id=1)</td><td>Tudo, inclusive gerenciar cargos</td></tr>
+              <tr><td><strong>Administrador</strong> (id=2)</td><td>Tudo exceto cargos</td></tr>
+              <tr><td><strong>Secretaria</strong> (id=3)</td><td>Alunos, turmas, inscrições, docs</td></tr>
+              <tr><td><strong>Professor</strong> (id=4)</td><td>Notas, frequência, planos</td></tr>
+              <tr><td><strong>Aluno</strong> (id=5)</td><td>Próprios dados</td></tr>
+              <tr><td><strong>Candidato</strong> (id=6)</td><td>Apenas portal inscrição</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 5. FRONTEND WEB -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>5. Frontend Web</h2>
+
+      <div class="topic-section">
+        <h3>Arquitetura</h3>
+        <p>Múltiplas páginas HTML estáticas + JavaScript vanilla. Sem SPA — cada página é um HTML independente. Três portais + um portal professor SPA + portal secretaria SPA.</p>
+      </div>
+
+      <div class="topic-section">
+        <h3>Como a autenticação funciona no frontend?</h3>
+        <ol class="step-list" style="margin-top:0.5rem">
+          <li><code>POST /api/usuarios/login</code> → recebe <code>{ token, usuario, permissoes }</code></li>
+          <li>Token salvo em <code>localStorage.setItem('auth', JSON.stringify(data))</code></li>
+          <li>URL da API salva em <code>localStorage.setItem('API_BASE_URL', url)</code></li>
+          <li>Requisições usam <code>Authorization: Bearer &lt;token&gt;</code></li>
+          <li>Usuário pode configurar manualmente a URL da API via modal</li>
+        </ol>
+      </div>
+
+      <div class="topic-section">
+        <h3>Páginas por portal</h3>
+        <div class="table-responsive">
+          <table>
+            <thead><tr><th>Portal</th><th>Quantidade</th><th>Principais páginas</th></tr></thead>
+            <tbody>
+              <tr><td>Inscrição</td><td>8</td><td>login, index (cursos), inscricao, matricula, status, privacidade</td></tr>
+              <tr><td>Escolar</td><td>19</td><td>dashboard, notas, frequência, horários, documentos, financeiro, agenda, reclamações</td></tr>
+              <tr><td>Professor</td><td>1 SPA</td><td>turmas, notas, frequência, disciplinas, planos de aula</td></tr>
+              <tr><td>Secretaria</td><td>1 SPA</td><td>inscrições, cursos, turmas, alunos, relatórios, auditoria</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 6. MOBILE APP -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>6. Mobile App</h2>
+
+      <div class="topic-section">
+        <h3>Estrutura de navegação</h3>
+        <p>Expo Router v6 com file-based routing. Cada arquivo em <code>app/</code> vira uma rota.</p>
+        <pre><code>app/
+├── _layout.tsx        # Stack navigator principal
+├── index.tsx          # Tela de login
+├── (tabs)/
+│   ├── _layout.tsx    # Bottom tabs (Inicio, Carteirinha, Acesso, Catraca*)
+│   ├── secretaria.tsx # Dashboard do aluno
+│   ├── carteirinha.tsx# Carteirinha digital
+│   ├── autenticacao.tsx# Código 6 dígitos + QR
+│   └── explore.tsx    # Scanner catraca (*condicional)
+├── notas.tsx, faltas.tsx, agenda.tsx, financeiro.tsx, ...</code></pre>
+      </div>
+
+      <div class="topic-section">
+        <h3>Autenticação no mobile</h3>
+        <p><strong>In-memory</strong> — o token não é persistido (AsyncStorage não é usado). Fechou o app, deslogou. Gerenciado via <code>services/api.ts</code> + <code>contexts/AuthContext.tsx</code> com React Context API.</p>
+      </div>
+
+      <div class="topic-section">
+        <h3>QR Code da Catraca</h3>
+        <ol class="step-list" style="margin-top:0.5rem">
+          <li>App gera código de 6 dígitos + QR Code via <code>react-native-qrcode-svg</code></li>
+          <li>Código expira em 30 segundos (regeneração automática)</li>
+          <li>Catraca lê QR/código e valida via <code>POST /api/auth/validar-codigo</code></li>
+          <li>Servidor verifica: código existe + não expirou + não usado → libera acesso</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 7. PERGUNTAS FREQUENTES -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>7. Perguntas Frequentes</h2>
+
+      <div class="qa-card">
+        <div class="qa-question" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+          Como o JWT é validado? <span class="toggle-icon">&#9654;</span>
+        </div>
+        <div class="qa-answer">
+          O middleware <code>requireAuth</code> extrai o token do header <code>Authorization: Bearer &lt;token&gt;</code>, verifica com <code>jwt.verify(token, JWT_SECRET)</code>. Se inválido ou expirado → retorna 401.
+        </div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-question" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+          Onde fica o JWT_SECRET? <span class="toggle-icon">&#9654;</span>
+        </div>
+        <div class="qa-answer">
+          Hardcoded como fallback <code>'secreta_sige_123'</code> em <code>middleware/auth.js</code>. Pode ser sobrescrito via <code>.env</code> → <code>JWT_SECRET</code>.
+        </div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-question" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+          Como as permissões são verificadas? <span class="toggle-icon">&#9654;</span>
+        </div>
+        <div class="qa-answer">
+          A função <code>getUserPermissoes(userId)</code> faz um JOIN: <code>cargos_permissoes → permissoes WHERE id_cargo = user.id_cargo</code>. O resultado é cacheado em memória durante a requisição.
+        </div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-question" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+          Qual a diferença entre ROLE e CARGO? <span class="toggle-icon">&#9654;</span>
+        </div>
+        <div class="qa-answer">
+          <code>role</code> é campo legado (VARCHAR: <code>ROLE_USER</code>, <code>ROLE_STUDENT</code>, etc.). <code>cargo</code> é o sistema novo RBAC (FK → <code>cargos.id</code>). O novo sistema substitui o antigo, mas <code>role</code> ainda existe como fallback.
+        </div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-question" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+          Como as senhas são armazenadas? <span class="toggle-icon">&#9654;</span>
+        </div>
+        <div class="qa-answer">
+          bcryptjs com 10 rounds de salt. <code>bcrypt.hashSync(senha, 10)</code>. NUNCA armazenamos senhas em texto plano. Na verificação: <code>bcrypt.compare(senha, hashArmazenado)</code>.
+        </div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-question" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+          O app mobile funciona offline? <span class="toggle-icon">&#9654;</span>
+        </div>
+        <div class="qa-answer">
+          Não. Todas as telas dependem de API online. Não há cache offline implementado. O token de autenticação fica em memória — fechou o app, deslogou.
+        </div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-question" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+          Como funciona o deploy? <span class="toggle-icon">&#9654;</span>
+        </div>
+        <div class="qa-answer">
+          Frontend web na <strong>Vercel</strong> (auto-deploy do GitHub). Backend no <strong>Render</strong> (Node.js, porta 8080). Banco no <strong>Supabase</strong> (PostgreSQL gerenciado). Mobile via <strong>EAS Build</strong> (Expo).
+        </div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-question" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+          O projeto tem testes automatizados? <span class="toggle-icon">&#9654;</span>
+        </div>
+        <div class="qa-answer">
+          Não. O projeto é focado em funcionalidade e demonstração acadêmica. Não há testes unitários ou de integração.
+        </div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-question" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+          Como uma inscrição vira matrícula? <span class="toggle-icon">&#9654;</span>
+        </div>
+        <div class="qa-answer">
+          Candidato se inscreve → admin aprova (<code>PUT /api/inscricoes/:id</code>) → sistema atualiza <code>role</code> para <code>ROLE_STUDENT</code> e <code>id_cargo</code> para 5 (Aluno) → cria registro em <code>matriculas</code> → aluno acessa portal escolar.
+        </div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-question" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+          Onde ficam os arquivos enviados (documentos)? <span class="toggle-icon">&#9654;</span>
+        </div>
+        <div class="qa-answer">
+          A coluna <code>arquivo_url</code> na tabela <code>documentos</code> armazena URLs como texto. Os arquivos em si não são servidos pelo backend — é uma referência textual. Para produção, integraria com S3 ou Storage do Supabase.
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 8. COMANDOS ÚTEIS -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>8. Comandos Úteis</h2>
+      <pre><code># Iniciar backend (desenvolvimento)
+cd backend && npm run dev
+
+# Iniciar frontend (servidor HTTP local)
+cd frontend-web && python -m http.server 8000
+
+# Build mobile APK
+cd mobile-app && npx eas build --platform android --profile preview
+
+# Rodar seed SQL
+# Copiar conteudo de database/seed-institucional.sql para o SQL Editor do Supabase
+
+# Verificar status do backend
+node -e "fetch('http://localhost:8080/api/cursos').then(r=>r.json()).then(console.log)"</code></pre>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 9. MAPA DE FLUXOS -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>9. Fluxos Principais (Passo a Passo)</h2>
+
+      <div class="topic-section">
+        <h3>Candidato → Aluno</h3>
+        <ol class="step-list" style="margin-top:0">
+          <li>Candidato acessa portal-inscricao → escolhe curso</li>
+          <li>Preenche formulário + aceita LGPD → <code>POST /api/inscricoes</code></li>
+          <li>Inscrição fica <code>EM_ANALISE</code></li>
+          <li>Admin aprova: <code>PUT /api/inscricoes/:id</code> → <code>status_aprovacao: 'APROVADO'</code></li>
+          <li>Sistema atualiza role para <code>ROLE_STUDENT</code> + cria matrícula</li>
+          <li>Aluno acessa portal-escolar com dados completos</li>
+        </ol>
+      </div>
+
+      <div class="topic-section">
+        <h3>Professor lança notas</h3>
+        <ol class="step-list" style="margin-top:0">
+          <li>Professor acessa portal-professor → clica "Lançar Notas"</li>
+          <li>Seleciona turma → disciplina → "Carregar Alunos"</li>
+          <li>Tabela de alunos aparece com inputs</li>
+          <li>Professor digita notas → clica "Salvar"</li>
+          <li><code>POST /api/professor/notas</code> → salva em <code>historico_escolar</code></li>
+        </ol>
+      </div>
+
+      <div class="topic-section">
+        <h3>Aluno acessa catraca via QR</h3>
+        <ol class="step-list" style="margin-top:0">
+          <li>Aluno abre app → aba "Acesso"</li>
+          <li>App gera código 6 dígitos + QR Code (expira em 30s)</li>
+          <li>Aluno apresenta na catraca</li>
+          <li>Catraca valida: <code>POST /api/auth/validar-codigo { codigo }</code></li>
+          <li>Servidor verifica existência + validade + não-uso → libera</li>
+        </ol>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <p>SIGE — Sistema de Inscrição e Gestão Escolar &copy; 2026</p>
+    </footer>
+  </main>
+</div>
+
+<script src="menu.js"></script>
+</body>
+</html>
