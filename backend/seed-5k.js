@@ -1,6 +1,7 @@
+require('dotenv').config();
 const { createClient } = require('@supabase/supabase-js');
-const supabaseUrl = 'https://seu-projeto.supabase.co';
-const serviceKey = 'SUA_CHAVE_SERVICE_ROLE';
+const supabaseUrl = process.env.SUPABASE_URL;
+const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const supabase = createClient(supabaseUrl, serviceKey);
 const headers = { 'apikey': serviceKey, 'Authorization': 'Bearer ' + serviceKey, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' };
 

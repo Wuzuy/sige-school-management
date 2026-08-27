@@ -3,14 +3,14 @@ const { readFileSync } = require('fs');
 const { resolve } = require('path');
 const { Client } = require('pg');
 
-const serviceKey = 'SUA_CHAVE_SERVICE_ROLE';
+const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 const regions = [
   'us-east-1', 'eu-west-1', 'eu-central-1',
   'us-west-1', 'sa-east-1', 'ap-southeast-1', 'ap-northeast-1'
 ];
 
-const projectRef = 'seu-projeto';
+const projectRef = process.env.SUPABASE_PROJECT_REF || 'seu-projeto';
 const sqlPath = resolve(__dirname, '..', '..', 'database', 'migration-financeiro.sql');
 
 async function tryMigrate(region) {

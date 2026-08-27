@@ -4,7 +4,7 @@ const { resolve } = require('path');
 
 const { Client } = require('pg');
 
-const serviceKey = 'SUA_CHAVE_SERVICE_ROLE';
+const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 const regions = [
   'us-east-1',
@@ -16,7 +16,7 @@ const regions = [
   'ap-northeast-1'
 ];
 
-const projectRef = 'seu-projeto';
+const projectRef = process.env.SUPABASE_PROJECT_REF || 'seu-projeto';
 const sqlPath = resolve(__dirname, '..', '..', 'database', 'supabase-cargos-permissoes.sql');
 
 async function tryMigrate(region) {
